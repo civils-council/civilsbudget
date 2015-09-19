@@ -16,18 +16,25 @@ class AppExtension extends \Twig_Extension
         $this->bankId = $bankId;
     }
 
-//    public function getFilters()
-//    {
-//        return [
-//            new \Twig_SimpleFilter('getLogin', [$this, 'getLogin']),
-//        ];
-//    }
+    public function getFilters()
+    {
+        return [
+            new \Twig_SimpleFilter('regexUrl', [$this, 'regexUrl']),
+        ];
+    }
 
     public function getGlobals()
     {
         return [
             'login_url' => $this->bankId->getLink(),
         ];
+    }
+
+    public function regexUrl($url)
+    {
+        preg_match('/https?:\/\/([^\/]+)\//i', $url, $matches);
+
+        return $matches[1];
     }
 
     /**
