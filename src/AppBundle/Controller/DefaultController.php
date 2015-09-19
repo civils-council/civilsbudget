@@ -2,7 +2,7 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Project;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -13,17 +13,17 @@ class DefaultController extends Controller
     /**
      * @Route("/", name="homepage")
      * @Template()
+     * @Method({"GET"})
      */
     public function indexAction()
     {
-        return [
-            'projects' => $this->getDoctrine()->getRepository('AppBundle:Project')->findAll(),
-        ];
+        return $this->redirectToRoute('projects_list');
     }
 
     /**
      * @Route("/profile", name="user_profile")
      * @Template()
+     * @Method({"GET"})
      */
     public function profileAction()
     {
@@ -31,17 +31,9 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/project/{id}", name="show_project")
-     * @Template()
-     */
-    public function showProjectAction(Project $project)
-    {
-        return ['project' => $project];
-    }
-
-    /**
      * @Route("/login", name="login")
      * @Template()
+     * @Method({"GET"})
      */
     public function loginAction()
     {
