@@ -1,0 +1,8 @@
+AppBundle\Entity\Project:
+    project{1..10}:
+        title: <word(3)>
+        description: <text(2000)>
+        owner: @user*
+        source: <url()>
+        confirmedAt: <datetime()>
+        confirmedBy: @admin*
