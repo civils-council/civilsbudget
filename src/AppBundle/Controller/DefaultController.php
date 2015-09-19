@@ -15,7 +15,7 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
-        return [];
+        return ['projects' => $this->getDoctrine()->getRepository('AppBundle:Project')->findAll()];
     }
 
     /**
