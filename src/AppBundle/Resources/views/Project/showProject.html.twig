@@ -33,13 +33,13 @@
 {% block navproject %}
     <div class="nav_project">
         <ul class="nav nav-pills">
-            <li><span>Created on: <span class="badge">{{ project.createAt|date('d-m-Y') }}</span></span></li>
+            <li><span>Створено: <span class="badge">{{ project.createAt|date('d-m-Y') }}</span></span></li>
             <li>
-                <span>Likes: <span class="badge">10 000</span></span>
+                <span>Підтримало: <span class="badge">10 000</span></span>
             </li>
             <li>
                 <span>
-                    Source: <a href="{{ project.source }}" class="badge">{{ project.source|regexUrl }}</a>
+                    Звідки: <a href="{{ project.source }}" class="badge">{{ project.source|regexUrl }}</a>
                 </span>
             </li>
             <li>
