@@ -6,7 +6,7 @@ $(function(){
 
         card.show('slow');
 
-        target.find('.card-reveal > button.close').on('click',function(e){
+        target.find('.card-reveal > button.close').on('click',function(){
             card.hide('slow');
         });
 
