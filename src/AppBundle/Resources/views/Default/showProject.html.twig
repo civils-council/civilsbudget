@@ -1,25 +1,8 @@
 {% extends '@App/layout.html.twig' %}
 
-
 {% block content %}
-
-
         <div class="info_project">
-            <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque porttitor suscipit gravida. Proin
-                varius, lectus non auctor interdum, enim ligula sodales odio, vitae aliquam massa augue nec mi. Mauris
-                cursus erat enim, tincidunt mollis arcu ullamcorper ut. Proin tincidunt tortor elit, sit amet tristique
-                felis blandit in. Donec congue eros eu efficitur pretium. Aliquam porta pellentesque libero. Mauris nec
-                ultrices lacus. Praesent eros nulla, ornare sed luctus non, convallis in ipsum. Pellentesque fringilla
-                turpis vel arcu sollicitudin, in sollicitudin mauris scelerisque. Nam tempus odio sed ultrices varius.
-                Nullam tempus euismod pulvinar. Nulla ultrices congue enim, eu feugiat ante eleifend non.
-            </p>
-            <ul>
-                <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
-                <li>Nulla a est sit amet quam accumsan tempus.</li>
-                <li>Nullam fermentum sem a porta commodo.</li>
-                <li>Ut in sapien sed urna hendrerit facilisis.</li>
-            </ul>
+            {{ project.description }}
         </div>
         {{ block("navproject") }}
 
@@ -33,34 +16,35 @@
         </div>
         <div class="fb-image-profile thumbnail">
             <div class="border_tumbnail">
-                <img align="left" class=" " src="http://lorempixel.com/150/150/sports" alt="Profile image example"/>
+                <img data-src="holder.js/150x150" alt="150x150" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMTkyIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDE5MiAyMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPjwhLS0KU291cmNlIFVSTDogaG9sZGVyLmpzLzEwMCV4MjAwCkNyZWF0ZWQgd2l0aCBIb2xkZXIuanMgMi42LjAuCkxlYXJuIG1vcmUgYXQgaHR0cDovL2hvbGRlcmpzLmNvbQooYykgMjAxMi0yMDE1IEl2YW4gTWFsb3BpbnNreSAtIGh0dHA6Ly9pbXNreS5jbwotLT48ZGVmcz48c3R5bGUgdHlwZT0idGV4dC9jc3MiPjwhW0NEQVRBWyNob2xkZXJfMTRmZTc1NTBjMmEgdGV4dCB7IGZpbGw6I0FBQUFBQTtmb250LXdlaWdodDpib2xkO2ZvbnQtZmFtaWx5OkFyaWFsLCBIZWx2ZXRpY2EsIE9wZW4gU2Fucywgc2Fucy1zZXJpZiwgbW9ub3NwYWNlO2ZvbnQtc2l6ZToxMHB0IH0gXV0+PC9zdHlsZT48L2RlZnM+PGcgaWQ9ImhvbGRlcl8xNGZlNzU1MGMyYSI+PHJlY3Qgd2lkdGg9IjE5MiIgaGVpZ2h0PSIyMDAiIGZpbGw9IiNFRUVFRUUiLz48Zz48dGV4dCB4PSI3MC4wNTQ2ODc1IiB5PSIxMDQuNSI+MTkyeDIwMDwvdGV4dD48L2c+PC9nPjwvc3ZnPg==" data-holder-rendered="true">
+                {#<img align="left" class=" " src="http://lorempixel.com/150/150/sports" alt="Profile image example"/>#}
             </div>
 
         </div>
         <div class="fb-profile-text">
-            <h1>Eli Macy</h1>
+            <h1>{{ project.owner.fullName }}</h1>
         </div>
     </div>
 {% endblock header %}
 
 {% block title %}
-    project view with ID: {{ project.id }}
+    {{ project.title|humanize }}
 {% endblock title %}
 
 {% block navproject %}
     <div class="nav_project">
         <ul class="nav nav-pills">
-            <li><span>Created on: <span class="badge">dd/mm/yyyy</span></span></li>
+            <li><span>Created on: <span class="badge">{{ project.createAt|date('d-m-Y') }}</span></span></li>
             <li>
                 <span>Likes: <span class="badge">10 000</span></span>
             </li>
             <li>
                 <span>
-                    Source: <a href="http://www.google.com" class="badge">www.google.com</a>
+                    Source: <a href="{{ project.source }}" class="badge">{{ project.source|regexUrl }}</a>
                 </span>
             </li>
             <li>
-                <button class="btn btn-info read_more">Read more</button>
+                <button class="btn btn-info read_more">Підтримати</button>
             </li>
 
         </ul>

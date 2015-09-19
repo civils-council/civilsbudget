@@ -292,4 +292,10 @@ class User
     {
         return $this->projects;
     }
+
+    /*----------------------------------------other methods-----------------------------------------------------------*/
+    public function getFullName()
+    {
+        return $this->getLastName() . ' ' . $this->getFirstName() . ' ' . $this->getMiddleName();
+    }
 }
