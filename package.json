@@ -1,0 +1,20 @@
+{
+  "name": "civils-council",
+  "version": "1.0.0",
+  "description": "civils-council ==============",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bower": "^1.5.2",
+    "gulp": "^3.9.0",
+    "gulp-clean": "^0.3.1",
+    "gulp-concat": "^2.6.0",
+    "gulp-less": "^3.0.3",
+    "gulp-uglify": "^1.4.1",
+    "less": "^2.5.1"
+  }
+}
