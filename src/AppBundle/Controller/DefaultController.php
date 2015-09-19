@@ -17,4 +17,22 @@ class DefaultController extends Controller
     {
         return [];
     }
+
+    /**
+     * @Route("/profile", name="user_profile")
+     * @Template()
+     */
+    public function profileAction()
+    {
+        return [];
+    }
+
+    /**
+     * @Route("/project/{id}", name="show_project")
+     * @Template()
+     */
+    public function showProjectAction($id)
+    {
+        return ['id' => $id];
+    }
 }
