@@ -1,0 +1,17 @@
+parameters:
+#    app.example.class: AppBundle\Example
+
+services:
+    app.security.bank_id:
+        class: AppBundle\Security\BankIdService
+        arguments:
+            - %client_id%
+            - %secret%
+            - @router
+    app.twig_extension:
+        class: AppBundle\Twig\AppExtension
+        public: false
+        arguments:
+            - @app.security.bank_id
+        tags:
+            - { name: twig.extension }
