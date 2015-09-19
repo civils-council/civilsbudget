@@ -19,7 +19,7 @@ class User
     /**
      * @var integer
      *
-     * @ORM\Column(name="id", type="integer")
+     * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
@@ -28,37 +28,44 @@ class User
     /**
      * @var string
      *
-     * @ORM\Column(name="firstName", type="string", length=255)
+     * @ORM\Column(type="string", length=255)
      */
     private $firstName;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="lastName", type="string", length=255)
+     * @ORM\Column(type="string", length=255)
      */
     private $lastName;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="middleName", type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $middleName;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="birthday", type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $birthday;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="lastLoginAt", type="datetime")
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private $lastLoginAt;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $phone;
 
     /**
      * @var Location
@@ -209,6 +216,24 @@ class User
     {
         return $this->lastLoginAt;
     }
+
+    /**
+     * @return string
+     */
+    public function getPhone()
+    {
+        return $this->phone;
+    }
+
+    /**
+     * @param string $phone
+     */
+    public function setPhone($phone)
+    {
+        $this->phone = $phone;
+    }
+
+    /*-------------------------------relations methods----------------------------------------------------------------*/
 
     /**
      * Set location

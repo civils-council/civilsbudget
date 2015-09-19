@@ -15,7 +15,7 @@ class Location
     /**
      * @var integer
      *
-     * @ORM\Column(name="id", type="integer")
+     * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
@@ -24,42 +24,42 @@ class Location
     /**
      * @var string
      *
-     * @ORM\Column(name="country", type="string", length=255)
+     * @ORM\Column(type="string", length=255)
      */
     private $country;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="district", type="string", length=255)
+     * @ORM\Column(type="string", length=255)
      */
     private $district;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="region", type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $region;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="city", type="string", length=255)
+     * @ORM\Column(type="string", length=255)
      */
     private $city;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="cityRegion", type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $cityRegion;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="address", type="string", length=255)
+     * @ORM\Column(type="string", length=255)
      */
     private $address;
 

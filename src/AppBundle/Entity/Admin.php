@@ -18,7 +18,7 @@ class Admin
     /**
      * @var integer
      *
-     * @ORM\Column(name="id", type="integer")
+     * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
@@ -27,28 +27,28 @@ class Admin
     /**
      * @var string
      *
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(length=255)
      */
     private $username;
 
     /**
      * @var string
      *
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(length=255)
      */
     private $firstName;
 
     /**
      * @var string
      *
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(length=255)
      */
     private $lastName;
 
     /**
      * @var string
      *
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(length=255, nullable=true)
      */
     private $middleName;
 
@@ -137,6 +137,8 @@ class Admin
     {
         $this->middleName = $middleName;
     }
+
+    /*------------------------------------------ relations methods----------------------------------------------------*/
 
     /**
      * Add confirmedProject
