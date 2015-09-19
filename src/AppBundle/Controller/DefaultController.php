@@ -7,7 +7,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class DefaultController extends Controller
 {
@@ -19,7 +18,6 @@ class DefaultController extends Controller
     {
         return [
             'projects' => $this->getDoctrine()->getRepository('AppBundle:Project')->findAll(),
-//            'link' => $this->get('app.security.bank_id')->getLink(),
         ];
     }
 
@@ -45,12 +43,8 @@ class DefaultController extends Controller
      * @Route("/login", name="login")
      * @Template()
      */
-    public function loginAction(Request $request)
+    public function loginAction()
     {
-//        dump($request);
-
-        return [
-//            'link' => $this->get('app.security.bank_id')->getLink(),
-        ];
+        return [];
     }
 }
