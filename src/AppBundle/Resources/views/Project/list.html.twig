@@ -5,7 +5,10 @@
 {% endblock title %}
 
 {% block content %}
-    <div class="row">
+    {% for project in projects %}
+        {% if loop.index % 4 == 1 %}
+            <div class="row">
+        {% endif %}
         <div class="col-md-3">
             <div class="card">
                 <div class="card-image">
@@ -14,21 +17,21 @@
                 </div><!-- card image -->
 
                 <div class="card-content">
-                    <span class="card-title">Material Cards</span>
+                    <span class="card-title">{{ project.title }}</span>
                     <button type="button" id="show" class="btn btn-custom pull-right" aria-label="Left Align">
                         <i class="fa fa-ellipsis-v"></i>
                     </button>
                 </div><!-- card content -->
                 <div class="card-action">
                     <p class="description">
-                        Here is some more information about this product that is only revealed once clicked on.
+                        {{ project.description[:50] ~'...' }}
                     </p>
                     <hr>
                     <ul class="nav nav-pills">
-                        <li><span>Date of creation: <span class="badge">dd/mm/yyyy</span></span></li>
+                        <li><span>Date of creation: <span class="badge">{{ project.createAt|date('d-m-Y') }}</span></span></li>
                         <li>
                             <span>Likes: <span class="badge">10 000</span></span>
-                            <a href="{{ path('show_project', { id: 1 }) }}" class="btn btn-info read_more">Read more</a>
+                            <a href="{{ path('show_project', { id: project.id }) }}" class="btn btn-info read_more">Read more</a>
                         </li>
                     </ul>
 
@@ -38,275 +41,17 @@
                     <a href="#" target="new_blank">Link</a>#}
                 </div><!-- card actions -->
                 <div class="card-reveal">
-                    <span class="card-title">Card Title</span> <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                    <p>Here is some more information about this product that is only revealed once clicked on. Here is some more information about this product that is only revealed once clicked on.</p>
-                </div><!-- card reveal -->
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card">
-                <div class="card-image">
-                    <img class="img-responsive" src="http://lorempixel.com/555/300/sports">
-
-                </div><!-- card image -->
-
-                <div class="card-content">
-                    <span class="card-title">Material Cards</span>
-                    <button type="button" id="show" class="btn btn-custom pull-right" aria-label="Left Align">
-                        <i class="fa fa-ellipsis-v"></i>
-                    </button>
-                </div><!-- card content -->
-                <div class="card-action">
-                    <p class="description">
-                        Here is some more information about this product that is only revealed once clicked on.
+                    <span class="card-title">{{ project.title }}</span> <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <p>
+                        {{ project.description }}
                     </p>
-                    <hr>
-                    <ul class="nav nav-pills">
-                        <li><span>Date of creation: <span class="badge">dd/mm/yyyy</span></span></li>
-                        <li>
-                            <span>Likes: <span class="badge">10 000</span></span>
-                            <a href="#" class="btn btn-info read_more">Read more</a>
-                        </li>
-                    </ul>
-
-
-                    {#<a href="#" target="new_blank">Link</a>
-                    <a href="#" target="new_blank">Link</a>
-                    <a href="#" target="new_blank">Link</a>#}
-                </div><!-- card actions -->
-                <div class="card-reveal">
-                    <span class="card-title">Card Title</span> <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                    <p>Here is some more information about this product that is only revealed once clicked on. Here is some more information about this product that is only revealed once clicked on.</p>
                 </div><!-- card reveal -->
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card">
-                <div class="card-image">
-                    <img class="img-responsive" src="http://lorempixel.com/555/300/sports">
-
-                </div><!-- card image -->
-
-                <div class="card-content">
-                    <span class="card-title">Material Cards</span>
-                    <button type="button" id="show" class="btn btn-custom pull-right" aria-label="Left Align">
-                        <i class="fa fa-ellipsis-v"></i>
-                    </button>
-                </div><!-- card content -->
-                <div class="card-action">
-                    <p class="description">
-                        Here is some more information about this product that is only revealed once clicked on.
-                    </p>
-                    <hr>
-                    <ul class="nav nav-pills">
-                        <li><span>Date of creation: <span class="badge">dd/mm/yyyy</span></span></li>
-                        <li>
-                            <span>Likes: <span class="badge">10 000</span></span>
-                            <a href="#" class="btn btn-info read_more">Read more</a>
-                        </li>
-                    </ul>
-
-
-                    {#<a href="#" target="new_blank">Link</a>
-                    <a href="#" target="new_blank">Link</a>
-                    <a href="#" target="new_blank">Link</a>#}
-                </div><!-- card actions -->
-                <div class="card-reveal">
-                    <span class="card-title">Card Title</span> <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                    <p>Here is some more information about this product that is only revealed once clicked on. Here is some more information about this product that is only revealed once clicked on.</p>
-                </div><!-- card reveal -->
+        {% if loop.index % 4 == 0 %}
             </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card">
-                <div class="card-image">
-                    <img class="img-responsive" src="http://lorempixel.com/555/300/sports">
-
-                </div><!-- card image -->
-
-                <div class="card-content">
-                    <span class="card-title">Material Cards</span>
-                    <button type="button" id="show" class="btn btn-custom pull-right" aria-label="Left Align">
-                        <i class="fa fa-ellipsis-v"></i>
-                    </button>
-                </div><!-- card content -->
-                <div class="card-action">
-                    <p class="description">
-                        Here is some more information about this product that is only revealed once clicked on.
-                    </p>
-                    <hr>
-                    <ul class="nav nav-pills">
-                        <li><span>Date of creation: <span class="badge">dd/mm/yyyy</span></span></li>
-                        <li>
-                            <span>Likes: <span class="badge">10 000</span></span>
-                            <a href="#" class="btn btn-info read_more">Read more</a>
-                        </li>
-                    </ul>
-
-
-                    {#<a href="#" target="new_blank">Link</a>
-                    <a href="#" target="new_blank">Link</a>
-                    <a href="#" target="new_blank">Link</a>#}
-                </div><!-- card actions -->
-                <div class="card-reveal">
-                    <span class="card-title">Card Title</span> <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                    <p>Here is some more information about this product that is only revealed once clicked on. Here is some more information about this product that is only revealed once clicked on.</p>
-                </div><!-- card reveal -->
-            </div>
-        </div>
-
-    </div>
-    <div class="row">
-        <div class="col-md-3">
-            <div class="card">
-                <div class="card-image">
-                    <img class="img-responsive" src="http://lorempixel.com/555/300/sports">
-
-                </div><!-- card image -->
-
-                <div class="card-content">
-                    <span class="card-title">Material Cards</span>
-                    <button type="button" id="show" class="btn btn-custom pull-right" aria-label="Left Align">
-                        <i class="fa fa-ellipsis-v"></i>
-                    </button>
-                </div><!-- card content -->
-                <div class="card-action">
-                    <p class="description">
-                        Here is some more information about this product that is only revealed once clicked on.
-                    </p>
-                    <hr>
-                    <ul class="nav nav-pills">
-                        <li><span>Date of creation: <span class="badge">dd/mm/yyyy</span></span></li>
-                        <li>
-                            <span>Likes: <span class="badge">10 000</span></span>
-                            <a href="#" class="btn btn-info read_more">Read more</a>
-                        </li>
-                    </ul>
-
-
-                    {#<a href="#" target="new_blank">Link</a>
-                    <a href="#" target="new_blank">Link</a>
-                    <a href="#" target="new_blank">Link</a>#}
-                </div><!-- card actions -->
-                <div class="card-reveal">
-                    <span class="card-title">Card Title</span> <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                    <p>Here is some more information about this product that is only revealed once clicked on. Here is some more information about this product that is only revealed once clicked on.</p>
-                </div><!-- card reveal -->
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card">
-                <div class="card-image">
-                    <img class="img-responsive" src="http://lorempixel.com/555/300/sports">
-
-                </div><!-- card image -->
-
-                <div class="card-content">
-                    <span class="card-title">Material Cards</span>
-                    <button type="button" id="show" class="btn btn-custom pull-right" aria-label="Left Align">
-                        <i class="fa fa-ellipsis-v"></i>
-                    </button>
-                </div><!-- card content -->
-                <div class="card-action">
-                    <p class="description">
-                        Here is some more information about this product that is only revealed once clicked on.
-                    </p>
-                    <hr>
-                    <ul class="nav nav-pills">
-                        <li><span>Date of creation: <span class="badge">dd/mm/yyyy</span></span></li>
-                        <li>
-                            <span>Likes: <span class="badge">10 000</span></span>
-                            <a href="#" class="btn btn-info read_more">Read more</a>
-                        </li>
-                    </ul>
-
-
-                    {#<a href="#" target="new_blank">Link</a>
-                    <a href="#" target="new_blank">Link</a>
-                    <a href="#" target="new_blank">Link</a>#}
-                </div><!-- card actions -->
-                <div class="card-reveal">
-                    <span class="card-title">Card Title</span> <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                    <p>Here is some more information about this product that is only revealed once clicked on. Here is some more information about this product that is only revealed once clicked on.</p>
-                </div><!-- card reveal -->
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card">
-                <div class="card-image">
-                    <img class="img-responsive" src="http://lorempixel.com/555/300/sports">
-
-                </div><!-- card image -->
-
-                <div class="card-content">
-                    <span class="card-title">Material Cards</span>
-                    <button type="button" id="show" class="btn btn-custom pull-right" aria-label="Left Align">
-                        <i class="fa fa-ellipsis-v"></i>
-                    </button>
-                </div><!-- card content -->
-                <div class="card-action">
-                    <p class="description">
-                        Here is some more information about this product that is only revealed once clicked on.
-                    </p>
-                    <hr>
-                    <ul class="nav nav-pills">
-                        <li><span>Date of creation: <span class="badge">dd/mm/yyyy</span></span></li>
-                        <li>
-                            <span>Likes: <span class="badge">10 000</span></span>
-                            <a href="#" class="btn btn-info read_more">Read more</a>
-                        </li>
-                    </ul>
-
-
-                    {#<a href="#" target="new_blank">Link</a>
-                    <a href="#" target="new_blank">Link</a>
-                    <a href="#" target="new_blank">Link</a>#}
-                </div><!-- card actions -->
-                <div class="card-reveal">
-                    <span class="card-title">Card Title</span> <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                    <p>Here is some more information about this product that is only revealed once clicked on. Here is some more information about this product that is only revealed once clicked on.</p>
-                </div><!-- card reveal -->
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card">
-                <div class="card-image">
-                    <img class="img-responsive" src="http://lorempixel.com/555/300/sports">
-
-                </div><!-- card image -->
-
-                <div class="card-content">
-                    <span class="card-title">Material Cards</span>
-                    <button type="button" id="show" class="btn btn-custom pull-right" aria-label="Left Align">
-                        <i class="fa fa-ellipsis-v"></i>
-                    </button>
-                </div><!-- card content -->
-                <div class="card-action">
-                    <p class="description">
-                        Here is some more information about this product that is only revealed once clicked on.
-                    </p>
-                    <hr>
-                    <ul class="nav nav-pills">
-                        <li><span>Date of creation: <span class="badge">dd/mm/yyyy</span></span></li>
-                        <li>
-                            <span>Likes: <span class="badge">10 000</span></span>
-                            <a href="#" class="btn btn-info read_more">Read more</a>
-                        </li>
-                    </ul>
-
-
-                    {#<a href="#" target="new_blank">Link</a>
-                    <a href="#" target="new_blank">Link</a>
-                    <a href="#" target="new_blank">Link</a>#}
-                </div><!-- card actions -->
-                <div class="card-reveal">
-                    <span class="card-title">Card Title</span> <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                    <p>Here is some more information about this product that is only revealed once clicked on. Here is some more information about this product that is only revealed once clicked on.</p>
-                </div><!-- card reveal -->
-            </div>
-        </div>
-
-    </div>
+        {% endif %}
+    {% endfor %}
 {% endblock content %}
 
 {% block javascripts %}
