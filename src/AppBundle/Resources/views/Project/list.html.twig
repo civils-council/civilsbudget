@@ -10,7 +10,7 @@
             <div class="row">
         {% endif %}
         <div class="col-md-3">
-            <div class="card">
+            <div class="card" id="project{{ project.id }}">
                 <div class="card-image">
                     <img class="img-responsive" src="http://lorempixel.com/555/300/sports">
 
@@ -18,8 +18,8 @@
 
                 <div class="card-content">
                     <span class="card-title">{{ project.title }}</span>
-                    <button type="button" id="show" class="btn btn-custom pull-right" aria-label="Left Align">
-                        <i class="fa fa-ellipsis-v"></i>
+                    <button type="button" class="btn btn-custom pull-right cards" aria-label="Left Align" data-value="project{{ project.id }}">
+                        <i class="fa fa-ellipsis-v" data-value="project{{ project.id }}"></i>
                     </button>
                 </div><!-- card content -->
                 <div class="card-action">

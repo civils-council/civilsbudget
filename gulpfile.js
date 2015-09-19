@@ -57,5 +57,5 @@ gulp.task('default', ['clean'], function () {
 
 gulp.task('watch', function () {
     var less = gulp.watch('web-src/less/*.less', ['less']),
-        js = gulp.watch('web-src/js/!*.js', ['pages-js']);
+        js = gulp.watch('web-src/js/*.js', ['pages-js']);
 });
