@@ -1,12 +1,7 @@
-{% extends '@App/layout.html.twig' %}
-
-{% block title %}
-    Авторизація
-{% endblock title %}
-
-{% block content %}
+{% extends 'base.html.twig' %}
+{% block body %}
     {{ form (form) }}
-{% endblock %}
+{% endblock body %}
 
 {% form_theme form _self %}
 

@@ -50,4 +50,24 @@ class DefaultController extends Controller
 
         return ['form' => $form->createView()];
     }
+
+    /**
+     * @Route("/loginIncluded", name="login_included")
+     * @Template()
+     */
+    public function loginIncludedAction()
+    {
+        $authenticationUtils = $this->get('security.authentication_utils');
+
+        $data = ['secret' => $authenticationUtils->getLastUsername()];
+        $form = $this->createForm(new LoginType(), $data, ['action' => $this->generateUrl('login_check')]);
+
+        if ($error = $authenticationUtils->getLastAuthenticationError()) {
+            $this->addFlash('danger', $error->getMessage());
+
+            return $this->redirectToRoute('homepage');
+        }
+
+        return ['form' => $form->createView()];
+    }
 }
