@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller\Admin;
 
-use AppBundle\Entity\Admin;
 use AppBundle\Form\AdminLoginType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -25,8 +24,14 @@ class AdminController extends Controller
      */
     public function loginAction()
     {
-        $adminDTO = new Admin();
-        $form = $this->createForm(new AdminLoginType(), $adminDTO);
+        $authenticationUtils = $this->get('security.authentication_utils');
+
+        $data = ['username' => $authenticationUtils->getLastUsername()];
+        $form = $this->createForm(new AdminLoginType(), $data, ['action' => $this->generateUrl('admin_login_check')]);
+
+        if ($error = $authenticationUtils->getLastAuthenticationError()) {
+            $this->addFlash('danger', $error->getMessage());
+        }
 
         return ['form' => $form->createView()];
     }

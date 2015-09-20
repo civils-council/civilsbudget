@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Form\LoginType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -33,10 +34,20 @@ class DefaultController extends Controller
     /**
      * @Route("/login", name="login")
      * @Template()
-     * @Method({"GET"})
      */
     public function loginAction()
     {
-        return [];
+        $authenticationUtils = $this->get('security.authentication_utils');
+
+        $data = ['secret' => $authenticationUtils->getLastUsername()];
+        $form = $this->createForm(new LoginType(), $data, ['action' => $this->generateUrl('login_check')]);
+
+        if ($error = $authenticationUtils->getLastAuthenticationError()) {
+            $this->addFlash('danger', $error->getMessage());
+
+            return $this->redirectToRoute('homepage');
+        }
+
+        return ['form' => $form->createView()];
     }
 }

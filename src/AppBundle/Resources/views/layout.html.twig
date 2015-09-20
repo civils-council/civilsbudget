@@ -6,9 +6,23 @@
     <div class="container">
         <div class="bs-docs-section">
             {{ block("header") }}
+            {{ block("flash") }}
             {{ block("content") }}
         </div>
         {{ block("footer") }}
+    </div>
+    <div id="login-modal" class="modal fade">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Логін</h4>
+                </div>
+                <div class="modal-body">
+                    {{ render(url('login')) }}
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock body %}
 
@@ -27,7 +41,7 @@
     <div class="navbar navbar-default navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
-                <a href="../" class="navbar-brand">Лого</a>
+                <a href="{{ path("homepage") }}" class="navbar-brand">Лого</a>
                 <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
@@ -41,7 +55,11 @@
 
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-                        <a href="{{ login_url }}">Логін</a>
+                        {% if app.user %}
+                            <a href="{{ path('logout') }}">Вихід</a>
+                        {% else %}
+                            <a href="#" data-toggle="modal" data-target="#login-modal">Увійти</a>
+                        {% endif %}
                     </li>
                 </ul>
 

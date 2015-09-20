@@ -7,3 +7,7 @@ admin_login_check:
     path: /admin/login_check
 admin_logout:
     path: /admin/logout
+login_check:
+    path: /login_check
+logout:
+    path: /logout

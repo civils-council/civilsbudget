@@ -5,6 +5,7 @@ namespace AppBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * User
@@ -12,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="AppBundle\Entity\UserRepository")
  */
-class User
+class User implements UserInterface
 {
     use GedmoTrait;
 
@@ -81,6 +82,13 @@ class User
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Project", mappedBy="owner")
      */
     private $projects;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", length=255)
+     */
+    private $secret;
 
     public function __construct()
     {
@@ -233,6 +241,22 @@ class User
         $this->phone = $phone;
     }
 
+    /**
+     * @return string
+     */
+    public function getSecret()
+    {
+        return $this->secret;
+    }
+
+    /**
+     * @param string $secret
+     */
+    public function setSecret($secret)
+    {
+        $this->secret = $secret;
+    }
+
     /*-------------------------------relations methods----------------------------------------------------------------*/
 
     /**
@@ -297,5 +321,44 @@ class User
     public function getFullName()
     {
         return $this->getLastName() . ' ' . $this->getFirstName() . ' ' . $this->getMiddleName();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getRoles()
+    {
+        return ['ROLE_USER'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPassword()
+    {
+        return null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSalt()
+    {
+        return null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getUsername()
+    {
+        return $this->getFullName();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function eraseCredentials()
+    {
     }
 }

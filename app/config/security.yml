@@ -18,7 +18,7 @@ security:
         user:
             entity:
                 class: AppBundle:User
-#                property: key
+                property: secret
 
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
@@ -37,12 +37,22 @@ security:
                 login_path: admin_login
                 check_path: admin_login_check
                 username_parameter: admin_login[username]
-                password_parameter: loadmin_logingin[password]
+                password_parameter: admin_login[password]
             logout:
                 path: admin_logout
+                target: /admin
 
         main:
+            pattern: ^/
             anonymous: ~
+            form_login:
+                provider: user
+                login_path: login
+                check_path: login_check
+                username_parameter: login[secret]
+            logout:
+                path: logout
+                target: /
 
     access_control:
         - { path: ^/admin/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY }

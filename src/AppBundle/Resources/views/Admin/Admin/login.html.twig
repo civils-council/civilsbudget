@@ -8,6 +8,7 @@
     <div class="container">
         <div class="bs-docs-section">
             {{ block("header") }}
+            {{ block('flash') }}
             {{ form(form) }}
         </div>
     </div>
@@ -26,4 +27,4 @@
 {% form_theme form _self %}
 
 {% block button_size %}btn btn-success btn-block{% endblock button_size %}
-{% block button_label %}Логін{% endblock button_label %}
+{% block button_label %}Увійти{% endblock button_label %}
