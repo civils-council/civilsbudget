@@ -35,15 +35,15 @@
         <ul class="nav nav-pills">
             <li><span>Створено: <span class="badge">{{ project.createAt|date('d-m-Y') }}</span></span></li>
             <li>
-                <span>Підтримало: <span class="badge">10 000</span></span>
+                <span>Підтримало: <span class="badge">{{ project.likedUsers|length|number_format(0, '.', ' ') }}</span></span>
             </li>
             <li>
                 <span>
                     Звідки: <a href="{{ project.source }}" class="badge">{{ project.source|regexUrl }}</a>
                 </span>
             </li>
-            <li>
-                <button class="btn btn-info read_more">Підтримати</button>
+            <li {{ app.user is null ? ' data-toggle="modal" data-target="#login-modal"' }}>
+                {{ render(controller('AppBundle:Project:like', { id: project.id })) }}
             </li>
 
         </ul>

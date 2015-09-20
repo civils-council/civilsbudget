@@ -58,7 +58,7 @@
                         {% if app.user %}
                             <a href="{{ path('logout') }}">Вихід</a>
                         {% elseif app.request.get('_route') != 'login' %}
-                            <a href="#" data-toggle="modal" data-target="#login-modal">Увійти</a>
+                            <a href="" data-toggle="modal" data-target="#login-modal">Увійти</a>
                         {% endif %}
                     </li>
                 </ul>

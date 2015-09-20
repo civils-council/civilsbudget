@@ -90,9 +90,17 @@ class User implements UserInterface
      */
     private $secret;
 
+    /**
+     * @var Collection
+     *
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Project", mappedBy="likedUsers")
+     */
+    private $likedProjects;
+
     public function __construct()
     {
         $this->projects = new ArrayCollection();
+        $this->likedProjects = new ArrayCollection();
     }
 
     /**
@@ -315,6 +323,44 @@ class User implements UserInterface
     public function getProjects()
     {
         return $this->projects;
+    }
+
+    /**
+     * Add likedProject
+     *
+     * @param Project $likedProject
+     *
+     * @return User
+     */
+    public function addLikedProject(Project $likedProject)
+    {
+        if (!$this->getLikedProjects()->contains($likedProject)) {
+            $this->getLikedProjects()->add($likedProject);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Remove likedProject
+     *
+     * @param Project $likedProject
+     */
+    public function removeLikedProject(Project $likedProject)
+    {
+        if ($this->getLikedProjects()->contains($likedProject)) {
+            $this->getLikedProjects()->removeElement($likedProject);
+        }
+    }
+
+    /**
+     * Get likedProjects
+     *
+     * @return Collection
+     */
+    public function getLikedProjects()
+    {
+        return $this->likedProjects;
     }
 
     /*----------------------------------------other methods-----------------------------------------------------------*/

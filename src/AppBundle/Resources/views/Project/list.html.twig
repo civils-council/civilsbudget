@@ -32,10 +32,10 @@
                             <span>Створено: <span class="badge">{{ project.createAt|date('d-m-Y') }}</span></span>
                         </li>
                         <li>
-                            <span>Підтримало: <span class="badge">10 000</span></span>
+                            <span>Підтримало: <span class="badge">{{ project.likedUsers|length|number_format(0, '.', ' ') }}</span></span>
                         </li>
                         <li>
-                            <a href="{{ path('show_project', { id: project.id }) }}" class="btn btn-info read_more">Читати далі</a>
+                            <a href="{{ path('projects_show', { id: project.id }) }}" class="btn btn-info read_more">Читати далі</a>
                         </li>
                     </ul>
 

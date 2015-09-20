@@ -2,6 +2,8 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -72,6 +74,18 @@ class Project
      * @ORM\JoinColumn(onDelete="SET NULL")
      */
     private $owner;
+
+    /**
+     * @var Collection
+     *
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\User", inversedBy="likedProjects")
+     */
+    private $likedUsers;
+
+    public function __construct()
+    {
+        $this->likedUsers = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -195,6 +209,7 @@ class Project
         return $this->confirmedAt;
     }
 
+    /*-------------------------------relation methods------------------------------------------------------------------*/
     /**
      * Set confirmedBy
      *
@@ -241,5 +256,44 @@ class Project
     public function getOwner()
     {
         return $this->owner;
+    }
+
+    /**
+     * Add likedUser
+     *
+     * @param User $likedUser
+     *
+     * @return Project
+     */
+    public function addLikedUser(User $likedUser)
+    {
+        if (!$this->getLikedUsers()->contains($likedUser)) {
+            $this->getLikedUsers()->add($likedUser);
+            $likedUser->addLikedProject($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Remove likedUser
+     *
+     * @param User $likedUser
+     */
+    public function removeLikedUser(User $likedUser)
+    {
+        if ($this->getLikedUsers()->contains($likedUser)) {
+            $this->getLikedUsers()->removeElement($likedUser);
+        }
+    }
+
+    /**
+     * Get likedUsers
+     *
+     * @return Collection
+     */
+    public function getLikedUsers()
+    {
+        return $this->likedUsers;
     }
 }
