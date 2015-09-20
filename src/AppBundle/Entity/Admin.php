@@ -5,6 +5,7 @@ namespace AppBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Admin
@@ -12,9 +13,10 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="AppBundle\Entity\AdminRepository")
  */
-class Admin
+class Admin implements UserInterface
 {
     use GedmoTrait;
+
     /**
      * @var integer
      *
@@ -59,6 +61,13 @@ class Admin
      */
     private $confirmedProjects;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", length=255)
+     */
+    private $password;
+
     public function __construct()
     {
         $this->confirmedProjects = new ArrayCollection();
@@ -96,6 +105,22 @@ class Admin
     public function getFirstName()
     {
         return $this->firstName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPassword()
+    {
+        return $this->password;
+    }
+
+    /**
+     * @param string $password
+     */
+    public function setPassword($password)
+    {
+        $this->password = $password;
     }
 
     /**
@@ -173,4 +198,27 @@ class Admin
     {
         return $this->confirmedProjects;
     }
+
+    /*--------------------------------implements methods--------------------------------------------------------------*/
+    /**
+     * {@inheritdoc}
+     */
+    public function getRoles()
+    {
+        return ['ROLE_ADMIN'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSalt()
+    {
+        return null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function eraseCredentials()
+    {}
 }

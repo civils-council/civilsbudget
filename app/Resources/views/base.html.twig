@@ -14,3 +14,15 @@
         {% endblock %}
     </body>
 </html>
+
+{% block flash %}
+    {% for flashType in app.session.flashbag.keys %}
+        {% for flash in app.session.flashbag.get(flashType) %}
+            <div class="alert alert-dismissible alert-{{ flashType }}">
+                <button type="button" class="close" data-dismiss="alert">×</button>
+                <h4>{{ flashType|humanize }}!</h4>
+                <p>{{ flash }}</p>
+            </div>
+        {% endfor %}
+    {% endfor %}
+{% endblock flash %}
