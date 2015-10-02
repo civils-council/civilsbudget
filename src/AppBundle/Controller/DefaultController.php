@@ -35,12 +35,16 @@ class DefaultController extends Controller
      * @Route("/login", name="login")
      * @Template()
      */
-    public function loginAction()
+    public function loginAction(Request $request)
     {
         $authenticationUtils = $this->get('security.authentication_utils');
 
         $data = ['secret' => $authenticationUtils->getLastUsername()];
         $form = $this->createForm(new LoginType(), $data, ['action' => $this->generateUrl('login_check')]);
+
+        if ($code = $request->query->get('code')) {
+            $this->get('app.security.bank_id')->getAccessToken($code);
+        }
 
         if ($error = $authenticationUtils->getLastAuthenticationError()) {
             $this->addFlash('danger', $error->getMessage());
