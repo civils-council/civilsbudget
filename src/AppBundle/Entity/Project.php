@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="AppBundle\Entity\ProjectRepository")
  */
-class Project
+class Project implements \JsonSerializable
 {
     use GedmoTrait;
 
@@ -295,5 +295,17 @@ class Project
     public function getLikedUsers()
     {
         return $this->likedUsers;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    function jsonSerialize()
+    {
+        return [
+            "id" => $this->getId(),
+            "title" => $this->getTitle(),
+            "description" => $this->getDescription(),
+        ];
     }
 }

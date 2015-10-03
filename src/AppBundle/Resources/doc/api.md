@@ -10,6 +10,7 @@ __GET__ `/api/projects`
 ####Response
 
 __200__
+
 	{
 		"projects": [{
 			"id": 1,
@@ -30,6 +31,7 @@ __GET__ `/api/projects/{id}`
 ###Response
 
 __200__
+
 	{
 		"project": {
 			"id": 1,
@@ -42,6 +44,8 @@ __200__
 			"owner": "fullName"
 		}
 	}
+
+
 
 
 
