@@ -16,4 +16,5 @@
 /vendor/
 /web/bundles/
 /web-src/less/*.css
+*~
 .idea
