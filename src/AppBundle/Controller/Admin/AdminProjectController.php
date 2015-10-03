@@ -62,6 +62,7 @@ class AdminProjectController extends Controller
             }
 
             return [
+                'debug' => true,
                 'project' => $project,
                 'form' => $form->createView(),
             ];
@@ -70,6 +71,40 @@ class AdminProjectController extends Controller
             return $this->redirect($this->generateUrl('login'));
         }
 
+    }
+
+    /**
+     * @Route("/add", name="admin_projects_add")
+     * @Method({"GET", "POST"})
+     * @Template()
+     */
+    public function addProjectAction(Request $request)
+    {
+        $security = $this->get('security.context');
+        if ($security->isGranted('ROLE_ADMIN')) {
+            $entity = new Project();
+            $form = $this->createCreateForm($entity);
+            $form->submit($request);
+            if ($request->isMethod('POST')) {
+                if ($form->isValid()) {
+                    $em = $this->getDoctrine()->getManager();
+                    $entity->setOwner($this->getUser());
+
+                    $em->persist($entity);
+                    $em->flush();
+
+                    return $this->redirect($this->generateUrl('projects_show', array('id' => $entity->getId())));
+                }
+            }
+            return [
+                'entity' => $entity,
+                'form' => $form->createView(),
+            ];
+
+        }
+        else{
+            return $this->redirect($this->generateUrl('login'));
+        }
     }
 
         // --------------------------------- Create Forms ---------------------------------
@@ -84,7 +119,7 @@ class AdminProjectController extends Controller
         private function createCreateForm(Project $entity)
     {
         $form = $this->createForm(new AddProjectType(), $entity, array(
-            'action' => $this->generateUrl('admin_project_show', array('id' => $entity->getId())),
+            'action' => $this->generateUrl('admin_projects_add', array('id' => $entity->getId())),
             'method' => 'POST',
             'attr' => array('class' => 'formCreateClass'),
         ));
