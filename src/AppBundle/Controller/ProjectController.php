@@ -20,8 +20,9 @@ class ProjectController extends Controller
      */
     public function listAction()
     {
+        $projects =$this->getDoctrine()->getRepository('AppBundle:Project')->findByConfirm('approved');
         return [
-            'projects' => $this->getDoctrine()->getRepository('AppBundle:Project')->findAll(),
+            'projects' => $projects,
         ];
     }
 
