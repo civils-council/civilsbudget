@@ -34,7 +34,7 @@ class BankIdService
 
     public function getAccessToken($code)
     {
-//        $client = new Client();
+        $client = new Client();
         $sha1 = sha1($this->clientId . $this->secret. $code, false);
         $url =  sprintf(
             self::BANK_ID_URL_ACCESS_TOKEN,
@@ -46,9 +46,9 @@ class BankIdService
 //        $url = "https://bankid.privatbank.ua/DataAccessService/oauth/token?grant_type=authorization_code&client_id={$this->clientId}&client_secret={$sha1}&code={$code}&redirect_uri=" . $this->router->generate('login', [], UrlGeneratorInterface::ABSOLUTE_URL);
 
 
-//        $response = $client->get()->send()->getBody();
+        $response = $client->get($url)->send()->getBody(true);
 
-//        dump($url);
+        dump($response);
 
     }
 }
