@@ -306,6 +306,11 @@ class Project implements \JsonSerializable
             "id" => $this->getId(),
             "title" => $this->getTitle(),
             "description" => $this->getDescription(),
+            "source" => $this->getSource(),
+            "picture" => $this->getPicture(),
+            "createdAt" => $this->getCreateAt()->format('c'),
+            "likes" => $this->getLikedUsers()->count(),
+            "owner" => $this->getOwner()->getFullName(),
         ];
     }
 }
