@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 class BankIdService
 {
     const BANK_ID_URL_LOGIN = "https://bankid.privatbank.ua/DataAccessService/das/authorize?response_type=code&client_id=%s&redirect_uri=%s";
-    const BANK_ID_URL_ACCESS_TOKEN = "https://bankid.privatbank.ua/DataAccessService/oauth/token";
+    const BANK_ID_URL_ACCESS_TOKEN = "https://bankid.privatbank.ua/DataAccessService/oauth/token?grant_type=authorization_code&client_id=%s&client_secret=%s&code=%s&redirect_uri=%s";
 
     private $clientId;
     private $secret;
@@ -35,18 +35,20 @@ class BankIdService
     public function getAccessToken($code)
     {
 //        $client = new Client();
-        $sha1 = sha1($this->clientId . $this->secret . $code);
-        dump($sha1, $this->clientId, $this->secret, $code, "https://bankid.privatbank.ua/DataAccessService/oauth/token?grant_type=authorization_code&client_id={$this->clientId}&client_secret={$sha1}&code={$code}&redirect_uri=http://civilsbudget.local/app_dev.php/login" );
+        $sha1 = sha1($this->clientId . $this->secret. $code, false);
+        $url =  sprintf(
+            self::BANK_ID_URL_ACCESS_TOKEN,
+            $this->clientId,
+            $sha1,
+            $code,
+            $this->router->generate('login', [], UrlGeneratorInterface::ABSOLUTE_URL)
+        );
+//        $url = "https://bankid.privatbank.ua/DataAccessService/oauth/token?grant_type=authorization_code&client_id={$this->clientId}&client_secret={$sha1}&code={$code}&redirect_uri=" . $this->router->generate('login', [], UrlGeneratorInterface::ABSOLUTE_URL);
 
-//
-//        $client->get(self::BANK_ID_URL_ACCESS_TOKEN, [
-//            'query' => [
-//                'grant_type' => 'authorization_code',
-//                'client_id' => $this->clientId,
-//                'client_secret' => $this->secret,
-//                'code' => $code,
-//                'redirect_uri' => $callBack = $this->router->generate('login', [], UrlGeneratorInterface::ABSOLUTE_URL),
-//            ]
-//        ]);
+
+//        $response = $client->get()->send()->getBody();
+
+//        dump($url);
+
     }
 }
