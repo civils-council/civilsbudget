@@ -42,7 +42,7 @@ class Project
     /**
      * @var string
      *
-     * @ORM\Column(name="source", type="string", length=255)
+     * @ORM\Column(name="source", type="string", length=255, nullable=true)
      */
     private $source;
 
@@ -56,7 +56,7 @@ class Project
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="confirmedAt", type="datetime")
+     * @ORM\Column(name="confirmedAt", type="datetime", nullable=true)
      */
     private $confirmedAt;
 
