@@ -1,0 +1,68 @@
+{% extends "@App/layout.html.twig" %}
+
+{% block title %}
+    Projects
+{% endblock title %}
+
+{% block content %}
+    {% for project in projects %}
+        {% if loop.index % 4 == 1 %}
+            <div class="row">
+        {% endif %}
+        <div class="col-md-3">
+            <div class="card" id="project{{ project.id }}">
+                <div class="card-image">
+                    <img class="img-responsive" src="http://lorempixel.com/555/300/sports">
+
+                </div><!-- card image -->
+
+                <div class="card-content">
+                    <span class="card-title">{{ project.title|humanize }}</span>
+                    <button type="button" class="btn btn-custom pull-right cards" aria-label="Left Align" data-value="project{{ project.id }}">
+                        <i class="fa fa-ellipsis-v" data-value="project{{ project.id }}"></i>
+                    </button>
+                </div><!-- card content -->
+                <div class="card-action">
+                    <p class="description">
+                        {{ project.description[:50] ~'...' }}
+                    </p>
+                    <hr>
+                    <ul class="nav nav-pills">
+                        <li>
+                            <span>Створено: <span class="badge">{{ project.createAt|date('d-m-Y') }}</span></span>
+                        </li>
+                        <li>
+                            <span>Підтримало: <span class="badge">{{ project.likedUsers|length|number_format(0, '.', ' ') }}</span></span>
+                        </li>
+                        <li>
+                            <span>Статус: <span class="badge">{{ project.confirm}}</span></span>
+                        </li>
+
+                        <li>
+                            <a href="{{ path('admin_project_show', { id: project.id }) }}" class="btn btn-info read_more">Читати далі</a>
+                        </li>
+                    </ul>
+
+
+                    {#<a href="#" target="new_blank">Link</a>
+                    <a href="#" target="new_blank">Link</a>
+                    <a href="#" target="new_blank">Link</a>#}
+                </div><!-- card actions -->
+                <div class="card-reveal">
+                    <span class="card-title">{{ project.title }}</span> <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <p>
+                        {{ project.description }}
+                    </p>
+                </div><!-- card reveal -->
+            </div>
+        </div>
+        {% if loop.index % 4 == 0 %}
+            </div>
+        {% endif %}
+    {% endfor %}
+{% endblock content %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/project_list.js') }}"></script>
+{% endblock %}
