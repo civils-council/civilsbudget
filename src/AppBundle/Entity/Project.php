@@ -61,6 +61,13 @@ class Project
     private $confirmedAt;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="confirm", type="string", length=255, nullable=true)
+     */
+    private $confirm;
+
+    /**
      * @var Admin
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Admin", inversedBy="confirmedProjects")
@@ -295,5 +302,29 @@ class Project
     public function getLikedUsers()
     {
         return $this->likedUsers;
+    }
+
+    /**
+     * Set confirm
+     *
+     * @param string $confirm
+     *
+     * @return Project
+     */
+    public function setConfirm($confirm)
+    {
+        $this->confirm = $confirm;
+
+        return $this;
+    }
+
+    /**
+     * Get confirm
+     *
+     * @return string
+     */
+    public function getConfirm()
+    {
+        return $this->confirm;
     }
 }
