@@ -39,7 +39,11 @@
             </li>
             <li>
                 <span>
-                    Звідки: <a href="{{ project.source }}" class="badge">{{ project.source|regexUrl }}</a>
+                    Звідки: <a href="{{ project.source }}" class="badge">
+                        {% if project.source is defined %}
+                        {{ project.source|regexUrl }}
+                        {% endif %}
+                    </a>
                 </span>
             </li>
             <li {{ app.user is null ? ' data-toggle="modal" data-target="#login-modal"' }}>
