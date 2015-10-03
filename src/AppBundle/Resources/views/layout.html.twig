@@ -53,8 +53,12 @@
             </div>
             <div class="navbar-collapse collapse" id="navbar-main">
                 <ul class="nav navbar-nav">
-                    {% if app.user %}
-                        <li><a href="{{ path('projects_add') }}">Add Project</a></li>
+                    {#{{ dump(is_granted('ROLE_USER'), is_granted('ROLE_ADMIN')) }}#}
+                        {% if app.user and is_granted('ROLE_USER') %}
+                        <li><a href="{{ path('projects_add') }}">Add Project User</a></li>
+                    {% endif %}
+                    {% if app.user and is_granted('ROLE_ADMIN') %}
+                        <li><a href="{{ path('admin_projects_add') }}">Add Project Admin</a></li>
                     {% endif %}
                 </ul>
 
