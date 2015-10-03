@@ -55,8 +55,6 @@
                 <ul class="nav navbar-nav">
                     {% if app.user %}
                         <li><a href="{{ path('projects_add') }}">Add Project</a></li>
-                    {% else %}
-                        <li><a href="{{ path('logout') }}">Registration</a></li>
                     {% endif %}
                 </ul>
 
