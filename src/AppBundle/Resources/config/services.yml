@@ -6,7 +6,7 @@ services:
         class: AppBundle\Security\BankIdService
         arguments:
             - %client_id%
-            - %secret%
+            - %client_secret%
             - @router
     app.twig_extension:
         class: AppBundle\Twig\AppExtension
