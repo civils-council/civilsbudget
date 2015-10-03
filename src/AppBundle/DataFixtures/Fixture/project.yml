@@ -4,5 +4,6 @@ AppBundle\Entity\Project:
         description: <text(2000)>
         owner: @user*
         source: <url()>
+        confirm: <characterConfirm()>
         confirmedAt: <datetime()>
         confirmedBy: @admin*
