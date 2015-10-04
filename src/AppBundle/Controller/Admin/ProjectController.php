@@ -3,7 +3,7 @@
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Entity\Project;
-use AppBundle\Form\AddProjectType;
+use AppBundle\Form\ProjectType;
 use AppBundle\Form\AdminLoginType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @Route("/admin/projects")
  */
-class AdminProjectController extends Controller
+class ProjectController extends Controller
 {
     /**
      * @Route("/show", name="admin_projects_show")
@@ -24,13 +24,9 @@ class AdminProjectController extends Controller
      */
     public function listAction()
     {
-        $security = $this->get('security.context');
-        if ($security->isGranted('ROLE_ADMIN')) {
-            return ['projects' => $this->getDoctrine()->getRepository('AppBundle:Project')->findAll()];
-        }
-        else{
-            return $this->redirect($this->generateUrl('login'));
-        }
+
+        return ['projects' => $this->getDoctrine()->getRepository('AppBundle:Project')->findAll()];
+
     }
 
     /**
@@ -40,13 +36,11 @@ class AdminProjectController extends Controller
      */
     public function showProjectAction(Project $project, Request $request)
     {
-        $security = $this->get('security.context');
-        if ($security->isGranted('ROLE_ADMIN')) {
 
-            $form = $this->createCreateForm($project);
+        $form = $this->createCreateForm($project);
 
-            if ($request->isMethod('POST')) {
-                $form->submit($request);
+        if ($request->isMethod('POST')) {
+            $form->submit($request);
                 if ($form->isValid()) {
                     $em = $this->getDoctrine()->getManager();
                     $project
@@ -59,17 +53,13 @@ class AdminProjectController extends Controller
 
                     return $this->redirect($this->generateUrl('admin_projects_show', array('id' => $project->getId())));
                 }
-            }
+        }
 
-            return [
+        return [
                 'debug' => true,
                 'project' => $project,
                 'form' => $form->createView(),
-            ];
-        }
-        else{
-            return $this->redirect($this->generateUrl('login'));
-        }
+        ];
 
     }
 
@@ -80,45 +70,38 @@ class AdminProjectController extends Controller
      */
     public function addProjectAction(Request $request)
     {
-        $security = $this->get('security.context');
-        if ($security->isGranted('ROLE_ADMIN')) {
-            $entity = new Project();
-            $form = $this->createCreateForm($entity);
-            $form->submit($request);
+        $project = new Project();
+        $form = $this->createCreateForm($project);
+        $form->submit($request);
             if ($request->isMethod('POST')) {
                 if ($form->isValid()) {
                     $em = $this->getDoctrine()->getManager();
-                    $entity->setOwner($this->getUser());
+                    $project->setOwner($this->getUser());
 
-                    $em->persist($entity);
+                    $em->persist($project);
                     $em->flush();
 
-                    return $this->redirect($this->generateUrl('projects_show', array('id' => $entity->getId())));
+                    return $this->redirect($this->generateUrl('projects_show', array('id' => $project->getId())));
                 }
             }
-            return [
-                'entity' => $entity,
+        return [
+                'entity' => $project,
                 'form' => $form->createView(),
-            ];
-
-        }
-        else{
-            return $this->redirect($this->generateUrl('login'));
-        }
+        ];
     }
 
-        // --------------------------------- Create Forms ---------------------------------
+    // --------------------------------- Create Forms ---------------------------------
 
-        /**
-         * Creates a form to create a Project entity.
-         *
-         * @param Project $entity The entity
-         *
-         * @return \Symfony\Component\Form\Form The form
-         */
-        private function createCreateForm(Project $entity)
+    /**
+     * Creates a form to create a Project entity.
+     *
+     * @param Project $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createCreateForm(Project $entity)
     {
-        $form = $this->createForm(new AddProjectType(), $entity, array(
+        $form = $this->createForm(new ProjectType(), $entity, array(
             'action' => $this->generateUrl('admin_projects_add', array('id' => $entity->getId())),
             'method' => 'POST',
             'attr' => array('class' => 'formCreateClass'),

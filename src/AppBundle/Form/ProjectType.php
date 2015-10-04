@@ -6,7 +6,7 @@ use Symfony\Component\Form\AbstractType,
     Symfony\Component\Form\FormBuilderInterface,
     Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class AddProjectType extends AbstractType
+class ProjectType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -37,6 +37,6 @@ class AddProjectType extends AbstractType
      */
     public function getName()
     {
-        return 'add_project';
+        return 'project';
     }
 }
