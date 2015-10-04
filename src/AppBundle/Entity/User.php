@@ -13,7 +13,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="AppBundle\Entity\UserRepository")
  */
-class User implements UserInterface
+class User implements UserInterface, \JsonSerializable
 {
     use GedmoTrait;
 
@@ -89,6 +89,13 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255)
      */
     private $secret;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", length=255)
+     */
+    private $clid;
 
     /**
      * @var Collection
@@ -265,6 +272,22 @@ class User implements UserInterface
         $this->secret = $secret;
     }
 
+    /**
+     * @return string
+     */
+    public function getClid()
+    {
+        return $this->clid;
+    }
+
+    /**
+     * @param string $secret
+     */
+    public function setClid($clid)
+    {
+        $this->clid = $clid;
+    }
+
     /*-------------------------------relations methods----------------------------------------------------------------*/
 
     /**
@@ -406,5 +429,16 @@ class User implements UserInterface
      */
     public function eraseCredentials()
     {
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    function jsonSerialize()
+    {
+        return [
+            "id" => $this->getId(),
+            "full_name" => $this->getFullName(),
+        ];
     }
 }
