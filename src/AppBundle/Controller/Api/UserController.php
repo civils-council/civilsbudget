@@ -11,15 +11,14 @@ use Symfony\Component\HttpFoundation\Request;
 class UserController extends Controller
 {
     /**
-     * @Route("/api/authorization", name="api_projects_list")
+     * @Route("/api/authorization", name="api_authorization")
      * @Method({"GET", "POST"})
      */
-    public function authAction(Request $request)
+    public function authorizationAction(Request $request)
     {
-//        $code = $request->query->get('code');
-        $code = 'tRMFjd54438';
+        $code = $request->query->get('code');
+//        $code = 'tRMFjd54438';
         $data = $this->get('app.security.bank_id')->getAccessToken($code);
-        $json = serialize($data);
-        return new JsonResponse(["data" => $json]);
+        return new JsonResponse(["data" => $data]);
     }
 }

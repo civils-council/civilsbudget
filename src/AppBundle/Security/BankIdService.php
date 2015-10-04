@@ -46,8 +46,7 @@ class BankIdService
 
         $accessToken = $client->get($url)->send()->getBody(true);
 
-        $data = $this->getBankIdUser($accessToken);
-        return $data;
+        return $this->getBankIdUser($accessToken);
     }
 
     public function getBankIdUser($rawAccessToken)
