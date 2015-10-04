@@ -16,9 +16,16 @@ class UserController extends Controller
      */
     public function authorizationAction(Request $request)
     {
-        $code = $request->query->get('code');
-//        $code = 'tRMFjd54438';
+//        $code = $request->query->get('code');
+        $code = 'N4iFZw50015';
         $data = $this->get('app.security.bank_id')->getAccessToken($code);
+
+        $state = $data['state'];
+        if ($data['state'] == 'ok') {
+            $clid = $data['customer']['clId'];
+            $user = $this->get('app.user.manager')->isUniqueUser($clid);
+        }
         return new JsonResponse(["data" => $data]);
+
     }
 }
