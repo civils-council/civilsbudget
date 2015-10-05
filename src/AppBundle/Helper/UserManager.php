@@ -25,17 +25,17 @@ class UserManager
 
     public function isUniqueUser($clid)
     {
-        $found = $this->em->getRepository('AppBundle:User')->findByClid($clid);
-        if (empty($found)) {
-            try {
+        $user = $this->em->getRepository('AppBundle:User')->findByClid($clid);
+        if (empty($user)) {
                 //ToDo create new User
 //                $this->em->flush();
 //                $this->mail->toUser_registration($user);//congratulation for registration
-            } catch (Exception $e) { return false; }
-        } else {
-            return false;
         }
-        return $found;
+        else
+        {
+            //ToDo add user in security context
+        }
+        return $user;
     }
 
 //    public function getInfoIpCountry($ip)
