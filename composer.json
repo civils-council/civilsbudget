@@ -21,7 +21,8 @@
         "stof/doctrine-extensions-bundle": "^1.2",
         "hautelook/alice-bundle": "^0.2.0",
         "guzzle/guzzle": "^3.9",
-        "mcfedr/json-form": "^3.1"
+        "mcfedr/json-form": "^3.1",
+        "eightpoints/guzzle-bundle": "~4.2"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"

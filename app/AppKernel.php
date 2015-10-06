@@ -18,6 +18,7 @@ class AppKernel extends Kernel
 
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
             new Mcfedr\JsonFormBundle\McfedrJsonFormBundle(),
+            new EightPoints\Bundle\GuzzleBundle\GuzzleBundle(),
 
             new AppBundle\AppBundle(),
         );
