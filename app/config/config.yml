@@ -75,3 +75,23 @@ stof_doctrine_extensions:
             timestampable: true
 
 mcfedr_json_form: ~
+
+guzzle:
+    clients:
+        api_chedream_v1:
+            base_url: "http://chedream.org/api/v1/"
+
+            # custom headers
+            headers:
+                Accept: "gzip, application/json"
+
+            # guzzle client options (full description here: http://guzzle.readthedocs.org/en/latest/request-options.html)
+            # NOTE: "headers" option is not accepted here as it is provided as described above.
+            options:
+                timeout: 30
+
+            # plugin settings
+#            plugin:
+#                wsse:
+#                    username: acme
+#                    password: pa55w0rd
