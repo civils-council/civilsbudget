@@ -1,0 +1,9 @@
+{% extends '@App/layout.html.twig' %}
+
+{% block content %}
+    <div id="content">
+        {% for project in raw %}
+            <strong>{{ project.title|capitalize }}</strong> {{ project.slug }}<br>
+        {% endfor %}
+    </div>
+{% endblock %}
