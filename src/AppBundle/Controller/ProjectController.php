@@ -62,4 +62,24 @@ class ProjectController extends Controller
 
         return ['form' => $form->createView()];
     }
+    
+    /**
+     * @Route("/projects/get-all", name="projects")
+     * @Template()
+     * @Method({"GET"})
+     */
+    public function getAllDreamsAction()
+    {
+        $client = $this->get('guzzle.client.api_chedream_v1');
+        $response = $client->request('GET', 'dreams', [
+            'query' => [
+                '_format' => 'json',
+                'status' => 'submitted',
+                'limit' => 100
+            ]
+        ]);
+        $raw = json_decode($response->getBody(), true);
+
+        return ['raw' => $raw];
+    }
 }
