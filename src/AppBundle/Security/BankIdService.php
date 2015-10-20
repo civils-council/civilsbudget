@@ -32,7 +32,7 @@ class BankIdService
         return sprintf(self::BANK_ID_URL_LOGIN, $this->clientId, $callBack);
     }
 
-    public function getAccessToken($code)
+    protected function getAccessToken($code)
     {
         $client = new Client();
         $sha1 = sha1($this->clientId . $this->secret. $code, false);
@@ -46,10 +46,19 @@ class BankIdService
 
         $accessToken = $client->get($url)->send()->getBody(true);
 
-        $this->getBankIdUser($accessToken);
+        return $accessToken;
     }
 
-    public function getBankIdUser($rawAccessToken)
+    public function getUser($code)
+    {
+        $accessToken = $this->getAccessToken($code);
+
+        $bankUser = $this->getBankIdUser($accessToken);
+
+        return $bankUser;
+    }
+
+    protected function getBankIdUser($rawAccessToken)
     {
         $client = new Client();
         $accessToken = json_decode($rawAccessToken, true);

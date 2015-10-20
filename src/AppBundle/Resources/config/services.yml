@@ -15,3 +15,9 @@ services:
             - @app.security.bank_id
         tags:
             - { name: twig.extension }
+    app.user_manager:
+        class: AppBundle\Manager\UserManager
+        arguments:
+            - @logger
+        calls:
+            - [setDoctrine, [@doctrine]]

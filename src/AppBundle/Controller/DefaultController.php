@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class DefaultController extends Controller
 {
@@ -43,28 +44,16 @@ class DefaultController extends Controller
         $form = $this->createForm(new LoginType(), $data, ['action' => $this->generateUrl('login_check')]);
 
         if ($code = $request->query->get('code')) {
-            $this->get('app.security.bank_id')->getAccessToken($code);
+            $bankUser = $this->get('app.security.bank_id')->getUser($code);
+            $user = $this->get('app.user_manager')->getUser($bankUser);
+
+
+            $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
+            $this->get('security.token_storage')->setToken($token);
+            $this->get('session')->set('_security_home', serialize($token));
+
+            return $this->redirect($this->generateUrl('homepage'));
         }
-
-        if ($error = $authenticationUtils->getLastAuthenticationError()) {
-            $this->addFlash('danger', $error->getMessage());
-
-            return $this->redirectToRoute('homepage');
-        }
-
-        return ['form' => $form->createView()];
-    }
-
-    /**
-     * @Route("/loginIncluded", name="login_included")
-     * @Template()
-     */
-    public function loginIncludedAction()
-    {
-        $authenticationUtils = $this->get('security.authentication_utils');
-
-        $data = ['secret' => $authenticationUtils->getLastUsername()];
-        $form = $this->createForm(new LoginType(), $data, ['action' => $this->generateUrl('login_check')]);
 
         if ($error = $authenticationUtils->getLastAuthenticationError()) {
             $this->addFlash('danger', $error->getMessage());

@@ -86,7 +86,7 @@ class User implements UserInterface
     /**
      * @var string
      *
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
      */
     private $secret;
 
@@ -96,6 +96,11 @@ class User implements UserInterface
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Project", mappedBy="likedUsers")
      */
     private $likedProjects;
+
+    /**
+     * @var string
+     */
+    private $code;
 
     public function __construct()
     {
@@ -263,6 +268,22 @@ class User implements UserInterface
     public function setSecret($secret)
     {
         $this->secret = $secret;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+    /**
+     * @param string $code
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
     }
 
     /*-------------------------------relations methods----------------------------------------------------------------*/
