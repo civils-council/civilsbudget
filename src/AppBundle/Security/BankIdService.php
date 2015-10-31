@@ -34,6 +34,7 @@ class BankIdService
 
     public function getAccessToken($code)
     {
+//        dump($code);exit;
         $client = new Client();
         $sha1 = sha1($this->clientId . $this->secret. $code, false);
         $url =  sprintf(
