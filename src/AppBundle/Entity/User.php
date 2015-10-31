@@ -439,6 +439,7 @@ class User implements UserInterface, \JsonSerializable
         return [
             "id" => $this->getId(),
             "full_name" => $this->getFullName(),
+            "apiKey" => $this->getClid(),
         ];
     }
 }

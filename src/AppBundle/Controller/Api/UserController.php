@@ -21,6 +21,6 @@ class UserController extends Controller
             $user = $this->get('app.user.manager')->isUniqueUser($data);
             return new JsonResponse(["user" => $user]);
         }
-        return new JsonResponse(["not find in bankingId"]);
+        return new JsonResponse(["code:" => 401, "message" => "Wrong authorization."]);
     }
 }
