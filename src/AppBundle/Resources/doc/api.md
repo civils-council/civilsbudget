@@ -77,9 +77,7 @@ __POST__ `/api/authorization`
 #### Request
 
     {
-        "user": {
-            "code": <bankId code>
-        }
+        "code": <bankId code>
     }
 
 #### Response
