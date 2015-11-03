@@ -24,7 +24,7 @@ class UserController extends Controller
         }else{
             return new JsonResponse(["code:" => 404, "message" => "Not find data"]);
         }
-        dump($params);exit;
+//        dump($params);exit;
         $data = $this->get('app.security.bank_id')->getAccessToken($params['code']);
         if ($data['state'] == 'ok') {
             $user = $this->get('app.user.manager')->isUniqueUser($data);
