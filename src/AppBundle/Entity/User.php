@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * User
@@ -67,6 +68,14 @@ class User implements UserInterface, \JsonSerializable
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $phone;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="email", type="string", length=255,  unique=true, nullable=true)
+     * @Assert\Length(min=3, max=255)
+     */
+    protected $email;
 
     /**
      * @var Location
@@ -441,5 +450,29 @@ class User implements UserInterface, \JsonSerializable
             "full_name" => $this->getFullName(),
             "apiKey" => $this->getClid(),
         ];
+    }
+
+    /**
+     * Set email
+     *
+     * @param string $email
+     *
+     * @return User
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * Get email
+     *
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->email;
     }
 }
