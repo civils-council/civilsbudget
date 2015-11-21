@@ -19,7 +19,8 @@ __200__
             "picture": "<url-picture>",
             "createdAt": "2015-10-03T09:11:04+00:00",
             "likes": 123,
-            "owner": "fullName"
+            "owner": "fullName",
+            "voted": "false/true" // if voted user for this project
         }]
     }
 
