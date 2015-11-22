@@ -71,6 +71,7 @@ class Project
      * @var Admin
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Admin", inversedBy="confirmedProjects")
+     * @ORM\JoinColumn(name="confirmBy_id", nullable = true, referencedColumnName="id")
      */
     private $confirmedBy;
 

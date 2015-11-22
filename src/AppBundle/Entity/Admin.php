@@ -57,7 +57,7 @@ class Admin implements UserInterface
     /**
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Project", mappedBy="confirmedBy")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Project", mappedBy="confirmedBy", cascade={"persist"})
      */
     private $confirmedProjects;
 
@@ -161,6 +161,11 @@ class Admin implements UserInterface
     public function setMiddleName($middleName)
     {
         $this->middleName = $middleName;
+    }
+
+    public function __toString()
+    {
+       return $this->username;
     }
 
     /*------------------------------------------ relations methods----------------------------------------------------*/
