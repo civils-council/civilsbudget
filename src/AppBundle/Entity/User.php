@@ -53,6 +53,13 @@ class User implements UserInterface, \JsonSerializable
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
+    private $sex;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
     private $birthday;
 
     /**
@@ -474,5 +481,29 @@ class User implements UserInterface, \JsonSerializable
     public function getEmail()
     {
         return $this->email;
+    }
+
+    /**
+     * Set sex
+     *
+     * @param string $sex
+     *
+     * @return User
+     */
+    public function setSex($sex)
+    {
+        $this->sex = $sex;
+
+        return $this;
+    }
+
+    /**
+     * Get sex
+     *
+     * @return string
+     */
+    public function getSex()
+    {
+        return $this->sex;
     }
 }
