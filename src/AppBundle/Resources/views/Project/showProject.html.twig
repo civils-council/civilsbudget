@@ -38,6 +38,7 @@
                 <span>Підтримало: <span class="badge">{{ project.likedUsers|length|number_format(0, '.', ' ') }}</span></span>
             </li>
             <li>
+                {% if project.source is defined %}
                 <span>
                     Звідки: <a href="{{ project.source }}" class="badge">
                         {% if project.source is defined %}
@@ -46,6 +47,7 @@
                         {% endif %}
                     </a>
                 </span>
+                {% endif %}
             </li>
             <li {{ app.user is null ? ' data-toggle="modal" data-target="#login-modal"' }}>
                 {{ render(controller('AppBundle:Project:like', { id: project.id })) }}

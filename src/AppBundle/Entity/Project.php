@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="AppBundle\Entity\ProjectRepository")
  */
-class Project
+class Project implements \JsonSerializable
 {
     use GedmoTrait;
 
@@ -306,12 +306,29 @@ class Project
     }
 
     /**
-     * Set confirm
-     *
-     * @param string $confirm
-     *
-     * @return Project
+     * {@inheritdoc}
      */
+    function jsonSerialize()
+    {
+        return [
+            "id" => $this->getId(),
+            "title" => $this->getTitle(),
+            "description" => $this->getDescription(),
+            "source" => $this->getSource(),
+            "picture" => $this->getPicture(),
+            "createdAt" => $this->getCreateAt()->format('c'),
+            "likes" => $this->getLikedUsers()->count(),
+            "owner" => $this->getOwner()->getFullName(),
+        ];
+    }
+
+   /**
+    * Set confirm
+    *
+    * @param string $confirm
+    *
+    * @return Project
+    */
     public function setConfirm($confirm)
     {
         $this->confirm = $confirm;

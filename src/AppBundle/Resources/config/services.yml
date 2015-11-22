@@ -15,3 +15,10 @@ services:
             - @app.security.bank_id
         tags:
             - { name: twig.extension }
+
+    app.user.manager:
+        class:  AppBundle\Helper\UserManager
+        arguments: [@templating, @doctrine.orm.entity_manager ]
+
+        calls:
+            - [ setRootDir, ["%kernel.root_dir%"] ]

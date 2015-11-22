@@ -34,7 +34,8 @@ class BankIdService
 
     public function getAccessToken($code)
     {
-//        $client = new Client();
+//        dump($code);exit;
+        $client = new Client();
         $sha1 = sha1($this->clientId . $this->secret. $code, false);
         $url =  sprintf(
             self::BANK_ID_URL_ACCESS_TOKEN,
@@ -43,12 +44,45 @@ class BankIdService
             $code,
             $this->router->generate('login', [], UrlGeneratorInterface::ABSOLUTE_URL)
         );
-//        $url = "https://bankid.privatbank.ua/DataAccessService/oauth/token?grant_type=authorization_code&client_id={$this->clientId}&client_secret={$sha1}&code={$code}&redirect_uri=" . $this->router->generate('login', [], UrlGeneratorInterface::ABSOLUTE_URL);
 
+        $accessToken = $client->get($url)->send()->getBody(true);
 
-//        $response = $client->get()->send()->getBody();
+        return $this->getBankIdUser($accessToken);
+    }
 
-//        dump($url);
+    public function getBankIdUser($rawAccessToken)
+    {
+        $client = new Client();
+        $accessToken = json_decode($rawAccessToken, true);
 
+        $bankUser = $client
+            ->post(
+                "https://bankid.privatbank.ua/ResourceService/checked/data",
+                [
+                    "Content-Type" => "application/json",
+                    "Accept" => "application/json",
+                    "Authorization" => "Bearer {$accessToken['access_token']}, Id {$this->clientId}",
+                ],
+                json_encode([
+                    "type" => "physical",
+                    "fields" => ["firstName","middleName","lastName","phone","inn","clId","clIdText","birthDay","email","sex","resident","dateModification"],
+                    "addresses" =>  [[
+                        "type" => "factual",
+                        "fields" => ["country","state","area","city","street","houseNo","flatNo","dateModification"]
+                    ],[
+                        "type" => "birth",
+                        "fields" => ["country","state","area","city","street","houseNo","flatNo","dateModification"]
+                    ]],
+                    "documents" => [[
+                        "type" => "passport",
+                        "fields" => ["series","number","issue","dateIssue","dateExpiration","issueCountryIso2","dateModification"]
+                    ]]
+                ])
+            )
+            ->send()
+            ->getBody(true)
+        ;
+
+        return json_decode($bankUser, true);
     }
 }

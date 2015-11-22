@@ -15,6 +15,7 @@ AppBundle\Entity\User:
         location: @location<current()>
         phone: <phoneNumber()>
         secret: <md5()>
+        clid: <md5()>
 
 AppBundle\Entity\Admin:
     admin{1..3}:

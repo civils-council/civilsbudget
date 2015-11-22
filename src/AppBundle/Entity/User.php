@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * User
@@ -13,7 +14,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="AppBundle\Entity\UserRepository")
  */
-class User implements UserInterface
+class User implements UserInterface, \JsonSerializable
 {
     use GedmoTrait;
 
@@ -69,6 +70,14 @@ class User implements UserInterface
     private $phone;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="email", type="string", length=255,  unique=true, nullable=true)
+     * @Assert\Length(min=3, max=255)
+     */
+    protected $email;
+
+    /**
      * @var Location
      *
      * @ORM\OneToOne(targetEntity="AppBundle\Entity\Location", cascade={"persist", "remove"})
@@ -86,9 +95,16 @@ class User implements UserInterface
     /**
      * @var string
      *
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $secret;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", length=255)
+     */
+    private $clid;
 
     /**
      * @var Collection
@@ -265,6 +281,22 @@ class User implements UserInterface
         $this->secret = $secret;
     }
 
+    /**
+     * @return string
+     */
+    public function getClid()
+    {
+        return $this->clid;
+    }
+
+    /**
+     * @param string $secret
+     */
+    public function setClid($clid)
+    {
+        $this->clid = $clid;
+    }
+
     /*-------------------------------relations methods----------------------------------------------------------------*/
 
     /**
@@ -406,5 +438,41 @@ class User implements UserInterface
      */
     public function eraseCredentials()
     {
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    function jsonSerialize()
+    {
+        return [
+            "id" => $this->getId(),
+            "full_name" => $this->getFullName(),
+            "apiKey" => $this->getClid(),
+        ];
+    }
+
+    /**
+     * Set email
+     *
+     * @param string $email
+     *
+     * @return User
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * Get email
+     *
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->email;
     }
 }
