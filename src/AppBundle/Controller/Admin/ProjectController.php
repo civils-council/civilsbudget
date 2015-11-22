@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 /**
  *
@@ -30,37 +31,14 @@ class ProjectController extends Controller
     }
 
     /**
-     * @Route("/{id}", name="admin_project_show", requirements={"id" = "\d+"})
+     * @Route("/{id}/show", name="admin_project_show", requirements={"id" = "\d+"})
      * @Template()
      * @Method({"GET", "POST"})
+     * @ParamConverter("project", class="AppBundle:Project")
      */
-    public function showProjectAction(Project $project, Request $request)
+    public function showProjectAction(Project $project)
     {
-
-        $form = $this->createCreateForm($project);
-
-        if ($request->isMethod('POST')) {
-            $form->submit($request);
-                if ($form->isValid()) {
-                    $em = $this->getDoctrine()->getManager();
-                    $project
-                        ->setConfirmedBy($this->getUser())
-                        ->setConfirm($form->getData()->getConfirm())
-                    ;
-
-                    $em->persist($project);
-                    $em->flush();
-
-                    return $this->redirect($this->generateUrl('admin_projects_show', array('id' => $project->getId())));
-                }
-        }
-
-        return [
-                'debug' => true,
-                'project' => $project,
-                'form' => $form->createView(),
-        ];
-
+        return ['project' => $project];
     }
 
     /**
@@ -76,12 +54,13 @@ class ProjectController extends Controller
             if ($request->isMethod('POST')) {
                 if ($form->isValid()) {
                     $em = $this->getDoctrine()->getManager();
-                    $project->setOwner($this->getUser());
+                    $project->setConfirm($this->getUser());
+                    $project->setConfirmedBy($this->getUser());
 
                     $em->persist($project);
                     $em->flush();
 
-                    return $this->redirect($this->generateUrl('projects_show', array('id' => $project->getId())));
+                    return $this->redirect($this->generateUrl('admin_project_show', array('id' => $project->getId())));
                 }
             }
         return [
