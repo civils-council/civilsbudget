@@ -5,7 +5,7 @@
             {{ project.description }}
         </div>
         {{ block("navproject") }}
-    {{ form(form) }}
+    {#{{ form(form) }}#}
 {% endblock %}
 
 {% block header %}
@@ -21,7 +21,9 @@
 
         </div>
         <div class="fb-profile-text">
+            {% if project.owner %}
             <h1><a href="{{ path('users_profile', { id: project.owner.id }) }}">{{ project.owner.fullName }}</a></h1>
+            {% endif %}
         </div>
     </div>
 {% endblock header %}
@@ -45,7 +47,8 @@
                 <span>
                     Звідки: <a href="{{ project.source }}" class="badge">
                         {% if project.source is defined %}
-                        {{ project.source|regexUrl }}
+                        {#{{ project.source|regexUrl }}#}
+                            {{ project.source }}
                         {% endif %}
                     </a>
                 </span>
