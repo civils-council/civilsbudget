@@ -18,4 +18,4 @@
 /web-src/less/*.css
 *~
 .idea
-rsa_key.pem
+/app/rsa_key.pem

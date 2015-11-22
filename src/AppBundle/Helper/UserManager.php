@@ -26,7 +26,7 @@ class UserManager
 
     public function isUniqueUser($data)
     {
-        $fp=fopen ("/home/ivan/host/civilsbudget/rsa_key.pem", "r");
+        $fp = fopen ($this->rootDir.'/rsa_key.pem', "r");
         $pub_key=fread ($fp,8192);
         fclose($fp);
         $res = openssl_get_privatekey($pub_key);
