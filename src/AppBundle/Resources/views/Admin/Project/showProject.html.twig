@@ -5,7 +5,7 @@
             {{ project.description }}
         </div>
         {{ block("navproject") }}
-
+    {#{{ form(form) }}#}
 {% endblock %}
 
 {% block header %}
@@ -21,7 +21,9 @@
 
         </div>
         <div class="fb-profile-text">
+            {% if project.owner %}
             <h1><a href="{{ path('users_profile', { id: project.owner.id }) }}">{{ project.owner.fullName }}</a></h1>
+            {% endif %}
         </div>
     </div>
 {% endblock header %}
@@ -38,7 +40,10 @@
                 <span>Підтримало: <span class="badge">{{ project.likedUsers|length|number_format(0, '.', ' ') }}</span></span>
             </li>
             <li>
-                {% if project.source is defined %}
+                <span>Статус: <span class="badge">{{ project.confirm}}</span></span>
+            </li>
+            {#{{ dump(app.user) }}#}
+            <li>
                 <span>
                     Звідки: <a href="{{ project.source }}" class="badge">
                         {% if project.source is defined %}
@@ -47,11 +52,10 @@
                         {% endif %}
                     </a>
                 </span>
-                {% endif %}
             </li>
-            <li {{ app.user is null ? ' data-toggle="modal" data-target="#login-modal"' }}>
-                {{ render(controller('AppBundle:Project:like', { id: project.id })) }}
-            </li>
+            {#<li {{ app.user is null ? ' data-toggle="modal" data-target="#login-modal"' }}>#}
+                {#{{ render(controller('AppBundle:Project:like', { id: project.id })) }}#}
+            {#</li>#}
 
         </ul>
     </div>

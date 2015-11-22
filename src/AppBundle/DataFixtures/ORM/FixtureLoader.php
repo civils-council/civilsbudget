@@ -20,6 +20,16 @@ class FixtureLoader extends DataFixtureLoader
         ];
     }
 
+    public function characterConfirm()
+    {
+        $names = array(
+            'approved',
+            'not_approved'
+        );
+
+        return $names[array_rand($names)];
+    }
+
     /**
      * @param UserInterface $user
      * @param $plainPassword
