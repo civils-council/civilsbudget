@@ -42,7 +42,7 @@ class Project
     /**
      * @var string
      *
-     * @ORM\Column(name="source", type="string", length=255)
+     * @ORM\Column(name="source", type="string", length=255, nullable=true)
      */
     private $source;
 
@@ -56,14 +56,22 @@ class Project
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="confirmedAt", type="datetime")
+     * @ORM\Column(name="confirmedAt", type="datetime", nullable=true)
      */
     private $confirmedAt;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="confirm", type="string", length=255, nullable=true)
+     */
+    private $confirm;
 
     /**
      * @var Admin
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Admin", inversedBy="confirmedProjects")
+     * @ORM\JoinColumn(name="confirmBy_id", nullable = true, referencedColumnName="id")
      */
     private $confirmedBy;
 
@@ -295,5 +303,29 @@ class Project
     public function getLikedUsers()
     {
         return $this->likedUsers;
+    }
+
+    /**
+     * Set confirm
+     *
+     * @param string $confirm
+     *
+     * @return Project
+     */
+    public function setConfirm($confirm)
+    {
+        $this->confirm = $confirm;
+
+        return $this;
+    }
+
+    /**
+     * Get confirm
+     *
+     * @return string
+     */
+    public function getConfirm()
+    {
+        return $this->confirm;
     }
 }

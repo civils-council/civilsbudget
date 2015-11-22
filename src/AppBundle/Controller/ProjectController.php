@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Project;
+use AppBundle\Form\ProjectType;
 use AppBundle\Form\LikeProjectType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -19,8 +20,9 @@ class ProjectController extends Controller
      */
     public function listAction()
     {
+        $projects =$this->getDoctrine()->getRepository('AppBundle:Project')->findByConfirm('approved');
         return [
-            'projects' => $this->getDoctrine()->getRepository('AppBundle:Project')->findAll(),
+            'projects' => $projects,
         ];
     }
 
@@ -61,5 +63,53 @@ class ProjectController extends Controller
         }
 
         return ['form' => $form->createView()];
+    }
+
+    /**
+     * @Route("/projects/add", name="projects_add")
+     * @Method({"GET", "POST"})
+     * @Template()
+     */
+    public function addProjectAction(Request $request)
+    {
+        $project = new Project();
+        $form = $this->createCreateForm($project);
+            $form->submit($request);
+            if ($request->isMethod('POST')) {
+                if ($form->isValid()) {
+                    $em = $this->getDoctrine()->getManager();
+                    $project->setOwner($this->getUser());
+
+                    $em->persist($project);
+                    $em->flush();
+
+                    return $this->redirect($this->generateUrl('projects_show', array('id' => $project->getId())));
+                }
+            }
+        return [
+                'entity' => $project,
+                'form' => $form->createView(),
+        ];
+    }
+
+    // --------------------------------- Create Forms ---------------------------------
+
+    /**
+     * Creates a form to create a Project entity.
+     *
+     * @param Project $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createCreateForm(Project $entity)
+    {
+        $form = $this->createForm(new ProjectType(), $entity, array(
+            'action' => $this->generateUrl('projects_add'),
+            'method' => 'POST',
+            'attr' => array('class' => 'formCreateClass'),
+        ));
+        $form->add('submit', 'submit', array('label' => 'Add Project'));
+
+        return $form;
     }
 }
