@@ -48,7 +48,8 @@ class DefaultController extends Controller
             $data = $this->get('app.security.bank_id')->getAccessToken($code);
             if ($data['state'] == 'ok') {
                 $user = $this->get('app.user.manager')->isUniqueUser($data);
-                $form = $this->createForm(new LoginUserType(), $user, ['action' => $this->generateUrl('update_user', ['id' => $user->getId()])]);
+//                $form = $this->createForm(new LoginUserType(), $user, ['action' => $this->generateUrl('update_user', ['id' => $user->getId()])]);
+                $editForm = $this->createEditForm($user);
             }
         }
 
@@ -58,7 +59,10 @@ class DefaultController extends Controller
             return $this->redirectToRoute('homepage');
         }
 
-        return ['form' => $form->createView()];
+        return [
+            'debug' => true,
+            'form' => $editForm->createView()
+        ];
     }
 
     /**
@@ -70,7 +74,7 @@ class DefaultController extends Controller
         $authenticationUtils = $this->get('security.authentication_utils');
 
         $data = ['secret' => $authenticationUtils->getLastUsername()];
-        $form = $this->createForm(new LoginType(), $data, ['action' => $this->generateUrl('update_user')]);
+        $form = $this->createForm(new LoginType(), $data, ['action' => $this->generateUrl('login_check')]);
 
         if ($error = $authenticationUtils->getLastAuthenticationError()) {
             $this->addFlash('danger', $error->getMessage());
@@ -83,7 +87,7 @@ class DefaultController extends Controller
 
 
     /**
-     * Displays a form to edit an existing CodeDirectorySpecialities entity.
+     * Displays a form to edit an existing User entity.
      *
      * @Route("/{id}/edit", name="update_user")
      * @Method("GET")
@@ -109,7 +113,7 @@ class DefaultController extends Controller
 
 
     /**
-     * Edits an existing CodeDirectorySpecialities entity.
+     * Edits an existing User entity.
      *
      * @Route("/{id}/edit/submit", name="update_date_user")
      * @Method("PUT")
@@ -142,7 +146,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * Creates a form to edit a CodeDirectorySpecialities entity.
+     * Creates a form to edit a User entity.
      *
      * @param User $entity The entity
      *
