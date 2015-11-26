@@ -10,7 +10,7 @@ services:
             - @router
             - @monolog.logger
             - @validator
-            - @serializer
+            - @jms_serializer.serializer
     app.twig_extension:
         class: AppBundle\Twig\AppExtension
         public: false

@@ -32,6 +32,7 @@ class BankIdService
         $this->monologLogger = $monologLogger;
         $this->validation = $validation;
         $this->serializer = $serializer;
+
     }
 
     public function getLink()
