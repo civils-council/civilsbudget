@@ -51,7 +51,7 @@ class DefaultController extends Controller
 //                $form = $this->createForm(new LoginUserType(), $user, ['action' => $this->generateUrl('update_user', ['id' => $user->getId()])]);
 //                $form = $this->createEditForm($user[0]);
                 if($user[1] == 'new') {
-                    $this->addFlash('chaeck email', 'you give personal secret key for enter');
+                    $this->addFlash('inforormation', 'add information');
                     $form = $this->createEditForm($user[0]);
                 }else{
                     $this->addFlash('you already register', 'enter with secret key');
@@ -142,7 +142,7 @@ class DefaultController extends Controller
 
             $em->flush();
 
-            return $this->redirect($this->generateUrl('login'));
+            return $this->redirect($this->generateUrl('login').'#'.$entity->getClid().'');
         }
 
         return array(
