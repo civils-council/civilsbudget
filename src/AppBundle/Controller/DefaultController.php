@@ -41,7 +41,7 @@ class DefaultController extends Controller
     {
         $authenticationUtils = $this->get('security.authentication_utils');
 
-        $data = ['secret' => $authenticationUtils->getLastUsername()];
+        $data = ['clid  ' => $authenticationUtils->getLastUsername()];
         $form = $this->createForm(new LoginType(), $data, ['action' => $this->generateUrl('login_check')]);
 
         if ($code = $request->query->get('code')) {
@@ -49,7 +49,13 @@ class DefaultController extends Controller
             if ($data['state'] == 'ok') {
                 $user = $this->get('app.user.manager')->isUniqueUser($data);
 //                $form = $this->createForm(new LoginUserType(), $user, ['action' => $this->generateUrl('update_user', ['id' => $user->getId()])]);
-                $editForm = $this->createEditForm($user);
+//                $form = $this->createEditForm($user[0]);
+                if($user[1] == 'new') {
+                    $this->addFlash('chaeck email', 'you give personal secret key for enter');
+                    $form = $this->createEditForm($user[0]);
+                }else{
+                    $this->addFlash('you already register', 'enter with secret key');
+                }
             }
         }
 
@@ -61,7 +67,7 @@ class DefaultController extends Controller
 
         return [
             'debug' => true,
-            'form' => $editForm->createView()
+            'form' => $form->createView()
         ];
     }
 
@@ -136,7 +142,7 @@ class DefaultController extends Controller
 
             $em->flush();
 
-            return $this->redirect($this->generateUrl('projects_list'));
+            return $this->redirect($this->generateUrl('login'));
         }
 
         return array(
