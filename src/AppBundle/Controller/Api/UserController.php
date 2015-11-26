@@ -16,22 +16,7 @@ class UserController extends Controller
      */
     public function authorizationAction(Request $request)
     {
-        $code = null;
-
-        if ($request->getMethod() == Request::METHOD_POST) {
-            $content = $this->get("request")->getContent();
-            if (!empty($content))
-            {
-                $params = json_decode($content, true);
-                $code = $params['code'];
-            }else{
-                return new JsonResponse(["code:" => 404, "message" => "Not find data"]);
-            }
-        }
-
-        if(!empty($request->query->get('code'))){
-            $code = $request->query->get('code');
-        }
+        $code = $request->query->get('code');
         if(!empty($code)) {
             $data = $this->get('app.security.bank_id')->getAccessToken($code);
             if ($data['state'] == 'ok') {
