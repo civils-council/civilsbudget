@@ -107,6 +107,13 @@ class User implements UserInterface, \JsonSerializable
     private $clid;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(type="string", length=255)
+     */
+    private $inn;
+
+    /**
      * @var Collection
      *
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Project", mappedBy="likedUsers")
@@ -518,4 +525,28 @@ class User implements UserInterface, \JsonSerializable
     }
 
     /*----------------------------------------end other methods-----------------------------------------------------------*/
+
+    /**
+     * Set inn
+     *
+     * @param string $inn
+     *
+     * @return User
+     */
+    public function setInn($inn)
+    {
+        $this->inn = $inn;
+
+        return $this;
+    }
+
+    /**
+     * Get inn
+     *
+     * @return string
+     */
+    public function getInn()
+    {
+        return $this->inn;
+    }
 }

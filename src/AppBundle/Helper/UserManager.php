@@ -68,6 +68,11 @@ class UserManager
             $result_field = openssl_private_decrypt($deceode_clId, $clId, $res);
         }
 
+        if(array_key_exists('inn', $data['customer']) == true) {
+            $deceode_inn = base64_decode($data['customer']['inn']);
+            $result_field = openssl_private_decrypt($deceode_inn, $inn, $res);
+        }
+
         if(array_key_exists('firstName', $data['customer']) == true) {
             $deceode_firstName = base64_decode($data['customer']['firstName']);
             $result_field = openssl_private_decrypt($deceode_firstName, $firstName, $res);
@@ -90,29 +95,52 @@ class UserManager
 
         $user = $this->em->getRepository('AppBundle:User')->findOneByClid($clId);
         if (empty($user)) {
-
-            $location = $this->em->getRepository('AppBundle:Location')->findOneByCity($city);
-            if(empty($location)) {
-                $location = new Location();
-            }
-            $location
-                ->setCity($city);
-                if(!empty($flatNo)) {
-                    $location->setAddress($street . ',' . $houseNo . 'appartment' . $flatNo);
-                        };
-            $location
-                ->setCountry($country)
-                ->setDistrict($city)
-                ;
-            $this->em->persist($location);
             $user = new User();
-            $user
-                ->setFirstName($firstName)
-                ->setLastName($lastName)
-                ->setMiddleName($middleName)
-                ->setSex($sex)
-                ->setClid($clId);
-            $user->setLocation($location);
+            if(array_key_exists('city', $data['customer']['addresses'][0]) == true) {
+                $location = $this->em->getRepository('AppBundle:Location')->findOneByCity($city);
+                if (empty($location)) {
+                    $location = new Location();
+                }
+                $location
+                    ->setCity($city)
+                    ->setDistrict($city);
+                if (
+                    array_key_exists('flatNo', $data['customer']['addresses'][0]) == true &&
+                    array_key_exists('street', $data['customer']['addresses'][0]) == true &&
+                    array_key_exists('houseNo', $data['customer']['addresses'][0]) == true
+                ) {
+                    $location->setAddress($street . ',' . $houseNo . 'appartment' . $flatNo);
+                };
+                if (array_key_exists('country', $data['customer']['addresses'][0]) == true) {
+                    $location->setCountry($country);
+                };
+
+                $this->em->persist($location);
+                $user->setLocation($location);
+            }
+            if (array_key_exists('clId', $data['customer']) == true) {
+                $user->setClid($clId);
+            };
+
+            if (array_key_exists('sex', $data['customer']) == true) {
+                $user->setSex($sex);
+            };
+
+            if (array_key_exists('middleName', $data['customer']) == true) {
+                $user->setMiddleName($middleName);
+            };
+
+            if (array_key_exists('lastName', $data['customer']) == true) {
+                $user->setLastName($lastName);
+            };
+
+            if (array_key_exists('firstName', $data['customer']) == true) {
+                $user->setFirstName($firstName);
+            };
+
+            if (array_key_exists('inn', $data['customer']) == true) {
+                $user->setInn($inn);
+            };
 
             $this->em->persist($user);
             $this->em->flush();
