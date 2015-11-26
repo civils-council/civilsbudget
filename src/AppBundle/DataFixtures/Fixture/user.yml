@@ -14,7 +14,6 @@ AppBundle\Entity\User:
         birthday: <date('Y-m-d', '2000-01-01')>
         location: @location<current()>
         phone: <phoneNumber()>
-        secret: <md5()>
         clid: <md5()>
 
 AppBundle\Entity\Admin:

@@ -49,7 +49,6 @@ class ProjectController extends Controller
                 'action' => $this->generateUrl('projects_like', ['id' => $project->getId()]),
             ]);
 
-
         if ($request->getMethod() == Request::METHOD_POST) {
             if ($project->getLikedUsers()->contains($this->getUser())) {
                 $this->addFlash('warning', 'Ви вже підтримали цей проект.');
