@@ -12,8 +12,7 @@
         <div class="col-md-3">
             <div class="card" id="project{{ project.id }}">
                 <div class="card-image">
-                    <img class="img-responsive" src="http://lorempixel.com/555/300/sports">
-
+                    <img src="{% if project.picture %} {{ asset(project.picture) }} {% else %} {{ asset('bundles/app/img/gerb_goroda_cherkassy_abali.ru_.png') }} {% endif %}" class="img-responsive" alt="">
                 </div><!-- card image -->
 
                 <div class="card-content">

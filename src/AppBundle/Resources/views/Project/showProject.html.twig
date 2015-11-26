@@ -12,13 +12,12 @@
     <div class="fb-profile">
         <div class="image_project">
             <h2 class="title_project">{{ block('title') }}</h2>
-            <img align="left" class="fb-image-lg" src="{{ asset("images/image_project.jpg") }}" alt="Profile image example"/>
+            <img src="{% if project.picture %} {{ asset(project.picture) }} {% else %} {{ asset('bundles/app/img/gerb_goroda_cherkassy_abali.ru_.png') }} {% endif %}" align="left" class="fb-image-lg" alt="Project image"/>
         </div>
         <div class="fb-image-profile thumbnail">
             <div class="border_tumbnail">
-                <img align="left" src="{{ asset("images/face.jpg") }}">
+                <img src="{% if project.owner.avatar %} {{ asset(project.owner.avatar) }} {% else %} {{ asset('bundles/app/img/icon_developer.png') }} {% endif %}" align="left" alt="avbatar">
             </div>
-
         </div>
         <div class="fb-profile-text">
             <h1><a href="{{ path('users_profile', { id: project.owner.id }) }}">{{ project.owner.fullName }}</a></h1>
@@ -37,6 +36,11 @@
             <li>
                 <span>Підтримало: <span class="badge">{{ project.likedUsers|length|number_format(0, '.', ' ') }}</span></span>
             </li>
+
+            <li>
+                <span>Бюджет: <span class="badge">{{ project.charge|number_format(0, '.', ' ') }}</span></span>
+            </li>
+
             <li>
                 {% if project.source is defined %}
                 <span>
