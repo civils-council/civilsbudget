@@ -17,12 +17,14 @@ class BankIdService
      * @var Router
      */
     private $router;
+    private $monolog_logger;
 
-    public function __construct($clientId, $secret, Router $router)
+    public function __construct($clientId, $secret, Router $router, $monolog_logger)
     {
         $this->clientId = $clientId;
         $this->secret = $secret;
         $this->router = $router;
+        $this->monolog_logger = $monolog_logger;
     }
 
     public function getLink()
@@ -46,7 +48,6 @@ class BankIdService
         );
 
         $accessToken = $client->get($url)->send()->getBody(true);
-
         return $this->getBankIdUser($accessToken);
     }
 

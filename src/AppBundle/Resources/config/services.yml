@@ -8,6 +8,7 @@ services:
             - %client_id%
             - %client_secret%
             - @router
+            - @monolog.logger
     app.twig_extension:
         class: AppBundle\Twig\AppExtension
         public: false
