@@ -11,7 +11,10 @@
 /app/logs/*
 !app/logs/.gitkeep
 /app/phpunit.xml
-/bin/
+/bin/*
+!bin/base_script.php
+!bin/reload_database.php
+!bin/clean.php
 /composer.phar
 /vendor/
 /web/bundles/
