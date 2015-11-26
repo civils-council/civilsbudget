@@ -102,13 +102,6 @@ class User implements UserInterface, \JsonSerializable
     /**
      * @var string
      *
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $secret;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(type="string", length=255)
      */
     private $clid;
@@ -119,6 +112,13 @@ class User implements UserInterface, \JsonSerializable
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Project", mappedBy="likedUsers")
      */
     private $likedProjects;
+
+    /**
+     * @var string $image
+     *
+     * @ORM\Column(name="avatar", type="string", length=255, nullable=true)
+     */
+    protected $avatar;
 
     public function __construct()
     {
@@ -275,22 +275,6 @@ class User implements UserInterface, \JsonSerializable
     /**
      * @return string
      */
-    public function getSecret()
-    {
-        return $this->secret;
-    }
-
-    /**
-     * @param string $secret
-     */
-    public function setSecret($secret)
-    {
-        $this->secret = $secret;
-    }
-
-    /**
-     * @return string
-     */
     public function getClid()
     {
         return $this->clid;
@@ -402,7 +386,81 @@ class User implements UserInterface, \JsonSerializable
         return $this->likedProjects;
     }
 
+
+    /**
+     * Set email
+     *
+     * @param string $email
+     *
+     * @return User
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * Get email
+     *
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * Set sex
+     *
+     * @param string $sex
+     *
+     * @return User
+     */
+    public function setSex($sex)
+    {
+        $this->sex = $sex;
+
+        return $this;
+    }
+
+    /**
+     * Get sex
+     *
+     * @return string
+     */
+    public function getSex()
+    {
+        return $this->sex;
+    }
+
+    /**
+     * Set avatar
+     *
+     * @param string $avatar
+     *
+     * @return User
+     */
+    public function setAvatar($avatar)
+    {
+        $this->avatar = $avatar;
+
+        return $this;
+    }
+
+    /**
+     * Get avatar
+     *
+     * @return string
+     */
+    public function getAvatar()
+    {
+        return $this->avatar;
+    }
+
     /*----------------------------------------other methods-----------------------------------------------------------*/
+
     public function getFullName()
     {
         return $this->getLastName() . ' ' . $this->getFirstName() . ' ' . $this->getMiddleName();
@@ -455,55 +513,9 @@ class User implements UserInterface, \JsonSerializable
         return [
             "id" => $this->getId(),
             "full_name" => $this->getFullName(),
-            "apiKey" => $this->getClid(),
+            "clid" => $this->getClid(),
         ];
     }
 
-    /**
-     * Set email
-     *
-     * @param string $email
-     *
-     * @return User
-     */
-    public function setEmail($email)
-    {
-        $this->email = $email;
-
-        return $this;
-    }
-
-    /**
-     * Get email
-     *
-     * @return string
-     */
-    public function getEmail()
-    {
-        return $this->email;
-    }
-
-    /**
-     * Set sex
-     *
-     * @param string $sex
-     *
-     * @return User
-     */
-    public function setSex($sex)
-    {
-        $this->sex = $sex;
-
-        return $this;
-    }
-
-    /**
-     * Get sex
-     *
-     * @return string
-     */
-    public function getSex()
-    {
-        return $this->sex;
-    }
+    /*----------------------------------------end other methods-----------------------------------------------------------*/
 }

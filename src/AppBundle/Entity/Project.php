@@ -54,6 +54,13 @@ class Project implements \JsonSerializable
     private $picture;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(type="integer", length=255, nullable=true)
+     */
+    private $charge;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="confirmedAt", type="datetime", nullable=true)
@@ -314,11 +321,14 @@ class Project implements \JsonSerializable
             "id" => $this->getId(),
             "title" => $this->getTitle(),
             "description" => $this->getDescription(),
+            "charge" => $this->getCharge(),
             "source" => $this->getSource(),
             "picture" => $this->getPicture(),
             "createdAt" => $this->getCreateAt()->format('c'),
-            "likes" => $this->getLikedUsers()->count(),
+            "likes_count" => $this->getLikedUsers()->count(),
+            "likes_user" => $this->getLikedUsers()->getValues(),
             "owner" => $this->getOwner()->getFullName(),
+            "avatar_owner" => $this->getOwner()->getAvatar(),
         ];
     }
 
@@ -344,5 +354,29 @@ class Project implements \JsonSerializable
     public function getConfirm()
     {
         return $this->confirm;
+    }
+
+    /**
+     * Set charge
+     *
+     * @param integer $charge
+     *
+     * @return Project
+     */
+    public function setCharge($charge)
+    {
+        $this->charge = $charge;
+
+        return $this;
+    }
+
+    /**
+     * Get charge
+     *
+     * @return integer
+     */
+    public function getCharge()
+    {
+        return $this->charge;
     }
 }
