@@ -6,8 +6,6 @@ use Guzzle\Http\Client;
 use Symfony\Bridge\Monolog\Logger;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\Validator\Validation;
 
 class BankIdService
 {
@@ -24,7 +22,7 @@ class BankIdService
     private $validation;
     private $serializer;
 
-    public function __construct($clientId, $secret, Router $router, Logger $monologLogger, Validation $validation, Serializer $serializer)
+    public function __construct($clientId, $secret, Router $router, Logger $monologLogger, ValidatorInterface $validation, Serializer $serializer)
     {
         $this->clientId = $clientId;
         $this->secret = $secret;
