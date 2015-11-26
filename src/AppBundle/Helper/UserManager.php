@@ -97,13 +97,13 @@ class UserManager
         if (empty($user)) {
             $user = new User();
             if(array_key_exists('city', $data['customer']['addresses'][0]) == true) {
-                $location = $this->em->getRepository('AppBundle:Location')->findOneByCity($city);
-                if (empty($location)) {
-                    $location = new Location();
-                }
+
+                $location = new Location();
+
                 $location
                     ->setCity($city)
                     ->setDistrict($city);
+
                 if (
                     array_key_exists('flatNo', $data['customer']['addresses'][0]) == true &&
                     array_key_exists('street', $data['customer']['addresses'][0]) == true &&
@@ -111,6 +111,7 @@ class UserManager
                 ) {
                     $location->setAddress($street . ',' . $houseNo . 'appartment' . $flatNo);
                 };
+
                 if (array_key_exists('country', $data['customer']['addresses'][0]) == true) {
                     $location->setCountry($country);
                 };

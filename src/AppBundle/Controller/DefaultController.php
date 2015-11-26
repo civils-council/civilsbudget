@@ -55,6 +55,7 @@ class DefaultController extends Controller
                     $form = $this->createEditForm($user[0]);
                 }else{
                     $this->addFlash('you already register', 'enter with secret key');
+                    return $this->redirect($this->generateUrl('login').'#'.$user[0]->getClid().'');
                 }
             }
         }
