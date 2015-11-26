@@ -15,12 +15,14 @@ __200__
             "id": 1,
             "title": "test title",
             "description": "test description",
+            "charge": "charge for project",            
             "source": "where",
             "picture": "<url-picture>",
             "createdAt": "2015-10-03T09:11:04+00:00",
-            "likes": 123,
+            "likes_count": 123,
+            "likes_user": user[],
             "owner": "fullName",
-            "voted": "false/true" // if voted user for this project
+            "avatar_owner": "avatar owner"
         }]
     }
 
@@ -37,18 +39,68 @@ __200__
             "id": 1,
             "title": "test title",
             "description": "test description",
+            "charge": "charge for project",            
             "source": "where",
             "picture": "<url-picture>",
             "createdAt": "2015-10-03T09:11:04+00:00",
-            "likes": 123,
-            "owner": "fullName"
+            "likes_count": 123,
+            "likes_user": user
+            [
+                    "user": {
+                        "id": 111
+                        "fullName": <fullName of user>,
+                        "clid": <very secret key>,
+                    }
+            ],
+            "owner": "fullName",
+            "avatar_owner": "avatar owner"            
         }
     }
 
 ### Like project
 
 __header__ `X-API-KEY`
-__POST__ `/api/projects/{id}/like`
+__POST__ `/api/projects/{id}/like` 
+          `{id} - id project`
+          `{clid} - uniq clid code request->parameters-get{'clid'}`                                          
+
+__200__
+
+    {
+        {
+          "warning": "Ви вже підтримали цей проект."
+        }
+        
+        {
+          "success": "Ваший голос зараховано на підтримку проект."
+        }
+    }
+    
+__GET__ `/api/projects/{id}/like`     
+
+    {
+        "project": {
+            "id": 1,
+            "title": "test title",
+            "description": "test description",
+            "charge": "charge for project",
+            "source": "where",
+            "picture": "<url-picture>",
+            "createdAt": "2015-10-03T09:11:04+00:00",
+            "likes_count": 123,
+            "likes_user": user
+            [
+                    "user": {
+                        "id": 111
+                        "fullName": <fullName of user>,
+                        "clid": <very secret key>,
+                    }
+            ],
+            "owner": "fullName",
+            "avatar_owner": "avatar owner"            
+        }
+    }
+
 
 #### Request
 
@@ -61,11 +113,21 @@ __200__
             "id": 1,
             "title": "test title",
             "description": "test description",
+            "charge": "charge for project",
             "source": "where",
             "picture": "<url-picture>",
             "createdAt": "2015-10-03T09:11:04+00:00",
-            "likes": 123,
-            "owner": "fullName"
+            "likes_count": 123,
+            "likes_user": user
+            [
+                    "user": {
+                        "id": 111
+                        "fullName": <fullName of user>,
+                        "clid": <very secret key>,
+                    }
+            ],
+            "owner": "fullName",
+            "avatar_owner": "avatar owner"
         }
     }
 
@@ -89,8 +151,7 @@ __200__
         "user": {
             "id": 111
             "fullName": <fullName of user>,
-            "apiKey": <very secret key>,
-            "apiKeyExpired": "2015-10-03T09:11:04+00:00"
+            "clid": <very secret key>,
         }
     }
 
