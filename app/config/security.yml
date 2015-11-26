@@ -18,7 +18,7 @@ security:
         user:
             entity:
                 class: AppBundle:User
-                property: secret
+                property: clid
 
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
@@ -49,7 +49,7 @@ security:
                 provider: user
                 login_path: login
                 check_path: login_check
-                username_parameter: login[secret]
+                username_parameter: login[clid]
                 use_referer: true
             logout:
                 path: logout
