@@ -17,7 +17,7 @@ class UserController extends Controller
     public function authorizationAction(Request $request)
     {
         $content = $this->get("request")->getContent();
-        dump($content, !empty($content));exit;
+//        dump($content, !empty($content));exit;
         if (!empty($content))
         {
             $params = json_decode($content, true);
