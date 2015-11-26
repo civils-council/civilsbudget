@@ -25,7 +25,8 @@
         "jms/serializer-bundle": "0.13.*"
     },
     "require-dev": {
-        "sensio/generator-bundle": "~2.3"
+        "sensio/generator-bundle": "~2.3",
+        "phpunit/phpunit": "^4.8"
     },
     "scripts": {
         "post-root-package-install": [
