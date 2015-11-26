@@ -16,6 +16,5 @@ show_run("Creating directories for app kernel", "mkdir -p app/cache/dev app/cach
 show_run("Warming up dev cache", "php app/console --env=dev cache:clear");
 show_run("Warming up prod cache", "php app/console --env=prod cache:clear");
 show_run("Changing permissions", "chmod -R 777 app/cache app/logs");
-show_run("Changing permissions", "chmod -R 777 web/uploads");
 
 exit(0);
