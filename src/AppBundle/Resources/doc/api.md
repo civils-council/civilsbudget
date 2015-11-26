@@ -127,13 +127,15 @@ __200__
                     }
             ],
             "owner": "fullName",
-            "avatar_owner": "avatar owner"
+            "avatar_owner": "avatar owner"   
         }
     }
 
 ## User
 
 ### Authorization user
+
+__GET__ `/api/authorization?code=idSlnv44178`
 
 __POST__ `/api/authorization`
 
