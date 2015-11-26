@@ -10,7 +10,7 @@ class LoginType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('secret')
+            ->add('clid')
             ->setRequired(false)
         ;
     }
