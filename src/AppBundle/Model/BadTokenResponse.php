@@ -1,14 +1,18 @@
 <?php
 
+use Symfony\Component\Validator\Constraints as Assert;
+
 class BadTokenResponse
 {
     /**
      * @var string
+     * @Assert\Type(type="string")
      */
     protected $error;
 
     /**
      * @var string
+     * @Assert\Type(type="string")
      */
     protected $errorDescription;
 

@@ -1,29 +1,37 @@
 <?php
 
+use Symfony\Component\Validator\Constraints as Assert;
+
 class SuccessTokenResponse
 {
     /**
      * @var string
+     * @Assert\NotBlank
+     * @Assert\Type(type="string")
      */
     protected $accessToken;
 
     /**
      * @var string
+     * @Assert\Type(type="string")
      */
     protected $refreshToken;
 
     /**
      * @var string
+     * @Assert\Type(type="string")
      */
     protected $tokenType;
 
     /**
      * @var int
+     * @Assert\Type(type="string")
      */
     protected $expiresIn;
 
     /**
      * @var array
+     * @Assert\Type(type="array")
      */
     protected $scope;
 
