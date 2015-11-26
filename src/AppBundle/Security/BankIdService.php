@@ -3,8 +3,11 @@
 namespace AppBundle\Security;
 
 use Guzzle\Http\Client;
+use Symfony\Bridge\Monolog\Logger;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Validator\Validation;
 
 class BankIdService
 {
@@ -17,14 +20,18 @@ class BankIdService
      * @var Router
      */
     private $router;
-    private $monolog_logger;
+    private $monologLogger;
+    private $validation;
+    private $serializer;
 
-    public function __construct($clientId, $secret, Router $router, $monolog_logger)
+    public function __construct($clientId, $secret, Router $router, Logger $monologLogger, Validation $validation, Serializer $serializer)
     {
         $this->clientId = $clientId;
         $this->secret = $secret;
         $this->router = $router;
-        $this->monolog_logger = $monolog_logger;
+        $this->monologLogger = $monologLogger;
+        $this->validation = $validation;
+        $this->serializer = $serializer;
     }
 
     public function getLink()

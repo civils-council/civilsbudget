@@ -9,6 +9,8 @@ services:
             - %client_secret%
             - @router
             - @monolog.logger
+            - @validator
+            - @serializer
     app.twig_extension:
         class: AppBundle\Twig\AppExtension
         public: false
