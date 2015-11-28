@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Authentication\Token\PreAuthenticatedToken;
 
 class DefaultController extends Controller
 {
@@ -41,7 +42,7 @@ class DefaultController extends Controller
     {
         $authenticationUtils = $this->get('security.authentication_utils');
 
-        $data = ['clid  ' => $authenticationUtils->getLastUsername()];
+        $data = ['clid' => $authenticationUtils->getLastUsername()];
         $form = $this->createForm(new LoginType(), $data, ['action' => $this->generateUrl('login_check')]);
 
         if ($code = $request->query->get('code')) {
@@ -53,9 +54,8 @@ class DefaultController extends Controller
                 if($user[1] == 'new') {
                     $this->addFlash('inforormation', 'add information');
                     $form = $this->createEditForm($user[0]);
-                }else{
-                    $this->addFlash('you already register', 'enter with secret key');
-                    return $this->redirect($this->generateUrl('login').'#'.$user[0]->getClid().'');
+                } else {
+                    return $this->redirectToRoute('homepage');
                 }
             }
         }
