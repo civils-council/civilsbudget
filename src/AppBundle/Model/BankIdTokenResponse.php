@@ -3,39 +3,59 @@
 namespace AppBundle\Model;
 
 use Symfony\Component\Validator\Constraints as Assert;
+use JMS\Serializer\Annotation as Serializer;
 
-class SuccessTokenResponse
+class BankIdTokenResponse
 {
     /**
      * @var string
      * @Assert\NotBlank
      * @Assert\Type(type="string")
+     * @Serializer\Type("string")
      */
     protected $accessToken;
 
     /**
      * @var string
      * @Assert\Type(type="string")
+     * @Serializer\Type("string")
      */
     protected $refreshToken;
 
     /**
      * @var string
      * @Assert\Type(type="string")
+     * @Serializer\Type("string")
      */
     protected $tokenType;
 
     /**
      * @var int
-     * @Assert\Type(type="string")
+     * @Assert\Type(type="integer")
+     * @Serializer\Type("integer")
      */
     protected $expiresIn;
 
     /**
      * @var array
      * @Assert\Type(type="array")
+     * @Serializer\Type("string")
      */
     protected $scope;
+
+    /**
+     * @var string
+     * @Assert\Type(type="string")
+     * @Serializer\Type("string")
+     */
+    protected $error;
+
+    /**
+     * @var string
+     * @Assert\Type(type="string")
+     * @Serializer\Type("string")
+     */
+    protected $errorDescription;
 
     /**
      * @return string
@@ -124,6 +144,42 @@ class SuccessTokenResponse
     public function setScope($scope)
     {
         $this->scope = explode("", $scope);
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getError()
+    {
+        return $this->error;
+    }
+
+    /**
+     * @param string $error
+     * @return BadTokenResponse
+     */
+    public function setError($error)
+    {
+        $this->error = $error;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getErrorDescription()
+    {
+        return $this->errorDescription;
+    }
+
+    /**
+     * @param string $errorDescription
+     * @return BadTokenResponse
+     */
+    public function setErrorDescription($errorDescription)
+    {
+        $this->errorDescription = $errorDescription;
         return $this;
     }
 }

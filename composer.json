@@ -22,7 +22,8 @@
         "hautelook/alice-bundle": "^0.2.0",
         "guzzle/guzzle": "^3.9",
         "mcfedr/json-form": "^3.1",
-        "jms/serializer-bundle": "0.13.*"
+        "jms/serializer-bundle": "0.13.*",
+        "hwi/oauth-bundle": "^0.3.9"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3",
