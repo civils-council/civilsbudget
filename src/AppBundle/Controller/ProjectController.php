@@ -53,7 +53,7 @@ class ProjectController extends Controller
         if ($request->getMethod() == Request::METHOD_POST) {
             $vote = $project->getLikedUsers()->contains($this->getUser());
             $user_vote = $this->getUser()->getLikedProjects();
-            if($user_vote =! false) {
+            if($user_vote != null) {
                 if ($vote != false) {
                     $this->addFlash('warning', 'Ви вже підтримали цей проект.');
                 } elseif ($project->getLikedUsers()->contains($this->getUser()) == false && $this->getUser()->getLikedProjects()->getId() == $project->getId()) {
