@@ -21,7 +21,15 @@ class UserController extends Controller
             $data = $this->get('app.security.bank_id')->getBankIdUser($code);
             if ($data['state'] == 'ok') {
                 $user = $this->get('app.user.manager')->isUniqueUser($data);
-                return new JsonResponse(["user" => $user[0]]);
+
+                return new JsonResponse(
+                    [
+                        "id" => $user[0]->getId(),
+                        "full_name" => $user[0]->getFullName(),
+                        "clid" => $user[0]->getClid(),
+                        "voted_project" => $user[0]->getLikedProjects()->getId()
+                    ]
+                );
             }
         }
         return new JsonResponse(["code:" => 401, "message" => "Wrong authorization."]);
