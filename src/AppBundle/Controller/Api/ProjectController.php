@@ -99,7 +99,7 @@ class ProjectController extends Controller
             $user = $em->getRepository('AppBundle:User')->findOneByClid($clid);
             if(!empty($user)) {
                 $user_vote = $user->getLikedProjects();
-                if ($user_vote = !false) {
+                if ($user_vote != null) {
                     if ($project->getLikedUsers()->contains($user)) {
                         return new JsonResponse(['warning' => 'Ви вже підтримали цей проект.']);
                     } elseif ($project->getLikedUsers()->contains($user) == false && $user->getLikedProjects()->getId() == $project->getId()) {
