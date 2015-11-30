@@ -70,6 +70,10 @@ __200__
         {
           "success": "Ваший голос зараховано на підтримку проект."
         }
+        
+        {
+          'warning', "Ви використали свiй голос."
+        }                        
     }
     
 __GET__ `/api/projects/{id}/like`
@@ -150,6 +154,7 @@ __200__
             "id": 111
             "fullName": <fullName of user>,
             "clid": <very secret key>,
+            "voted_project": <id project>/false
         }
     }
 
