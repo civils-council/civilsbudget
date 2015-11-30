@@ -83,6 +83,13 @@ class Project implements \JsonSerializable
     private $confirmedBy;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    private $externalId;
+
+    /**
      * @var User
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="projects")
@@ -248,6 +255,22 @@ class Project implements \JsonSerializable
     {
         return $this->confirmedBy;
     }
+	
+    /**
+     * @return string
+     */
+    public function getExternalId()
+    {
+        return $this->externalId;
+    }
+
+    /**
+     * @param string $externalId
+     */
+    public function setExternalId($externalId)
+    {
+        $this->externalId = $externalId;
+    }	
 
     /**
      * Set owner
@@ -329,6 +352,7 @@ class Project implements \JsonSerializable
             "likes_user" => $this->getLikedUsers()->getValues(),
             "owner" => $this->getOwner()->getFullName(),
             "avatar_owner" => $this->getOwner()->getAvatar(),
+            "external_id" => $this->getExternalId(),
         ];
     }
 
