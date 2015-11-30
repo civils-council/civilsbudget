@@ -147,7 +147,8 @@ class DefaultController extends Controller
 
             $em->flush();
 
-            return $this->redirect($this->generateUrl('login').'#'.$entity->getClid().'');
+//            return $this->redirect($this->generateUrl('login').'#'.$entity->getClid().'');
+            return $this->redirectToRoute('homepage');
         }
 
         return array(
