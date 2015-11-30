@@ -24,7 +24,10 @@ services:
             - { name: twig.extension }
     app.user.manager:
         class:  AppBundle\Helper\UserManager
-        arguments: [@templating, @doctrine.orm.entity_manager ]
-
+        arguments:
+            - @templating
+            - @doctrine.orm.entity_manager
+            - @security.token_storage
+            - @session
         calls:
             - [ setRootDir, ["%kernel.root_dir%"] ]

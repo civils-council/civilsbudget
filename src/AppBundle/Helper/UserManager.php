@@ -5,6 +5,9 @@ namespace AppBundle\Helper;
 use AppBundle\Entity\Location;
 use AppBundle\Entity\User;
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Security\Core\Authentication\Token\PreAuthenticatedToken;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 
 class UserManager
 {
@@ -13,15 +16,27 @@ class UserManager
 
     private $rootDir;
 
+    /**
+     * @var TokenStorage
+     */
+    private $tokenStorage;
+
+    /**
+     * @var Session
+     */
+    private $session;
+
     public function setRootDir($rootDir)
     {
         $this->rootDir = $rootDir;
     }
 
-    public function __construct($_templateEngine, EntityManager $em)
+    public function __construct($_templateEngine, EntityManager $em, TokenStorage $tokenStorage, Session $session)
     {
         $this->templateEngine = $_templateEngine;
         $this->em = $em;
+        $this->tokenStorage = $tokenStorage;
+        $this->session = $session;
     }
 
     public function isUniqueUser($data)
@@ -93,6 +108,7 @@ class UserManager
             $result_field = openssl_private_decrypt($deceode_sex, $sex, $res);
         }
 
+        /** @var User $user */
         $user = $this->em->getRepository('AppBundle:User')->findOneByClid($clId);
         if (empty($user)) {
             $user = new User();
@@ -147,10 +163,11 @@ class UserManager
             $this->em->flush();
 
             return [$user, 'new'];
-        }
-        else
-        {
-            //ToDo add user in security context
+        } else {
+            $token = new PreAuthenticatedToken($user, $clId, 'main', $user->getRoles());
+            $this->tokenStorage->setToken($token);
+            $this->session->set('_security_main', serialize($token));
+
             return [$user, 'old'];
         }
     }
