@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Project;
+use AppBundle\Entity\User;
 use AppBundle\Form\ProjectType;
 use AppBundle\Form\LikeProjectType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -48,14 +49,17 @@ class ProjectController extends Controller
                 'user' => $this->getUser(),
                 'action' => $this->generateUrl('projects_like', ['id' => $project->getId()]),
             ]);
+        $vote = $project->getLikedUsers()->contains($this->getUser());
 
         if ($request->getMethod() == Request::METHOD_POST) {
-            if ($project->getLikedUsers()->contains($this->getUser())) {
+            if ($vote != false) {
                 $this->addFlash('warning', 'Ви вже підтримали цей проект.');
-            } else {
-                $project->addLikedUser($this->getUser());
+            } elseif($project->getLikedUsers()->contains($this->getUser()) == false && $this->getUser()->getLikedProjects()->getId() == $project->getId()){
+                $this->getUser()->setLikedProjects($project);
                 $this->getDoctrine()->getManager()->flush();
                 $this->addFlash('success', 'Ваший голос зараховано на підтримку проект.');
+            }else{
+                $this->addFlash('warning', 'Ви використали свiй голос.');
             }
 
             return $this->redirectToRoute('projects_show', ['id' => $project->getId()]);
