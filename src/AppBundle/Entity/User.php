@@ -30,14 +30,14 @@ class User implements UserInterface, \JsonSerializable
     /**
      * @var string
      *
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $firstName;
 
     /**
      * @var string
      *
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $lastName;
 
@@ -109,7 +109,7 @@ class User implements UserInterface, \JsonSerializable
     /**
      * @var string
      *
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $inn;
 
@@ -126,12 +126,6 @@ class User implements UserInterface, \JsonSerializable
      * @ORM\Column(name="avatar", type="string", length=255, nullable=true)
      */
     protected $avatar;
-
-//    public function __construct()
-//    {
-//        $this->projects = new ArrayCollection();
-//        $this->likedProjects = new ArrayCollection();
-//    }
 
     /**
      * Get id
