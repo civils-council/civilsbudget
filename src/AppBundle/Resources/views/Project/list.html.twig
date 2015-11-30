@@ -1,58 +1,54 @@
 {% extends "@App/layout.html.twig" %}
 
 {% block title %}
-    Projects
+    Проекти
 {% endblock title %}
 
 {% block content %}
+	<a href="#" id="hp-logo"></a>
+		<h1 id="hp-title">
+			Громадський бюджет в місті Черкаси 2015
+		</h1>
+
     {% for project in projects %}
         {% if loop.index % 4 == 1 %}
-            <div class="row">
+         <div class="row">
         {% endif %}
-        <div class="col-md-3">
-            <div class="card" id="project{{ project.id }}">
-                <div class="card-image">
-                    <img src="{% if project.picture %} {{ asset(project.picture) }} {% else %} {{ asset('bundles/app/img/gerb_goroda_cherkassy_abali.ru_.png') }} {% endif %}" class="img-responsive" alt="">
-                </div><!-- card image -->
 
-                <div class="card-content">
-                    <span class="card-title">{{ project.title|humanize }}</span>
-                    <button type="button" class="btn btn-custom pull-right cards" aria-label="Left Align" data-value="project{{ project.id }}">
-                        <i class="fa fa-ellipsis-v" data-value="project{{ project.id }}"></i>
-                    </button>
-                </div><!-- card content -->
-                <div class="card-action">
-                    <p class="description">
-                        {{ project.description[:50] ~'...' }}
-                    </p>
-                    <hr>
-                    <ul class="nav nav-pills">
-                        <li>
-                            <span>Створено: <span class="badge">{{ project.createAt|date('d-m-Y') }}</span></span>
-                        </li>
-                        <li>
-                            <span>Підтримало: <span class="badge">{{ project.likedUsers|length|number_format(0, '.', ' ') }}</span></span>
-                        </li>
-                        <li>
-                            <a href="{{ path('projects_show', { id: project.id }) }}" class="btn btn-info read_more">Читати далі</a>
-                        </li>
-                    </ul>
+        <div class="col-md-3  item-content">
+            <div class="wrap-item">
+                <div class="card" id="project{{ project.id }}">
+                    <div class="card-image">
+                        <a href="{{ path('projects_show', { id: project.id }) }}" class="img-lnk">
+                            <img src="{% if project.picture %} {{ asset(project.picture) }} {% else %} {{ asset('bundles/app/img/gerb_goroda_cherkassy_abali.ru_.png') }} {% endif %}" class="img-responsive" alt="">
+                        </a>
+                    </div><!-- card image -->
 
-
-                    {#<a href="#" target="new_blank">Link</a>
-                    <a href="#" target="new_blank">Link</a>
-                    <a href="#" target="new_blank">Link</a>#}
-                </div><!-- card actions -->
-                <div class="card-reveal">
-                    <span class="card-title">{{ project.title }}</span> <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                    <p>
-                        {{ project.description }}
-                    </p>
-                </div><!-- card reveal -->
+                    <div class="card-content">
+                        <h2 class="item-title">{{ project.title|humanize }}</h2>
+                    </div><!-- card content -->
+                    <div class="item-excerpt">
+                        <span>{{ project.description[:70] ~'...' }}</span>
+                        <button type="button" class="btn btn-custom pull-right cards desc-btn" aria-label="Left Align" data-value="project{{ project.id }}">
+                            <i class="fa fa-ellipsis-v" data-value="project{{ project.id }}"></i>
+                        </button>
+                    </div><!-- card actions -->
+                    <div class="item-meta">
+                        <div>Створено: <span>{{ project.createAt|date('d-m-Y') }}</span></div>
+                        <div>Підтримало: <span>{{ project.likedUsers|length|number_format(0, '.', ' ') }}</span></div>
+                    </div>
+                    <div class="card-reveal">
+                        <span class="card-title">{{ project.title }}</span> <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                        <p>
+                            {{ project.description }}
+                        </p>
+                    </div><!-- card reveal -->
+                    <a href="{{ path('projects_show', { id: project.id }) }}" class="detail-btn">детальніше</a>
+                </div>
             </div>
         </div>
         {% if loop.index % 4 == 0 %}
-            </div>
+        </div>
         {% endif %}
     {% endfor %}
 {% endblock content %}

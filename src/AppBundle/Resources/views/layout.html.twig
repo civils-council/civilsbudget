@@ -2,15 +2,15 @@
 
 {% block body %}
 
-    {{ block("menu") }}
-    <div class="container">
-        <div class="bs-docs-section">
-            {{ block("header") }}
+    {{ block("header") }}
+
+    <main id="main-wrap">
+        <div class="container">
             {{ block("flash") }}
             {{ block("content") }}
         </div>
-        {{ block("footer") }}
-    </div>
+    </main>
+    {{ block("footer") }}
     <div id="login-modal" class="modal fade">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -28,12 +28,20 @@
     </div>
 {% endblock body %}
 
-{% block content %}{% endblock content %}
-{% block footer %}
-    <footer>
-        <div class="row">
-            <div class="col-lg-12">
+{% block content %}
+{% endblock content %}
 
+{% block footer %}
+    <footer id="main-footer">
+        <div class="container main-block">
+            <div id="copyright">
+                &copy; 2015
+            </div>
+            <div id="footer-social">
+                <a href="#" class="icon-share"></a>
+                <a href="#" class="icon-vk"></a>
+                <a href="#" class="icon-facebook-1"></a>
+                <a href="#" class="icon-odnoklassniki"></a>
             </div>
         </div>
     </footer>
@@ -53,12 +61,6 @@
             <div class="navbar-collapse collapse" id="navbar-main">
                 <ul class="nav navbar-nav">
                     {#{{ dump(is_granted('ROLE_USER'), is_granted('ROLE_ADMIN')) }}#}
-                        {% if app.user and is_granted('ROLE_USER') %}
-                        <li><a href="{{ path('projects_add') }}">Add Project User</a></li>
-                    {% endif %}
-                    {% if app.user and is_granted('ROLE_ADMIN') %}
-                        <li><a href="{{ path('admin_projects_add') }}">Add Project Admin</a></li>
-                    {% endif %}
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">
@@ -78,11 +80,26 @@
 {% endblock menu %}
 
 {% block header %}
-    <div class="page-header">
-        <div class="row">
-            <div class="col-lg-12">
-                <h1 id="buttons">{{ block('title') }}</h1>
-            </div>
+
+    <header id="main-header">
+        <div class="container main-block">
+            <a href="{{ path("homepage") }}" id="home-icon" class="icon-home"></a>
+            <a href="{{ path("homepage") }}">golos.ck.ua</a>
+
+            {% if app.user and is_granted('ROLE_USER') %}
+            <a href="{{ path('projects_add') }}">Add Project User</a>
+            {% endif %}
+            {% if app.user and is_granted('ROLE_ADMIN') %}
+            <a href="{{ path('admin_projects_add') }}">Add Project Admin</a>
+            {% endif %}
+
+            {% if app.user %}
+            <a href="{{ path('logout') }}" id="user-icon">Вихід</a>
+            <a href="#" id="user-icon"  style="background-image: url(http://npg.si.edu/exhibit/feature/images/schoeller_full.jpg);"></a>
+            {% elseif app.request.get('_route') != 'login' %}
+            <a href="" id="user-icon" data-toggle="modal" data-target="#login-modal">Увійти</a>
+            {% endif %}
+
         </div>
-    </div>
+    </header>
 {% endblock header %}
