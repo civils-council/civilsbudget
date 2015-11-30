@@ -97,13 +97,15 @@ class ProjectController extends Controller
 
         if ($request->getMethod() == Request::METHOD_POST) {
             $user = $em->getRepository('AppBundle:User')->findOneByClid($clid);
+
             if ($project->getLikedUsers()->contains($user)) {
-                $this->addFlash('warning', 'Ви вже підтримали цей проект.');
                 return new JsonResponse(['warning' => 'Ви вже підтримали цей проект.']);
-            } else {
+            } elseif($project->getLikedUsers()->contains($user) == false && $user->getLikedProjects()->getId() == $project->getId()) {
                 $project->addLikedUser($user);
                 $this->getDoctrine()->getManager()->flush();
                 return new JsonResponse(['success' => 'Ваший голос зараховано на підтримку проект.']);
+            }else{
+                return new JsonResponse(['warning' => 'Ви використали свiй голос.']);
             }
         }
 
