@@ -25,14 +25,14 @@ class BankIdService
         $this->router = $router;
     }
 
-    public function getLink()
+    public function getLink($projectId = null)
     {
-        $callBack = $this->router->generate('login', [], UrlGeneratorInterface::ABSOLUTE_URL);
+        $callBack = $this->router->generate('login', ['id' => $projectId], UrlGeneratorInterface::ABSOLUTE_URL);
 
         return sprintf(self::BANK_ID_URL_LOGIN, $this->clientId, $callBack);
     }
 
-    public function getAccessToken($code)
+    public function getAccessToken($code, $projectId = null)
     {
 //        dump($code);exit;
         $client = new Client();
@@ -42,7 +42,7 @@ class BankIdService
             $this->clientId,
             $sha1,
             $code,
-            $this->router->generate('login', [], UrlGeneratorInterface::ABSOLUTE_URL)
+            $this->router->generate('login', ['id' => $projectId], UrlGeneratorInterface::ABSOLUTE_URL)
         );
 
         $accessToken = $client->get($url)->send()->getBody(true);

@@ -34,18 +34,18 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/login", name="login")
+     * @Route("/login/{id}", name="login", defaults={"id" = null}, requirements={"id" = "null|\d+"})
      * @Template()
      */
-    public function loginAction(Request $request)
+    public function loginAction($id = null, Request $request)
     {
         $authenticationUtils = $this->get('security.authentication_utils');
 
-        $data = ['clid  ' => $authenticationUtils->getLastUsername()];
+        $data = ['clid' => $authenticationUtils->getLastUsername()];
         $form = $this->createForm(new LoginType(), $data, ['action' => $this->generateUrl('login_check')]);
 
         if ($code = $request->query->get('code')) {
-            $data = $this->get('app.security.bank_id')->getAccessToken($code);
+            $data = $this->get('app.security.bank_id')->getAccessToken($code, $id);
             if ($data['state'] == 'ok') {
                 $user = $this->get('app.user.manager')->isUniqueUser($data);
 //                $form = $this->createForm(new LoginUserType(), $user, ['action' => $this->generateUrl('update_user', ['id' => $user->getId()])]);
@@ -53,9 +53,12 @@ class DefaultController extends Controller
                 if($user[1] == 'new') {
                     $this->addFlash('inforormation', 'add information');
                     $form = $this->createEditForm($user[0]);
-                }else{
-                    $this->addFlash('you already register', 'enter with secret key');
-                    return $this->redirect($this->generateUrl('login').'#'.$user[0]->getClid().'');
+                } else {
+                    if ($id) {
+                        return $this->redirectToRoute('projects_show', ['id' => $id]);
+                    }
+
+                    return $this->redirectToRoute('homepage');
                 }
             }
         }
