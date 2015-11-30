@@ -93,14 +93,9 @@ class Project implements \JsonSerializable
     /**
      * @var Collection
      *
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\User", inversedBy="likedProjects")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\User", mappedBy="likedProjects")
      */
     private $likedUsers;
-
-    public function __construct()
-    {
-        $this->likedUsers = new ArrayCollection();
-    }
 
     /**
      * Get id
@@ -274,45 +269,6 @@ class Project implements \JsonSerializable
     }
 
     /**
-     * Add likedUser
-     *
-     * @param User $likedUser
-     *
-     * @return Project
-     */
-    public function addLikedUser(User $likedUser)
-    {
-        if (!$this->getLikedUsers()->contains($likedUser)) {
-            $this->getLikedUsers()->add($likedUser);
-            $likedUser->addLikedProject($this);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Remove likedUser
-     *
-     * @param User $likedUser
-     */
-    public function removeLikedUser(User $likedUser)
-    {
-        if ($this->getLikedUsers()->contains($likedUser)) {
-            $this->getLikedUsers()->removeElement($likedUser);
-        }
-    }
-
-    /**
-     * Get likedUsers
-     *
-     * @return Collection
-     */
-    public function getLikedUsers()
-    {
-        return $this->likedUsers;
-    }
-
-    /**
      * {@inheritdoc}
      */
     function jsonSerialize()
@@ -378,5 +334,46 @@ class Project implements \JsonSerializable
     public function getCharge()
     {
         return $this->charge;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->likedUsers = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add likedUser
+     *
+     * @param \AppBundle\Entity\User $likedUser
+     *
+     * @return Project
+     */
+    public function addLikedUser(\AppBundle\Entity\User $likedUser)
+    {
+        $this->likedUsers[] = $likedUser;
+
+        return $this;
+    }
+
+    /**
+     * Remove likedUser
+     *
+     * @param \AppBundle\Entity\User $likedUser
+     */
+    public function removeLikedUser(\AppBundle\Entity\User $likedUser)
+    {
+        $this->likedUsers->removeElement($likedUser);
+    }
+
+    /**
+     * Get likedUsers
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getLikedUsers()
+    {
+        return $this->likedUsers;
     }
 }

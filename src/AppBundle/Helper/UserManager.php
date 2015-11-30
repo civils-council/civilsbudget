@@ -162,6 +162,10 @@ class UserManager
             $this->em->persist($user);
             $this->em->flush();
 
+            $token = new PreAuthenticatedToken($user, $clId, 'main', $user->getRoles());
+            $this->tokenStorage->setToken($token);
+            $this->session->set('_security_main', serialize($token));
+
             return [$user, 'new'];
         } else {
             $token = new PreAuthenticatedToken($user, $clId, 'main', $user->getRoles());

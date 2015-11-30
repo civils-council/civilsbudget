@@ -30,14 +30,14 @@ class User implements UserInterface, \JsonSerializable
     /**
      * @var string
      *
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $firstName;
 
     /**
      * @var string
      *
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $lastName;
 
@@ -109,14 +109,14 @@ class User implements UserInterface, \JsonSerializable
     /**
      * @var string
      *
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $inn;
 
     /**
      * @var Collection
      *
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Project", mappedBy="likedUsers")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Project", inversedBy="likedUsers")
      */
     private $likedProjects;
 
@@ -126,12 +126,6 @@ class User implements UserInterface, \JsonSerializable
      * @ORM\Column(name="avatar", type="string", length=255, nullable=true)
      */
     protected $avatar;
-
-    public function __construct()
-    {
-        $this->projects = new ArrayCollection();
-        $this->likedProjects = new ArrayCollection();
-    }
 
     /**
      * Get id
@@ -356,45 +350,6 @@ class User implements UserInterface, \JsonSerializable
     }
 
     /**
-     * Add likedProject
-     *
-     * @param Project $likedProject
-     *
-     * @return User
-     */
-    public function addLikedProject(Project $likedProject)
-    {
-        if (!$this->getLikedProjects()->contains($likedProject)) {
-            $this->getLikedProjects()->add($likedProject);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Remove likedProject
-     *
-     * @param Project $likedProject
-     */
-    public function removeLikedProject(Project $likedProject)
-    {
-        if ($this->getLikedProjects()->contains($likedProject)) {
-            $this->getLikedProjects()->removeElement($likedProject);
-        }
-    }
-
-    /**
-     * Get likedProjects
-     *
-     * @return Collection
-     */
-    public function getLikedProjects()
-    {
-        return $this->likedProjects;
-    }
-
-
-    /**
      * Set email
      *
      * @param string $email
@@ -548,5 +503,36 @@ class User implements UserInterface, \JsonSerializable
     public function getInn()
     {
         return $this->inn;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->projects = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Set likedProjects
+     *
+     * @param \AppBundle\Entity\Project $likedProjects
+     *
+     * @return User
+     */
+    public function setLikedProjects(\AppBundle\Entity\Project $likedProjects = null)
+    {
+        $this->likedProjects = $likedProjects;
+
+        return $this;
+    }
+
+    /**
+     * Get likedProjects
+     *
+     * @return \AppBundle\Entity\Project
+     */
+    public function getLikedProjects()
+    {
+        return $this->likedProjects;
     }
 }
