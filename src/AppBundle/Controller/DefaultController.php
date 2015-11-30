@@ -34,7 +34,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/login/{id}", name="login", defaults={"id" = null}, requirements={"id" = "null|\d+"})
+     * @Route("/login", name="login", defaults={"id" = null}, requirements={"id" = "null|\d+"})
      * @Template()
      */
     public function loginAction($id = null, Request $request)
@@ -55,10 +55,6 @@ class DefaultController extends Controller
                     $this->addFlash('inforormation', 'add information');
                     $form = $this->createEditForm($user[0]);
                 } else {
-                    if ($id) {
-                        return $this->redirectToRoute('projects_show', ['id' => $id]);
-                    }
-
                     return $this->redirectToRoute('homepage');
                 }
             }
