@@ -34,12 +34,22 @@
 {% block footer %}
     <footer id="main-footer">
         <div class="container main-block">
-            <div id="copyright">
-                &copy; 2015
-            </div>
-            <div id="footer-social">
-                <a href="#" class="icon-facebook-1"></a>
-                <a href="#" class="icon-vk"></a>
+            <div class="row">
+                <div class="col-md-4 copyright">
+                    <span>&copy; 2015</span>
+                    <span>Про программу</span>
+                    <span>Розробники</span>
+                </div>
+                <div class="col-md-4 text-center icon-wrap">
+                    <a href="#" class="icon-4"></a>
+                    <a href="#" class="icon-3"></a>
+                    <a href="#" class="icon-2"></a>
+                    <a href="#" class="icon-1"></a>
+                </div>
+                <div class="col-md-4 footer-social">
+                    <a href="https://www.facebook.com/civilscouncil" class="icon-facebook"></a>
+                    <a href="https://vk.com/civilscouncil" class="icon-vk"></a>
+                </div>
             </div>
         </div>
     </footer>
@@ -96,7 +106,6 @@
             {% elseif app.request.get('_route') != 'login' %}
             <a href="" id="user-icon" data-toggle="modal" data-target="#login-modal">Увійти</a>
             {% endif %}
-
         </div>
     </header>
 {% endblock header %}
