@@ -354,7 +354,7 @@ class User implements UserInterface, \JsonSerializable
     {
         return $this->projects;
     }
-    
+
     /**
      * Set email
      *
