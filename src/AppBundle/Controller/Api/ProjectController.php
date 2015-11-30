@@ -103,14 +103,15 @@ class ProjectController extends Controller
                     if ($project->getLikedUsers()->contains($user)) {
                         return new JsonResponse(['warning' => 'Ви вже підтримали цей проект.']);
                     } elseif ($project->getLikedUsers()->contains($user) == false && $user->getLikedProjects()->getId() == $project->getId()) {
-                        $project->addLikedUser($user);
+                        $user->setLikedProjects($project);
                         $this->getDoctrine()->getManager()->flush();
+
                         return new JsonResponse(['success' => 'Ваший голос зараховано на підтримку проект.']);
                     } else {
                         return new JsonResponse(['warning' => 'Ви використали свiй голос.']);
                     }
                 } else {
-                    $project->addLikedUser($user);
+                    $user->setLikedProjects($project);
                     $this->getDoctrine()->getManager()->flush();
                     return new JsonResponse(['success' => 'Ваший голос зараховано на підтримку проект.']);
                 }
