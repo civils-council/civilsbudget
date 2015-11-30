@@ -1,29 +1,54 @@
 {% extends '@App/layout.html.twig' %}
 
 {% block content %}
-        <div class="info_project">
+            <div class="row hd-caption">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h3> {{ block('title') }} </h3>
+                    </div>
+                </div>
+
+                <div class="row hd-info">
+                    <div class="col-md-4">
+                        <div id="user-avatar" style="background-image: url({% if project.owner.avatar %} {{ asset(project.owner.avatar) }} {% else %} {{ asset('bundles/app/img/icon_developer.png') }} {% endif %});"></div>
+                        <h4 id="user-title"><a href="{{ path('users_profile', { id: project.owner.id }) }}">{{ project.owner.fullName }}</a></h4>
+                    </div>
+                    <div class="col-md-4">
+                        <div {{ app.user is null ? ' data-toggle="modal" data-target="#login-modal"' }}>
+                        {{ render(controller('AppBundle:Project:like', { id: project.id })) }}
+                        </div>
+                    </div>
+                    <div class="col-md-4 tl-price">Ціна проекту: <span class="price">{{ project.charge|number_format(0, '.', ' ') }}<span> грн</div>
+                </div>
+            </div>
+
+            <div class="row hd-title">
+                <div class="col-md-12"></div>
+            </div>
+            <div class="row hd-statis">
+                <div class="col-md-6 support">Підтримало: <span>{{ project.likedUsers|length|number_format(0, '.', ' ') }}</span></div>
+                <div class="col-md-6 date-voting">Кінцева дата голосування: <span>14.12.15</span></div>
+            </div>
+            <div class="row hd-description">
+                <div class="col-md-12">
+                    <p>{{ project.description }}</p>
+                </div>
+            </div>
+
+    <img src="{% if project.picture %} {{ asset(project.picture) }} {% else %} {{ asset('bundles/app/img/gerb_goroda_cherkassy_abali.ru_.png') }} {% endif %}" align="left" class="fb-image-lg" alt="Project image"/>
+
+
+            <div class="row hd-comments">
+                <div class="col-md-12"><a class="lb-comment" href="#">Коментарі</a><a class="lb-edit" href="#">Додати коментар</a></div>
+            </div>
+
+
+      <div class="info_project">
             {{ project.description }}
         </div>
         {{ block("navproject") }}
 
 {% endblock %}
-
-{% block header %}
-    <div class="fb-profile">
-        <div class="image_project">
-            <h2 class="title_project">{{ block('title') }}</h2>
-            <img src="{% if project.picture %} {{ asset(project.picture) }} {% else %} {{ asset('bundles/app/img/gerb_goroda_cherkassy_abali.ru_.png') }} {% endif %}" align="left" class="fb-image-lg" alt="Project image"/>
-        </div>
-        <div class="fb-image-profile thumbnail">
-            <div class="border_tumbnail">
-                <img src="{% if project.owner.avatar %} {{ asset(project.owner.avatar) }} {% else %} {{ asset('bundles/app/img/icon_developer.png') }} {% endif %}" align="left" alt="avbatar">
-            </div>
-        </div>
-        <div class="fb-profile-text">
-            <h1><a href="{{ path('users_profile', { id: project.owner.id }) }}">{{ project.owner.fullName }}</a></h1>
-        </div>
-    </div>
-{% endblock header %}
 
 {% block title %}
     {{ project.title|humanize }}
