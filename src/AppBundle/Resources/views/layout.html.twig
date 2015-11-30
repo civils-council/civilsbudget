@@ -94,8 +94,7 @@
             {% endif %}
 
             {% if app.user %}
-            <a href="{{ path('logout') }}" id="user-icon">Вихід</a>
-            <a href="#" id="user-icon"  style="background-image: url(http://npg.si.edu/exhibit/feature/images/schoeller_full.jpg);"></a>
+            <a href="{{ path('logout') }}" id="user-icon" style="background-image: url( {% if app.user.avatar %} {{ asset(app.user.avatar) }} {% else %} {{ asset('bundles/app/img/icon_developer.png') }} {% endif %} );" alt="Вихід"></a>
             {% elseif app.request.get('_route') != 'login' %}
             <a href="" id="user-icon" data-toggle="modal" data-target="#login-modal">Увійти</a>
             {% endif %}
