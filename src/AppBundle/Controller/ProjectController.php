@@ -49,9 +49,10 @@ class ProjectController extends Controller
                 'user' => $this->getUser(),
                 'action' => $this->generateUrl('projects_like', ['id' => $project->getId()]),
             ]);
-        $vote = $project->getLikedUsers()->contains($this->getUser());
-        $user_vote = $this->getUser()->getLikedProjects();
+
         if ($request->getMethod() == Request::METHOD_POST) {
+            $vote = $project->getLikedUsers()->contains($this->getUser());
+            $user_vote = $this->getUser()->getLikedProjects();
             if($user_vote =! false) {
                 if ($vote != false) {
                     $this->addFlash('warning', 'Ви вже підтримали цей проект.');
