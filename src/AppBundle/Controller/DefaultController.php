@@ -45,7 +45,8 @@ class DefaultController extends Controller
         $form = $this->createForm(new LoginType(), $data, ['action' => $this->generateUrl('login_check')]);
 
         if ($code = $request->query->get('code')) {
-            $data = $this->get('app.security.bank_id')->getAccessToken($code, $id);
+            $accessToken = $this->get('app.security.bank_id')->getAccessToken($code);
+            $data = $this->get('app.security.bank_id')->getBankIdUser($accessToken['access_token']);
             if ($data['state'] == 'ok') {
                 $user = $this->get('app.user.manager')->isUniqueUser($data);
 //                $form = $this->createForm(new LoginUserType(), $user, ['action' => $this->generateUrl('update_user', ['id' => $user->getId()])]);

@@ -18,7 +18,7 @@ class UserController extends Controller
     {
         $code = $request->query->get('code');
         if(!empty($code)) {
-            $data = $this->get('app.security.bank_id')->getAccessToken($code);
+            $data = $this->get('app.security.bank_id')->getBankIdUser($code);
             if ($data['state'] == 'ok') {
                 $user = $this->get('app.user.manager')->isUniqueUser($data);
                 return new JsonResponse(["user" => $user[0]]);

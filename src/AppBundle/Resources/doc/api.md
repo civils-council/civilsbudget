@@ -5,6 +5,7 @@
 ### List
 
 __GET__ `/api/projects`
+        `?clid={clid}`
 
 ####Response
 
@@ -12,6 +13,7 @@ __200__
 
     {
         "projects": [{
+            "vote": "true/false"
             "id": 1,
             "title": "test title",
             "description": "test description",
@@ -29,6 +31,7 @@ __200__
 ### One project
 
 __GET__ `/api/projects/{id}`
+        `?clid={clid}`
 
 ###Response
 
@@ -36,6 +39,7 @@ __200__
 
     {
         "project": {
+            "vote": "true/false"
             "id": 1,
             "title": "test title",
             "description": "test description",
@@ -44,14 +48,6 @@ __200__
             "picture": "<url-picture>",
             "createdAt": "2015-10-03T09:11:04+00:00",
             "likes_count": 123,
-            "likes_user": user
-            [
-                    "user": {
-                        "id": 111
-                        "fullName": <fullName of user>,
-                        "clid": <very secret key>,
-                    }
-            ],
             "owner": "fullName",
             "avatar_owner": "avatar owner"            
         }
@@ -76,7 +72,7 @@ __200__
         }
     }
     
-__GET__ `/api/projects/{id}/like`     
+__GET__ `/api/projects/{id}/like`
 
     {
         "project": {

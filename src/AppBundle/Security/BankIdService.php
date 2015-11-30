@@ -45,15 +45,15 @@ class BankIdService
             $this->router->generate('login', ['id' => $projectId], UrlGeneratorInterface::ABSOLUTE_URL)
         );
 
-        $accessToken = $client->get($url)->send()->getBody(true);
-
-        return $this->getBankIdUser($accessToken);
+        $rawAccessToken = $client->get($url)->send()->getBody(true);
+        $accessToken = json_decode($rawAccessToken, true);
+        return $accessToken;
     }
 
-    public function getBankIdUser($rawAccessToken)
+    public function getBankIdUser($accessToken)
     {
         $client = new Client();
-        $accessToken = json_decode($rawAccessToken, true);
+//        $accessToken = json_decode($rawAccessToken, true);
 
         $bankUser = $client
             ->post(
@@ -61,7 +61,7 @@ class BankIdService
                 [
                     "Content-Type" => "application/json",
                     "Accept" => "application/json",
-                    "Authorization" => "Bearer {$accessToken['access_token']}, Id {$this->clientId}",
+                    "Authorization" => "Bearer {$accessToken}, Id {$this->clientId}",
                 ],
                 json_encode([
                     "type" => "physical",
