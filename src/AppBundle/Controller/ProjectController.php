@@ -50,17 +50,24 @@ class ProjectController extends Controller
                 'action' => $this->generateUrl('projects_like', ['id' => $project->getId()]),
             ]);
         $vote = $project->getLikedUsers()->contains($this->getUser());
-
+        $user_vote = $this->getUser()->getLikedProjects();
         if ($request->getMethod() == Request::METHOD_POST) {
-            if ($vote != false) {
-                $this->addFlash('warning', 'Ви вже підтримали цей проект.');
-            } elseif($project->getLikedUsers()->contains($this->getUser()) == false && $this->getUser()->getLikedProjects()->getId() == $project->getId()){
+            if($user_vote =! false) {
+                if ($vote != false) {
+                    $this->addFlash('warning', 'Ви вже підтримали цей проект.');
+                } elseif ($project->getLikedUsers()->contains($this->getUser()) == false && $this->getUser()->getLikedProjects()->getId() == $project->getId()) {
+                    $this->getUser()->setLikedProjects($project);
+                    $this->getDoctrine()->getManager()->flush();
+                    $this->addFlash('success', 'Ваший голос зараховано на підтримку проект.');
+                } else {
+                    $this->addFlash('warning', 'Ви використали свiй голос.');
+                }
+            }else{
                 $this->getUser()->setLikedProjects($project);
                 $this->getDoctrine()->getManager()->flush();
                 $this->addFlash('success', 'Ваший голос зараховано на підтримку проект.');
-            }else{
-                $this->addFlash('warning', 'Ви використали свiй голос.');
             }
+
 
             return $this->redirectToRoute('projects_show', ['id' => $project->getId()]);
         }
