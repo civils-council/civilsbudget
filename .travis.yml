@@ -7,7 +7,7 @@ before_script:
     - composer install
     - app/console doctrine:database:create
     - app/console doctrine:schema:create
-    - app/console doctrine:fixtures:load
+    - app/console doctrine:fixtures:load --no-interaction
 
 script:
   - php bin/phpunit -c app/ --coverage-clover=coverage.clover
