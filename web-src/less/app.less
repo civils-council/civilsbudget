@@ -922,8 +922,17 @@ a.description-btn:hover {
     border-radius:6px;
     background: #ffffff;
     border: none;
-;
+    &::before{
+        content: 'Підтримати';
+    }
 }
+
+#like_submit.not_auth:hover{
+    &::before{
+        content: 'Авторизуватися';
+    }
+}
+
 #like_submit:hover{
     background-color: #4c5c9c;
     color:#fff;
@@ -1118,19 +1127,6 @@ a.description-btn:hover {
     }
 }
 
-#like_submit{
-    display: block;
-    padding: 10px 0px;
-    margin: 0 auto;
-    max-width: 170px;
-    text-align: center;
-    font-size: 18px;
-    text-transform: uppercase;
-    text-decoration:none;
-    color:#525c99;
-    background-color: #fff;
-    border-radius:6px;
-}
 @media(max-width: 1200px){
     #main-footer{
         position: static;
@@ -1227,15 +1223,5 @@ button.close:hover {
     }
     .hd-description{
         padding: 10px 0;
-    }
-}
-#like_submit{
-     &::before{
-         content: 'Підтримати';
-     }
- }
-#like_submit.not_auth:hover{
-    &::before{
-        content: 'Авторизуватися';
     }
 }
