@@ -21,3 +21,19 @@ login_check:
     path: /login_check
 logout:
     path: /logout
+
+rada_about:
+    pattern: /about
+    defaults:
+        _controller:  FrameworkBundle:Template:template
+        template:     'AppBundle:Static:about.html.twig'
+        maxAge:       86400
+        sharedMaxAge: 86400
+
+rada_developerss:
+    pattern: /developers
+    defaults:
+        _controller:  FrameworkBundle:Template:template
+        template:     'AppBundle:Static:developers.html.twig'
+        maxAge:       86400
+        sharedMaxAge: 86400
