@@ -318,6 +318,7 @@ body {
 }
 
 #main-wrap {
+    position: relative;
     z-index: 2;
     padding-bottom: 60px;
 }
@@ -515,6 +516,12 @@ a.description-btn:hover {
     font-size:20px;
     color:#22222a;
     padding: 0px 20px;
+
+    overflow-wrap: normal;
+    word-wrap: break-word;
+    word-break: keep-all;
+    line-break: normal;
+    -webkit-hyphens: auto; -moz-hyphens: auto; -ms-hyphens: auto; hyphens: auto;
 }
 
 .item-excerpt {
@@ -1165,4 +1172,52 @@ a.description-btn:hover {
 .close:hover,
 .close:focus{
     outline: none;
+}
+
+#livechat-compact-container {
+    bottom: 50%!important;
+    right: -99px!important;
+    transform: rotate(270deg);
+    -webkit-transform: rotate(270deg);
+    -moz-transform: rotate(270deg);
+}
+
+.alert{
+    position: fixed;
+    top:80px;
+    left: 40%;
+    margin-left: -40px;
+    padding:80px;
+    border-color:rgb(82, 92, 153);
+    border-radius:0;
+    z-index: 10;
+    font-size: 22px;
+    text-transform: uppercase;
+}
+.alert-warning,
+.alert-success,
+.alert-danger {
+    background-color:#fff;
+    border-color:rgb(82, 92, 153);
+    color:rgb(82, 92, 153);
+}
+
+button.close {
+    position: absolute;
+    top: 0;
+    right: 1px;
+    border: none;
+    background: none;
+    font-size: 45px;
+    color:#4196e3;
+}
+
+button.close:hover {
+    color:#525c99;
+}
+
+@media(max-width: 768px) {
+    #aboutDeveloper .s3 {
+        padding: 30px 0;
+    }
 }
