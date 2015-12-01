@@ -10,46 +10,21 @@ use Symfony\Component\HttpFoundation\Request;
 class BankIdResourceOwner extends GenericOAuth2ResourceOwner
 {
     const USER_AGENT_HEADER = "User-Agent: Gromadskiy Byudjet mista Cherkasy (https://www.golos.ck.ua/)";
-
-    /**
-     * @param string $rawAccessToken
-     * @return mixed
-     */
-    protected function getBankIdUser($rawAccessToken)
-    {
-        $client = new Client();
-        $accessToken = json_decode($rawAccessToken, true);
-
-        $bankUser = $client
-            ->post(
-                "https://bankid.privatbank.ua/ResourceService/checked/data",
-                [
-                    "Content-Type" => "application/json",
-                    "Accept" => "application/json",
-                    "Authorization" => "Bearer {$accessToken['access_token']}, Id {$this->clientId}",
-                ],
-                json_encode([
-                    "type" => "physical",
-                    "fields" => ["firstName","middleName","lastName","phone","inn","clId","clIdText","birthDay","email","sex","resident","dateModification"],
-                    "addresses" =>  [[
-                        "type" => "factual",
-                        "fields" => ["country","state","area","city","street","houseNo","flatNo","dateModification"]
-                    ],[
-                        "type" => "birth",
-                        "fields" => ["country","state","area","city","street","houseNo","flatNo","dateModification"]
-                    ]],
-                    "documents" => [[
-                        "type" => "passport",
-                        "fields" => ["series","number","issue","dateIssue","dateExpiration","issueCountryIso2","dateModification"]
-                    ]]
-                ])
-            )
-            ->send()
-            ->getBody(true)
-        ;
-
-        return json_decode($bankUser, true);
-    }
+    const FIELDS_DECLARATION = [
+        "type" => "physical",
+        "fields" => ["firstName","middleName","lastName","phone","inn","clId","clIdText","birthDay","email","sex","resident","dateModification"],
+        "addresses" =>  [[
+            "type" => "factual",
+            "fields" => ["country","state","area","city","street","houseNo","flatNo","dateModification"]
+        ],[
+            "type" => "birth",
+            "fields" => ["country","state","area","city","street","houseNo","flatNo","dateModification"]
+        ]],
+        "documents" => [[
+            "type" => "passport",
+            "fields" => ["series","number","issue","dateIssue","dateExpiration","issueCountryIso2","dateModification"]
+        ]]
+    ];
 
     /**
      * Performs an HTTP request
@@ -76,7 +51,14 @@ class BankIdResourceOwner extends GenericOAuth2ResourceOwner
     public function getUserInformation(array $accessToken, array $extraParameters = array())
     {
         $url = $this->normalizeUrl($this->options['infos_url']);
-        $content = $this->httpRequest($url, null, [sprintf('Bearer %s, Id %s', $accessToken['access_token'], $this->options['client_id'])]);
+        $content = $this->httpRequest(
+            $url,
+            json_encode(self::FIELDS_DECLARATION),
+            [sprintf('Authorization: Bearer %s, Id %s', $accessToken['access_token'], $this->options['client_id']),
+                'Content-type: application/json',
+                'Accept: application/json'],
+            "POST"
+        );
 
         $response = $this->getUserResponse();
         $response->setResponse($content->getContent());
