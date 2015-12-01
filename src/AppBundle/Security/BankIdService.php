@@ -8,41 +8,45 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class BankIdService
 {
-    const BANK_ID_URL_LOGIN = "https://bankid.privatbank.ua/DataAccessService/das/authorize?response_type=code&client_id=%s&redirect_uri=%s";
-    const BANK_ID_URL_ACCESS_TOKEN = "https://bankid.privatbank.ua/DataAccessService/oauth/token?grant_type=authorization_code&client_id=%s&client_secret=%s&code=%s&redirect_uri=%s";
+    const BANK_ID_URL_LOGIN = "/DataAccessService/das/authorize?response_type=code&client_id=%s&redirect_uri=%s";
+    const BANK_ID_URL_ACCESS_TOKEN = "/DataAccessService/oauth/token?grant_type=authorization_code&client_id=%s&client_secret=%s&code=%s&redirect_uri=%s";
 
     private $clientId;
     private $secret;
+    private $bi_get_data_url;
+    private $bi_oauth_url;
     /**
      * @var Router
      */
     private $router;
 
-    public function __construct($clientId, $secret, Router $router)
+    public function __construct($clientId, $secret, $bi_get_data_url, $bi_oauth_url, Router $router)
     {
         $this->clientId = $clientId;
         $this->secret = $secret;
+        $this->bi_get_data_url = $bi_get_data_url;
+        $this->bi_oauth_url = $bi_oauth_url;
         $this->router = $router;
     }
 
-    public function getLink($projectId = null)
+    public function getLink()
     {
-        $callBack = $this->router->generate('login', ['id' => $projectId], UrlGeneratorInterface::ABSOLUTE_URL);
+        $callBack = $this->router->generate('login', [], UrlGeneratorInterface::ABSOLUTE_URL);
 
-        return sprintf(self::BANK_ID_URL_LOGIN, $this->clientId, $callBack);
+        return sprintf($this->bi_oauth_url.self::BANK_ID_URL_LOGIN, $this->clientId, $callBack);
     }
 
-    public function getAccessToken($code, $projectId = null)
+    public function getAccessToken($code)
     {
 //        dump($code);exit;
         $client = new Client();
         $sha1 = sha1($this->clientId . $this->secret. $code, false);
         $url =  sprintf(
-            self::BANK_ID_URL_ACCESS_TOKEN,
+            $this->bi_oauth_url.self::BANK_ID_URL_ACCESS_TOKEN,
             $this->clientId,
             $sha1,
             $code,
-            $this->router->generate('login', ['id' => $projectId], UrlGeneratorInterface::ABSOLUTE_URL)
+            $this->router->generate('login', [], UrlGeneratorInterface::ABSOLUTE_URL)
         );
 
         $rawAccessToken = $client->get($url)->send()->getBody(true);
@@ -57,7 +61,7 @@ class BankIdService
 
         $bankUser = $client
             ->post(
-                "https://bankid.privatbank.ua/ResourceService/checked/data",
+                $this->bi_get_data_url."/ResourceService/checked/data",
                 [
                     "Content-Type" => "application/json",
                     "Accept" => "application/json",
