@@ -1,4 +1,4 @@
-{% extends "::base.html.twig" %}
+{% extends "@App/layout.html.twig" %}
 
 {% block body %}
 
@@ -76,7 +76,7 @@
                 <li>
                     <div class="img-wrap" style="background-image: url( {{ asset('bundles/app/img/developers/modnovolyk.png') }} )"></div>
                     <h3>Максим Одноволик</h3>
-                    <p>– розробив знану частину мобільної iOS версії та проводив технічний контроль за візуальною частиною. Розробник на Swift</p>
+                    <p>– розробив значну частину мобільної iOS версії та проводив технічний контроль за візуальною частиною. Розробник на Swift</p>
                 </li>
 
                 <li>
@@ -178,72 +178,3 @@
     </div>
 {% endblock content %}
 
-{% block footer %}
-    <footer id="main-footer">
-        <div class="container main-block">
-            <div id="copyright">
-                &copy; 2015
-            </div>
-            <div id="footer-social">
-                <a href="#" class="icon-facebook-1"></a>
-                <a href="#" class="icon-vk"></a>
-            </div>
-        </div>
-    </footer>
-{% endblock footer %}
-
-{% block menu %}
-    <div class="navbar navbar-default navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <a href="{{ path("homepage") }}" class="navbar-brand">Лого</a>
-                <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-            </div>
-            <div class="navbar-collapse collapse" id="navbar-main">
-                <ul class="nav navbar-nav">
-                    {#{{ dump(is_granted('ROLE_USER'), is_granted('ROLE_ADMIN')) }}#}
-                </ul>
-
-                <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        {% if app.user %}
-                            <a href="{{ path('logout') }}">Вихід</a>
-                        {% elseif app.request.get('_route') != 'login' %}
-                            <a href="" data-toggle="modal" data-target="#login-modal">Увійти</a>
-                        {% endif %}
-                    </li>
-                </ul>
-
-            </div>
-        </div>
-    </div>
-
-{% endblock menu %}
-
-{% block header %}
-
-    <header id="main-header">
-        <div class="container main-block">
-            <a href="{{ path("homepage") }}" id="home-icon" class="icon-home"></a>
-            <a href="{{ path("homepage") }}">golos.ck.ua</a>
-
-            {% if app.user and is_granted('ROLE_USER') %}
-            <a href="{{ path('projects_add') }}">Add Project User</a>
-            {% endif %}
-            {% if app.user and is_granted('ROLE_ADMIN') %}
-            <a href="{{ path('admin_projects_add') }}">Add Project Admin</a>
-            {% endif %}
-
-            {% if app.user %}
-            <a href="{{ path('logout') }}" id="user-icon" style="background-image: url( {% if app.user.avatar %} {{ asset(app.user.avatar) }} {% else %} {{ asset('bundles/app/img/icon_developer.png') }} {% endif %} );" alt="Вихід"></a>
-            {% elseif app.request.get('_route') != 'login' %}
-            <a href="" id="user-icon" data-toggle="modal" data-target="#login-modal">Увійти</a>
-            {% endif %}
-
-        </div>
-    </header>
-{% endblock header %}

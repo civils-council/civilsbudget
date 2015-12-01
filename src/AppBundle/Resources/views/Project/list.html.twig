@@ -5,7 +5,7 @@
 {% endblock title %}
 
 {% block content %}
-	<a href="#" id="hp-logo"></a>
+	    <div id="hp-logo"></div>
 		<h1 id="hp-title">
 			Громадський бюджет в місті Черкаси 2015
 		</h1>
@@ -36,6 +36,7 @@
                     <div class="item-meta">
                         <div>Створено: <span>{{ project.createAt|date('d-m-Y') }}</span></div>
                         <div>Підтримало: <span>{{ project.likedUsers|length|number_format(0, '.', ' ') }}</span></div>
+                        <div>Бюджет: <span>{{ project.charge|number_format(0, '.', ' ') }}</span> грн.</div>
                     </div>
                     <div class="card-reveal">
                         <span class="card-title">{{ project.title }}</span> <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
