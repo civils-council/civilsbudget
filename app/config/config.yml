@@ -37,7 +37,6 @@ twig:
     strict_variables: "%kernel.debug%"
     form_themes:
         - form.html.twig
-    exception_controller:  AppBundle:Exception:showException
 
 # Doctrine Configuration
 doctrine:
