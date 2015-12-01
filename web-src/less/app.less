@@ -574,7 +574,7 @@ a.description-btn:hover {
     background-size:cover;
     -webkit-background-size:cover;
     -moz-background-size:cover;
-    margin-top: 52px;
+    margin: 52px 0 6px;
     //margin-bottom: 5px;
     /*background: linear-gradient(135deg, red, blue);*/
     /*linear-gradient(to top, #000088, #000066);*/
@@ -589,8 +589,10 @@ a.description-btn:hover {
     right: 0;
     top: 0;
     bottom: 0;
-    background-color: rgba(95,134,205,.85);
+    opacity: .8;
+    background-image: linear-gradient(to bottom, #6394df, #525d99);
     z-index: -1;
+    display: block;
 }
 
 /*.hd-caption:before{*/
@@ -640,8 +642,8 @@ a.description-btn:hover {
     font-size: 17px;
     background: url(../images/icon-lb.png) no-repeat left;
     //background-size: contain;
-    padding-left: 35px;
-    margin-top: 10px;
+    padding: 5px 0 5px 35px;
+    margin-top: 5px;
 }
 
 /*.icon-lb {*/
@@ -1067,10 +1069,12 @@ a.description-btn:hover {
     border-radius: 50%;
 }
 #aboutDeveloper h3{
+    font-family: HelveticaRoman, sans-serif;
     font-size: 20px;
     color: #525c99;
 }
 #aboutDeveloper p{
+    font-family: HelveticaRoman, sans-serif;
     font-size: 18px;
     color: #696969;
 }
@@ -1144,4 +1148,11 @@ a.description-btn:hover {
 
 #user-title a {
     color:#fff;
+}
+.modal-content{
+    color: #696969;
+}
+.close:hover,
+.close:focus{
+    outline: none;
 }
