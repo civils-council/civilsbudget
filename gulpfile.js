@@ -37,7 +37,7 @@ gulp.task('images', function () {
 
 gulp.task('fonts', function () {
     return gulp.src([
-        'bower_components/bootstrap/fonts/*'
+        'bower_components/bootstrap/fonts/*','web-src/fonts/*'
     ])
         .pipe(gulp.dest('web/fonts/'))
 });

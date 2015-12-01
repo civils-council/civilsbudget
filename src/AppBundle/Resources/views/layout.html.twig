@@ -2,15 +2,15 @@
 
 {% block body %}
 
-    {{ block("menu") }}
-    <div class="container">
-        <div class="bs-docs-section">
-            {{ block("header") }}
+    {{ block("header") }}
+
+    <main id="main-wrap">
+        <div class="container">
             {{ block("flash") }}
             {{ block("content") }}
         </div>
-        {{ block("footer") }}
-    </div>
+    </main>
+    {{ block("footer") }}
     <div id="login-modal" class="modal fade">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -23,7 +23,7 @@
                         При ідентифікації громадян через BankID <b>НЕ ПЕРЕДАЄТЬСЯ фінансова та будь-яка інша приватна інформація.</b> Тільки та інформація, що надається в паперовій формі при голосуванні за проекти Громадський Бюджет (ім’я, прізвище, по-батькові, стать, дата народження, адреса та ідентифікаційний номер).
                         Отримані дані використовуються лише для ідентифікації громадян.</div>
                     <hr/>
-                    <a href="{{ 'projects_show' == app.request.get('_route') ? project|projectCallback : login_url }}">
+                    <a href="{{ login_url }}">
                         {#<img src="{{ asset('images/bank-id.png') }}" alt="BankID" />#}
                         <button>Продовжити</button>
                     </a>
@@ -33,12 +33,29 @@
     </div>
 {% endblock body %}
 
-{% block content %}{% endblock content %}
-{% block footer %}
-    <footer>
-        <div class="row">
-            <div class="col-lg-12">
+{% block content %}
+{% endblock content %}
 
+{% block footer %}
+    <footer id="main-footer">
+        <div class="container main-block">
+            <div class="row">
+                <div class="col-md-4 copyright">
+                    <span>&copy; 2015</span>
+                    <a href="{{ path("rada_about") }}">Про программу</a>
+                    <a href="{{ path("rada_developerss") }}">Розробники</a>
+
+                </div>
+                <div class="col-md-4 text-center icon-wrap">
+                    <span class="icon-4"></span>
+                    <span class="icon-3"></span>
+                    <span class="icon-2"></span>
+                    <span class="icon-1"></span>
+                </div>
+                <div class="col-md-4 footer-social">
+                    <a href="https://www.facebook.com/civilscouncil" class="icon-facebook" target="_blank"></a>
+                    <a href="https://vk.com/civilscouncil" class="icon-vk" target="_blank"></a>
+                </div>
             </div>
         </div>
     </footer>
@@ -58,12 +75,6 @@
             <div class="navbar-collapse collapse" id="navbar-main">
                 <ul class="nav navbar-nav">
                     {#{{ dump(is_granted('ROLE_USER'), is_granted('ROLE_ADMIN')) }}#}
-                        {% if app.user and is_granted('ROLE_USER') %}
-                        <li><a href="{{ path('projects_add') }}">Add Project User</a></li>
-                    {% endif %}
-                    {% if app.user and is_granted('ROLE_ADMIN') %}
-                        <li><a href="{{ path('admin_projects_add') }}">Add Project Admin</a></li>
-                    {% endif %}
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">
@@ -83,11 +94,29 @@
 {% endblock menu %}
 
 {% block header %}
-    <div class="page-header">
-        <div class="row">
-            <div class="col-lg-12">
-                <h1 id="buttons">{{ block('title') }}</h1>
+    <header id="main-header">
+        <div class="container main-block">
+            <a href="{{ path("homepage") }}" id="home-icon" class="icon-home"></a>
+            <a href="{{ path("homepage") }}">golos.ck.ua</a>
+
+            {#Logging#}
+            {#{% if app.user and is_granted('ROLE_USER') %}#}
+            {#<a href="{{ path('projects_add') }}">Add Project User</a>#}
+            {#{% endif %}#}
+            {#{% if app.user and is_granted('ROLE_ADMIN') %}#}
+            {#<a href="{{ path('admin_projects_add') }}">Add Project Admin</a>#}
+            {#{% endif %}#}
+
+
+            <div class="header-controls">
+                {#<a href="#" class="lb-diagramm" title="Статистика"></a>#}
+                {% if app.user %}
+                <a href="{{ path('logout') }}" class="lb-signout" style="background-image: url( {% if app.user.avatar %} {{ asset(app.user.avatar) }} {% else %} {{ asset('bundles/app/img/icon_developer.png') }} {% endif %} );" title="Вихід"></a>
+                {% elseif app.request.get('_route') != 'login' %}
+                <a href="" class="lb-signin" data-toggle="modal" data-target="#login-modal" title="Увійти"></a>
+                {% endif %}
             </div>
+
         </div>
-    </div>
+    </header>
 {% endblock header %}

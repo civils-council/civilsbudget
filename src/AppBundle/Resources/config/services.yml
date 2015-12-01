@@ -7,6 +7,8 @@ services:
         arguments:
             - %client_id%
             - %client_secret%
+            - %bi_get_data_url%
+            - %bi_oauth_url%
             - @router
     app.twig_extension:
         class: AppBundle\Twig\AppExtension
