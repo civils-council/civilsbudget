@@ -49,10 +49,12 @@ class DefaultController extends Controller
             $data = $this->get('app.security.bank_id')->getBankIdUser($accessToken['access_token']);
             if ($data['state'] == 'ok') {
                 $user = $this->get('app.user.manager')->isUniqueUser($data);
-//                $form = $this->createForm(new LoginUserType(), $user, ['action' => $this->generateUrl('update_user', ['id' => $user->getId()])]);
-//                $form = $this->createEditForm($user[0]);
+
+                if($this->get('app.seesion')->check()) {
+                    return $this->redirect($this->generateUrl('projects_show', ['id' => $this->get('app.seesion')->getProjectId()]));
+                }
                 if($user[1] == 'new') {
-                    $this->addFlash('inforormation', 'add information');
+                    $this->addFlash('inforormation', 'congratulations');
                     return $this->redirectToRoute('homepage');
 //                    $form = $this->createEditForm($user[0]);
                 } else {
