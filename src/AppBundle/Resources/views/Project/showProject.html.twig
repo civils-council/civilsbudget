@@ -14,6 +14,7 @@
                         <h4 id="user-title"><a href="{{ path('users_profile', { id: project.owner.id }) }}">{{ project.owner.fullName }}</a></h4>
                     </div>
                     <div class="col-md-2">
+
                         <div {{ app.user is null ? ' data-toggle="modal" data-target="#login-modal"' }}>
                         {{ render(controller('AppBundle:Project:like', { id: project.id })) }}
                         </div>
