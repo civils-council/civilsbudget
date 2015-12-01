@@ -1,7 +1,7 @@
 {% extends '@App/layout.html.twig' %}
 
 {% block content %}
-            <div class="row hd-caption">
+            <div class="row hd-caption" style="background-image: url({% if project.picture %} {{ asset(project.picture) }} {% else %} {{ asset('bundles/app/img/gerb_goroda_cherkassy_abali.ru_.png') }} {% endif %})">
                 <div class="row">
                     <div class="col-md-12">
                         <h3> {{ block('title') }} </h3>
@@ -9,16 +9,17 @@
                 </div>
 
                 <div class="row hd-info">
-                    <div class="col-md-4">
+                    <div class="col-md-5">
                         <div id="user-avatar" style="background-image: url({% if project.owner.avatar %} {{ asset(project.owner.avatar) }} {% else %} {{ asset('bundles/app/img/icon_developer.png') }} {% endif %});"></div>
                         <h4 id="user-title"><a href="{{ path('users_profile', { id: project.owner.id }) }}">{{ project.owner.fullName }}</a></h4>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-2">
                         <div {{ app.user is null ? ' data-toggle="modal" data-target="#login-modal"' }}>
                         {{ render(controller('AppBundle:Project:like', { id: project.id })) }}
                         </div>
                     </div>
-                    <div class="col-md-4 tl-price">Ціна проекту: <span class="price">{{ project.charge|number_format(0, '.', ' ') }}<span> грн</div>
+                    <div class="col-md-1"></div>
+                    <div class="col-md-3 tl-price">Ціна проекту: <span class="price">{{ project.charge|number_format(0, '.', ' ') }}<span> грн</div>
                 </div>
             </div>
 
@@ -35,19 +36,9 @@
                 </div>
             </div>
 
-    <img src="{% if project.picture %} {{ asset(project.picture) }} {% else %} {{ asset('bundles/app/img/gerb_goroda_cherkassy_abali.ru_.png') }} {% endif %}" align="left" class="fb-image-lg" alt="Project image"/>
-
-
-            <div class="row hd-comments">
-                <div class="col-md-12"><a class="lb-comment" href="#">Коментарі</a><a class="lb-edit" href="#">Додати коментар</a></div>
-            </div>
-
-
-      <div class="info_project">
-            {{ project.description }}
-        </div>
-        {{ block("navproject") }}
-
+            {#<div class="row hd-comments">#}
+                {#<div class="col-md-12"><a class="lb-comment" href="#">Коментарі</a><a class="lb-edit" href="#">Додати коментар</a></div>#}
+            {#</div>#}
 {% endblock %}
 
 {% block title %}
@@ -55,33 +46,26 @@
 {% endblock title %}
 
 {% block navproject %}
-    <div class="nav_project">
-        <ul class="nav nav-pills">
-            <li><span>Створено: <span class="badge">{{ project.createAt|date('d-m-Y') }}</span></span></li>
-            <li>
-                <span>Підтримало: <span class="badge">{{ project.likedUsers|length|number_format(0, '.', ' ') }}</span></span>
-            </li>
+    {#<div class="nav_project">#}
+        {#<ul class="nav nav-pills">#}
+            {#<li><span>Створено: <span class="badge">{{ project.createAt|date('d-m-Y') }}</span></span></li>#}
 
-            <li>
-                <span>Бюджет: <span class="badge">{{ project.charge|number_format(0, '.', ' ') }}</span></span>
-            </li>
+            {#<li>#}
+                {#{% if project.source is defined %}#}
+                {#<span>#}
+                    {#Звідки: <a href="{{ project.source }}" class="badge">#}
+                        {#{% if project.source is defined %}#}
+                        {#&#123;&#35;{{ project.source|regexUrl }}&#35;&#125;#}
+                            {#{{ project.source }}#}
+                        {#{% endif %}#}
+                    {#</a>#}
+                {#</span>#}
+                {#{% endif %}#}
+            {#</li>#}
+            {#<li {{ app.user is null ? ' data-toggle="modal" data-target="#login-modal"' }}>#}
+                {#{{ render(controller('AppBundle:Project:like', { id: project.id })) }}#}
+            {#</li>#}
 
-            <li>
-                {% if project.source is defined %}
-                <span>
-                    Звідки: <a href="{{ project.source }}" class="badge">
-                        {% if project.source is defined %}
-                        {#{{ project.source|regexUrl }}#}
-                            {{ project.source }}
-                        {% endif %}
-                    </a>
-                </span>
-                {% endif %}
-            </li>
-            <li {{ app.user is null ? ' data-toggle="modal" data-target="#login-modal"' }}>
-                {{ render(controller('AppBundle:Project:like', { id: project.id })) }}
-            </li>
-
-        </ul>
-    </div>
+        {#</ul>#}
+    {#</div>#}
 {% endblock navproject %}
