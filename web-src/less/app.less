@@ -1,3 +1,4 @@
+@charset 'utf-8';
 @import "../../bower_components/bootstrap/less/bootstrap.less";
 @import "../../bower_components/bootswatch/yeti/variables.less";
 @import "../../bower_components/bootswatch/yeti/bootswatch.less";
@@ -322,11 +323,15 @@ body {
     padding-bottom: 60px;
 }
 
+.container{
+    position: relative;
+}
+
 #main-footer{
     position:absolute;
     bottom:0;
     width:100%;
-    height:60px;   /* ������ ����� "footer" */
+    height:60px;   /* пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ "footer" */
     text-align:center;
     background-color: #4c5c9c;
     padding:10px 0;
@@ -493,7 +498,7 @@ a.description-btn:hover {
 }
 
 
-/*�������*/
+/*пїЅпїЅпїЅпїЅпїЅпїЅпїЅ*/
 
 .item-content {
     margin:15px 0px;
@@ -515,6 +520,12 @@ a.description-btn:hover {
     font-size:20px;
     color:#22222a;
     padding: 0px 20px;
+
+    overflow-wrap: normal;
+    word-wrap: break-word;
+    word-break: keep-all;
+    line-break: normal;
+    -webkit-hyphens: auto; -moz-hyphens: auto; -ms-hyphens: auto; hyphens: auto;
 }
 
 .item-excerpt {
@@ -897,10 +908,11 @@ a.description-btn:hover {
 
 #like_submit{
     display: block;
-    padding: 10px 30px;
-    margin: 0 auto;
-    max-width: 170px;
-    width: 100%;
+    padding: 10px 40px;
+    //margin: 0 auto;
+    margin-left: -15px;
+    width: 190px;
+    max-width: 200px !important;
     text-align: center;
     font-size: 18px;
     text-transform: uppercase;
@@ -910,8 +922,17 @@ a.description-btn:hover {
     border-radius:6px;
     background: #ffffff;
     border: none;
-;
+    &::before{
+        content: 'Підтримати';
+    }
 }
+
+#like_submit.not_auth:hover{
+    &::before{
+        content: 'Авторизуватися';
+    }
+}
+
 #like_submit:hover{
     background-color: #4c5c9c;
     color:#fff;
@@ -1106,19 +1127,6 @@ a.description-btn:hover {
     }
 }
 
-#like_submit{
-    display: block;
-    padding: 10px 0px;
-    margin: 0 auto;
-    max-width: 170px;
-    text-align: center;
-    font-size: 18px;
-    text-transform: uppercase;
-    text-decoration:none;
-    color:#525c99;
-    background-color: #fff;
-    border-radius:6px;
-}
 @media(max-width: 1200px){
     #main-footer{
         position: static;
@@ -1165,4 +1173,55 @@ a.description-btn:hover {
 .close:hover,
 .close:focus{
     outline: none;
+}
+
+#livechat-compact-container {
+    bottom: 50%!important;
+    right: -99px!important;
+    transform: rotate(270deg);
+    -webkit-transform: rotate(270deg);
+    -moz-transform: rotate(270deg);
+}
+
+.alert{
+    position: fixed;
+    top:80px;
+    left: 40%;
+    margin-left: -40px;
+    padding:80px;
+    border-color:rgb(82, 92, 153);
+    border-radius:0;
+    z-index: 10;
+    font-size: 22px;
+    text-transform: uppercase;
+}
+.alert-warning,
+.alert-success,
+.alert-danger {
+    background-color:#fff;
+    border-color:rgb(82, 92, 153);
+    color:rgb(82, 92, 153);
+}
+
+button.close {
+    position: absolute;
+    top: 0;
+    right: 1px;
+    border: none;
+    background: none;
+    font-size: 45px;
+    color:#4196e3;
+}
+
+button.close:hover {
+    color:#525c99;
+}
+
+@media(max-width: 768px) {
+    #aboutDeveloper .s3 {
+        padding: 30px 0;
+    }
+    .hd-description{
+        padding: 10px 0;
+    }
 }
