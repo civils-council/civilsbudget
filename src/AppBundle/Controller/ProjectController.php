@@ -34,6 +34,9 @@ class ProjectController extends Controller
      */
     public function showProjectAction(Project $project)
     {
+        if(empty($this->getUser())){
+            $sessionSet = $this->get('app.seesion')->setSession($project->getId());
+        }
         return ['project' => $project];
     }
 
