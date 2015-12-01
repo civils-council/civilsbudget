@@ -79,7 +79,7 @@ class User implements UserInterface, \JsonSerializable
     /**
      * @var string
      *
-     * @ORM\Column(name="email", type="string", length=255,  unique=true, nullable=true)
+     * @ORM\Column(name="email", type="string", length=255, nullable=true)
      * @Assert\Length(min=3, max=255)
      */
     protected $email;
