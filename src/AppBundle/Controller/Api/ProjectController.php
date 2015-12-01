@@ -38,7 +38,7 @@ class ProjectController extends Controller
             $project_array[$i]["picture"] = $projects[$i]->getPicture();
             $project_array[$i]["createdAt"] = $projects[$i]->getCreateAt()->format('c');
             $project_array[$i]["likes_count"] = $projects[$i]->getLikedUsers()->count();
-            $project_array[$i]["owner"] = $projects[$i]->getOwner()->getFullName();
+            $project_array[$i]["owner"] = $projects[$i]->getOwner()->getFirstName();
             $project_array[$i]["avatar_owner"] = $projects[$i]->getOwner()->getAvatar();
 
         }
