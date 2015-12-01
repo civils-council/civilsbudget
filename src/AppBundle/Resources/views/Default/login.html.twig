@@ -1,0 +1,14 @@
+{% extends '@App/layout.html.twig' %}
+
+{% block title %}
+    Авторизація
+{% endblock title %}
+
+{% block content %}
+    {{ form (form) }}
+{% endblock %}
+
+{% form_theme form _self %}
+
+{% block button_size %}btn btn-success btn-block{% endblock button_size %}
+{% block button_label %}Увійти{% endblock button_label %}

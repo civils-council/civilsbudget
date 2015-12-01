@@ -11,6 +11,7 @@
     "require": {
         "php": ">=5.3.9",
         "symfony/symfony": "2.7.*",
+        "twig/twig": "1.23.*",
         "doctrine/orm": "^2.4.8",
         "doctrine/doctrine-bundle": "~1.4",
         "symfony/swiftmailer-bundle": "~2.3",
@@ -19,10 +20,13 @@
         "sensio/framework-extra-bundle": "^3.0.2",
         "incenteev/composer-parameter-handler": "~2.0",
         "stof/doctrine-extensions-bundle": "^1.2",
-        "hautelook/alice-bundle": "^0.2.0"
+        "hautelook/alice-bundle": "^0.2.0",
+        "guzzle/guzzle": "^3.9",
+        "mcfedr/json-form": "^3.1"
     },
     "require-dev": {
-        "sensio/generator-bundle": "~2.3"
+        "sensio/generator-bundle": "~2.3",
+        "phpunit/phpunit": "^5.0"
     },
     "scripts": {
         "post-root-package-install": [

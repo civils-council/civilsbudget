@@ -1,0 +1,16 @@
+language: php
+php:
+  - 5.6
+
+before_script:
+    - composer self-update
+    - composer install
+    - app/console doctrine:database:create
+    - app/console doctrine:schema:create
+    - app/console doctrine:fixtures:load --no-interaction
+
+script:
+  - php bin/phpunit -c app/ --coverage-clover=coverage.clover
+  - wget https://scrutinizer-ci.com/ocular.phar
+  - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
+  - app/console security:check

@@ -2,6 +2,8 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -10,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="AppBundle\Entity\ProjectRepository")
  */
-class Project
+class Project implements \JsonSerializable
 {
     use GedmoTrait;
 
@@ -40,7 +42,7 @@ class Project
     /**
      * @var string
      *
-     * @ORM\Column(name="source", type="string", length=255)
+     * @ORM\Column(name="source", type="string", length=255, nullable=true)
      */
     private $source;
 
@@ -52,16 +54,31 @@ class Project
     private $picture;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(type="integer", length=255, nullable=true)
+     */
+    private $charge;
+
+    /**
      * @var \DateTime
      *
-     * @ORM\Column(name="confirmedAt", type="datetime")
+     * @ORM\Column(name="confirmedAt", type="datetime", nullable=true)
      */
     private $confirmedAt;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="confirm", type="string", length=255, nullable=true)
+     */
+    private $confirm;
 
     /**
      * @var Admin
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Admin", inversedBy="confirmedProjects")
+     * @ORM\JoinColumn(name="confirmBy_id", nullable = true, referencedColumnName="id")
      */
     private $confirmedBy;
 
@@ -72,6 +89,13 @@ class Project
      * @ORM\JoinColumn(onDelete="SET NULL")
      */
     private $owner;
+
+    /**
+     * @var Collection
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\User", mappedBy="likedProjects")
+     */
+    private $likedUsers;
 
     /**
      * Get id
@@ -195,6 +219,7 @@ class Project
         return $this->confirmedAt;
     }
 
+    /*-------------------------------relation methods------------------------------------------------------------------*/
     /**
      * Set confirmedBy
      *
@@ -241,5 +266,114 @@ class Project
     public function getOwner()
     {
         return $this->owner;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    function jsonSerialize()
+    {
+        return [
+            "id" => $this->getId(),
+            "title" => $this->getTitle(),
+            "description" => $this->getDescription(),
+            "charge" => $this->getCharge(),
+            "source" => $this->getSource(),
+            "picture" => $this->getPicture(),
+            "createdAt" => $this->getCreateAt()->format('c'),
+            "likes_count" => $this->getLikedUsers()->count(),
+            "likes_user" => $this->getLikedUsers()->getValues(),
+            "owner" => $this->getOwner()->getFullName(),
+            "avatar_owner" => $this->getOwner()->getAvatar(),
+        ];
+    }
+
+   /**
+    * Set confirm
+    *
+    * @param string $confirm
+    *
+    * @return Project
+    */
+    public function setConfirm($confirm)
+    {
+        $this->confirm = $confirm;
+
+        return $this;
+    }
+
+    /**
+     * Get confirm
+     *
+     * @return string
+     */
+    public function getConfirm()
+    {
+        return $this->confirm;
+    }
+
+    /**
+     * Set charge
+     *
+     * @param integer $charge
+     *
+     * @return Project
+     */
+    public function setCharge($charge)
+    {
+        $this->charge = $charge;
+
+        return $this;
+    }
+
+    /**
+     * Get charge
+     *
+     * @return integer
+     */
+    public function getCharge()
+    {
+        return $this->charge;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->likedUsers = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add likedUser
+     *
+     * @param \AppBundle\Entity\User $likedUser
+     *
+     * @return Project
+     */
+    public function addLikedUser(\AppBundle\Entity\User $likedUser)
+    {
+        $this->likedUsers[] = $likedUser;
+
+        return $this;
+    }
+
+    /**
+     * Remove likedUser
+     *
+     * @param \AppBundle\Entity\User $likedUser
+     */
+    public function removeLikedUser(\AppBundle\Entity\User $likedUser)
+    {
+        $this->likedUsers->removeElement($likedUser);
+    }
+
+    /**
+     * Get likedUsers
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getLikedUsers()
+    {
+        return $this->likedUsers;
     }
 }

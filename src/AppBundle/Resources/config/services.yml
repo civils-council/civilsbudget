@@ -1,0 +1,27 @@
+parameters:
+#    app.example.class: AppBundle\Example
+
+services:
+    app.security.bank_id:
+        class: AppBundle\Security\BankIdService
+        arguments:
+            - %client_id%
+            - %client_secret%
+            - @router
+    app.twig_extension:
+        class: AppBundle\Twig\AppExtension
+        public: false
+        arguments:
+            - @app.security.bank_id
+        tags:
+            - { name: twig.extension }
+
+    app.user.manager:
+        class:  AppBundle\Helper\UserManager
+        arguments:
+            - @templating
+            - @doctrine.orm.entity_manager
+            - @security.token_storage
+            - @session
+        calls:
+            - [ setRootDir, ["%kernel.root_dir%"] ]

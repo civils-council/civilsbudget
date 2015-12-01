@@ -1,0 +1,22 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    {{ form(form) }}
+{% endblock %}
+
+{% form_theme form _self %}
+
+{% block button_size %}btn btn-info read_more{% endblock button_size %}
+{% block button_label %}Підтримати{% endblock button_label %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $('form[name=like_form]').submit(function (e) {
+            var user = '{{ app.user ? app.user.fullName }}';
+            if (!user) {
+                e.preventDefault();
+            }
+        });
+    </script>
+{% endblock javascripts %}

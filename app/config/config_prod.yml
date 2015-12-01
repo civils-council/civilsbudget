@@ -1,6 +1,9 @@
 imports:
     - { resource: config.yml }
 
+twig:
+    exception_controller:  AppBundle:Exception:showException
+
 #framework:
 #    validation:
 #        cache: validator.mapping.cache.apc

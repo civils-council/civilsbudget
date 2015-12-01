@@ -1,0 +1,39 @@
+{% use 'bootstrap_3_layout.html.twig' %}
+
+{%- block form_start -%}
+    {% set attr = attr|merge({ novalidate: "novalidate" }) -%}
+    {{- parent() -}}
+{%- endblock form_start -%}
+
+{%- block form_widget_compound -%}
+    <div {{ block('widget_container_attributes') }}>
+        {%- if form.parent is empty -%}
+            {{ form_errors(form) }}
+        {%- endif -%}
+        {{- block('form_rows') -}}
+        {{- form_rest(form) -}}
+        {% set addSubmit = true %}
+        {% for child in form %}
+            {% if 'submit' in child.vars['block_prefixes'] %}
+                {% set addSubmit = false %}
+            {% endif %}
+        {% endfor %}
+
+        {% if addSubmit and form.parent is null %}
+            {{ block('submit_row') }}
+        {% endif %}
+    </div>
+{%- endblock form_widget_compound -%}
+
+{% block button_size %}btn btn-default{% endblock button_size %}
+{% block button_label %}Submit{% endblock button_label %}
+{% block button_parent %}{% endblock button_parent %}
+
+{% block button_centered %}{% endblock %}
+{% block submit_row %}
+    {% set submit_id = form.vars.name ? form.vars.name ~ '_submit' : 'form_submit' %}
+    <div class="form-group {{ block('button_parent') }} {{ block('button_centered') }}">
+        <button type="submit" id="{{ submit_id }}"
+                class="{{ block('button_size') }}">{{ block('button_label') }}</button>
+    </div>
+{% endblock %}
