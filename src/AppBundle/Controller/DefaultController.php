@@ -34,11 +34,6 @@ class DefaultController extends Controller
     }
 
     /**
-            $data = $this->get('app.security.bank_id')->getBankIdUser($accessToken['access_token']);
-                        return $this->redirectToRoute('projects_show', ['id' => $id]);
-                    }
-                    return $this->redirectToRoute('homepage');
-//                    $form = $this->createEditForm($user[0]);
      * @Route("/loginIncluded", name="login_included")
      * @Template()
      */
