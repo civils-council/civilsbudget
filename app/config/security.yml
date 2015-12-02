@@ -3,11 +3,6 @@
 hwi_oauth:
     firewall_name: main
     resource_owners: ~
-    # uncomment next lines when BankId will commited in HWIOauthBundle
-#        bank_id:
-#            type: bank_id
-#            client_id: %client_id%
-#            client_secret: %client_secret%
 
 security:
     encoders:
