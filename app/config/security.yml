@@ -57,10 +57,7 @@ security:
                     bank_id: "/login/check-bank-id"
 
                 oauth_user_provider:
-                    orm:
-                        class: AppBundle\Entity\User
-                        properties: {'bank_id': 'clid'}
-                        manager_name: default
+                    service: app.bank_id_user_provider
             form_login:
                 provider: user
                 login_path: login

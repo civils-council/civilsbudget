@@ -15,6 +15,14 @@ services:
               user_response_class: AppBundle\Security\Response\BankIdUserResponse
             - "bank_id"
             - @hwi_oauth.storage.session
+    app.bank_id_user_provider:
+        class: AppBundle\Security\BankIdUserProvider
+        arguments:
+            - @doctrine
+            - AppBundle\Entity\User
+            - {'bank_id': 'clid'}
+        calls:
+            - [ setEncryptor, [@app.encryptor] ]
     app.twig_extension:
         class: AppBundle\Twig\AppExtension
         public: false
