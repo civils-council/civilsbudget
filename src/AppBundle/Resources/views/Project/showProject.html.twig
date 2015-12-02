@@ -14,12 +14,12 @@
                         <h4 id="user-title"><a href="{{ path('users_profile', { id: project.owner.id }) }}">{{ project.owner.fullName }}</a></h4>
                     </div>
                     <div class="col-md-2">
+
                         <div {{ app.user is null ? ' data-toggle="modal" data-target="#login-modal"' }}>
                         {{ render(controller('AppBundle:Project:like', { id: project.id })) }}
                         </div>
                     </div>
-                    <div class="col-md-1"></div>
-                    <div class="col-md-3 tl-price">Бюджет проекту: <span class="price">{{ project.charge|number_format(0, '.', ' ') }}<span> грн.</div>
+                    <div class="col-md-4 col-md-offset-1 tl-price">Бюджет проекту: <span class="price">{{ project.charge|number_format(0, '.', ' ') }}</span> грн.</div>
                 </div>
             </div>
 

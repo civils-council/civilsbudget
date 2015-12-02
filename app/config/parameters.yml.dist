@@ -20,3 +20,8 @@ parameters:
 
     client_id: ~
     client_secret: ~
+
+    bi_oauth_url: "https://bankid.org.ua"
+    bi_get_data_url: "https://biprocessing.org.ua"
+
+

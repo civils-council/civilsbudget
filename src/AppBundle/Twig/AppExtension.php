@@ -29,13 +29,7 @@ class AppExtension extends \Twig_Extension
     {
         return [
             new \Twig_SimpleFilter('regexUrl', [$this, 'regexUrl']),
-            new \Twig_SimpleFilter('projectCallback', [$this, 'projectCallback']),
         ];
-    }
-
-    public function projectCallback(Project $project = null)
-    {
-        return $this->bankId->getLink(!$project ?: $project->getId());
     }
 
     public function getGlobals()

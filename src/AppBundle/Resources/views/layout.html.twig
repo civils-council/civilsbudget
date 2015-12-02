@@ -5,8 +5,8 @@
     {{ block("header") }}
 
     <main id="main-wrap">
+        {{ block("flash") }}
         <div class="container">
-            {{ block("flash") }}
             {{ block("content") }}
         </div>
     </main>
@@ -23,7 +23,7 @@
                         При ідентифікації громадян через BankID <b>НЕ ПЕРЕДАЄТЬСЯ фінансова та будь-яка інша приватна інформація.</b> Тільки та інформація, що надається в паперовій формі при голосуванні за проекти Громадський Бюджет (ім’я, прізвище, по-батькові, стать, дата народження, адреса та ідентифікаційний номер).
                         Отримані дані використовуються лише для ідентифікації громадян.</div>
                     <hr/>
-                    <a href="{{ 'projects_show' == app.request.get('_route') ? project|projectCallback : login_url }}">
+                    <a href="{{ login_url }}">
                         {#<img src="{{ asset('images/bank-id.png') }}" alt="BankID" />#}
                         <button>Продовжити</button>
                     </a>

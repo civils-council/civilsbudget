@@ -34,6 +34,8 @@ class DefaultController extends Controller
     }
 
     /**
+                if($user[1] == 'new') {
+                    $this->addFlash('inforormation', 'congratulations');
      * @Route("/loginIncluded", name="login_included")
      * @Template()
      */
