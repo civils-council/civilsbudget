@@ -35,7 +35,6 @@
                     <p>{{ project.description }}</p>
                 </div>
             </div>
-
             {#<div class="row hd-comments">#}
                 {#<div class="col-md-12"><a class="lb-comment" href="#">Коментарі</a><a class="lb-edit" href="#">Додати коментар</a></div>#}
             {#</div>#}
@@ -44,6 +43,14 @@
 {% block title %}
     {{ project.title|humanize }}
 {% endblock title %}
+
+{% block og %}
+    <meta property="og:title" content="Народна Рада - {{ project.title|humanize }}"/>
+    <meta property="og:image" content="{{ url('homepage')|trim('/') }}{% if project.picture %}{{ asset(project.picture) }}{% else %}{{ asset('bundles/app/img/gerb_goroda_cherkassy_abali.ru_.png') }}{% endif %}"/>
+    <meta property="og:description" content="{{ project.description[:100] ~'...' }}"/>
+    <meta property="og:url" content="{{ app.request.getUri }}"/>
+{% endblock og %}
+
 
 {% block navproject %}
     {#<div class="nav_project">#}
