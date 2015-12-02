@@ -23,6 +23,10 @@ services:
             - @router
         tags:
             - { name: twig.extension }
+    app.encryptor:
+        class: AppBundle\Security\Encryptor
+        calls:
+            - [ setPrivateKey, [%app.private_key%] ]
     app.user.manager:
         class:  AppBundle\Helper\UserManager
         arguments:

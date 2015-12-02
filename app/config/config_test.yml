@@ -1,6 +1,10 @@
 imports:
     - { resource: config_dev.yml }
 
+app:
+    public_key: "%kernel.root_dir%/Resources/ssl-keys/test/public.key"
+    private_key: "%kernel.root_dir%/Resources/ssl-keys/test/private.key"
+
 framework:
     test: ~
     session:
