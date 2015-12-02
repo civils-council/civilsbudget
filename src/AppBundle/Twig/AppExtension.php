@@ -3,18 +3,26 @@
 namespace AppBundle\Twig;
 
 use AppBundle\Entity\Project;
-use AppBundle\Security\BankIdService;
+use AppBundle\Security\BankIdResourceOwner;
+use Symfony\Bundle\FrameworkBundle\Routing\Router;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class AppExtension extends \Twig_Extension
 {
     /**
-     * @var BankIdService
+     * @var BankIdResourceOwner
      */
     private $bankId;
 
-    public function __construct(BankIdService $bankId)
+    /**
+     * @var Router
+     */
+    private $router;
+
+    public function __construct(BankIdResourceOwner $bankId, Router $router)
     {
         $this->bankId = $bankId;
+        $this->router = $router;
     }
 
     public function getFilters()
@@ -27,7 +35,7 @@ class AppExtension extends \Twig_Extension
     public function getGlobals()
     {
         return [
-            'login_url' => $this->bankId->getLink(),
+            'login_url' => $this->bankId->getAuthorizationUrl($this->router->generate('bank_id_login', [], UrlGeneratorInterface::ABSOLUTE_URL)),
         ];
     }
 

@@ -21,4 +21,5 @@
 /web-src/less/*.css
 *~
 .idea
-/app/rsa_key.pem
+/app/Resources/ssl-keys/prod/*
+!/app/Resources/ssl-keys/prod/.gitkeep

@@ -34,48 +34,6 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/login", name="login")
-     * @Template()
-     */
-    public function loginAction(Request $request)
-    {
-        $authenticationUtils = $this->get('security.authentication_utils');
-
-        $data = ['clid' => $authenticationUtils->getLastUsername()];
-        $form = $this->createForm(new LoginType(), $data, ['action' => $this->generateUrl('login_check')]);
-
-        if ($code = $request->query->get('code')) {
-            $accessToken = $this->get('app.security.bank_id')->getAccessToken($code);
-            $data = $this->get('app.security.bank_id')->getBankIdUser($accessToken['access_token']);
-            if ($data['state'] == 'ok') {
-                $user = $this->get('app.user.manager')->isUniqueUser($data);
-
-                if($this->get('app.seesion')->check()) {
-                    return $this->redirect($this->generateUrl('projects_show', ['id' => $this->get('app.seesion')->getProjectId()]));
-                }
-                if($user[1] == 'new') {
-                    $this->addFlash('inforormation', 'congratulations');
-                    return $this->redirectToRoute('homepage');
-//                    $form = $this->createEditForm($user[0]);
-                } else {
-                    return $this->redirectToRoute('homepage');
-                }
-            }
-        }
-
-        if ($error = $authenticationUtils->getLastAuthenticationError()) {
-            $this->addFlash('danger', $error->getMessage());
-
-            return $this->redirectToRoute('homepage');
-        }
-
-        return [
-            'debug' => true,
-            'form' => $form->createView()
-        ];
-    }
-
-    /**
      * @Route("/loginIncluded", name="login_included")
      * @Template()
      */

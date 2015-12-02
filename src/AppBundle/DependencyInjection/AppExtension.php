@@ -16,6 +16,11 @@ class AppExtension extends Extension
     {
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
+        $rootNode = $configuration->getConfigTreeBuilder()->buildTree()->getName();
+
+        foreach ($config as $node => $nodeValue) {
+            $container->setParameter(sprintf('%s.%s',$rootNode,$node), $nodeValue);
+        }
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');

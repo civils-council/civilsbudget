@@ -1,5 +1,9 @@
 # To get started with security, check out the documentation:
 # http://symfony.com/doc/current/book/security.html
+hwi_oauth:
+    firewall_name: main
+    resource_owners: ~
+
 security:
     encoders:
         AppBundle\Entity\Admin:
@@ -45,6 +49,15 @@ security:
         main:
             pattern: ^/
             anonymous: ~
+            oauth:
+                login_path:        /login
+                use_forward:       false
+                failure_path:      /login
+                resource_owners:
+                    bank_id: "/login/check-bank-id"
+
+                oauth_user_provider:
+                    service: app.bank_id_user_provider
             form_login:
                 provider: user
                 login_path: login

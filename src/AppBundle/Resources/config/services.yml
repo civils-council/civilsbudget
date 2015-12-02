@@ -2,22 +2,39 @@ parameters:
 #    app.example.class: AppBundle\Example
 
 services:
-    app.security.bank_id:
-        class: AppBundle\Security\BankIdService
+    hwi_oauth.resource_owner.bank_id:
+        class: AppBundle\Security\BankIdResourceOwner
         arguments:
-            - %client_id%
-            - %client_secret%
-            - %bi_get_data_url%
-            - %bi_oauth_url%
-            - @router
+            - @buzz.client
+            - @security.http_utils
+            - client_id: %client_id%
+              client_secret: %client_secret%
+              authorization_url: https://bankid.privatbank.ua/DataAccessService/das/authorize
+              access_token_url: https://bankid.privatbank.ua/DataAccessService/oauth/token
+              infos_url: https://bankid.privatbank.ua/ResourceService/checked/data
+              user_response_class: AppBundle\Security\Response\BankIdUserResponse
+            - "bank_id"
+            - @hwi_oauth.storage.session
+    app.bank_id_user_provider:
+        class: AppBundle\Security\BankIdUserProvider
+        arguments:
+            - @doctrine
+            - AppBundle\Entity\User
+            - {'bank_id': 'clid'}
+        calls:
+            - [ setEncryptor, [@app.encryptor] ]
     app.twig_extension:
         class: AppBundle\Twig\AppExtension
         public: false
         arguments:
-            - @app.security.bank_id
+            - @hwi_oauth.resource_owner.bank_id
+            - @router
         tags:
             - { name: twig.extension }
-
+    app.encryptor:
+        class: AppBundle\Security\Encryptor
+        calls:
+            - [ setPrivateKey, [%app.private_key%] ]
     app.user.manager:
         class:  AppBundle\Helper\UserManager
         arguments:

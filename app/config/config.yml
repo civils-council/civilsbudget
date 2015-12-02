@@ -8,6 +8,9 @@ imports:
 parameters:
     locale: en
 
+app:
+    private_key: "%kernel.root_dir%/Resources/ssl-keys/prod/private.key"
+
 framework:
     #esi:             ~
     #translator:      { fallbacks: ["%locale%"] }
