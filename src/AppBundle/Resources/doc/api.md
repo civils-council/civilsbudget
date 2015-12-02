@@ -169,4 +169,4 @@ __401__
     
 ### Check bi_oauth_url
 
-__GET__ `/api/check`    
+__GET__ `/api/settings`    

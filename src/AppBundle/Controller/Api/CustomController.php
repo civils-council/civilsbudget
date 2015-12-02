@@ -11,12 +11,12 @@ use Symfony\Component\HttpFoundation\Request;
 class CustomController extends Controller
 {
     /**
-     * @Route("/api/check", name="api_check")
+     * @Route("/api/settings", name="api_check")
      * @Method({"GET"})
      */
     public function checkAction(Request $request)
     {
         $check = $this->container->getParameter('bi_oauth_url');
-        return new JsonResponse(["bid_auth_url" => $check]);
+        return new JsonResponse(["bi_auth_url" => $check]);
     }
 }
