@@ -26,9 +26,9 @@ class BankIdUserProvider extends EntityUserProvider
             throw new \RuntimeException(sprintf("No property defined for entity for resource owner '%s'.", $resourceOwnerName));
         }
 
-        $username = $response->getUsername();
+        $username = $this->encryptor->decrypt($response->getUsername());
 
-        if (null === $user = $this->repository->findOneBy(array($this->properties[$resourceOwnerName] => $username))) {
+        if (null === $user = $this->repository->findOneBy([$this->properties[$resourceOwnerName] => $username])) {
             $user = $this->getUserFromResponse($response);
             $this->em->persist($user);
             $this->em->flush();
