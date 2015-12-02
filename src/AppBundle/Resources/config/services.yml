@@ -12,6 +12,7 @@ services:
               authorization_url: https://bankid.privatbank.ua/DataAccessService/das/authorize
               access_token_url: https://bankid.privatbank.ua/DataAccessService/oauth/token
               infos_url: https://bankid.privatbank.ua/ResourceService/checked/data
+              user_response_class: AppBundle\Security\Response\BankIdUserResponse
             - "bank_id"
             - @hwi_oauth.storage.session
     app.twig_extension:
