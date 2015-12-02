@@ -267,10 +267,13 @@ class User implements UserInterface, \JsonSerializable
 
     /**
      * @param string $phone
+     * @return $this
      */
     public function setPhone($phone)
     {
         $this->phone = $phone;
+
+        return $this;
     }
 
     /**
@@ -282,11 +285,14 @@ class User implements UserInterface, \JsonSerializable
     }
 
     /**
-     * @param string $secret
+     * @param $clid
+     * @return $this
      */
     public function setClid($clid)
     {
         $this->clid = $clid;
+
+        return $this;
     }
 
     /*-------------------------------relations methods----------------------------------------------------------------*/
