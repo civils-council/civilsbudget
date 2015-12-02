@@ -35,10 +35,19 @@
                     <p>{{ project.description }}</p>
                 </div>
             </div>
-            {#<div class="row hd-comments">#}
+           {{ block('notice') }}
+             {#<div class="row hd-comments">#}
                 {#<div class="col-md-12"><a class="lb-comment" href="#">Коментарі</a><a class="lb-edit" href="#">Додати коментар</a></div>#}
             {#</div>#}
 {% endblock %}
+
+{% block notice %}
+    <div class="row hd-description">
+        <div class="col-md-12">
+            <i>У випадку перемоги проект буде реалізовано структурними підрозділами Черкаської міської ради протягом 2016 року.</i>
+        </div>
+    </div>
+{% endblock notice %}
 
 {% block title %}
     {{ project.title|humanize }}
