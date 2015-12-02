@@ -2,15 +2,21 @@
 
 namespace AppBundle\Security;
 
+use AppBundle\Entity\User;
 use AppBundle\Security\Response\BankIdUserResponse;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\User\EntityUserProvider;
-use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 
 class BankIdUserProvider extends EntityUserProvider
 {
     /**
-     * {@inheritdoc}
+     * @var Encryptor
+     */
+    protected $encryptor;
+
+    /**
+     * @param BankIdUserResponse $response
+     * @return User
      */
     public function loadUserByOAuthUserResponse(UserResponseInterface $response)
     {
@@ -19,29 +25,42 @@ class BankIdUserProvider extends EntityUserProvider
         if (!isset($this->properties[$resourceOwnerName])) {
             throw new \RuntimeException(sprintf("No property defined for entity for resource owner '%s'.", $resourceOwnerName));
         }
-var_dump($response->getResponse());exit;
+
         $username = $response->getUsername();
+
         if (null === $user = $this->repository->findOneBy(array($this->properties[$resourceOwnerName] => $username))) {
-            $user = $this->createUser($response);
+            $user = $this->getUserFromResponse($response);
+            $this->em->persist($user);
+            $this->em->flush();
         }
 
         return $user;
     }
 
-    protected function createUser(BankIdUserResponse $response)
+    /**
+     * @param BankIdUserResponse $response
+     * @return User
+     * @throws \Exception`
+     */
+    protected function getUserFromResponse(BankIdUserResponse $response)
     {
-        var_dump(
-            $response->getClid(),
-            $response->getUsername(),
-            $response->getInn(),
-            $response->getFirstName(),
-            $response->getLastName(),
-            $response->getMiddleName(),
-            $response->getSex(),
-            $response->getBirthday()
+        $user = new User();
 
-        );
+        $user
+            ->setClid($this->encryptor->decrypt($response->getClid()))
+            ->setFirstName($this->encryptor->decrypt($response->getFirstName()))
+            ->setLastName($this->encryptor->decrypt($response->getLastName()))
+            ->setMiddleName($this->encryptor->decrypt($response->getMiddleName()))
+            ->setInn($this->encryptor->decrypt($response->getInn()))
+            ->setSex($this->encryptor->decrypt($response->getSex()))
+            ->setBirthday($this->encryptor->decrypt($response->getBirthday()))
         ;
-        throw new \Exception('Create new user');
+
+        return $user;
+    }
+
+    public function setEncryptor(Encryptor $encryptor)
+    {
+        $this->encryptor = $encryptor;
     }
 }
