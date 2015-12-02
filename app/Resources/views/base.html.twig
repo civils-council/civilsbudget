@@ -4,15 +4,21 @@
         <meta charset="UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Громадська рада - {% block title %}Welcome!{% endblock %}</title>
+
+        <title>Народна Рада - {% block title %}Welcome!{% endblock %}</title>
+        <meta property="og:title" content="Народна Рада - громадський проект електронного голосування"/>
+        <meta property="og:image" content="{{ url('homepage') }}images/thumbnail.png"/>
+        <meta property="og:description" content="Народна Рада - це платформа, розроблена з метою допомоги соціально-активним жителям не лише спостерігати за діями членів міської ради та рішеннями, які вони приймають щодо міського бюджету, але й долучитися до відповідної процедури голосування."/>
+        <meta property="og:url" content="http://www.golos.ck.ua"/>
+        <meta property="og:site_name" content="Народна Рада"/>
+        <meta property="og:type" content="website"/>
+
         <link rel="stylesheet" href="{{ asset('css/app.css') }}">
         {% block stylesheets %}
             <!-- Latest compiled and minified CSS -->
             {#<link rel="stylesheet" href="{{ asset('css/main.css') }}" >#}
         {% endblock %}
-
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
-
         <!-- Google Analitics -->
         <script>
             (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -24,7 +30,6 @@
             ga('send', 'pageview');
         </script>
         <!-- Google Analitics END -->
-
     </head>
     <body class="main-bg-1">
         {% block body %}{% endblock %}
@@ -42,7 +47,6 @@
                 })();
             </script>
             <!-- End o1f LiveChat code -->
-
             <!-- Google Tag Manager -->
             <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-WS56JR"
                               height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
