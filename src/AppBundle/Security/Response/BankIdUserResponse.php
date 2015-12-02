@@ -3,8 +3,9 @@
 namespace AppBundle\Security\Response;
 
 use HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse;
+use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 
-class BankIdUserResponse extends AbstractUserResponse
+class BankIdUserResponse extends AbstractUserResponse implements UserResponseInterface
 {
     /**
      * Get the unique user identifier.
@@ -17,7 +18,42 @@ class BankIdUserResponse extends AbstractUserResponse
      */
     public function getUsername()
     {
-        // TODO: Implement getUsername() method.
+        return $this->getClid();
+    }
+
+    public function getClid()
+    {
+        return isset($this->getResponse()['customer']['clId']) ? $this->getResponse()['customer']['clId'] : null;
+    }
+
+    public function getInn()
+    {
+        return isset($this->getResponse()['customer']['inn']) ? $this->getResponse()['customer']['inn'] : null;
+    }
+
+    public function getFirstName()
+    {
+        return isset($this->getResponse()['customer']['firstName']) ? $this->getResponse()['customer']['firstName'] : null;
+    }
+
+    public function getLastName()
+    {
+        return isset($this->getResponse()['customer']['lastName']) ? $this->getResponse()['customer']['lastName'] : null;
+    }
+
+    public function getMiddleName()
+    {
+        return isset($this->getResponse()['customer']['middleName']) ? $this->getResponse()['customer']['middleName'] : null;
+    }
+
+    public function getSex()
+    {
+        return isset($this->getResponse()['customer']['sex']) ? $this->getResponse()['customer']['sex'] : null;
+    }
+
+    public function getBirthday()
+    {
+        return isset($this->getResponse()['customer']['birthDay']) ? $this->getResponse()['customer']['birthDay'] : null;
     }
 
     /**
