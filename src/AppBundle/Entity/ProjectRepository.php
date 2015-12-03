@@ -10,4 +10,21 @@ namespace AppBundle\Entity;
  */
 class ProjectRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function getProjects()
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder('d');
+        $qb
+            ->select('d')
+            ->from('AppBundle:Project', 'd')
+            ->where('d.confirm = :identifier')
+            ->setParameter('identifier', 'approved')
+            ->orderBy('d.charge', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+
+        $query = $qb->getQuery();
+        $results = $query->getResult();
+        return $results;
+    }
 }
