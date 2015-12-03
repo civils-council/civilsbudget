@@ -21,7 +21,20 @@ class ProjectController extends Controller
      */
     public function listAction()
     {
-        $projects =$this->getDoctrine()->getRepository('AppBundle:Project')->getProjects();
+        $projects =$this->getDoctrine()->getRepository('AppBundle:Project')->findByConfirm('approved');
+        return [
+            'projects' => $projects,
+        ];
+    }
+
+    /**
+     * @Route("/statistics", name="projects_statistics")
+     * @Template()
+     * @Method({"GET"})
+     */
+    public function statisticsAction()
+    {
+        $projects =$this->getDoctrine()->getRepository('AppBundle:Project')->findByConfirm();
         return [
             'projects' => $projects,
         ];
