@@ -50,7 +50,7 @@ class UserController extends Controller
         $code = $request->query->get('code');
 
         if ($code = $request->query->get('code')) {
-            $accessToken = $this->get('app.security.bank_id')->getAccessToken($code);
+            $accessToken = $this->get('app.security.bank_id')->getApiAccessToken($code);
             $data = $this->get('app.security.bank_id')->getBankIdUser($accessToken['access_token']);
             if ($data['state'] == 'ok') {
                 $user = $this->get('app.user.manager')->isUniqueUser($data);
