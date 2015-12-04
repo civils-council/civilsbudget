@@ -24,7 +24,7 @@ class CustomController extends Controller
             [
                 "bi_auth_url" => $check,
                 "bi_client_id" => $clientId,
-                "bi_redirect_uri" => $base_url."api/login"
+                "bi_redirect_uri" => $base_url."/api/login"
             ]
         );
     }
