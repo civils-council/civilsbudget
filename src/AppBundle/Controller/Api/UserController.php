@@ -51,12 +51,7 @@ class UserController extends Controller
 
         if ($code = $request->query->get('code')) {
             $accessToken = $this->get('app.security.bank_id')->getApiAccessToken($code);
-            return new JsonResponse(
-                [
-                    "response_bi" => $accessToken
-                ]
-            );
-
+            return new JsonResponse($accessToken);
         }else{
             throw new NotFoundHttpException('No find code in request');
         }
