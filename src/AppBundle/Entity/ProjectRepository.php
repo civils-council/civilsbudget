@@ -20,7 +20,7 @@ class ProjectRepository extends \Doctrine\ORM\EntityRepository
             ->join('d.likedUsers', 'm')
             ->join('m.location', 'l')
             ->where('l.city = :identifier')
-            ->setParameter('identifier', 'ЧЕРКАСИ')
+            ->setParameter('identifier', 'ЧЕРКАССЫ')
             ->groupBy('d.id')
             ->orderBy("nMethods", 'DESC')
 
