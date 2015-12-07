@@ -53,7 +53,7 @@ class UserController extends Controller
             $accessToken = $this->get('app.security.bank_id')->getApiAccessToken($code);
             return new JsonResponse(
                 [
-                    "access_token" => $accessToken['access_token']
+                    "response_bi" => $accessToken
                 ]
             );
 
