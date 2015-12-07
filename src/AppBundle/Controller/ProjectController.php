@@ -34,8 +34,9 @@ class ProjectController extends Controller
      */
     public function statisticsAction()
     {
-        $projects =$this->getDoctrine()->getRepository('AppBundle:Project')->findByConfirm();
+        $projects =$this->getDoctrine()->getRepository('AppBundle:Project')->getProject();
         return [
+            'debug' => true,
             'projects' => $projects,
         ];
     }
