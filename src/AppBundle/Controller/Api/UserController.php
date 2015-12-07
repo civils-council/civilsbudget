@@ -51,25 +51,7 @@ class UserController extends Controller
 
         if ($code = $request->query->get('code')) {
             $accessToken = $this->get('app.security.bank_id')->getApiAccessToken($code);
-            $data = $this->get('app.security.bank_id')->getBankIdUser($accessToken['access_token']);
-            if ($data['state'] == 'ok') {
-                $user = $this->get('app.user.manager')->isUniqueUser($data);
-
-                $vote = $user[0]->getLikedProjects();
-                if(!is_null($vote)){
-                    $voted_project = $user[0]->getLikedProjects()->getId();
-                }else{
-                    $voted_project = false;
-                }
-                return new JsonResponse(
-                    [
-                        "id" => $user[0]->getId(),
-                        "full_name" => $user[0]->getFullName(),
-                        "clid" => $user[0]->getClid(),
-                        "voted_project" => $voted_project
-                    ]
-                );
-            }
+            return $accessToken['access_token'];
         }else{
             throw new NotFoundHttpException('No find code in request');
         }
