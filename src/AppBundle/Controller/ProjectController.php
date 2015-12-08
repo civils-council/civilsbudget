@@ -21,7 +21,7 @@ class ProjectController extends Controller
      */
     public function listAction()
     {
-        $projects =$this->getDoctrine()->getRepository('AppBundle:Project')->findByConfirm('approved');
+        $projects =$this->getDoctrine()->getRepository('AppBundle:Project')->getProjectShow();
         return [
             'projects' => $projects,
         ];
@@ -34,7 +34,7 @@ class ProjectController extends Controller
      */
     public function statisticsAction()
     {
-        $projects =$this->getDoctrine()->getRepository('AppBundle:Project')->getProject();
+        $projects =$this->getDoctrine()->getRepository('AppBundle:Project')->getProjectStat();
         return [
             'debug' => true,
             'projects' => $projects,
