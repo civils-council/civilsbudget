@@ -31,6 +31,7 @@
             ga('send', 'pageview');
         </script>
         <!-- Google Analitics END -->
+        {% block headscripts %}{% endblock headscripts %}
     </head>
     <body class="main-bg-1">
         {% block body %}{% endblock %}
@@ -59,6 +60,7 @@
             <!-- End Google Tag Manager -->
 
         {% endblock %}
+        {% block bodyscripts %}{% endblock %}
     </body>
 </html>
 
