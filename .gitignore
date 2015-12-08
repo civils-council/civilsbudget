@@ -22,3 +22,4 @@
 *~
 .idea
 /app/rsa_key.pem
+*.log

@@ -54,6 +54,24 @@ class BankIdService
         return $accessToken;
     }
 
+    public function getApiAccessToken($code)
+    {
+//        dump($code);exit;
+        $client = new Client();
+        $sha1 = sha1($this->clientId . $this->secret. $code, false);
+        $url =  sprintf(
+            $this->bi_oauth_url.self::BANK_ID_URL_ACCESS_TOKEN,
+            $this->clientId,
+            $sha1,
+            $code,
+            $this->router->generate('api_login', [], UrlGeneratorInterface::ABSOLUTE_URL)
+        );
+
+        $rawAccessToken = $client->get($url)->send()->getBody(true);
+        $accessToken = json_decode($rawAccessToken, true);
+        return $accessToken;
+    }
+
     public function getBankIdUser($accessToken)
     {
         $client = new Client();

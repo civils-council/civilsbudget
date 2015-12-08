@@ -35,6 +35,13 @@ gulp.task('images', function () {
         .pipe(gulp.dest('web/images/'))
 });
 
+gulp.task('developers', function () {
+    return gulp.src([
+        'web-src/images/developers/*'
+    ])
+        .pipe(gulp.dest('web/images/developers/'))
+});
+
 gulp.task('fonts', function () {
     return gulp.src([
         'bower_components/bootstrap/fonts/*',
@@ -49,7 +56,7 @@ gulp.task('clean', function () {
 });
 
 gulp.task('default', ['clean'], function () {
-    var tasks = ['images', 'fonts', 'less', 'lib-js', 'pages-js'];
+    var tasks = ['images', 'fonts', 'less', 'lib-js', 'pages-js', 'developers'];
 
     tasks.forEach(function (val) {
         gulp.start(val);

@@ -5,6 +5,7 @@ namespace AppBundle\Controller\Api;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -39,4 +40,23 @@ class UserController extends Controller
         }
         return new JsonResponse(["code:" => 401, "message" => "Wrong authorization."]);
     }
+
+    /**
+     * @Route("/api/login", name="api_login")
+     * @Method({"GET", "POST"})
+     */
+    public function loginAction(Request $request)
+    {
+        $code = $request->query->get('code');
+
+        if ($code = $request->query->get('code')) {
+            $accessToken = $this->get('app.security.bank_id')->getApiAccessToken($code);
+            return new JsonResponse($accessToken);
+        }else{
+            throw new NotFoundHttpException('No find code in request');
+        }
+
+    }
+
+
 }

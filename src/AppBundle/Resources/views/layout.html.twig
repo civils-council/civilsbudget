@@ -11,30 +11,40 @@
         </div>
     </main>
     {{ block("footer") }}
-    <div id="login-modal" class="modal fade">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Авторизація</h4>
-                </div>
-                <div class="modal-body">
-                    <div>BankID – це спосіб ідентифікації громадян. Це теж саме, що перевірка документів в повсякденності, тільки в електронному виді.
-                        При ідентифікації громадян через BankID <b>НЕ ПЕРЕДАЄТЬСЯ фінансова та будь-яка інша приватна інформація.</b> Тільки та інформація, що надається в паперовій формі при голосуванні за проекти Громадський Бюджет (ім’я, прізвище, по-батькові, стать, дата народження, адреса та ідентифікаційний номер).
-                        Отримані дані використовуються лише для ідентифікації громадян.</div>
-                    <hr/>
-                    <a href="{{ login_url }}">
-                        {#<img src="{{ asset('images/bank-id.png') }}" alt="BankID" />#}
-                        <button>Продовжити</button>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
+    {{ block("popauth") }}
 {% endblock body %}
 
 {% block content %}
 {% endblock content %}
+
+
+{% block popauth %}
+    <div id="login-modal" class="modal fade">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="row blh-auth">
+                        <div class="col-md-6">крок "Авторизація"</div><span class="arrow"></span>
+                        <div class="col-md-6">крок "Голосування за проект"</div>
+                    </div>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        Якщо у Вас немає можливості підтримати проект онлайн, Ви його можете підримати прийшовши за адресою:</br></br>
+                        м. Черкаси, вул. Б.Вишневецького, 36, к. 100 з 8.00 до 20.00 (крім вихідних).</br></br>
+                        При собі мати паспорт та ідентифікаційний код.
+                    </div>
+                    <hr/>
+                    <a href="{{ login_url }}">
+                        {#<img src="{{ asset('images/bank-id.png') }}" alt="BankID" />#}
+                        <button class="modal-btn">Продовжити</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+     </div>
+{% endblock popauth %}
 
 {% block footer %}
     <footer id="main-footer">
@@ -42,7 +52,7 @@
             <div class="row">
                 <div class="col-md-4 copyright">
                     <span>&copy; 2015</span>
-                    <a href="{{ path("rada_about") }}">Про программу</a>
+                    <a href="{{ path("rada_about") }}">Про проект</a>
                     <a href="{{ path("rada_developerss") }}">Розробники</a>
 
                 </div>

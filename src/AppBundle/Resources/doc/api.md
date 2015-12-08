@@ -166,3 +166,7 @@ __401__
             "message": "Wrong authorization."
         }
     }
+    
+### Check bi_oauth_url
+
+__GET__ `/api/settings`    

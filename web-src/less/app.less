@@ -250,6 +250,7 @@
 
 // *****  MAIN CSS *****
 
+/*FONTS*/
 @font-face {
     font-family: HelveticaRoman;
     src: url('../fonts/HelveticaNeueCyr-Roman.ttf');
@@ -260,6 +261,10 @@
     src: url('../fonts/HelveticaNeueCyr-Medium.ttf');
 }
 
+@font-face {
+    font-family: HelveticaLight;
+    src: url('../fonts/HelveticaNeueCyr-Light.ttf');
+}
 
 a {color:#6f6ea6;}
 a:hover {text-decoration:none;}
@@ -415,7 +420,7 @@ a.detail-btn {
 }
 
 a.detail-btn:hover {
-    background-color: #7170a8;
+    background-color: #525c99;
     color:#fff;
 }
 
@@ -488,16 +493,18 @@ a.description-btn:hover {
 }
 
 #hp-title {
-    /*font-family: LatoWeb;*/
-    font-size:28px;
+    font-family: HelveticaLight;
+    font-size:25px;
     font-weight:normal;
     text-align:center;
-    text-transform:uppercase;
     margin:40px 0px 20px;
     color:#fff;
 }
-
-
+#hp-title p {
+    font-family: HelveticaMedium;
+    text-transform: uppercase;
+    font-size:28px;
+}
 /*пїЅпїЅпїЅпїЅпїЅпїЅпїЅ*/
 
 .item-content {
@@ -520,7 +527,7 @@ a.description-btn:hover {
     font-size:20px;
     color:#22222a;
     padding: 0px 20px;
-
+    margin-top: 17px;
     overflow-wrap: normal;
     word-wrap: break-word;
     word-break: keep-all;
@@ -928,7 +935,7 @@ a.description-btn:hover {
 }
 
 #like_submit:hover{
-    background-color: #4c5c9c;
+    background-color: #4196e3;
     color:#fff;
 }
 
@@ -1199,16 +1206,16 @@ a.description-btn:hover {
 
 button.close {
     position: absolute;
-    top: 0;
+    top: 5px;
     right: 1px;
     border: none;
     background: none;
     font-size: 45px;
-    color:#4196e3;
+    color:#525c99;
 }
 
 button.close:hover {
-    color:#525c99;
+    color:#fff;
 }
 
 @media(max-width: 768px) {
@@ -1217,5 +1224,103 @@ button.close:hover {
     }
     .hd-description{
         padding: 10px 0;
+    }
+}
+
+
+/*Modal Authorization*/
+
+/*FIX*/
+.modal-header {
+    padding: 0;
+    margin: 0;
+}
+
+/*Button FIX*/
+
+.modal-btn {
+    display: block;
+    margin: 0 auto;
+    padding: 3px 12px;
+    font-size: 18px;
+    text-decoration: none;
+    color: #fff;
+    background: #525c99;
+    border: none;
+    border-radius: 18px;
+
+}
+
+.modal-btn:hover {
+    background: #4196e3;
+}
+
+/*Block-Header*/
+.blh-auth {
+    position: relative;
+    font-family: HelveticaLight;
+    font-size: 18px;
+    color: #fff;
+    text-align: center;
+}
+
+
+.blh-auth div:first-child {
+    background: #525c99;
+    border-right: solid 2px #fff;
+}
+
+.blh-auth div:last-child {
+    background: #4196e3;
+}
+
+.blh-auth div::before{
+        content: '';
+        display: inline-block;
+        padding: 5px 12px;
+        margin: 8px 5px 5px 0;
+        border-style: solid;
+        border-width: 4px;
+        border-radius: 50px;
+        -moz-border-radius: 50px;
+        -webkit-border-radius: 50px;
+        color: #fff;
+}
+
+.blh-auth div:first-child::before{
+    content: '1';
+    background: #525c99;
+}
+
+.blh-auth div:last-child::before{
+    content: '2';
+    background: #4196e3;
+}
+
+.arrow{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -15px;
+    margin-top: -15px;
+    padding: 15px;
+    border-radius: 50px;
+    -moz-border-radius: 50px;
+    -webkit-border-radius: 50px;
+    background: #fff url(../images/arrow.png) no-repeat center;
+    z-index:10;
+    color:#4196e3;
+}
+
+@media(max-width: 768px) {
+    .blh-auth{
+        text-align: left;
+    }
+    .arrow{
+        -moz-transform:rotate(90deg);
+        -webkit-transform:rotate(90deg);
+    }
+    .blh-auth div:first-child {
+        border: none;
     }
 }

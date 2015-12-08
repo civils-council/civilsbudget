@@ -6,12 +6,14 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <title>Народна Рада - {% block title %}Welcome!{% endblock %}</title>
-        <meta property="og:title" content="Народна Рада - громадський проект електронного голосування"/>
-        <meta property="og:image" content="{{ asset('bundles/app/img/thumbnail.png') }}"/>
-        <meta property="og:description" content="Народна Рада - це платформа, розроблена з метою допомоги соціально-активним жителям не лише спостерігати за діями членів міської ради та рішеннями, які вони приймають щодо міського бюджету, але й долучитися до відповідної процедури голосування."/>
-        <meta property="og:url" content="http://www.golos.ck.ua"/>
         <meta property="og:site_name" content="Народна Рада"/>
         <meta property="og:type" content="website"/>
+        {% block og %}
+            <meta property="og:title" content="Народна Рада - громадський проект електронного голосування"/>
+            <meta property="og:image" content="{{ url('homepage') }}images/thumbnail.png"/>
+            <meta property="og:description" content="Народна Рада - це платформа, розроблена з метою допомоги соціально-активним жителям не лише спостерігати за діями членів міської ради та рішеннями, які вони приймають щодо міського бюджету, але й долучитися до відповідної процедури голосування."/>
+            <meta property="og:url" content="{{ url('homepage') }}"/>
+        {% endblock og %}
 
         <link rel="stylesheet" href="{{ asset('css/app.css') }}">
         {% block stylesheets %}

@@ -21,8 +21,23 @@ class ProjectController extends Controller
      */
     public function listAction()
     {
-        $projects =$this->getDoctrine()->getRepository('AppBundle:Project')->findByConfirm('approved');
+        $projects =$this->getDoctrine()->getRepository('AppBundle:Project')->getProjectShow();
         return [
+            'debug' => true,
+            'projects' => $projects,
+        ];
+    }
+
+    /**
+     * @Route("/statistics", name="projects_statistics")
+     * @Template()
+     * @Method({"GET"})
+     */
+    public function statisticsAction()
+    {
+        $projects = $this->getDoctrine()->getRepository('AppBundle:Project')->getProjectStat();
+        return [
+            'debug' => true,
             'projects' => $projects,
         ];
     }
@@ -32,12 +47,13 @@ class ProjectController extends Controller
      * @Template()
      * @Method({"GET"})
      */
-    public function showProjectAction(Project $project)
+    public function showProjectAction(Project $project, $id)
     {
+        $project = $this->getDoctrine()->getRepository('AppBundle:Project')->getOneProjectShow($id);
         if(empty($this->getUser())){
-            $sessionSet = $this->get('app.seesion')->setSession($project->getId());
+            $sessionSet = $this->get('app.seesion')->setSession($project[0][0]->getId());
         }
-        return ['project' => $project];
+        return ['projects' => $project];
     }
 
     /**
