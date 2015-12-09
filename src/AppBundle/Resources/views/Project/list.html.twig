@@ -9,12 +9,14 @@
 
 		<h1 id="hp-title">
             <p>виріши долю громадського бюджету міста Черкас на 2016 рік</p>
-            Голосування відкрито до 14 грудня 2015 року
+            Голосування відкрито до 14 грудня 2015 року<br>
+            <hr>
+            Вже проголосувало Черкащан:
 		</h1>
 
     {% set votes = 0 %}
     {% for project in projects %}
-        {% set votes = votes + project[0].likedUsers|length|number_format(0, '.', ' ') %}
+        {% set votes = votes + project['nMethods']|number_format(0, '.', ' ') %}
     {% endfor %}
     {% set digits = votes|split('') %}
 
@@ -27,6 +29,7 @@
         </div>
 
     {% for project in projects %}
+        {% set votes = votes + project['nMethods']|number_format(0, '.', ' ') %}
         {% if loop.index % 4 == 1 %}
          <div class="row">
         {% endif %}
