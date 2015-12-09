@@ -56,15 +56,15 @@
     </div>
 {% endblock notice %}
 
-{#{% block title %}#}
-    {#{{ project[0].title|humanize }}#}
-{#{% endblock title %}#}
-{#{% block og %}#}
-    {#<meta property="og:title" content="Народна Рада - {{ project[0].title|humanize }}"/>#}
-    {#<meta property="og:image" content="{{ url('homepage')|trim('/') }}{% if project[0].picture %}{{ asset(project[0].picture) }}{% else %}{{ asset('images/gerb_goroda_cherkassy.png') }}{% endif %}"/>#}
-    {#<meta property="og:description" content="{{ project[0].description[:100] ~'...' }}"/>#}
-    {#<meta property="og:url" content="{{ app.request.getUri }}"/>#}
-{#{% endblock og %}#}
+{% block title %}
+    {{ projects[0][0].title|humanize }}
+{% endblock title %}
+{% block og %}
+    <meta property="og:title" content="Народна Рада - {{ projects[0][0].title|humanize }}"/>
+    <meta property="og:image" content="{{ url('homepage')|trim('/') }}{% if projects[0][0].picture %}{{ asset(projects[0][0].picture) }}{% else %}{{ asset('images/gerb_goroda_cherkassy.png') }}{% endif %}"/>
+    <meta property="og:description" content="{{ projects[0][0].description[:100] ~'...' }}"/>
+    <meta property="og:url" content="{{ app.request.getUri }}"/>
+{% endblock og %}
 
 
 {% block navproject %}
