@@ -6,10 +6,25 @@
 
 {% block content %}
 	    <div id="hp-logo"></div>
+
 		<h1 id="hp-title">
             <p>виріши долю громадського бюджету міста Черкас на 2016 рік</p>
             Голосування відкрито до 14 грудня 2015 року
 		</h1>
+
+    {% set votes = 0 %}
+    {% for project in projects %}
+        {% set votes = votes + project[0].likedUsers|length|number_format(0, '.', ' ') %}
+    {% endfor %}
+    {% set digits = votes|split('') %}
+
+        <div class="counter">
+        {% for digit in digits %}
+            <span class="digit">
+                <span title="{{ digit }}">{{ digit }}</span>
+            </span>
+        {% endfor %}
+        </div>
 
     {% for project in projects %}
         {% if loop.index % 4 == 1 %}
