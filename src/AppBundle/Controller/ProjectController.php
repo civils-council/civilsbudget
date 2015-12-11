@@ -74,18 +74,18 @@ class ProjectController extends Controller
             $user_vote = $this->getUser()->getLikedProjects();
             if($user_vote != null) {
                 if ($vote != false) {
-                    $this->addFlash('warning', 'Ви вже підтримали цей проект.');
+                    $this->addFlash('', 'Ви вже підтримали цей проект.');
                 } elseif ($project->getLikedUsers()->contains($this->getUser()) == false && $this->getUser()->getLikedProjects()->getId() == $project->getId()) {
                     $this->getUser()->setLikedProjects($project);
                     $this->getDoctrine()->getManager()->flush();
-                    $this->addFlash('success', 'Ваший голос зараховано на підтримку проект.');
+                    $this->addFlash('', 'Ваший голос зараховано на підтримку проект.');
                 } else {
-                    $this->addFlash('warning', 'Ви використали свiй голос.');
+                    $this->addFlash('', 'Ви використали свiй голос.');
                 }
             }else{
                 $this->getUser()->setLikedProjects($project);
                 $this->getDoctrine()->getManager()->flush();
-                $this->addFlash('success', 'Ваший голос зараховано на підтримку проект.');
+                $this->addFlash('', 'Ваший голос зараховано на підтримку проект.');
             }
 
 
