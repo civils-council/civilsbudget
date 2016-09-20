@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Api;
 
 use AppBundle\Entity\Project;
+use AppBundle\Entity\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -86,6 +87,7 @@ class ProjectController extends Controller
         $em = $this->getDoctrine()->getManager();
         $clid = null;
         $content = $this->get("request")->getContent();
+        $limitVotes = $this->getParameter('limit_votes');
         if (!empty($content))
         {
             $params = json_decode($content, true);
@@ -97,27 +99,59 @@ class ProjectController extends Controller
 
         if ($request->getMethod() == Request::METHOD_POST) {
             $user = $em->getRepository('AppBundle:User')->findOneByClid($clid);
-            if(!empty($user)) {
-                $user_vote = $user->getLikedProjects();
-                if ($user_vote != null) {
-                    if ($project->getLikedUsers()->contains($user)) {
-                        return new JsonResponse(['warning' => 'Ви вже підтримали цей проект.']);
-                    } elseif ($project->getLikedUsers()->contains($user) == false && $user->getLikedProjects()->getId() == $project->getId()) {
-                        $user->setLikedProjects($project);
-                        $this->getDoctrine()->getManager()->flush();
-
-                        return new JsonResponse(['success' => 'Ваший голос зараховано на підтримку проект.']);
+            if ($user instanceof User) {
+                if ($project->getLastDateOfVotes() > new \DateTime()) {
+                    if ($user->getCountVotes() < $limitVotes) {
+                        if (!$user->getLikedProjects()->contains($project)) {
+                            if (mb_strtolower($user->getLocation()->getCity()) == mb_strtolower($project->getCity())) {
+                                $user->setCountVotes($user->getCountVotes() + 1);
+                                $user->addLikedProjects($project);
+                                $project->addLikedUser($user);
+                                $em->flush();
+                                $balanceVotes = $limitVotes - $user->getCountVotes();
+                                return new JsonResponse(['success' => "Дякуємо за Ваш голос. Ваш голос зараховано на підтримку проекту. У вас залишилось $balanceVotes голосів"]);
+                            } else {
+                                $uCity = mb_strtolower($user->getLocation()->getCity());
+                                $pCity = mb_strtolower($project->getCity());
+                                return new JsonResponse(['danger' => "Цей проект не стосується міста в якому ви зареєстровані."]);
+                            }
+                        } else {
+                            return new JsonResponse(['danger' => "Ви вже підтримали цей проект."]);
+                        }
                     } else {
-                        return new JsonResponse(['warning' => 'Ви використали свiй голос.']);
+                        return new JsonResponse(['danger' => "Ви вже вичерпали свій ліміт голосів."]);
                     }
                 } else {
-                    $user->setLikedProjects($project);
-                    $this->getDoctrine()->getManager()->flush();
-                    return new JsonResponse(['success' => 'Ваший голос зараховано на підтримку проект.']);
+                    $lastDate = $project->getLastDateOfVotes()->format('d.m.Y');
+                    return new JsonResponse(['danger' => "Вибачте. Кінцева дата голосування до  $lastDate."]);
                 }
-            }else{
-                return new JsonResponse(['warning' => 'Такого користувача не iснуэ.']);
+            } else {
+                return new JsonResponse(['danger' => "Ви не маєте доступу до створення проекту."]);
             }
+
+
+//
+//            if(!empty($user)) {
+//                $user_vote = $user->getLikedProjects();
+//                if ($user_vote != null) {
+//                    if ($project->getLikedUsers()->contains($user)) {
+//                        return new JsonResponse(['warning' => 'Ви вже підтримали цей проект.']);
+//                    } elseif ($project->getLikedUsers()->contains($user) == false && $user->getLikedProjects()->getId() == $project->getId()) {
+//                        $user->setLikedProjects($project);
+//                        $this->getDoctrine()->getManager()->flush();
+//
+//                        return new JsonResponse(['success' => 'Ваший голос зараховано на підтримку проект.']);
+//                    } else {
+//                        return new JsonResponse(['warning' => 'Ви використали свiй голос.']);
+//                    }
+//                } else {
+//                    $user->setLikedProjects($project);
+//                    $this->getDoctrine()->getManager()->flush();
+//                    return new JsonResponse(['success' => 'Ваший голос зараховано на підтримку проект.']);
+//                }
+//            }else{
+//                return new JsonResponse(['warning' => 'Такого користувача не iснуэ.']);
+//            }
         }
 
         return new JsonResponse(['project' => $project]);
