@@ -48,25 +48,28 @@ class ProjectController extends Controller
      */
     public function addProjectAction(Request $request)
     {
-        $project = new Project();
-        $form = $this->createCreateForm($project);
-        $form->submit($request);
-            if ($request->isMethod('POST')) {
-                if ($form->isValid()) {
-                    $em = $this->getDoctrine()->getManager();
-                    $project->setConfirm($this->getUser());
-                    $project->setConfirmedBy($this->getUser());
+        //  project have an owner property. it's - User entity, not admin
 
-                    $em->persist($project);
-                    $em->flush();
-
-                    return $this->redirect($this->generateUrl('admin_project_show', array('id' => $project->getId())));
-                }
-            }
-        return [
-                'entity' => $project,
-                'form' => $form->createView(),
-        ];
+//        $project = new Project();
+//        $form = $this->createCreateForm($project);
+//        $form->submit($request);
+//            if ($request->isMethod('POST')) {
+//                if ($form->isValid()) {
+//                    $em = $this->getDoctrine()->getManager();
+//                    $project->setOwner($this->getUser());
+//                    $project->setApproved(true);
+//                    $project->setConfirmedBy($this->getUser());
+//
+//                    $em->persist($project);
+//                    $em->flush();
+//
+//                    return $this->redirect($this->generateUrl('admin_project_show', array('id' => $project->getId())));
+//                }
+//            }
+//        return [
+//                'entity' => $project,
+//                'form' => $form->createView(),
+//        ];
     }
 
     // --------------------------------- Create Forms ---------------------------------
@@ -85,7 +88,7 @@ class ProjectController extends Controller
             'method' => 'POST',
             'attr' => array('class' => 'formCreateClass'),
         ));
-        $this->addFormFields($form);
+//        $this->addFormFields($form);
         $form->add('submit', 'submit', array('label' => 'Add Project'));
 
         return $form;
@@ -93,6 +96,6 @@ class ProjectController extends Controller
 
     private function addFormFields($form)
     {
-        $form->add('confirm', 'choice', array('choices' => array('approved' => 'approved', 'not_approved' => 'not_approved')));
+//        $form->add('confirm', 'choice', array('choices' => array('approved' => 'approved', 'not_approved' => 'not_approved')));
     }
 }

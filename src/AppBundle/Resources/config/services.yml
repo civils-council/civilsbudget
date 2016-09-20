@@ -28,7 +28,7 @@ services:
         calls:
             - [ setRootDir, ["%kernel.root_dir%"] ]
 
-    app.seesion:
+    app.session:
         class:  AppBundle\Helper\SessionSet
         arguments:
             - @session

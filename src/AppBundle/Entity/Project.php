@@ -70,9 +70,9 @@ class Project implements \JsonSerializable
     /**
      * @var string
      *
-     * @ORM\Column(name="confirm", type="string", length=255, nullable=true)
+     * @ORM\Column(name="approved", type="boolean", options = {"default": true})
      */
-    private $confirm;
+    private $approved;
 
     /**
      * @var Admin
@@ -314,27 +314,27 @@ class Project implements \JsonSerializable
     }
 
    /**
-    * Set confirm
+    * Set approved
     *
-    * @param string $confirm
+    * @param boolean $approved
     *
     * @return Project
     */
-    public function setConfirm($confirm)
+    public function setApproved($approved)
     {
-        $this->confirm = $confirm;
+        $this->approved = $approved;
 
         return $this;
     }
 
     /**
-     * Get confirm
+     * Get approved
      *
-     * @return string
+     * @return boolean
      */
-    public function getConfirm()
+    public function isApproved()
     {
-        return $this->confirm;
+        return $this->approved;
     }
 
     /**
@@ -365,7 +365,7 @@ class Project implements \JsonSerializable
      */
     public function __construct()
     {
-        $this->likedUsers = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->likedUsers = new ArrayCollection();
     }
 
     /**
@@ -377,6 +377,9 @@ class Project implements \JsonSerializable
      */
     public function addLikedUser(\AppBundle\Entity\User $likedUser)
     {
+        if (!$this->getLikedUsers()->contains($likedUser)) {
+            $this->getLikedUsers()->add($likedUser);
+        }
         $this->likedUsers[] = $likedUser;
 
         return $this;
@@ -389,6 +392,9 @@ class Project implements \JsonSerializable
      */
     public function removeLikedUser(\AppBundle\Entity\User $likedUser)
     {
+        if ($this->getLikedUsers()->contains($likedUser)) {
+            $this->getLikedUsers()->removeElement($likedUser);
+        }
         $this->likedUsers->removeElement($likedUser);
     }
 

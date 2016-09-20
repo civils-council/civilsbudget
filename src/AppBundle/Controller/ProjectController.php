@@ -11,6 +11,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ProjectController extends Controller
 {
@@ -47,11 +48,16 @@ class ProjectController extends Controller
      * @Template()
      * @Method({"GET"})
      */
-    public function showProjectAction(Project $project, $id)
+    public function showProjectAction($id)
     {
         $project = $this->getDoctrine()->getRepository('AppBundle:Project')->getOneProjectShow($id);
+
+        if (!$project) {
+            throw new NotFoundHttpException('This project not found in our source');
+        }
+
         if(empty($this->getUser())){
-            $sessionSet = $this->get('app.seesion')->setSession($project[0][0]->getId());
+            $sessionSet = $this->get('app.session')->setSession($project[0][0]->getId());
         }
         return ['projects' => $project];
     }
@@ -109,6 +115,7 @@ class ProjectController extends Controller
                 if ($form->isValid()) {
                     $em = $this->getDoctrine()->getManager();
                     $project->setOwner($this->getUser());
+                    $project->setApproved(true);
 
                     $em->persist($project);
                     $em->flush();

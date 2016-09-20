@@ -50,8 +50,8 @@ class DefaultController extends Controller
             if ($data['state'] == 'ok') {
                 $user = $this->get('app.user.manager')->isUniqueUser($data);
 
-                if($this->get('app.seesion')->check()) {
-                    return $this->redirect($this->generateUrl('projects_show', ['id' => $this->get('app.seesion')->getProjectId()]));
+                if($this->get('app.session')->check()) {
+                    return $this->redirect($this->generateUrl('projects_show', ['id' => $this->get('app.session')->getProjectId()]));
                 }
                 if($user[1] == 'new') {
                     $this->addFlash('inforormation', 'congratulations');

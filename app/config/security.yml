@@ -59,4 +59,5 @@ security:
         - { path: ^/admin/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/, roles: ROLE_ADMIN }
         - { path: ^/projects/, roles: ROLE_USER, method: [POST, PUT, DELETE]}
+        - { path: ^/projects/add, roles: ROLE_USER }
         - { path: ^/users, roles: ROLE_USER }

@@ -12,15 +12,15 @@ class ProjectRepository extends \Doctrine\ORM\EntityRepository
 {
     public function getProjectStat()
     {
-        $qb = $this->getEntityManager()->createQueryBuilder('d');
+        $qb = $this->getEntityManager()->createQueryBuilder('project');
         $qb
-            ->select('d')
-            ->from('AppBundle:Project', 'd')
-            ->addSelect('COUNT(m.id) as nMethods')
-            ->join('d.likedUsers', 'm')
-            ->join('m.location', 'l')
-            ->where($qb->expr()->like('l.city', $qb->expr()->literal('%ЧЕРКАС%')))
-            ->groupBy('d.id')
+            ->select('project')
+            ->from('AppBundle:Project', 'project')
+            ->addSelect('COUNT(user.id) as nMethods')
+            ->leftJoin('project.likedUsers', 'user')
+//            ->leftJoin('user.location', 'location')
+//            ->andWhere($qb->expr()->like('location.city', $qb->expr()->literal('%ЧЕРКАС%')))
+            ->groupBy('project.id')
             ->orderBy("nMethods", 'DESC')
 
             ->getQuery()
@@ -33,17 +33,18 @@ class ProjectRepository extends \Doctrine\ORM\EntityRepository
 
     public function getProjectShow()
     {
-        $qb = $this->getEntityManager()->createQueryBuilder('d');
+        $qb = $this->getEntityManager()->createQueryBuilder('project');
         $qb
-            ->select('d')
-            ->from('AppBundle:Project', 'd')
-            ->addSelect('COUNT(m.id) as nMethods')
-            ->join('d.likedUsers', 'm')
-            ->join('m.location', 'l')
-            ->where('d.confirm = :confirm')
-            ->andWhere($qb->expr()->like('l.city', $qb->expr()->literal('%ЧЕРКАС%')))
-            ->setParameter('confirm', 'approved')
-            ->groupBy('d.id')
+            ->select('project')
+            ->from('AppBundle:Project', 'project')
+            ->addSelect('COUNT(user.id) as nMethods')
+            ->leftJoin('project.likedUsers', 'user')
+//            ->leftJoin('user.location', 'location')
+            ->andWhere('project.approved = :approved')
+//            ->andWhere($qb->expr()->like('location.city', ':search'))
+//            ->setParameter('search', 'ЧЕРКАС%')
+            ->setParameter('approved', true)
+            ->groupBy('project.id')
 
             ->getQuery()
             ->getResult()
@@ -55,19 +56,19 @@ class ProjectRepository extends \Doctrine\ORM\EntityRepository
 
     public function getOneProjectShow($id)
     {
-        $qb = $this->getEntityManager()->createQueryBuilder('d');
+        $qb = $this->getEntityManager()->createQueryBuilder('project');
         $qb
-            ->select('d')
-            ->from('AppBundle:Project', 'd')
-            ->addSelect('COUNT(m.id) as nMethods')
-            ->join('d.likedUsers', 'm')
-            ->join('m.location', 'l')
-            ->where('d.confirm = :confirm')
-            ->andWhere('d.id = :id')
-            ->andWhere($qb->expr()->like('l.city', $qb->expr()->literal('%ЧЕРКАС%')))
-            ->setParameter('confirm', 'approved')
+            ->select('project')
+            ->from('AppBundle:Project', 'project')
+            ->addSelect('COUNT(user.id) as nMethods')
+            ->leftJoin('project.likedUsers', 'user')
+//            ->leftJoin('user.location', 'location')
+            ->andWhere('project.approved= :approved')
+            ->andWhere('project.id = :id')
+//            ->andWhere($qb->expr()->like('location.city', $qb->expr()->literal('%ЧЕРКАС%')))
+            ->setParameter('approved', true)
             ->setParameter('id', $id)
-            ->groupBy('d.id')
+            ->groupBy('project.id')
 
             ->getQuery()
             ->getResult()

@@ -40,7 +40,7 @@
                 <span>Підтримало: <span class="badge">{{ project.likedUsers|length|number_format(0, '.', ' ') }}</span></span>
             </li>
             <li>
-                <span>Статус: <span class="badge">{{ project.confirm}}</span></span>
+                <span>Статус: <span class="badge">{% if project.approved %} approved {% else %} not approved {% endif %}</span></span>
             </li>
             {#{{ dump(app.user) }}#}
             <li>

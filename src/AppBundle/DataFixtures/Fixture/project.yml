@@ -5,6 +5,6 @@ AppBundle\Entity\Project:
         charge: <randomDigit()>
         owner: @user*
         source: <url()>
-        confirm: <characterConfirm()>
+        approved: true
         confirmedAt: <datetime()>
         confirmedBy: @admin*
