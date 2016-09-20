@@ -1,6 +1,7 @@
 <?php
 
 namespace AppBundle\Entity;
+use Doctrine\Common\Collections\Criteria;
 
 /**
  * ProjectRepository
@@ -40,6 +41,7 @@ class ProjectRepository extends \Doctrine\ORM\EntityRepository
             ->andWhere('project.approved = :approved')
             ->setParameter('approved', true)
             ->groupBy('project.id')
+            ->orderBy('project.lastDateOfVotes', Criteria::DESC)
 
             ->getQuery()
             ->getResult()
