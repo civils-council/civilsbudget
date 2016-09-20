@@ -112,6 +112,13 @@ class Project implements \JsonSerializable
     private $city;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", nullable = true)
+     */
+    private $lastDateOfVotes;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -431,5 +438,21 @@ class Project implements \JsonSerializable
     public function setCity($city)
     {
         $this->city = $city;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getLastDateOfVotes()
+    {
+        return $this->lastDateOfVotes;
+    }
+
+    /**
+     * @param \DateTime $lastDateOfVotes
+     */
+    public function setLastDateOfVotes($lastDateOfVotes)
+    {
+        $this->lastDateOfVotes = $lastDateOfVotes;
     }
 }

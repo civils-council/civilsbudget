@@ -9,3 +9,4 @@ AppBundle\Entity\Project:
         city: ЧЕРКАСИ
         confirmedAt: <datetime()>
         confirmedBy: @admin*
+        lastDateOfVotes: <datetime()>

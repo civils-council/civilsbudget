@@ -1,6 +1,7 @@
-{% extends '@App/layout.html.twig' %}
+{% extends '@App/Admin/layout.html.twig' %}
 
 {% block content %}
+        {{ block("headers") }}
         <div class="info_project">
             {{ project.description }}
         </div>
@@ -8,7 +9,35 @@
     {#{{ form(form) }}#}
 {% endblock %}
 
-{% block header %}
+{#{% block header %}#}
+    {#<header id="main-header">#}
+        {#<div class="container main-block">#}
+            {#<a href="{{ path("homepage") }}" id="home-icon" class="icon-home"></a>#}
+            {#<a href="{{ path("homepage") }}">golos.ck.ua</a>#}
+
+            {#Logging#}
+            {#{% if app.user and is_granted('ROLE_USER') %}#}
+            {#<a href="{{ path('projects_add') }}">Add Project User</a>#}
+            {#{% endif %}#}
+            {#{% if app.user and is_granted('ROLE_ADMIN') %}#}
+            {#<a href="{{ path('admin_projects_add') }}">Add Project Admin</a>#}
+            {#{% endif %}#}
+
+
+            {#<div class="header-controls">#}
+                {#<a href="#" class="lb-diagramm" title="Статистика"></a>#}
+                {#{% if app.user %}#}
+                    {#<a href="{{ path('logout') }}" class="lb-signout" style="background-image: url( {% if app.user.avatar %} {{ asset(app.user.avatar) }} {% else %} {{ asset('bundles/app/img/icon_developer.png') }} {% endif %} );" title="Вихід"></a>#}
+                {#{% elseif app.request.get('_route') != 'login' %}#}
+                    {#<a href="" class="lb-signin" data-toggle="modal" data-target="#login-modal" title="Увійти"></a>#}
+                {#{% endif %}#}
+            {#</div>#}
+
+        {#</div>#}
+    {#</header>#}
+{#{% endblock header %}#}
+
+{% block headers %}
     <div class="fb-profile">
         <div class="image_project">
             <h2 class="title_project">{{ block('title') }}</h2>
@@ -26,7 +55,7 @@
             {% endif %}
         </div>
     </div>
-{% endblock header %}
+{% endblock headers %}
 
 {% block title %}
     {{ project.title|humanize }}

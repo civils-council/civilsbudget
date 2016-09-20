@@ -81,27 +81,31 @@ class ProjectController extends Controller
         if ($request->getMethod() == Request::METHOD_POST) {
 
             if ($user instanceof User) {
-                if ($user->getCountVotes() < $limitVotes) {
-                    if (!$user->getLikedProjects()->contains($project)) {
-                        if (mb_strtolower($user->getLocation()->getCity()) == mb_strtolower($project->getCity())) {
-                            $user->setCountVotes($user->getCountVotes() + 1);
-                            $user->addLikedProjects($project);
-                            $project->addLikedUser($user);
-                            $em->flush();
-                            $balanceVotes = $limitVotes - $user->getCountVotes();
-                            $this->addFlash('success', "Дякуємо за Ваш голос. Ваш голос зараховано на підтримку проекту. У вас залишилось $balanceVotes голосів");
-                        }
-                        else {
-                            $uCity = mb_strtolower($user->getLocation()->getCity());
-                            $pCity = mb_strtolower($project->getCity());
-                            $this->addFlash('danger', "Цей проект не стосується міста в якому ви зареєстровані. Your city: $uCity. 
-                            Project city: $pCity.");
+                if ($project->getLastDateOfVotes() > new \DateTime()) {
+                    if ($user->getCountVotes() < $limitVotes) {
+                        if (!$user->getLikedProjects()->contains($project)) {
+                            if (mb_strtolower($user->getLocation()->getCity()) == mb_strtolower($project->getCity())) {
+                                $user->setCountVotes($user->getCountVotes() + 1);
+                                $user->addLikedProjects($project);
+                                $project->addLikedUser($user);
+                                $em->flush();
+                                $balanceVotes = $limitVotes - $user->getCountVotes();
+                                $this->addFlash('success', "Дякуємо за Ваш голос. Ваш голос зараховано на підтримку проекту. У вас залишилось $balanceVotes голосів");
+                            } else {
+                                $uCity = mb_strtolower($user->getLocation()->getCity());
+                                $pCity = mb_strtolower($project->getCity());
+                                $this->addFlash('danger', "Цей проект не стосується міста в якому ви зареєстровані. Your city: $uCity. 
+                                Project city: $pCity.");
+                            }
+                        } else {
+                            $this->addFlash('danger', 'Ви вже підтримали цей проект.');
                         }
                     } else {
-                        $this->addFlash('danger', 'Ви вже підтримали цей проект.');
+                        $this->addFlash('danger', 'Ви вже вичерпали свій ліміт голосів.');
                     }
                 } else {
-                    $this->addFlash('danger', 'Ви вже вичерпали свій ліміт голосів.');
+                    $lastDate = $project->getLastDateOfVotes()->format('d.m.Y');
+                    $this->addFlash('danger', "Вибачте. Кінцева дата голосування до  $lastDate.");
                 }
             } else {
                 $this->addFlash('danger', 'Ви не маєте доступу до створення проекту.');
@@ -149,12 +153,14 @@ class ProjectController extends Controller
             if ($form->isValid()) {
                 $em = $this->getDoctrine()->getManager();
                 $project->setOwner($this->getUser());
-                $project->setApproved(true);
+                $project->setApproved(false);
 
                 $em->persist($project);
                 $em->flush();
 
-                return $this->redirect($this->generateUrl('projects_show', array('id' => $project->getId())));
+                $this->addFlash('success', 'Проект був успішно створений. Після перегляду адміністратором, його буде опрелюднено.');
+
+                return $this->redirect($this->generateUrl('projects_list'));
             }
         }
         return [

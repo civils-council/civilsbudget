@@ -1,6 +1,7 @@
-{% extends "@App/layout.html.twig" %}
+{% extends "@App/Admin/layout.html.twig" %}
 
-{% block body %}
-    admin dashboard <a href="{{ path('admin_logout') }}">LOGOUT</a>
-    admin list_projects <a href="{{ path('admin_projects_show') }}">admin list_projects</a>
-{% endblock body %}
+{% block content %}
+    Адмін панель <a href="{{ path('admin_logout') }}" class="btn btn-default">Розлогінитись</a><br><br>
+    Список усіх проектів:  <a href="{{ path('admin_projects_show') }}" class="btn btn-default">Усі проекти</a><br><br>
+    Не підтвердженні проекти:  <a href="{{ path('admin_projects_not_approved') }}" class="btn btn-default">Не підтвердженні проекти</a><br><br>
+{% endblock content %}

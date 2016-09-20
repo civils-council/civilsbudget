@@ -31,6 +31,47 @@ class ProjectController extends Controller
     }
 
     /**
+     * @Route("/projects/not_approved", name="admin_projects_not_approved")
+     * @Template()
+     */
+    public function notApprovedProjectsAction()
+    {
+        $notApprovedProjects = $this->getDoctrine()->getRepository('AppBundle:Project')->findBy(['approved' => false]);
+
+        return ['projects' => $notApprovedProjects];
+
+    }
+
+    /**
+     * @Route("/not_approved/{id}/show", name="admin_not_approved_project_show", requirements={"id" = "\d+"})
+     * @Template()
+     * @Method({"GET", "PUT"})
+     * @ParamConverter("project", class="AppBundle:Project")
+     */
+    public function showNotApprovedProjectAction(Project $project, Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $form = $this->createForm(new ProjectType(), $project, ['method' => 'PUT',
+            'admin' => true,
+            'attr' => array('class' => 'formCreateClass'),
+        ]);
+        $form->add('submit', 'submit', array('label' => 'Оновити проект'));
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->flush();
+            if ($project->isApproved()) {
+                $this->addFlash('success', 'Проект був успішно оновлений та опрелюднений');
+            } else {
+                $this->addFlash('info', 'Проект був успішно оновлений, але не буде опрелюднений');
+            }
+            return $this->redirectToRoute('admin_projects_not_approved');
+        }
+        return ['form' => $form->createView()];
+    }
+
+    /**
      * @Route("/{id}/show", name="admin_project_show", requirements={"id" = "\d+"})
      * @Template()
      * @Method({"GET", "POST"})
