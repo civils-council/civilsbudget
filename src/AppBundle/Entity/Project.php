@@ -100,9 +100,25 @@ class Project implements \JsonSerializable
     /**
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\User", mappedBy="likedProjects")
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\User", mappedBy="likedProjects")
      */
     private $likedUsers;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $city;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->likedUsers = new ArrayCollection();
+    }
+
 
     /**
      * Get id
@@ -360,13 +376,6 @@ class Project implements \JsonSerializable
     {
         return $this->charge;
     }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->likedUsers = new ArrayCollection();
-    }
 
     /**
      * Add likedUser
@@ -406,5 +415,21 @@ class Project implements \JsonSerializable
     public function getLikedUsers()
     {
         return $this->likedUsers;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCity()
+    {
+        return $this->city;
+    }
+
+    /**
+     * @param string $city
+     */
+    public function setCity($city)
+    {
+        $this->city = $city;
     }
 }

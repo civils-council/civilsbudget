@@ -16,12 +16,10 @@ class ProjectRepository extends \Doctrine\ORM\EntityRepository
         $qb
             ->select('project')
             ->from('AppBundle:Project', 'project')
-            ->addSelect('COUNT(user.id) as nMethods')
+            ->addSelect('COUNT(user.id) as countLikes')
             ->leftJoin('project.likedUsers', 'user')
-//            ->leftJoin('user.location', 'location')
-//            ->andWhere($qb->expr()->like('location.city', $qb->expr()->literal('%ЧЕРКАС%')))
             ->groupBy('project.id')
-            ->orderBy("nMethods", 'DESC')
+            ->orderBy("countLikes", 'DESC')
 
             ->getQuery()
             ->getResult()
@@ -37,12 +35,9 @@ class ProjectRepository extends \Doctrine\ORM\EntityRepository
         $qb
             ->select('project')
             ->from('AppBundle:Project', 'project')
-            ->addSelect('COUNT(user.id) as nMethods')
+            ->addSelect('COUNT(user.id) as countLikes')
             ->leftJoin('project.likedUsers', 'user')
-//            ->leftJoin('user.location', 'location')
             ->andWhere('project.approved = :approved')
-//            ->andWhere($qb->expr()->like('location.city', ':search'))
-//            ->setParameter('search', 'ЧЕРКАС%')
             ->setParameter('approved', true)
             ->groupBy('project.id')
 
@@ -60,12 +55,10 @@ class ProjectRepository extends \Doctrine\ORM\EntityRepository
         $qb
             ->select('project')
             ->from('AppBundle:Project', 'project')
-            ->addSelect('COUNT(user.id) as nMethods')
+            ->addSelect('COUNT(user.id) as countLikes')
             ->leftJoin('project.likedUsers', 'user')
-//            ->leftJoin('user.location', 'location')
             ->andWhere('project.approved= :approved')
             ->andWhere('project.id = :id')
-//            ->andWhere($qb->expr()->like('location.city', $qb->expr()->literal('%ЧЕРКАС%')))
             ->setParameter('approved', true)
             ->setParameter('id', $id)
             ->groupBy('project.id')

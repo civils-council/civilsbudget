@@ -3,7 +3,7 @@ AppBundle\Entity\Location:
         country: Ukraine
         district: district<current()>
         region: region<current()>
-        city: city<current()>
+        city: ЧЕРКАСИ
         cityRegion: cityRegion<current()>
         address: <streetAddress()>
 
@@ -16,6 +16,7 @@ AppBundle\Entity\User:
         phone: <phoneNumber()>
         inn: randomNumber($nbDigits = 12)
         clid: <md5()>
+        countVotes: 0
 
 AppBundle\Entity\Admin:
     admin{1..3}:

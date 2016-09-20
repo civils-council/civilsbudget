@@ -31,8 +31,8 @@
                 <div class="col-md-12"></div>
             </div>
             <div class="row hd-statis">
-                <div class="col-md-6 support">Підтримало: <span>{{ project[0].likedUsers|length|number_format(0, '.', ' ') }}</span>
-                    Зараховано: <span>{{ project['nMethods']|number_format(0, '.', ' ') }}</span></div>
+                <div class="col-md-6 support">
+                    Підтримало: <span>{{ project['countLikes']|number_format(0, '.', ' ') }}</span></div>
                 {#<div class="col-md-6 support">Черкаси: <span>{{ project['nMethods']|number_format(0, '.', ' ') }}</span></div>#}
                 <div class="col-md-6 date-voting">Кінцева дата голосування: <span>14.12.15</span></div>
             </div>

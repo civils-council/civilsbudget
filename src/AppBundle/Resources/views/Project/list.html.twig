@@ -16,7 +16,7 @@
 
     {% set votes = 0 %}
     {% for project in projects %}
-        {% set votes = votes + project['nMethods']|number_format(0, '.', ' ') %}
+        {% set votes = votes + project['countLikes']|number_format(0, '.', ' ') %}
     {% endfor %}
     {% set digits = votes|split('') %}
 
@@ -29,7 +29,7 @@
         </div>
 
     {% for project in projects %}
-        {% set votes = votes + project['nMethods']|number_format(0, '.', ' ') %}
+        {% set votes = votes + project['countLikes']|number_format(0, '.', ' ') %}
         {% if loop.index % 4 == 1 %}
          <div class="row">
         {% endif %}
@@ -54,8 +54,7 @@
                     </div><!-- card actions -->
                     <div class="item-meta">
                         <div>Створено: <span>{{ project[0].createAt|date('d-m-Y') }}</span></div>
-                        <div>Підтримало: <span>{{ project[0].likedUsers|length|number_format(0, '.', ' ') }}</span></div>
-                        <div>Зараховано: <span>{{ project['nMethods']|number_format(0, '.', ' ') }}</span></div>
+                        <div>Підтримало: <span>{{ project['countLikes']|number_format(0, '.', ' ') }}</span></div>
                         <div>Бюджет: <span>{{ project[0].charge|number_format(0, '.', ' ') }}</span> грн.</div>
                     </div>
                     <div class="card-reveal">

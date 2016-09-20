@@ -24,4 +24,6 @@ parameters:
     bi_oauth_url: "https://bankid.org.ua"
     bi_get_data_url: "https://biprocessing.org.ua"
 
+    limit_votes: 4
+
 

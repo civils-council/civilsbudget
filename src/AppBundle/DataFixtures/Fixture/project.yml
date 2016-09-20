@@ -6,5 +6,6 @@ AppBundle\Entity\Project:
         owner: @user*
         source: <url()>
         approved: true
+        city: ЧЕРКАСИ
         confirmedAt: <datetime()>
         confirmedBy: @admin*

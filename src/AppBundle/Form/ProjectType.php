@@ -19,6 +19,7 @@ class ProjectType extends AbstractType
             ->add('description')
             ->add('source')
             ->add('charge')
+            ->add('city')
         ;
     }
 
