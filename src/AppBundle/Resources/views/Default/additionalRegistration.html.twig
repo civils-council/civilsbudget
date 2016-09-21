@@ -1,0 +1,12 @@
+{% extends '@App/layout.html.twig' %}
+
+{% block title %}
+    Перевірка даних
+{% endblock title %}
+
+{% block content %}
+    <h3>Перевірьте, будь ласка правильність отриманих даних.</h3>
+    {{ form (form) }}
+{% endblock %}
+
+{% form_theme form _self %}

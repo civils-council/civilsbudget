@@ -130,9 +130,16 @@ class User implements UserInterface, \JsonSerializable
     /**
      * @var integer
      *
-     * @ORM\Column(name="count_votes", type="integer", options={"default": 0})
+     * @ORM\Column(name="count_votes", type="integer", options={"default": 0}, nullable = true)
      */
     private $countVotes;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_subscribe", type="boolean", options={"default": true}, nullable = true)
+     */
+    private $isSubscribe;
 
 
     /**
@@ -586,5 +593,21 @@ class User implements UserInterface, \JsonSerializable
     public function setCountVotes($countVotes)
     {
         $this->countVotes = $countVotes;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isIsSubscribe()
+    {
+        return $this->isSubscribe;
+    }
+
+    /**
+     * @param boolean $isSubscribe
+     */
+    public function setIsSubscribe($isSubscribe)
+    {
+        $this->isSubscribe = $isSubscribe;
     }
 }

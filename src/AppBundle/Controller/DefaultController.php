@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\User;
+use AppBundle\Form\ConfirmDataType;
 use AppBundle\Form\LoginType;
 use AppBundle\Form\LoginUserType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -39,6 +40,8 @@ class DefaultController extends Controller
      */
     public function loginAction(Request $request)
     {
+        //http://i.prntscr.com/64388f0de71e4ea496ba43c9e1b2c704.png
+
         $authenticationUtils = $this->get('security.authentication_utils');
 
         $data = ['clid' => $authenticationUtils->getLastUsername()];
@@ -54,12 +57,10 @@ class DefaultController extends Controller
                     return $this->redirect($this->generateUrl('projects_show', ['id' => $this->get('app.session')->getProjectId()]));
                 }
                 if($user[1] == 'new') {
-                    $this->addFlash('inforormation', 'congratulations');
-                    return $this->redirectToRoute('homepage');
-//                    $form = $this->createEditForm($user[0]);
-                } else {
-                    return $this->redirectToRoute('homepage');
+                    $this->addFlash('info', 'congratulations');
                 }
+
+                return $this->redirectToRoute('additional_registration', ['id' => $user[0]->getid()]);
             }
         }
 
@@ -71,6 +72,25 @@ class DefaultController extends Controller
 
         return [
             'debug' => true,
+            'form' => $form->createView()
+        ];
+    }
+
+    /**
+     * @Route("/confirm_data/{id}", name="additional_registration")
+     * @Template()
+     * @Method({"GET","POST"})
+     */
+    public function additionalRegistrationAction(User $user, Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $form = $this->createForm(new ConfirmDataType(), $user);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->flush();
+            return $this->redirectToRoute('homepage');
+        }
+        return [
             'form' => $form->createView()
         ];
     }
@@ -89,7 +109,7 @@ class DefaultController extends Controller
         if ($error = $authenticationUtils->getLastAuthenticationError()) {
             $this->addFlash('danger', $error->getMessage());
 
-            return $this->redirectToRoute('homepage');
+            return $this->redirectToRoute('additional_registration');
         }
 
         return ['form' => $form->createView()];

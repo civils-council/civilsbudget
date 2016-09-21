@@ -85,7 +85,7 @@ class ProjectController extends Controller
                     if ($user->getCountVotes() < $limitVotes) {
                         if (!$user->getLikedProjects()->contains($project)) {
                             if (mb_strtolower($user->getLocation()->getCity()) == mb_strtolower($project->getCity())) {
-                                $user->setCountVotes($user->getCountVotes() + 1);
+                                $user->setCountVotes(($user->getCountVotes())?($user->getCountVotes() + 1) : 1);
                                 $user->addLikedProjects($project);
                                 $project->addLikedUser($user);
                                 $em->flush();
