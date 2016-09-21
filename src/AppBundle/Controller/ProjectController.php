@@ -92,10 +92,7 @@ class ProjectController extends Controller
                                 $balanceVotes = $limitVotes - $user->getCountVotes();
                                 $this->addFlash('success', "Дякуємо за Ваш голос. Ваш голос зараховано на підтримку проекту. У вас залишилось $balanceVotes голосів");
                             } else {
-                                $uCity = mb_strtolower($user->getLocation()->getCity());
-                                $pCity = mb_strtolower($project->getCity());
-                                $this->addFlash('danger', "Цей проект не стосується міста в якому ви зареєстровані. Your city: $uCity. 
-                                Project city: $pCity.");
+                                $this->addFlash('danger', "Цей проект не стосується міста в якому ви зареєстровані.");
                             }
                         } else {
                             $this->addFlash('danger', 'Ви вже підтримали цей проект.');
