@@ -19,4 +19,16 @@ class UserController extends Controller
     {
         return ['user' => $user];
     }
+
+    /**
+     * @Route("/users/{id}/count_votes", name="user_count_votes", requirements={"id" = "\d+"})
+     * @Template()
+     */
+    public function countVotesAction(User $user)
+    {
+        $userCountVotes = ($user->getCountVotes())?:0;
+
+
+        return ['countVotes' => ($this->getParameter('limit_votes') - $userCountVotes)];
+    }
 }
