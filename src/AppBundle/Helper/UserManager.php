@@ -109,7 +109,7 @@ class UserManager
         }
 
         /** @var User $user */
-        $user = $this->em->getRepository('AppBundle:User')->findOneByClid($clId);
+        $user = $this->em->getRepository('AppBundle:User')->findOneByClid('f06e4848720d1bd415dd81c76778773f');
         if (empty($user)) {
             $user = new User();
             if(array_key_exists('city', $data['customer']['addresses'][0]) == true) {
