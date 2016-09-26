@@ -16,7 +16,8 @@
                 <div class="row hd-info">
                     <div class="col-md-5">
                         <div id="user-avatar" style="background-image: url({% if project[0].owner.avatar %}{{ asset(project[0].owner.avatar) }}{% else %}{% if project[0].owner.sex == 'f' %}{{ asset('images/avatar-female.png') }}{% else %}{{ asset('images/avatar-male.png') }}{% endif %}{% endif %});"></div>
-                        <h4 id="user-title"><a href="{{ path('users_profile', { id: project[0].owner.id }) }}">{{ project[0].owner.fullName }}</a></h4>
+                        <h4 id="user-title">{{ project[0].owner.fullName }}</h4>
+                        {#<h4 id="user-title"><a href="{{ path('users_profile', { id: project[0].owner.id }) }}">{{ project[0].owner.fullName }}</a></h4>#}
                     </div>
                     <div class="col-md-2">
                         <div {{ app.user is null ? ' data-toggle="modal" data-target="#login-modal"' }}>
