@@ -108,7 +108,7 @@ class ProjectController extends Controller
                 $this->addFlash('danger', 'Ви не маєте доступу до створення проекту.');
             }
 
-            return $this->redirectToRoute('projects_show', ['id' => $project->getId()]);
+            return $this->redirectToRoute('projects_list');
 
 //
 //            $vote = $project->getLikedUsers()->contains($this->getUser());
