@@ -23,8 +23,6 @@ services:
         arguments:
             - @templating
             - @doctrine.orm.entity_manager
-            - @security.token_storage
-            - @session
         calls:
             - [ setRootDir, ["%kernel.root_dir%"] ]
 

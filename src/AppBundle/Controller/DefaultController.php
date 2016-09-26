@@ -11,6 +11,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Authentication\Token\PreAuthenticatedToken;
 
 class DefaultController extends Controller
 {
@@ -51,16 +52,9 @@ class DefaultController extends Controller
             $accessToken = $this->get('app.security.bank_id')->getAccessToken($code);
             $data = $this->get('app.security.bank_id')->getBankIdUser($accessToken['access_token']);
             if ($data['state'] == 'ok') {
-                $user = $this->get('app.user.manager')->isUniqueUser($data);
+                $usersData = $this->get('app.user.manager')->isUniqueUser($data);
 
-                if($this->get('app.session')->check()) {
-                    return $this->redirect($this->generateUrl('projects_show', ['id' => $this->get('app.session')->getProjectId()]));
-                }
-                if($user[1] == 'new') {
-                    $this->addFlash('info', 'congratulations');
-                }
-
-                return $this->redirectToRoute('additional_registration', ['id' => $user[0]->getid()]);
+                return $this->redirectToRoute('additional_registration', ['id' => $usersData['user']->getid(), 'status' => $usersData['status']]);
             }
         }
 
@@ -88,6 +82,24 @@ class DefaultController extends Controller
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $em->flush();
+
+            $token = new PreAuthenticatedToken($user, $user->getClid(), 'main', $user->getRoles());
+            $this->get('security.token_storage')->setToken($token);
+            $this->get('session')->set('_security_main', serialize($token));
+
+            if ($this->get('app.session')->check()) {
+                return $this->redirect($this->generateUrl('projects_show', ['id' => $this->get('app.session')->getProjectId()]));
+            }
+            if ($request->get('status') && $request->get('status') == 'new') {
+                $this->addFlash('info', 'congratulations');
+            }
+
+
+            if ($error = $this->get('security.authentication_utils')->getLastAuthenticationError()) {
+                $this->addFlash('danger', $error->getMessage());
+
+                return $this->redirectToRoute('homepage');
+            }
             return $this->redirectToRoute('homepage');
         }
         return [
@@ -136,8 +148,8 @@ class DefaultController extends Controller
         $editForm = $this->createEditForm($entity);
 
         return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'entity' => $entity,
+            'edit_form' => $editForm->createView(),
         );
     }
 
@@ -171,8 +183,8 @@ class DefaultController extends Controller
         }
 
         return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'entity' => $entity,
+            'edit_form' => $editForm->createView(),
         );
     }
 
