@@ -105,7 +105,7 @@ class ProjectController extends Controller
                     $this->addFlash('danger', "Вибачте. Кінцева дата голосування до  $lastDate.");
                 }
             } else {
-                $this->addFlash('danger', 'Ви не маєте доступу до створення проекту.');
+                $this->addFlash('danger', 'Ви не маєте доступу до голосуваня за проект.');
             }
 
             return $this->redirectToRoute('projects_list');
