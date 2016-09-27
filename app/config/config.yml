@@ -75,3 +75,9 @@ stof_doctrine_extensions:
             timestampable: true
 
 mcfedr_json_form: ~
+
+doctrine_migrations:
+    dir_name: "%kernel.root_dir%/DoctrineMigrations"
+    namespace: Application\Migrations
+    table_name: migration_versions
+    name: Application Migrations

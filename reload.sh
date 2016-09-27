@@ -21,7 +21,7 @@ case $reload in
 
     ./node_modules/.bin/gulp
     ./app/console doctrine:database:create
-    ./app/console doctrine:schema:update --force
+    ./app/console doctrine:migration:migrate -n
 
 ;;
 2)
@@ -40,9 +40,7 @@ case $reload in
 
 ;;
 3)
-    echo "reload Fixtures"
-    ./app/console doctrine:schema:drop --force
-    ./app/console doctrine:schema:update --force
+    echo "load Fixtures"
     ./app/console doctrine:fixtures:load --no-interaction
 
 ;;
