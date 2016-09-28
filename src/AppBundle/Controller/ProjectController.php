@@ -90,7 +90,13 @@ class ProjectController extends Controller
                                 $project->addLikedUser($user);
                                 $em->flush();
                                 $balanceVotes = $limitVotes - $user->getCountVotes();
-                                $this->addFlash('success', "Дякуємо за Ваш голос. Ваш голос зараховано на підтримку проекту. У вас залишилось $balanceVotes голосів");
+                                $votes = 'голоси';
+                                if ($balanceVotes = 1) {
+                                    $votes = 'голос';
+                                } elseif ($balanceVotes = 0) {
+                                    $votes = 'голосів';
+                                }
+                                $this->addFlash('success', "Дякуємо за Ваш голос. Ваш голос зараховано на підтримку проекту. У вас залишилось $balanceVotes $votes");
                             } else {
                                 $this->addFlash('danger', "Цей проект не стосується міста в якому ви зареєстровані.");
                             }
