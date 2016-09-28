@@ -6,6 +6,7 @@ use AppBundle\Entity\User;
 use AppBundle\Form\ConfirmDataType;
 use AppBundle\Form\LoginType;
 use AppBundle\Form\LoginUserType;
+use Guzzle\Http\Message\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -92,9 +93,13 @@ class DefaultController extends Controller
             }
             if ($request->get('status') && $request->get('status') == 'new') {
                 $this->addFlash('info', 'congratulations');
+                $this->get('app.mail.sender')->sendEmail(
+                    [$user->getEmail()],
+                    'Golos.ck.ua: Вітаємо Вас',
+                    'email/new_user.html.twig',
+                    ['user' => $user]
+                );
             }
-
-
             if ($error = $this->get('security.authentication_utils')->getLastAuthenticationError()) {
                 $this->addFlash('danger', $error->getMessage());
 
@@ -205,5 +210,18 @@ class DefaultController extends Controller
         $form->add('submit', 'submit', array('label' => 'Update'));
 
         return $form;
+    }
+
+    /**
+     * @Route("/verify", name="verify")
+     */
+    public function verifyAction()
+    {
+        $result = $this->get('app.mail.sender')->verifyEmail();
+
+        dump($result);
+
+        return new \Symfony\Component\HttpFoundation\Response('ok');
+
     }
 }

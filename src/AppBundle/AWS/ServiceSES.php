@@ -1,5 +1,5 @@
 <?php
-namespace AppBundle\Aws;
+namespace AppBundle\AWS;
 
 use Aws\Ses\SesClient;
 use Psr\Log\LoggerInterface;
@@ -61,5 +61,14 @@ class ServiceSES
         } catch (\Exception $e) {
             $this->logger->critical('sending email was crashed', ['to' => $emails, 'subject' => $subject, 'e' => $e->getMessage()]);
         }
+    }
+
+    public function verifyEmail()
+    {
+        $result = $this->client->verifyEmailIdentity([
+            'EmailAddress' => 'katerinasyrotchuk@gmail.com', // REQUIRED
+        ]);
+
+        return $result;
     }
 }

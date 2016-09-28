@@ -41,8 +41,8 @@ services:
                     key: "%aws_key%"
                     secret: "%aws_secret%"
 
-    app.ses_sender:
-        class: AppBundle\Aws\ServiceSES
+    app.mail.sender:
+        class: AppBundle\AWS\ServiceSES
         arguments:
             - "%email_sender%"
             - "@ses_client"
