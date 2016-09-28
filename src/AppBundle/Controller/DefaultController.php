@@ -91,7 +91,7 @@ class DefaultController extends Controller
                 return $this->redirect($this->generateUrl('projects_show', ['id' => $this->get('app.session')->getProjectId()]));
             }
             if ($request->get('status') && $request->get('status') == 'new') {
-                $this->addFlash('info', 'congratulations');
+                $this->addFlash('info', 'Дякуємо, Ви успішно зареєструвались');
             }
 
 
