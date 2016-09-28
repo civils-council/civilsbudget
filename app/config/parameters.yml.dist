@@ -18,6 +18,10 @@ parameters:
     # A secret key that's used to generate certain security-related tokens
     secret:            ThisTokenIsNotSoSecretChangeIt
 
+    aws_key: ~
+    aws_secret: ~
+    aws_region: eu-west-1
+
     client_id: ~
     client_secret: ~
 

@@ -30,3 +30,21 @@ services:
         class:  AppBundle\Helper\SessionSet
         arguments:
             - @session
+
+    ses_client:
+        class: Aws\Ses\SesClient
+        arguments:
+            -
+                region: "%aws_region%"
+                version: "2010-12-01"
+                credentials:
+                    key: "%aws_key%"
+                    secret: "%aws_secret%"
+
+    app.ses_sender:
+        class: AppBundle\Aws\ServiceSES
+        arguments:
+            - "%email_sender%"
+            - "@ses_client"
+            - "@templating"
+            - "@logger"
