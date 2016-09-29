@@ -9,4 +9,4 @@ AppBundle\Entity\Project:
         city: ЧЕРКАСИ
         confirmedAt: <datetime()>
         confirmedBy: @admin*
-        lastDateOfVotes: <datetime()>
+        lastDateOfVotes: <dateTimeBetween("-10 days", "+200 days")>
