@@ -28,7 +28,18 @@ class UserController extends Controller
     {
         $userCountVotes = ($user->getCountVotes())?:0;
 
+        $balanceVotes = $this->getParameter('limit_votes') - $userCountVotes;
+        $message = 'У Вас';
 
-        return ['countVotes' => ($this->getParameter('limit_votes') - $userCountVotes)];
+        if ($balanceVotes >= 2) {
+            $message .= " залишилось $balanceVotes голоси";
+        } elseif ($balanceVotes == 1) {
+            $message .= ' залишився 1 голос';
+        } elseif ($balanceVotes == 0) {
+            $message .= ' залишився 0 голосів';
+        }
+
+
+        return ['message' => $message];
     }
 }

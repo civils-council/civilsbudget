@@ -91,9 +91,9 @@ class ProjectController extends Controller
                                 $em->flush();
                                 $balanceVotes = $limitVotes - $user->getCountVotes();
                                 $votes = 'голоси';
-                                if ($balanceVotes = 1) {
+                                if ($balanceVotes == 1) {
                                     $votes = 'голос';
-                                } elseif ($balanceVotes = 0) {
+                                } elseif ($balanceVotes == 0) {
                                     $votes = 'голосів';
                                 }
                                 $this->addFlash('success', "Дякуємо за Ваш голос. Ваш голос зараховано на підтримку проекту. У вас залишилось $balanceVotes $votes");
