@@ -25,9 +25,7 @@ class ProjectController extends Controller
      */
     public function listAction()
     {
-
         return ['projects' => $this->getDoctrine()->getRepository('AppBundle:Project')->findAll()];
-
     }
 
     /**
@@ -39,7 +37,6 @@ class ProjectController extends Controller
         $notApprovedProjects = $this->getDoctrine()->getRepository('AppBundle:Project')->findBy(['approved' => false]);
 
         return ['projects' => $notApprovedProjects];
-
     }
 
     /**

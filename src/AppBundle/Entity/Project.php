@@ -119,6 +119,14 @@ class Project implements \JsonSerializable
     private $lastDateOfVotes;
 
     /**
+     * @var VoteSettings
+     *
+     * @ORM\ManyToOne(targetEntity="VoteSettings", inversedBy="project")
+     * @ORM\JoinColumn(name="vote_setting_id", nullable = true, referencedColumnName="id")
+     */
+    private $voteSetting;    
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -454,5 +462,39 @@ class Project implements \JsonSerializable
     public function setLastDateOfVotes($lastDateOfVotes)
     {
         $this->lastDateOfVotes = $lastDateOfVotes;
+    }
+
+    /**
+     * Get approved
+     *
+     * @return boolean
+     */
+    public function getApproved()
+    {
+        return $this->approved;
+    }
+
+    /**
+     * Set voteSetting
+     *
+     * @param \AppBundle\Entity\VoteSettings $voteSetting
+     *
+     * @return Project
+     */
+    public function setVoteSetting(\AppBundle\Entity\VoteSettings $voteSetting = null)
+    {
+        $this->voteSetting = $voteSetting;
+
+        return $this;
+    }
+
+    /**
+     * Get voteSetting
+     *
+     * @return \AppBundle\Entity\VoteSettings
+     */
+    public function getVoteSetting()
+    {
+        return $this->voteSetting;
     }
 }

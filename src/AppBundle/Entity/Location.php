@@ -64,6 +64,14 @@ class Location
     private $address;
 
     /**
+     * @var VoteSettings
+     *
+     * @ORM\ManyToOne(targetEntity="VoteSettings", inversedBy="project")
+     * @ORM\JoinColumn(name="vote_setting_id", nullable = true, referencedColumnName="id")
+     */
+    private $voteSetting;
+
+    /**
      * Get id
      *
      * @return integer
@@ -215,5 +223,29 @@ class Location
     public function getAddress()
     {
         return $this->address;
+    }
+
+    /**
+     * Set voteSetting
+     *
+     * @param \AppBundle\Entity\VoteSettings $voteSetting
+     *
+     * @return Location
+     */
+    public function setVoteSetting(\AppBundle\Entity\VoteSettings $voteSetting = null)
+    {
+        $this->voteSetting = $voteSetting;
+
+        return $this;
+    }
+
+    /**
+     * Get voteSetting
+     *
+     * @return \AppBundle\Entity\VoteSettings
+     */
+    public function getVoteSetting()
+    {
+        return $this->voteSetting;
     }
 }
