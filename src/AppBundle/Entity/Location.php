@@ -62,14 +62,28 @@ class Location
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $address;
-
+    
     /**
-     * @var VoteSettings
+     * @var VoteSettings[]ArrayCollection
      *
-     * @ORM\ManyToOne(targetEntity="VoteSettings", inversedBy="project")
-     * @ORM\JoinColumn(name="vote_setting_id", nullable = true, referencedColumnName="id")
+     * @ORM\OneToMany(targetEntity="VoteSettings", mappedBy="location", cascade={"persist"})
      */
     private $voteSetting;
+    
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->city;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->voteSetting = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -226,23 +240,33 @@ class Location
     }
 
     /**
-     * Set voteSetting
+     * Add voteSetting
      *
      * @param \AppBundle\Entity\VoteSettings $voteSetting
      *
      * @return Location
      */
-    public function setVoteSetting(\AppBundle\Entity\VoteSettings $voteSetting = null)
+    public function addVoteSetting(\AppBundle\Entity\VoteSettings $voteSetting)
     {
-        $this->voteSetting = $voteSetting;
+        $this->voteSetting[] = $voteSetting;
 
         return $this;
     }
 
     /**
+     * Remove voteSetting
+     *
+     * @param \AppBundle\Entity\VoteSettings $voteSetting
+     */
+    public function removeVoteSetting(\AppBundle\Entity\VoteSettings $voteSetting)
+    {
+        $this->voteSetting->removeElement($voteSetting);
+    }
+
+    /**
      * Get voteSetting
      *
-     * @return \AppBundle\Entity\VoteSettings
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getVoteSetting()
     {

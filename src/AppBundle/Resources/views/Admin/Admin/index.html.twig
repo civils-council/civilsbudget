@@ -2,6 +2,7 @@
 
 {% block content %}
     Адмін панель <a href="{{ path('admin_logout') }}" class="btn btn-default">Розлогінитись</a><br><br>
+    Список усіх налаштувань голосування:  <a href="{{ path('vote_settings') }}" class="btn btn-default">Усі налаштування</a><br><br>
     Список усіх проектів:  <a href="{{ path('admin_projects_show') }}" class="btn btn-default">Усі проекти</a><br><br>
     Не підтвердженні проекти:  <a href="{{ path('admin_projects_not_approved') }}" class="btn btn-default">Не підтвердженні проекти</a><br><br>
 {% endblock content %}

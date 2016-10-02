@@ -71,7 +71,8 @@ class ProjectController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $user = $this->getUser();
-        $limitVotes = $this->getParameter('limit_votes');
+        $limitVotes = $project->getVoteSetting()->getVoteLimits();
+//        $limitVotes = $this->getParameter('limit_votes');
         $form = $this
             ->createForm(new LikeProjectType(), [], [
                 'user' => $user,

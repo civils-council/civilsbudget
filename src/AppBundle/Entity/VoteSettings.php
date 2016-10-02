@@ -47,9 +47,10 @@ class VoteSettings
     private $project;
 
     /**
-     * @var Location[]ArrayCollection
+     * @var Location
      *
-     * @ORM\OneToMany(targetEntity="Location", mappedBy="voteSetting", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Location", inversedBy="voteSetting")
+     * @ORM\JoinColumn(name="location_id", nullable = true, referencedColumnName="id")
      */
     private $location;
     
@@ -59,7 +60,6 @@ class VoteSettings
     public function __construct()
     {
         $this->project = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->location = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -155,33 +155,23 @@ class VoteSettings
     }
 
     /**
-     * Add location
+     * Set location
      *
      * @param \AppBundle\Entity\Location $location
      *
      * @return VoteSettings
      */
-    public function addLocation(\AppBundle\Entity\Location $location)
+    public function setLocation(\AppBundle\Entity\Location $location = null)
     {
-        $this->location[] = $location;
+        $this->location = $location;
 
         return $this;
     }
 
     /**
-     * Remove location
-     *
-     * @param \AppBundle\Entity\Location $location
-     */
-    public function removeLocation(\AppBundle\Entity\Location $location)
-    {
-        $this->location->removeElement($location);
-    }
-
-    /**
      * Get location
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return \AppBundle\Entity\Location
      */
     public function getLocation()
     {
