@@ -6,6 +6,7 @@
 
     <main id="main-wrap">
         {{ block("flash") }}
+        {{ block("herosection") }}
         <div class="container">
             {{ block("content") }}
         </div>
@@ -14,9 +15,11 @@
     {{ block("popauth") }}
 {% endblock body %}
 
+{% block herosection %}
+{% endblock herosection %}
+
 {% block content %}
 {% endblock content %}
-
 
 {% block popauth %}
     <div id="login-modal" class="modal fade">
@@ -56,13 +59,14 @@
                     <a href="{{ path("rada_developerss") }}">Розробники</a>
 
                 </div>
-                <div class="col-md-4 text-center icon-wrap">
+                <div class="col-md-6 text-center icon-wrap">
                     <span class="icon-4"></span>
                     <span class="icon-3"></span>
                     <span class="icon-2"></span>
                     <span class="icon-1"></span>
+                    <span class="icon-0"></span>
                 </div>
-                <div class="col-md-4 footer-social">
+                <div class="col-md-2 footer-social">
                     <a href="https://www.facebook.com/civilscouncil" class="icon-facebook" target="_blank"></a>
                     <a href="https://vk.com/civilscouncil" class="icon-vk" target="_blank"></a>
                 </div>
@@ -106,8 +110,8 @@
 {% block header %}
     <header id="main-header">
         <div class="container main-block">
-            <a href="{{ path("homepage") }}" id="home-icon" class="icon-home"></a>
-            <a href="{{ path("homepage") }}">golos.ck.ua</a>
+            <a href="{{ path("homepage") }}" id="home-icon" class="icon-home">Всі проекти</a>
+            <a href="{{ path("homepage") }}">Громадський бюджет- Черкаси</a>
 
             {#Logging#}
             {#{% if app.user and is_granted('ROLE_USER') %}#}
@@ -125,7 +129,7 @@
                 {% if app.user %}
                 <a href="{{ path('logout') }}" class="lb-signout" style="background-image: url( {% if app.user.avatar %} {{ asset(app.user.avatar) }} {% else %} {{ asset('bundles/app/img/icon_developer.png') }} {% endif %} );" title="Вихід"></a>
                 {% elseif app.request.get('_route') != 'login' %}
-                <a href="" class="lb-signin" data-toggle="modal" data-target="#login-modal" title="Увійти"></a>
+                <a href="" class="lb-signin" data-toggle="modal" data-target="#login-modal" title="Увійти">Увійти та проголосувати</a>
                 {% endif %}
             </div>
 
