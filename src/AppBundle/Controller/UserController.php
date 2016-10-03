@@ -36,7 +36,7 @@ class UserController extends Controller
         } elseif ($balanceVotes == 1) {
             $message .= ' залишився 1 голос';
         } elseif ($balanceVotes == 0) {
-            $message .= ' залишився 0 голосів';
+            $message .= ' залишилось 0 голосів';
         }
 
 
