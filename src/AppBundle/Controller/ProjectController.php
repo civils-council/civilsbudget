@@ -90,13 +90,18 @@ class ProjectController extends Controller
                                 $project->addLikedUser($user);
                                 $em->flush();
                                 $balanceVotes = $limitVotes - $user->getCountVotes();
-                                $votes = 'голоси';
-                                if ($balanceVotes == 1) {
-                                    $votes = 'голос';
+
+                                $message = 'У Вас';
+                                // TODO If the vote is more than 5 - will test endings (залишилось 5 голосів)
+                                if ($balanceVotes >= 2) {
+                                    $message .= " залишилось $balanceVotes голоси";
+                                } elseif ($balanceVotes == 1) {
+                                    $message .= ' залишився 1 голос';
                                 } elseif ($balanceVotes == 0) {
-                                    $votes = 'голосів';
+                                    $message .= ' залишилось 0 голосів';
                                 }
-                                $this->addFlash('success', "Дякуємо за Ваш голос. Ваш голос зараховано на підтримку проекту. У вас залишилось $balanceVotes $votes");
+
+                                $this->addFlash('success', "Дякуємо за Ваш голос. Ваш голос зараховано на підтримку проекту. У вас залишилось $message");
                             } else {
                                 $this->addFlash('danger', "Цей проект не стосується міста в якому ви зареєстровані.");
                             }
