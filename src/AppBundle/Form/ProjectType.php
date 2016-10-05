@@ -15,15 +15,17 @@ class ProjectType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title', 'text')
+            ->add('title', 'text', ['label' => 'Назва проекту'])
             ->add('description', 'textarea', [
                 //'class="form-control" rows="5"
+                'label' => 'Про проект',
                 'attr' => ['class' => 'form-control',
                     'rows' => '10']
             ])
-            ->add('source', 'email')
-            ->add('charge', 'number')
-            ->add('city', 'text')
+            // TODO check email/http/name ???
+            ->add('source', 'email', ['label' => 'Відповідальна особа'])
+            ->add('charge', 'number', ['label' => 'Бюджет'])
+            ->add('city', 'text', ['label' => 'Місто'])
         ;
         if (in_array('admin', $options) && $options['admin']) {
             $builder

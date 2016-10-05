@@ -30,7 +30,7 @@ class UserController extends Controller
 
         $balanceVotes = $this->getParameter('limit_votes') - $userCountVotes;
         $message = 'У Вас';
-
+        // TODO If the vote is more than 5 - will test endings (залишилось 5 голосів)
         if ($balanceVotes >= 2) {
             $message .= " залишилось $balanceVotes голоси";
         } elseif ($balanceVotes == 1) {

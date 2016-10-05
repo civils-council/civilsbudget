@@ -109,7 +109,17 @@ class ProjectController extends Controller
                                 $project->addLikedUser($user);
                                 $em->flush();
                                 $balanceVotes = $limitVotes - $user->getCountVotes();
-                                return new JsonResponse(['success' => "Дякуємо за Ваш голос. Ваш голос зараховано на підтримку проекту. У вас залишилось $balanceVotes голосів"]);
+                                // TODO If the vote is more than 5 - will test endings (залишилось 5 голосів)
+                                $message = 'У Вас';
+                                if ($balanceVotes >= 2) {
+                                    $message .= " залишилось $balanceVotes голоси";
+                                } elseif ($balanceVotes == 1) {
+                                    $message .= ' залишився 1 голос';
+                                } elseif ($balanceVotes == 0) {
+                                    $message .= ' залишилось 0 голосів';
+                                }
+
+                                return new JsonResponse(['success' => "Дякуємо за Ваш голос. Ваш голос зараховано на підтримку проекту. $message"]);
                             } else {
                                 return new JsonResponse(['danger' => "Цей проект не стосується міста в якому ви зареєстровані."]);
                             }

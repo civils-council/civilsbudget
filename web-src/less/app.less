@@ -1,10 +1,10 @@
-@charset 'utf-8';
+@charset "utf-8";
 @import "../../bower_components/bootstrap/less/bootstrap.less";
 @import "../../bower_components/bootswatch/yeti/variables.less";
 @import "../../bower_components/bootswatch/yeti/bootswatch.less";
 
-@import url(http://fonts.googleapis.com/css?family=Roboto:400,300);
-@import url(//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css);
+@import url(fonts.googleapis.com/css?family=Roboto:400,300);
+@import url(maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css);
 
 .card .card-image{
     overflow: hidden;
@@ -296,7 +296,7 @@ body {
     -moz-background-size:cover;
     min-height:100%;
     height: auto !important;
-    height: 100%;
+    //height: 100%;
     position: relative;
     width:100%;
     color:#22222a;
@@ -490,12 +490,14 @@ a.description-btn:hover {
 }
 
 #hp-logo {
-    width:143px;
-    height:143px;
+    width:200px;
+    height:200px;
     background: url(../images/logo.png) no-repeat;
     display:block;
-    margin: 90px 50px;
+    margin: 45px 10px 90px 10px;
     float: left;
+    background-size: cover;
+
 }
 #hp-logo-2 {
     width:186px;
@@ -519,13 +521,17 @@ a.description-btn:hover {
     margin:40px 0px 20px;
     color:#fff;
 }
-#hp-title p {
+#hp-title-main {
     font-family: HelveticaMedium, sans-serif;
     text-transform: uppercase;
     font-size:28px;
 }
 
-/*пїЅпїЅпїЅпїЅпїЅпїЅпїЅ*/
+#hp-title-sub {
+    text-align: left;
+    margin-left: 190px;
+}
+
 
 .item-content {
     margin:15px 0px;
@@ -576,8 +582,10 @@ a.description-btn:hover {
     font-family: HelveticaLight, sans-serif;
     font-size:25px;
     font-weight:normal;
-    text-align:center;
-    margin:30px 0px 20px;
+    text-align: left;
+    //margin-left: 40px;
+    //text-align:center;
+    margin:30px 0px 20px 190px;
     color:#fff;
 }
 
@@ -856,7 +864,7 @@ a.description-btn:hover {
     color: #6F6EA6;
     font-size: 15px;
     position:absolute;
-    right:100px;
+    right:60px;
     top: 4px;
 }
 
@@ -1322,8 +1330,8 @@ a.description-btn:hover {
 
 button.close {
     position: absolute;
-    top: 5px;
-    right: 1px;
+    top: -2px;
+    right: 4px;
     border: none;
     background: none;
     font-size: 45px;
@@ -1353,18 +1361,17 @@ button.close:hover {
 }
 
 /*Button FIX*/
-
 .modal-btn {
     display: block;
     margin: 0 auto;
-    padding: 3px 12px;
+    padding: 7px 12px;
     font-size: 18px;
     text-decoration: none;
     color: #fff;
     background: #525c99;
     border: none;
     border-radius: 18px;
-
+    outline:0;
 }
 
 .modal-btn:hover {
