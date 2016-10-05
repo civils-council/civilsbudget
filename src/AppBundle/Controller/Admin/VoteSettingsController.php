@@ -62,25 +62,6 @@ class VoteSettingsController extends Controller
     }
 
     /**
-     * Creates a form to create a VoteSettings entity.
-     *
-     * @param VoteSettings $entity The entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createCreateForm(VoteSettings $entity)
-    {
-        $form = $this->createForm(new VoteSettingsType(), $entity, array(
-            'action' => $this->generateUrl('vote_settings_create'),
-            'method' => 'POST',
-        ));
-
-        $form->add('submit', 'submit', array('label' => 'Create'));
-
-        return $form;
-    }
-
-    /**
      * Displays a form to create a new VoteSettings entity.
      *
      * @Route("/new", name="vote_settings_new")
@@ -149,25 +130,7 @@ class VoteSettingsController extends Controller
             'delete_form' => $deleteForm->createView(),
         );
     }
-
-    /**
-    * Creates a form to edit a VoteSettings entity.
-    *
-    * @param VoteSettings $entity The entity
-    *
-    * @return \Symfony\Component\Form\Form The form
-    */
-    private function createEditForm(VoteSettings $entity)
-    {
-        $form = $this->createForm(new VoteSettingsType(), $entity, array(
-            'action' => $this->generateUrl('vote_settings_update', array('id' => $entity->getId())),
-            'method' => 'PUT',
-        ));
-
-        $form->add('submit', 'submit', array('label' => 'Update'));
-
-        return $form;
-    }
+    
     /**
      * Edits an existing VoteSettings entity.
      *
@@ -201,6 +164,7 @@ class VoteSettingsController extends Controller
             'delete_form' => $deleteForm->createView(),
         );
     }
+    
     /**
      * Deletes a VoteSettings entity.
      *
@@ -243,4 +207,42 @@ class VoteSettingsController extends Controller
             ->getForm()
         ;
     }
+
+    /**
+     * Creates a form to edit a VoteSettings entity.
+     *
+     * @param VoteSettings $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createEditForm(VoteSettings $entity)
+    {
+        $form = $this->createForm(new VoteSettingsType(), $entity, array(
+            'action' => $this->generateUrl('vote_settings_update', array('id' => $entity->getId())),
+            'method' => 'PUT',
+        ));
+
+        $form->add('submit', 'submit', array('label' => 'Update'));
+
+        return $form;
+    }
+
+    /**
+     * Creates a form to create a VoteSettings entity.
+     *
+     * @param VoteSettings $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createCreateForm(VoteSettings $entity)
+    {
+        $form = $this->createForm(new VoteSettingsType(), $entity, array(
+            'action' => $this->generateUrl('vote_settings_create'),
+            'method' => 'POST',
+        ));
+
+        $form->add('submit', 'submit', array('label' => 'Create'));
+
+        return $form;
+    }    
 }
