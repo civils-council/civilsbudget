@@ -66,7 +66,7 @@ class ServiceSES
     public function verifyEmail()
     {
         $result = $this->client->verifyEmailIdentity([
-            'EmailAddress' => 'katerinasyrotchuk@gmail.com', // REQUIRED
+            'EmailAddress' => 'your_email@gmail.com', // REQUIRED
         ]);
 
         return $result;
