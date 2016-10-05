@@ -134,6 +134,10 @@
     width: 20%;
 }
 
+.form-title {
+    text-align: center;
+}
+
 @media (max-width:768px)
 {
 
@@ -295,7 +299,7 @@ body {
     height: 100%;
     position: relative;
     width:100%;
-    color:#fff;
+    color:#22222a;
 }
 
 .main-bg-1 {
@@ -374,6 +378,13 @@ body {
     height: 18px;
 }
 
+.icon-wrap .icon-0 {
+    background: url(../images/icon-0.png) no-repeat;
+    background-size: contain;
+    width: 75px;
+    height: 32px;
+}
+
 
 /*Header*/
 .icon{
@@ -387,9 +398,11 @@ body {
 
 #home-icon {
     position:absolute; left:20px; top:-4px;
-    width:27px;
+    width:146px;
     height:27px;
-    background: url('../images/header-home.png') no-repeat center;
+    background: url('../images/header-home.png') no-repeat left center;
+    text-align: right;
+    line-height: 34px;
 }
 
 #user-icon {
@@ -481,8 +494,8 @@ a.description-btn:hover {
     height:143px;
     background: url(../images/logo.png) no-repeat;
     display:block;
-    margin: 0 auto;
-    margin-top: 90px;
+    margin: 90px 50px;
+    float: left;
 }
 #hp-logo-2 {
     width:186px;
@@ -493,8 +506,13 @@ a.description-btn:hover {
     margin-top: 90px;
 }
 
+.hp-text {
+    float: left;
+    width: ~"calc(100% - 243px)";
+}
+
 #hp-title {
-    font-family: HelveticaLight;
+    font-family: HelveticaLight, sans-serif;
     font-size:25px;
     font-weight:normal;
     text-align:center;
@@ -502,10 +520,11 @@ a.description-btn:hover {
     color:#fff;
 }
 #hp-title p {
-    font-family: HelveticaMedium;
+    font-family: HelveticaMedium, sans-serif;
     text-transform: uppercase;
     font-size:28px;
 }
+
 /*пїЅпїЅпїЅпїЅпїЅпїЅпїЅ*/
 
 .item-content {
@@ -522,6 +541,44 @@ a.description-btn:hover {
     background:#fff;
     color: #22222a;
     /*padding-bottom: 40px;*/
+}
+
+.hero-section {
+    background: url("../images/concert_img_450.jpg") top left/cover #ffffff;
+    position: relative;
+    margin-bottom: 50px;
+
+    &:after {
+        content: '';
+        background: -moz-linear-gradient(top,  rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%); /* FF3.6-15 */
+        background: -webkit-linear-gradient(top,  rgba(255,255,255,0) 0%,rgba(255,255,255,1) 100%); /* Chrome10-25,Safari5.1-6 */
+        background: linear-gradient(to bottom,  rgba(255,255,255,0) 0%,rgba(255,255,255,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
+        display: block;
+        width: 100%;
+        height: 70px;
+        position: absolute;
+        top: auto;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        z-index: 1;
+    }
+
+}
+
+.hero-shadow {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 50px 0 100px;
+}
+
+#hp-voted {
+    font-family: HelveticaLight, sans-serif;
+    font-size:25px;
+    font-weight:normal;
+    text-align:center;
+    margin:30px 0px 20px;
+    color:#fff;
 }
 
 .item-title {
@@ -719,8 +776,35 @@ a.description-btn:hover {
         position: static;
     }
 
+    #hp-logo {
+        margin: 50px auto;
+        float: none;
+    }
+
+    .hp-text {
+        float: none;
+        width: 100%;
+    }
 }
 
+@media(max-width: 991px){
+    #home-icon {
+        position: static;
+        display: block;
+        margin: 0 auto 10px;
+    }
+
+    .main-block {
+        .header-controls {
+            position: static;
+            padding-bottom: 10px;
+        }
+    }
+
+    header#main-header {
+        height: auto;
+    }
+}
 #user-title {
     font-size: 20px;
     color: #fff;
@@ -788,8 +872,10 @@ a.description-btn:hover {
 .lb-signin{
     display: inline-block;
     background: url(../images/icon-singin.png) no-repeat right;
-    width: 27px;
+    width: 262px;
     height: 25px;
+    text-align: left;
+    line-height: 34px;
 }
 
 .lb-signout{
@@ -912,7 +998,7 @@ a.description-btn:hover {
 
 #like_submit{
     margin-left: -15px;
-    width: 190px;
+    width: 198px;
     font-size: 18px;
     text-transform: uppercase;
     text-decoration:none;
@@ -920,12 +1006,14 @@ a.description-btn:hover {
     border-radius:6px;
     background: #ffffff;
     border: none;
+    vertical-align: middle;
+    letter-spacing: 1px;
     &::before{
-        content: 'Проголосувати';
+        content: 'Віддати голос';
     }
 }
 
-@media(max-width: 768px){
+@media(max-width: 991px){
     #like_submit{
         display: block;
         margin: 0 auto;
@@ -1193,32 +1281,34 @@ a.description-btn:hover {
 
 .alert{
     position: absolute;
-    top:80px;
-    margin: auto;
-    //width: 50%;
-    //height: 50%;
-    left: 10%;
-    right: 10%;
+    top:50px;
+    //margin: auto;
+    width: 100%;
+    height: 75px;
+    text-align: center;
+    vertical-align: middle;
+    //left: 10%;
+    //right: 10%;
     //margin-left: -400px;
-    padding:50px;
+    padding: 20px;
     border-color:rgb(82, 92, 153);
-    border-radius:3px;
+    //border-radius:3px;
     z-index: 10;
     font-size: 22px;
-    text-transform: uppercase;
+    //text-transform: uppercase;
 }
 
 .alert-info,
 .alert-success {
-    background-color:#E6F0E6;
-    border-color:#AAEEAC;
-    color:rgb(82, 92, 153);
+    background-color: #0086C7;
+    border-color: #132df2;
+    color: #fff;
 }
 .alert-warning,
 .alert-danger {
-    background-color:#FFDCDC;
-    border-color:#FFCBCB;
-    color:rgb(82, 92, 153);
+    background-color: #DB1F2C;
+    border-color: #750101;
+    color: #fff;
 }
 .alert-dismissible .close{
     position: absolute;
@@ -1338,7 +1428,7 @@ button.close:hover {
     color:#4196e3;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 991px) {
     #count_votes {
         position: static;
         //color: red;
@@ -1346,6 +1436,13 @@ button.close:hover {
     #main-header {
         height: 65px;
     }
+    .alert {
+        position: static;
+        margin-bottom: 0;
+    }
+    //    top:65px;
+    //    height: 85px;
+    //}
 
 }
 
@@ -1363,13 +1460,12 @@ button.close:hover {
 }
 
 .counter {
-    display: block;
+    display: inline-block;
     position: relative;
     margin: 0 auto;
     text-align: center;
     width: 200px;
     height: 44px;
-
 }
 
 /**/
@@ -1398,7 +1494,7 @@ button.close:hover {
      -webkit-border-radius: 2px;
      border-radius: 2px;
      border-bottom: 1px solid #fff;
-     z-index: -10;
+     z-index: 0;
 
  }
 
@@ -1414,11 +1510,13 @@ button.close:hover {
     -webkit-border-radius: 2px;
     border-radius: 2px;
     border-top: 1px solid #d0d0d0;
-    z-index: -10;
+    z-index: 0;
 
 }
 .counter span.digit span {
     text-align: center;
+    position: relative;
+    z-index: 1;
 }
 .counter span.digit hr {
     border-color: transparent;
@@ -1445,6 +1543,11 @@ button.close:hover {
 }
 /**/
 /*<input type="text" id="confirm_data_last_name" name="confirm_data[last_name]" required="required" class="form-control" value="СИРОТЧУК">*/
+#confirm_data {
+    width: 500px;
+    margin: auto;
+    color: black;
+}
 .form-control {
     line-height: 3.4;
 }

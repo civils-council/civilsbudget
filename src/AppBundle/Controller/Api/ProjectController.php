@@ -111,8 +111,6 @@ class ProjectController extends Controller
                                 $balanceVotes = $limitVotes - $user->getCountVotes();
                                 return new JsonResponse(['success' => "Дякуємо за Ваш голос. Ваш голос зараховано на підтримку проекту. У вас залишилось $balanceVotes голосів"]);
                             } else {
-                                $uCity = mb_strtolower($user->getLocation()->getCity());
-                                $pCity = mb_strtolower($project->getCity());
                                 return new JsonResponse(['danger' => "Цей проект не стосується міста в якому ви зареєстровані."]);
                             }
                         } else {
@@ -126,7 +124,7 @@ class ProjectController extends Controller
                     return new JsonResponse(['danger' => "Вибачте. Кінцева дата голосування до  $lastDate."]);
                 }
             } else {
-                return new JsonResponse(['danger' => "Ви не маєте доступу до створення проекту."]);
+                return new JsonResponse(['danger' => "Ви не маєте доступу до голосування за проект."]);
             }
 
 
