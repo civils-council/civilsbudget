@@ -91,6 +91,18 @@ class ProjectController extends Controller
                                 $em->flush();
                                 $balanceVotes = $limitVotes - $user->getCountVotes();
 
+                                // send email when voting ended
+                                if ($balanceVotes == 0) {
+                                    $this->get('app.mail.sender')->sendEmail(
+                                        [$user->getEmail()],
+                                        'Golos.ck.ua: Онлайн голосування',
+                                        'AppBundle:Email:votes_end.html.twig',
+                                        [
+                                            'user' => $user,
+                                        ]
+                                    );
+                                }
+
                                 $message = 'У Вас';
                                 // TODO If the vote is more than 5 - will test endings (залишилось 5 голосів)
                                 if ($balanceVotes >= 2) {

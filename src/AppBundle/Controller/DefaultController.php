@@ -96,7 +96,7 @@ class DefaultController extends Controller
                 $this->get('app.mail.sender')->sendEmail(
                     [$user->getEmail()],
                     'Golos.ck.ua: Вітаємо Вас',
-                    'email/new_user.html.twig',
+                    'AppBundle:Email:new_user.html.twig',
                     ['user' => $user]
                 );
             }
