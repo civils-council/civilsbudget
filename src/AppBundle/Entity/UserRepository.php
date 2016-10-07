@@ -10,4 +10,15 @@ namespace AppBundle\Entity;
  */
 class UserRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function findCountVotedUsers()
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder('user');
+        $qb
+            ->select('user')
+            ->from('AppBundle:User', 'user')
+            ->where('user.countVotes != :param')
+            ->setParameter('param', 0)
+        ;
+        return count($qb->getQuery()->getArrayResult());
+    }
 }

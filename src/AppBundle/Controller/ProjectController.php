@@ -6,6 +6,7 @@ use AppBundle\Entity\Project;
 use AppBundle\Entity\User;
 use AppBundle\Form\ProjectType;
 use AppBundle\Form\LikeProjectType;
+use Doctrine\Common\Collections\Expr\Expression;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -23,9 +24,11 @@ class ProjectController extends Controller
     public function listAction()
     {
         $projects = $this->getDoctrine()->getRepository('AppBundle:Project')->getProjectShow();
+        $countVoted = $this->getDoctrine()->getRepository('AppBundle:User')->findCountVotedUsers();
         return [
             'debug' => true,
             'projects' => $projects,
+            'countVoted' => $countVoted,
         ];
     }
 

@@ -49,17 +49,17 @@
                     </h1>
                     <div id="hp-voted">
                         <span class="voted-title">Вже проголосувало Черкащан:</span>
-                        {% set votes = 0 %}
-                        {% for project in projects %}
-                            {% set votes = votes + project['countLikes']|number_format(0, '.', ' ') %}
-                        {% endfor %}
-                        {% set digits = votes|split('') %}
+                        {#{% set votes = 0 %}#}
+                        {#{% for project in projects %}#}
+                            {#{% set votes = votes + project['countLikes']|number_format(0, '.', ' ') %}#}
+                        {#{% endfor %}#}
+                        {% set digits = countVoted|split('') %}
 
                         <div class="counter">
                             {% for digit in digits %}
                                 <span class="digit">
-                                <span title="{{ digit }}">{{ digit }}</span>
-                            </span>
+                                    <span title="{{ digit }}">{{ digit }}</span>
+                                </span>
                             {% endfor %}
                         </div>
                     </div>
