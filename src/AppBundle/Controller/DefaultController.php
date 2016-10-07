@@ -224,4 +224,5 @@ class DefaultController extends Controller
         return new \Symfony\Component\HttpFoundation\Response('ok');
 
     }
+
 }

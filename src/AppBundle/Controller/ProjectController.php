@@ -116,7 +116,7 @@ class ProjectController extends Controller
                                     $message .= ' залишилось 0 голосів';
                                 }
 
-                                $this->addFlash('success', "Дякуємо за Ваш голос. Ваш голос зараховано на підтримку проекту. У вас залишилось $message");
+                                $this->addFlash('success', "Дякуємо за Ваш голос. Ваш голос зараховано на підтримку проекту. $message");
                             } else {
                                 $this->addFlash('danger', "Цей проект не стосується міста в якому ви зареєстровані.");
                             }
