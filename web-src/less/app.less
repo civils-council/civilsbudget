@@ -328,6 +328,11 @@ body {
     z-index:10;
 }
 
+#main-header a:focus {
+    outline: none;
+    text-decoration: none;
+}
+
 #main-wrap {
     z-index: 2;
     padding-bottom: 60px;
@@ -563,7 +568,7 @@ a.description-btn:hover {
 }
 
 .hero-section {
-    background: url("../images/concert_img_450.jpg") top left/cover #ffffff;
+    background: url("../images/homebanner.png") top left/cover #ffffff;
     position: relative;
     margin-bottom: 50px;
 
@@ -1358,6 +1363,8 @@ button.close {
     border: none;
     background: none;
     font-size: 45px;
+    line-height: 38px;
+    height: 30px;
     color:#525c99;
 }
 
@@ -1376,6 +1383,50 @@ button.close:hover {
 
 
 /*Modal Authorization*/
+.safari-header {
+    padding: 15px 35px;
+    border-bottom: 2px solid #6f6ea6;
+
+    button.close {
+        top: 13px;
+        right: 13px;
+
+        &:hover {
+            color: #6f6ea6;
+        }
+    }
+}
+
+.safari-body {
+    border-bottom: 2px solid #6f6ea6;
+    text-align: center;
+    padding: 35px;
+
+    .browsers {
+        max-width: 500px;
+        margin: 30px auto 0;
+        padding: 15px;
+    }
+
+    .icon-wrapper {
+        float: left;
+        width: 150px;
+        height: 150px;
+
+        &:nth-child(2) {
+            margin: 0 10px;
+        }
+
+        img {
+            max-width: 100%;
+        }
+    }
+}
+
+.safari-footer {
+    padding: 15px;
+    text-align: center;
+}
 
 /*FIX*/
 .modal-header {
@@ -1487,6 +1538,19 @@ button.close:hover {
     .blh-auth div:first-child {
         border: none;
     }
+
+    .safari-body {
+        padding: 15px 10px;
+
+        .browsers {
+            max-width: 260px;
+        }
+
+        .icon-wrapper {
+            width: 70px;
+            height: 70px;
+        }
+    }
 }
 
 .counter {
@@ -1580,4 +1644,10 @@ button.close:hover {
 }
 .form-control {
     line-height: 3.4;
+}
+
+@media screen and (max-width: 529px) {
+    #confirm_data {
+        width: auto;
+    }
 }
