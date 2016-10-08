@@ -12,6 +12,10 @@ use Symfony\Component\HttpFoundation\ParameterBag;
  */
 class UserRepository extends EntityRepository implements UserRepositoryInterface
 {
+    /**
+     * @param ParameterBag $parameterBag
+     * @return mixed
+     */
     public function findCountVotedUsers(
         ParameterBag $parameterBag
     ) {
@@ -22,18 +26,17 @@ class UserRepository extends EntityRepository implements UserRepositoryInterface
             ->select('COUNT(u.id)')
             ->from('AppBundle:User', 'u')
             ->leftJoin('u.likedProjects', 'l');
-            
-            if ($city = $parameterBag->get(ProjectController::QUERY_CITY)) {
-                $qb
-                    ->leftJoin('l.voteSetting', 'vs')
-                    ->leftJoin('vs.location', 'c')
-                    ->andWhere('c.city = :city')
-                    ->setParameter('city', $city);
 
-            }
+        if ($city = $parameterBag->get(ProjectController::QUERY_CITY)) {
+            $qb
+                ->leftJoin('l.voteSetting', 'vs')
+                ->leftJoin('vs.location', 'c')
+                ->andWhere('c.city = :city')
+                ->setParameter('city', $city);
+
+        }
         $qb
             ->andWhere($qb->expr()->between('l.createAt', ':dateFrom', ':dateTo'))
-
             ->setParameter(':dateFrom', $firstDay)
             ->setParameter(':dateTo', $lastDay);
 
@@ -41,7 +44,7 @@ class UserRepository extends EntityRepository implements UserRepositoryInterface
         $result = $query->getSingleScalarResult();
         return $result;
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -66,7 +69,7 @@ class UserRepository extends EntityRepository implements UserRepositoryInterface
     {
         $this->_em->flush();
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -77,7 +80,7 @@ class UserRepository extends EntityRepository implements UserRepositoryInterface
         if (!$project->getVoteSetting()) {
             throw new ValidatorException('Проекту повинен бути назначений тип голосування');
         }
-        
+
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb
             ->select('COUNT lp.id')
@@ -91,10 +94,10 @@ class UserRepository extends EntityRepository implements UserRepositoryInterface
                 'voteId', $project->getVoteSetting()->getId(),
                 'userId', $user->getId()
             ]);
-        
+
         $query = $qb->getQuery();
         $results = $query->getSingleScalarResult();
-        
+
         return $results;
     }
 }
