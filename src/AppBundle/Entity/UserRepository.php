@@ -10,6 +10,18 @@ use Doctrine\ORM\EntityRepository;
  */
 class UserRepository extends EntityRepository implements UserRepositoryInterface
 {
+    public function findCountVotedUsers()
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder('user');
+        $qb
+            ->select('user')
+            ->from('AppBundle:User', 'user')
+            ->where('user.countVotes != :param')
+            ->setParameter('param', 0)
+        ;
+        return count($qb->getQuery()->getArrayResult());
+    }
+    
     /**
      * {@inheritdoc}
      */

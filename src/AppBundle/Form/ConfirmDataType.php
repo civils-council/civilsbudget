@@ -6,6 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 class ConfirmDataType extends AbstractType
@@ -15,19 +16,20 @@ class ConfirmDataType extends AbstractType
         $builder
             ->add('first_name', 'text', [
                 'label' => 'Ім’я (обов’язкове поле)',
-                'constraints' => new NotBlank()
+                'constraints' => new NotBlank(['message' => 'Поле не може бути пустим'])
             ])
             ->add('last_name', 'text', [
                 'label' => 'Прізвище (обов’язкове поле)',
-                'constraints' => new NotBlank()
+                'constraints' => new NotBlank(['message' => 'Поле не може бути пустим'])
             ])
             ->add('email', 'email', array(
                 'label' => 'Електронна адреса (обов’язкове поле)',
                 'required' => true,
                 'constraints' => [
-                    new NotBlank(),
-                    new Email()
-            ]))
+                    new NotBlank(['message' => 'Поле не може бути пустим']),
+                    new Email(['message' => 'Поле електронної адреси не коректне'])
+            ],
+            ))
             ->add('phone', 'text', [
                 'label' => 'Телефон'
             ])

@@ -4,32 +4,74 @@
     Проекти
 {% endblock title %}
 
-{% block content %}
-	    <div id="hp-logo"></div>
+{#{% block herosection %}#}
+    {#<div class="hero-section">#}
+        {#<div class="hero-shadow">#}
+            {#<div class="container">#}
+                {#<div id="hp-logo"></div>#}
+                {#<div class="hp-text">#}
+                    {#<div id="hp-title">#}
+                        {#<div id="hp-title-main">виріши долю громадського бюджету міста Черкас на 2016 рік</div>#}
+                        {#<div id="hp-title-sub">Голосування відкрито до 14 грудня 2015 року</div>#}
+                        {#<hr>#}
+                    {#</div>#}
+                    {#<div id="hp-voted">#}
+                        {#<span class="voted-title">Вже проголосувало Черкащан:</span>#}
+                        {#{% set votes = 0 %}#}
+                        {#{% for project in projects %}#}
+                            {#{% set votes = votes + project['countLikes']|number_format(0, '.', ' ') %}#}
+                        {#{% endfor %}#}
+                        {#{% set digits = votes|split('') %}#}
 
-		<h1 id="hp-title">
-            <p>виріши долю громадського бюджету міста Черкас на 2016 рік</p>
-            Голосування відкрито до 14 грудня 2015 року<br>
-            <hr>
-            Вже проголосувало Черкащан:
-		</h1>
+                        {#<div class="counter">#}
+                            {#{% for digit in digits %}#}
+                                {#<span class="digit">#}
+                                {#<span title="{{ digit }}">{{ digit }}</span>#}
+                            {#</span>#}
+                            {#{% endfor %}#}
+                        {#</div>#}
+                    {#</div>#}
+                {#</div>#}
+            {#</div>#}
+        {#</div>#}
+    {#</div>#}
+{#{% endblock herosection %}#}
+{% block herosection %}
+    <div class="hero-section">
+        <div class="hero-shadow">
+            <div class="container">
+                <div id="hp-logo"></div>
+                <div class="hp-text">
+                    <h1 id="hp-title">
+                        <p>виріши долю громадського бюджету міста Черкас на 2016 рік</p>
+                        Голосування відкрито до 14 грудня 2015 року<br>
+                        <hr>
+                    </h1>
+                    <div id="hp-voted">
+                        <span class="voted-title">Вже проголосувало Черкащан:</span>
+                        {#{% set votes = 0 %}#}
+                        {#{% for project in projects %}#}
+                            {#{% set votes = votes + project['countLikes']|number_format(0, '.', ' ') %}#}
+                        {#{% endfor %}#}
+                        {% set digits = countVoted|split('') %}
 
-    {% set votes = 0 %}
-    {% for project in projects %}
-        {% set votes = votes + project['countLikes']|number_format(0, '.', ' ') %}
-    {% endfor %}
-    {% set digits = votes|split('') %}
-
-        <div class="counter">
-        {% for digit in digits %}
-            <span class="digit">
-                <span title="{{ digit }}">{{ digit }}</span>
-            </span>
-        {% endfor %}
+                        <div class="counter">
+                            {% for digit in digits %}
+                                <span class="digit">
+                                    <span title="{{ digit }}">{{ digit }}</span>
+                                </span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+    </div>
+{% endblock herosection %}
+{% block content %}
 
     {% for project in projects %}
-        {% set votes = votes + project['countLikes']|number_format(0, '.', ' ') %}
+        {#{% set votes = votes + project['countLikes']|number_format(0, '.', ' ') %}#}
         {% if loop.index % 4 == 1 %}
          <div class="row">
         {% endif %}
