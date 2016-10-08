@@ -18,16 +18,19 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class ProjectController extends Controller
 {
     const SERVER_ERROR                    = 'Server Error';
+    const QUERY_CITY                      = 'city';
     
     /**
      * @Route("/projects", name="projects_list")
      * @Template()
      * @Method({"GET"})
      */
-    public function listAction()
+    public function listAction(Request $request)
     {
-        $projects = $this->getDoctrine()->getRepository('AppBundle:Project')->getProjectShow();
-        $countVoted = $this->getDoctrine()->getRepository('AppBundle:User')->findCountVotedUsers();
+        $parameterBag = $request->query;
+
+        $projects = $this->getDoctrine()->getRepository('AppBundle:Project')->getProjectShow($parameterBag);
+        $countVoted = $this->getDoctrine()->getRepository('AppBundle:User')->findCountVotedUsers($parameterBag);
         return [
             'debug' => true,
             'projects' => $projects,

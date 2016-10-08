@@ -2,6 +2,8 @@
 
 namespace AppBundle\Entity\Interfaces;
 
+use Symfony\Component\HttpFoundation\ParameterBag;
+
 interface ProjectRepositoryInterface
 {
     /**
@@ -10,9 +12,12 @@ interface ProjectRepositoryInterface
     public function getProjectStat();
 
     /**
+     * @param ParameterBag $parameterBag
      * @return array
      */
-    public function getProjectShow();
+    public function getProjectShow(
+        ParameterBag $parameterBag
+    );
 
     /**
      * @param integer $id

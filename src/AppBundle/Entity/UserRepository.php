@@ -1,25 +1,47 @@
 <?php
 
 namespace AppBundle\Entity;
+use AppBundle\Controller\ProjectController;
 use AppBundle\Entity\Interfaces\UserRepositoryInterface;
 use AppBundle\Exception\ValidatorException;
 use Doctrine\ORM\EntityRepository;
+use Symfony\Component\HttpFoundation\ParameterBag;
 
 /**
  * UserRepository
  */
 class UserRepository extends EntityRepository implements UserRepositoryInterface
 {
-    public function findCountVotedUsers()
-    {
-        $qb = $this->getEntityManager()->createQueryBuilder('user');
+    public function findCountVotedUsers(
+        ParameterBag $parameterBag
+    ) {
+        $firstDay = new \DateTime('first day of this year');
+        $lastDay = new \DateTime('last day of this year');
+        $qb = $this->getEntityManager()->createQueryBuilder();
         $qb
-            ->select('user')
-            ->from('AppBundle:User', 'user')
-            ->where('user.countVotes != :param')
-            ->setParameter('param', 0)
-        ;
-        return count($qb->getQuery()->getArrayResult());
+            ->select('COUNT(u.id)')
+            ->from('AppBundle:User', 'u')
+            ->leftJoin('u.likedProjects', 'l');
+            
+            if ($city = $parameterBag->get(ProjectController::QUERY_CITY)) {
+                $qb
+                    ->leftJoin('l.voteSetting', 'vs')
+                    ->leftJoin('vs.location', 'c')
+                    ->andWhere('c.city = :city')
+                    ->setParameter('city', $city);
+
+            }
+        $qb
+            ->andWhere($qb->expr()->between('l.createAt', ':dateFrom', ':dateTo'))
+
+            ->setParameters([
+                ':dateFrom' => $firstDay,
+                ':dateTo' => $lastDay
+            ]);
+
+        $query = $qb->getQuery();
+        $result = $query->getSingleScalarResult();
+        return $result;
     }
     
     /**

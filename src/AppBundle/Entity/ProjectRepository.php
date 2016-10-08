@@ -1,9 +1,11 @@
 <?php
 
 namespace AppBundle\Entity;
+use AppBundle\Controller\ProjectController;
 use AppBundle\Entity\Interfaces\ProjectRepositoryInterface;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityRepository;
+use Symfony\Component\HttpFoundation\ParameterBag;
 
 /**
  * ProjectRepository
@@ -23,17 +25,19 @@ class ProjectRepository extends EntityRepository implements ProjectRepositoryInt
             ->leftJoin('project.likedUsers', 'user')
             ->groupBy('project.id')
             ->orderBy("countLikes", 'DESC');
-        
+
         $query = $qb->getQuery();
         $results = $query->getResult();
-        
+
         return $results;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getProjectShow()
+    public function getProjectShow(
+        ParameterBag $parameterBag
+    )
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb
@@ -41,14 +45,23 @@ class ProjectRepository extends EntityRepository implements ProjectRepositoryInt
             ->from('AppBundle:Project', 'project')
             ->addSelect('COUNT(user.id) as countLikes')
             ->leftJoin('project.likedUsers', 'user')
-            ->andWhere('project.approved = :approved')
-            ->setParameter('approved', true)
+            ->leftJoin('project.voteSetting', 'vs')
+            ->leftJoin('vs.location', 'l')
+            ->where('project.approved = :approved')
+            ->setParameter('approved', true);
+
+        if ($city = $parameterBag->get(ProjectController::QUERY_CITY)) {
+            $qb
+                ->andWhere('l.city = :city')
+                ->setParameter('city', $city);
+        }
+        $qb
             ->groupBy('project.id')
             ->orderBy('project.lastDateOfVotes', Criteria::DESC);
-        
+
         $query = $qb->getQuery();
         $results = $query->getResult();
-        
+
         return $results;
     }
 
@@ -68,10 +81,10 @@ class ProjectRepository extends EntityRepository implements ProjectRepositoryInt
             ->setParameter('approved', true)
             ->setParameter('id', $id)
             ->groupBy('project.id');
-        
+
         $query = $qb->getQuery();
         $results = $query->getResult();
-        
+
         return $results;
     }
 }
