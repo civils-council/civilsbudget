@@ -41,6 +41,9 @@ case $reload in
 ;;
 3)
     echo "load Fixtures"
+    ./app/console doctrine:database:drop --force
+    ./app/console doctrine:database:create
+    ./app/console doctrine:migration:migrate -n
     ./app/console doctrine:fixtures:load --no-interaction
 
 ;;

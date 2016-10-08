@@ -1,3 +1,11 @@
+AppBundle\Entity\VoteSettings:
+    voteSettings{1..2}:
+        title: <word(3)>
+        description: <text(2000)>
+        dateFrom: <datetime()>
+        dateTo: <datetime()>
+        voteLimits: <randomNumber($nbDigits = 2)>
+
 AppBundle\Entity\Project:
     project{1..10}:
         title: <word(3)>
@@ -10,3 +18,4 @@ AppBundle\Entity\Project:
         confirmedAt: <datetime()>
         confirmedBy: @admin*
         lastDateOfVotes: <dateTimeBetween("-10 days", "+200 days")>
+        voteSetting: @voteSettings*
