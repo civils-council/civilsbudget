@@ -2,6 +2,7 @@
 
 namespace AppBundle\Application\Project;
 
+use AppBundle\Entity\Project;
 use AppBundle\Exception\ValidatorException;
 
 interface ProjectInterface

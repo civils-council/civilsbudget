@@ -96,7 +96,6 @@ class ProjectController extends Controller
                     $project
                 ));
                 
-                
             } catch (ValidatorException $e) {
                 return new JsonResponse('danger', $e->getMessage());
             } catch (\Exception $e) {
