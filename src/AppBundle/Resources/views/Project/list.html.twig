@@ -43,8 +43,14 @@
                 <div id="hp-logo"></div>
                 <div class="hp-text">
                     <h1 id="hp-title">
-                        <p>виріши долю громадського бюджету міста Черкас на 2016 рік</p>
-                        Голосування відкрито до 14 грудня 2015 року<br>
+                            {% if voteSetting %}
+                                {{ voteSetting.titleH1 }}
+                            {% else %}
+                                <p>виріши долю громадського бюджету міста Черкас на 2016 рік</p>
+                            {% endif %}
+                        Голосування відкрито до {% if voteSetting %}
+                        {{ voteSetting.dateTo|date("m/d/Y") }}
+                    {% else %} some date {% endif %}<br>
                         <hr>
                     </h1>
                     <div id="hp-voted">

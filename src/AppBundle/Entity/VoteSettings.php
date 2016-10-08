@@ -37,6 +37,13 @@ class VoteSettings
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
+    private $title;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
     private $address;
 
     /**

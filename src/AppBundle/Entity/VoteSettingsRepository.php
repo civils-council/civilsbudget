@@ -6,6 +6,7 @@ use AppBundle\Entity\Interfaces\VoteSettingInterface;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\ParameterBag;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * VoteSettingsRepository
@@ -15,17 +16,16 @@ class VoteSettingsRepository extends EntityRepository implements VoteSettingInte
     /**
      * {@inheritdoc}
      */
-    public function getProjectShow(
-        ParameterBag $parameterBag
-    )
-    {
+    public function getProjectVoteSettingShow(
+        Request $request
+    ) {
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb
             ->select('vs')
             ->from('AppBundle:VoteSettings', 'vs')
             ->leftJoin('vs.location', 'l');
 
-        if ($city = $parameterBag->get(ProjectController::QUERY_CITY)) {
+        if ($city = $request->get(ProjectController::QUERY_CITY)) {
             $qb
                 ->andWhere('l.city = :city')
                 ->setParameter('city', $city);

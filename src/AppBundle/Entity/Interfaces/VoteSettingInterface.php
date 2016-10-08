@@ -2,17 +2,16 @@
 
 namespace AppBundle\Entity\Interfaces;
 
-
 use AppBundle\Entity\VoteSettings;
-use Symfony\Component\HttpFoundation\ParameterBag;
+use Symfony\Component\HttpFoundation\Request;
 
 interface VoteSettingInterface
 {
     /**
-     * @param ParameterBag $parameterBag
+     * @param Request $request
      * @return VoteSettings|null
      */
-    public function getProjectShow(
-        ParameterBag $parameterBag
+    public function getProjectVoteSettingShow(
+        Request $request
     );
 }

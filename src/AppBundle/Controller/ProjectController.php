@@ -29,13 +29,15 @@ class ProjectController extends Controller
     {
         $parameterBag = $request->query;
 
-        
-        $projects = $this->getDoctrine()->getRepository('AppBundle:Project')->getProjectShow($parameterBag);
-        $countVoted = $this->getDoctrine()->getRepository('AppBundle:User')->findCountVotedUsers($parameterBag);
+        $em = $this->getDoctrine()->getManager();
+        $projects = $em->getRepository('AppBundle:Project')->getProjectShow($parameterBag);
+        $countVoted = $em->getRepository('AppBundle:User')->findCountVotedUsers($parameterBag);
         return [
             'debug' => true,
             'projects' => $projects,
             'countVoted' => $countVoted,
+            'voteSetting' => $em->getRepository('AppBundle:VoteSettings')
+                ->getProjectVoteSettingShow($request)
         ];
     }
 
@@ -44,12 +46,15 @@ class ProjectController extends Controller
      * @Template()
      * @Method({"GET"})
      */
-    public function statisticsAction()
+    public function statisticsAction(Request $request)
     {
+        $em = $this->getDoctrine()->getManager();
         $projects = $this->getDoctrine()->getRepository('AppBundle:Project')->getProjectStat();
         return [
             'debug' => true,
             'projects' => $projects,
+            'voteSetting' => $em->getRepository('AppBundle:VoteSettings')
+                ->getProjectVoteSettingShow($request)            
         ];
     }
 
@@ -58,9 +63,10 @@ class ProjectController extends Controller
      * @Template()
      * @Method({"GET"})
      */
-    public function showProjectAction($id)
+    public function showProjectAction($id, Request $request)
     {
-        $project = $this->getDoctrine()->getRepository('AppBundle:Project')->getOneProjectShow($id);
+        $em = $this->getDoctrine()->getManager();
+        $project = $em->getRepository('AppBundle:Project')->getOneProjectShow($id);
 
         if (!$project) {
             throw new NotFoundHttpException('This project not found in our source');
@@ -69,7 +75,11 @@ class ProjectController extends Controller
         if (empty($this->getUser())) {
             $sessionSet = $this->get('app.session')->setSession($project[0][0]->getId());
         }
-        return ['projects' => $project];
+        return [
+            'projects' => $project,
+            'voteSetting' => $em->getRepository('AppBundle:VoteSettings')
+                ->getProjectVoteSettingShow($request)
+        ];
     }
 
     /**
@@ -103,7 +113,11 @@ class ProjectController extends Controller
             return $this->redirectToRoute('projects_list');
         }
 
-        return ['form' => $form->createView()];
+        return [
+            'form' => $form->createView(),
+            'voteSetting' => $this->getDoctrine()->getRepository('AppBundle:VoteSettings')
+                ->getProjectVoteSettingShow($request)
+        ];
     }
 
     /**
@@ -133,6 +147,8 @@ class ProjectController extends Controller
         return [
             'entity' => $project,
             'form' => $form->createView(),
+            'voteSetting' => $this->getDoctrine()->getRepository('AppBundle:VoteSettings')
+                ->getProjectVoteSettingShow($request)            
         ];
     }
 

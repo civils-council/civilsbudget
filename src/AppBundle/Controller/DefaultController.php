@@ -67,7 +67,9 @@ class DefaultController extends Controller
 
         return [
             'debug' => true,
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'voteSetting' => $this->getDoctrine()->getRepository('AppBundle:VoteSettings')
+                ->getProjectVoteSettingShow($request)            
         ];
     }
 
@@ -108,7 +110,9 @@ class DefaultController extends Controller
             return $this->redirectToRoute('homepage');
         }
         return [
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'voteSetting' => $this->getDoctrine()->getRepository('AppBundle:VoteSettings')
+                ->getProjectVoteSettingShow($request)            
         ];
     }
 
@@ -116,7 +120,7 @@ class DefaultController extends Controller
      * @Route("/loginIncluded", name="login_included")
      * @Template()
      */
-    public function loginIncludedAction()
+    public function loginIncludedAction(Request $request)
     {
         $authenticationUtils = $this->get('security.authentication_utils');
 
@@ -129,7 +133,11 @@ class DefaultController extends Controller
             return $this->redirectToRoute('additional_registration');
         }
 
-        return ['form' => $form->createView()];
+        return [
+            'form' => $form->createView(),
+            'voteSetting' => $this->getDoctrine()->getRepository('AppBundle:VoteSettings')
+                ->getProjectVoteSettingShow($request)            
+        ];
     }
 
 
@@ -140,7 +148,7 @@ class DefaultController extends Controller
      * @Method("GET")
      * @Template()
      */
-    public function editAction($id)
+    public function editAction($id, Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -155,6 +163,8 @@ class DefaultController extends Controller
         return array(
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
+            'voteSetting' => $this->getDoctrine()->getRepository('AppBundle:VoteSettings')
+                ->getProjectVoteSettingShow($request)
         );
     }
 
@@ -190,6 +200,8 @@ class DefaultController extends Controller
         return array(
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
+            'voteSetting' => $this->getDoctrine()->getRepository('AppBundle:VoteSettings')
+                ->getProjectVoteSettingShow($request)            
         );
     }
 
