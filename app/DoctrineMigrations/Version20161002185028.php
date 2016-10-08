@@ -45,7 +45,7 @@ class Version20161002185028 extends AbstractMigration
             $schemaTable = $schema->getTable('project');
             if (!$schemaTable->hasColumn('vote_setting_id')) {
                 $this->addSql('
-                    ALTER TABLE `project` ADD `vote_setting_id` INT DEFAULT NULL
+                    ALTER TABLE `project` ADD `vote_setting_id` INT NOT NULL
                 ');   
             }
             
