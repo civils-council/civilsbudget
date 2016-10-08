@@ -34,10 +34,8 @@ class UserRepository extends EntityRepository implements UserRepositoryInterface
         $qb
             ->andWhere($qb->expr()->between('l.createAt', ':dateFrom', ':dateTo'))
 
-            ->setParameters([
-                ':dateFrom' => $firstDay,
-                ':dateTo' => $lastDay
-            ]);
+            ->setParameter(':dateFrom', $firstDay)
+            ->setParameter(':dateTo', $lastDay);
 
         $query = $qb->getQuery();
         $result = $query->getSingleScalarResult();

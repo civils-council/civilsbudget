@@ -5,6 +5,7 @@ AppBundle\Entity\VoteSettings:
         dateFrom: <datetime()>
         dateTo: <datetime()>
         voteLimits: <randomNumber($nbDigits = 2)>
+        location: @location*
 
 AppBundle\Entity\Project:
     project{1..10}:
