@@ -1,0 +1,8 @@
+parameters:
+    app.application.project.project.class:                             AppBundle\Application\Project\Project
+
+services:
+    app.application.project:
+        class: "%app.application.project.project.class%"
+        arguments:
+            - "@app.domain.project"

@@ -99,7 +99,7 @@ class Project implements \JsonSerializable
     private $owner;
 
     /**
-     * @var Collection
+     * @var User[]ArrayCollection
      *
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\User", mappedBy="likedProjects")
      */
@@ -124,7 +124,7 @@ class Project implements \JsonSerializable
      *
      * @Assert\NotBlank()
      * @ORM\ManyToOne(targetEntity="VoteSettings", inversedBy="project")
-     * @ORM\JoinColumn(name="vote_setting_id", nullable = true, referencedColumnName="id")
+     * @ORM\JoinColumn(name="vote_setting_id", nullable = false, referencedColumnName="id")
      */
     private $voteSetting;    
 

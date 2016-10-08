@@ -17,8 +17,10 @@ class VoteSettingsType extends AbstractType
         $builder
             ->add('title')
             ->add('voteLimits')
+            ->add('dateFrom')
+            ->add('dateTo')
+            ->add('description')
             ->add('location');
-        ;
     }
     
     /**

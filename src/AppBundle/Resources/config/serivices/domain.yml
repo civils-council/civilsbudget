@@ -1,0 +1,14 @@
+parameters:
+    app.domain.project.project.class:                             AppBundle\Domain\Project\Project
+    app.domain.user.user.class:                                   AppBundle\Domain\User\User
+
+services:
+    app.domain.project:
+        class:            "%app.domain.project.project.class%"
+        arguments:
+            - "@app.repository.project"
+
+    app.domain.user:
+        class:            "%app.domain.user.user.class%"
+        arguments:
+            - "@app.repository.user"

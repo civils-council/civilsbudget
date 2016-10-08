@@ -10,6 +10,9 @@
                 <th>Title</th>
                 <th>Votelimits</th>
                 <th>Location</th>
+                <th>dateFrom</th>
+                <th>dateTo</th>
+                <th>description</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -20,6 +23,11 @@
                 <td>{{ entity.title }}</td>
                 <td>{{ entity.voteLimits }}</td>
                 <td>{{ entity.location }}</td>
+
+                <td>{{ entity.dateFrom|date("m/d/Y") }}</td>
+                <td>{{ entity.dateTo|date("m/d/Y") }}</td>
+                <td>{{ entity.description }}</td>
+
                 <td>
                 <ul>
                     <li>

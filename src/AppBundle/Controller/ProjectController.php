@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Project;
 use AppBundle\Entity\User;
+use AppBundle\Exception\ValidatorException;
 use AppBundle\Form\ProjectType;
 use AppBundle\Form\LikeProjectType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -15,6 +16,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ProjectController extends Controller
 {
+    const SERVER_ERROR                    = 'Server Error';
+    
     /**
      * @Route("/projects", name="projects_list")
      * @Template()
@@ -69,75 +72,28 @@ class ProjectController extends Controller
      */
     public function likeAction(Project $project, Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
         $user = $this->getUser();
-        $limitVotes = $project->getVoteSetting()->getVoteLimits();
-//        $limitVotes = $this->getParameter('limit_votes');
         $form = $this
             ->createForm(new LikeProjectType(), [], [
                 'user' => $user,
                 'action' => $this->generateUrl('projects_like', ['id' => $project->getId()]),
             ]);
-
+        
         if ($request->getMethod() == Request::METHOD_POST) {
 
-            if ($user instanceof User) {
-                if ($project->getLastDateOfVotes() > new \DateTime()) {
-                    if ($user->getCountVotes() < $limitVotes) {
-                        if (!$user->getLikedProjects()->contains($project)) {
-                            if (mb_strtolower($user->getLocation()->getCity()) == mb_strtolower($project->getCity())) {
-                                $user->setCountVotes(($user->getCountVotes())?($user->getCountVotes() + 1) : 1);
-                                $user->addLikedProjects($project);
-                                $project->addLikedUser($user);
-                                $em->flush();
-                                $balanceVotes = $limitVotes - $user->getCountVotes();
-                                $votes = 'голоси';
-                                if ($balanceVotes == 1) {
-                                    $votes = 'голос';
-                                } elseif ($balanceVotes == 0) {
-                                    $votes = 'голосів';
-                                }
-                                $this->addFlash('success', "Дякуємо за Ваш голос. Ваш голос зараховано на підтримку проекту. У вас залишилось $balanceVotes $votes");
-                            } else {
-                                $this->addFlash('danger', "Цей проект не стосується міста в якому ви зареєстровані.");
-                            }
-                        } else {
-                            $this->addFlash('danger', 'Ви вже підтримали цей проект.');
-                        }
-                    } else {
-                        $this->addFlash('danger', 'Ви вже вичерпали свій ліміт голосів.');
-                    }
-                } else {
-                    $lastDate = $project->getLastDateOfVotes()->format('d.m.Y');
-                    $this->addFlash('danger', "Вибачте. Кінцева дата голосування до  $lastDate.");
-                }
-            } else {
-                $this->addFlash('danger', 'Ви не маєте доступу до голосуваня за проект.');
+            try {
+                $this->addFlash('success', $this->getProjectApplication()->crateUserLike(
+                    $user,
+                    $project
+                ));
+                
+            } catch (ValidatorException $e) {
+                $this->addFlash('danger', $e->getMessage());
+            } catch (\Exception $e) {
+                $this->addFlash('danger', self::SERVER_ERROR);
             }
 
             return $this->redirectToRoute('projects_list');
-
-//
-//            $vote = $project->getLikedUsers()->contains($this->getUser());
-//            $user_vote = $this->getUser()->getLikedProjects();
-//            if ($user_vote != null) {
-//                if ($vote != false) {
-//                    $this->addFlash('', 'Ви вже підтримали цей проект.');
-//                } elseif ($project->getLikedUsers()->contains($this->getUser()) == false && $this->getUser()->getLikedProjects()->getId() == $project->getId()) {
-//                    $this->getUser()->setLikedProjects($project);
-//                    $this->getDoctrine()->getManager()->flush();
-//                    $this->addFlash('', 'Ваший голос зараховано на підтримку проект.');
-//                } else {
-//                    $this->addFlash('', 'Ви використали свiй голос.');
-//                }
-//            } else {
-//                $this->getUser()->setLikedProjects($project);
-//                $this->getDoctrine()->getManager()->flush();
-//                $this->addFlash('', 'Ваший голос зараховано на підтримку проект.');
-//            }
-//
-//
-//            return $this->redirectToRoute('projects_show', ['id' => $project->getId()]);
         }
 
         return ['form' => $form->createView()];
@@ -192,5 +148,13 @@ class ProjectController extends Controller
         $form->add('submit', 'submit', array('label' => 'Add Project'));
 
         return $form;
+    }
+
+    /**
+     * @return \AppBundle\Application\Project\Project
+     */
+    private function getProjectApplication()
+    {
+        return $this->get('app.application.project');
     }
 }

@@ -34,12 +34,13 @@ class VoteSettingsController extends Controller
             'entities' => $entities,
         );
     }
+    
     /**
      * Creates a new VoteSettings entity.
      *
      * @Route("/", name="vote_settings_create")
      * @Method("POST")
-     * @Template("AppBundle:VoteSettings:new.html.twig")
+     * @Template("AppBundle:Admin:VoteSettings:new.html.twig")
      */
     public function createAction(Request $request)
     {
@@ -55,10 +56,10 @@ class VoteSettingsController extends Controller
             return $this->redirect($this->generateUrl('vote_settings_show', array('id' => $entity->getId())));
         }
 
-        return array(
+        return $this->render('AppBundle:Admin/VoteSettings:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
-        );
+        ));
     }
 
     /**
@@ -136,7 +137,7 @@ class VoteSettingsController extends Controller
      *
      * @Route("/{id}", name="vote_settings_update")
      * @Method("PUT")
-     * @Template("AppBundle:VoteSettings:edit.html.twig")
+     * @Template("AppBundle:Admin:VoteSettings:edit.html.twig")
      */
     public function updateAction(Request $request, $id)
     {
