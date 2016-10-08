@@ -32,12 +32,13 @@ class ProjectController extends Controller
         $em = $this->getDoctrine()->getManager();
         $projects = $em->getRepository('AppBundle:Project')->getProjectShow($parameterBag);
         $countVoted = $em->getRepository('AppBundle:User')->findCountVotedUsers($parameterBag);
+        $vote =  $em->getRepository('AppBundle:VoteSettings')
+            ->getProjectVoteSettingShow($request);
         return [
             'debug' => true,
             'projects' => $projects,
             'countVoted' => $countVoted,
-            'voteSetting' => $em->getRepository('AppBundle:VoteSettings')
-                ->getProjectVoteSettingShow($request)
+            'voteSetting' => $vote
         ];
     }
 

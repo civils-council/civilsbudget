@@ -31,9 +31,10 @@ class VoteSettingsRepository extends EntityRepository implements VoteSettingInte
                 ->setParameter('city', $city);
         }
         $qb->orderBy('vs.createAt', Criteria::DESC);
-        $query = $qb->getQuery();
-        $results = $query->getOneOrNullResult();
 
-        return $results;
+        $query = $qb->getQuery();
+        $results = $query->getResult();
+
+        return isset($results[0]) ? $results[0] : [];
     }
 }
