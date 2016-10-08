@@ -30,7 +30,14 @@ class VoteSettings
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $title;
+    private $titleH1;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $address;
 
     /**
      * @var integer
@@ -272,5 +279,53 @@ class VoteSettings
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /**
+     * Set address
+     *
+     * @param string $address
+     *
+     * @return VoteSettings
+     */
+    public function setAddress($address)
+    {
+        $this->address = $address;
+
+        return $this;
+    }
+
+    /**
+     * Get address
+     *
+     * @return string
+     */
+    public function getAddress()
+    {
+        return $this->address;
+    }
+
+    /**
+     * Set titleH1
+     *
+     * @param string $titleH1
+     *
+     * @return VoteSettings
+     */
+    public function setTitleH1($titleH1)
+    {
+        $this->titleH1 = $titleH1;
+
+        return $this;
+    }
+
+    /**
+     * Get titleH1
+     *
+     * @return string
+     */
+    public function getTitleH1()
+    {
+        return $this->titleH1;
     }
 }

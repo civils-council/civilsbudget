@@ -29,6 +29,7 @@ class ProjectController extends Controller
     {
         $parameterBag = $request->query;
 
+        
         $projects = $this->getDoctrine()->getRepository('AppBundle:Project')->getProjectShow($parameterBag);
         $countVoted = $this->getDoctrine()->getRepository('AppBundle:User')->findCountVotedUsers($parameterBag);
         return [
