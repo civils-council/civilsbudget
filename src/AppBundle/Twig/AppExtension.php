@@ -16,6 +16,12 @@ class AppExtension extends \Twig_Extension
     {
         $this->bankId = $bankId;
     }
+    public function getFunctions()
+    {
+        return [
+            'isSafary' => new \Twig_Function_Method($this, 'isSafary'),
+        ];
+    }
 
     public function getFilters()
     {
@@ -36,6 +42,18 @@ class AppExtension extends \Twig_Extension
         preg_match('/https?:\/\/([^\/]+)\//i', $url, $matches);
 
         return $matches[1];
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSafary() {
+        preg_match("/(MSIE|Opera|Firefox|Chrome|Version)(?:\/| )([0-9.]+)/", $_SERVER['HTTP_USER_AGENT'], $browser_info);
+        if ($browser_info[1] =='Version') {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**

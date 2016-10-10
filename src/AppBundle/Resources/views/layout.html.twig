@@ -1,7 +1,6 @@
 {% extends "::base.html.twig" %}
 
 {% block body %}
-
     {{ block("header") }}
 
     <main id="main-wrap">
@@ -26,56 +25,57 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
 
-            <!-- if safari true -->
-                {#<div class="safari-header">#}
-                    {#<img src="{{ asset('images/bank-id.png') }}" alt="BankID" />#}
-                    {#<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>#}
-                {#</div>#}
-                {#<div class="safari-body">#}
-                    {#<div class="safari-content">#}
-                        {#<p>Для стабільної роботи всіх сервісів BankID рекомендує використовувати браузери</p>#}
-                        {#<div class="browsers clearfix">#}
-                            {#<div class="icon-wrapper">#}
-                                {#<img src="{{ asset('images/icon-chrome.ico') }}" alt="Chrome">#}
-                            {#</div>#}
-                            {#<div class="icon-wrapper">#}
-                                {#<img src="{{ asset('images/icon-firefox.ico') }}" alt="Chrome">#}
-                            {#</div>#}
-                            {#<div class="icon-wrapper">#}
-                                {#<img src="{{ asset('images/icon-opera.png') }}" alt="Chrome">#}
-                            {#</div>#}
-                        {#</div>#}
-                    {#</div>#}
-                {#</div>#}
-                {#<div class="safari-footer">#}
-                    {#<p>По всім питанням звертатись</p>#}
-                    {#<p><a href="mailto:info@bankid.org.ua">info@bankid.org.ua</a></p>#}
-                {#</div>#}
-
-
-            <!-- else (safari false) -->
-                <div class="modal-header">
-                    <div class="row blh-auth">
-                        <div class="col-md-6">крок "Авторизація"</div><span class="arrow"></span>
-                        <div class="col-md-6">крок "Голосування за проект"</div>
+                {% if isSafary() %}
+                    <div class="safari-header">
+                        <img src="{{ asset('images/bank-id.png') }}" alt="BankID"/>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     </div>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <div>
-                        Якщо у Вас немає можливості підтримати проект онлайн, Ви його можете підримати прийшовши за адресою:</br></br>
-                        м. Черкаси, вул. Б.Вишневецького, 36, к. 100 з 8.00 до 20.00 (крім вихідних).</br></br>
-                        При собі мати паспорт та ідентифікаційний код.
+                    <div class="safari-body">
+                        <div class="safari-content">
+                            <p>Для стабільної роботи всіх сервісів BankID рекомендує використовувати браузери</p>
+
+                            <div class="browsers clearfix">
+                                <div class="icon-wrapper">
+                                    <img src="{{ asset('images/icon-chrome.ico') }}" alt="Chrome">
+                                </div>
+                                <div class="icon-wrapper">
+                                    <img src="{{ asset('images/icon-firefox.ico') }}" alt="Chrome">
+                                </div>
+                                <div class="icon-wrapper">
+                                    <img src="{{ asset('images/icon-opera.png') }}" alt="Chrome">
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <hr/>
-                    <a href="{{ login_url }}">
-                        <img src="{{ asset('images/bank-id.png') }}" alt="BankID" />
-                        <button class="modal-btn"> Увійти та проголосувати онлайн </button>
-                    </a>
-                </div>
+                    <div class="safari-footer">
+                        <p>По всім питанням звертатись</p>
+
+                        <p><a href="mailto:info@bankid.org.ua">info@bankid.org.ua</a></p>
+                    </div>
+                {% else %}
+                    <div class="modal-header">
+                        <div class="row blh-auth">
+                            <div class="col-md-6">крок "Авторизація"</div><span class="arrow"></span>
+                            <div class="col-md-6">крок "Голосування за проект"</div>
+                        </div>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+                            Якщо у Вас немає можливості підтримати проект онлайн, Ви його можете підримати прийшовши за адресою:</br></br>
+                            м. Черкаси, вул. Б.Вишневецького, 36, к. 100 з 8.00 до 20.00 (крім вихідних).</br></br>
+                            При собі мати паспорт та ідентифікаційний код.
+                        </div>
+                        <hr/>
+                        <a href="{{ login_url }}">
+                            <img src="{{ asset('images/bank-id.png') }}" alt="BankID" />
+                            <button class="modal-btn"> Увійти та проголосувати онлайн </button>
+                        </a>
+                    </div>
+                {% endif %}
             </div>
         </div>
-     </div>
+    </div>
 {% endblock popauth %}
 
 {% block footer %}
@@ -156,9 +156,9 @@
             <div class="header-controls">
                 {#<a href="#" class="lb-diagramm" title="Статистика"></a>#}
                 {% if app.user %}
-                <a href="{{ path('logout') }}" class="lb-signout" style="background-image: url( {% if app.user.avatar %} {{ asset(app.user.avatar) }} {% else %} {{ asset('bundles/app/img/icon_developer.png') }} {% endif %} );" title="Вихід"></a>
+                    <a href="{{ path('logout') }}" class="lb-signout" style="background-image: url( {% if app.user.avatar %} {{ asset(app.user.avatar) }} {% else %} {{ asset('bundles/app/img/icon_developer.png') }} {% endif %} );" title="Вихід"></a>
                 {% elseif app.request.get('_route') != 'login' %}
-                <a href="" class="lb-signin" data-toggle="modal" data-target="#login-modal" title="Увійти">Увійти та проголосувати</a>
+                    <a href="" class="lb-signin" data-toggle="modal" data-target="#login-modal" title="Увійти">Увійти та проголосувати</a>
                 {% endif %}
             </div>
 
