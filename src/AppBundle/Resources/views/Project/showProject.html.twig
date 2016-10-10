@@ -12,7 +12,13 @@
                         </h3>
                     </div>
                 </div>
-
+                <div class="row hd-info">
+                    <div class="col-md-12">
+                        {% if app.user %}
+                        <p id="user-voter">{{ render(controller('AppBundle:User:countVotes', {'id': app.user.id})) }}</p>
+                        {% endif %}
+                    </div>
+                </div>
                 <div class="row hd-info">
                     <div class="col-md-5">
                         <div id="user-avatar" style="background-image: url({% if project[0].owner.avatar %}{{ asset(project[0].owner.avatar) }}{% else %}{% if project[0].owner.sex == 'f' %}{{ asset('images/avatar-female.png') }}{% else %}{{ asset('images/avatar-male.png') }}{% endif %}{% endif %});"></div>

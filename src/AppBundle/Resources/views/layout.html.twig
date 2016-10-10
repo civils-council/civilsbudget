@@ -149,9 +149,10 @@
             {#{% if app.user and is_granted('ROLE_ADMIN') %}#}
             {#<a href="{{ path('admin_projects_add') }}">Add Project Admin</a>#}
             {#{% endif %}#}
-            {% if app.user %}
-                <p id="count_votes">{{ render(controller('AppBundle:User:countVotes', {'id': app.user.id})) }}</p>
-            {% endif %}
+
+            {#{% if app.user %}#}
+                {#<p id="count_votes">{{ render(controller('AppBundle:User:countVotes', {'id': app.user.id})) }}</p>#}
+            {#{% endif %}#}
 
             <div class="header-controls">
                 {#<a href="#" class="lb-diagramm" title="Статистика"></a>#}
