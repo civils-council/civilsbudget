@@ -40,16 +40,21 @@
             <script src="{{ asset('js/app.js') }}"></script>
 
             <!-- Start of LiveChat (www.livechatinc.com) code -->
-            <script type="text/javascript">
-                window.__lc = window.__lc || {};
-                window.__lc.license = 6821881;
-                (function() {
-                    var lc = document.createElement('script'); lc.type = 'text/javascript'; lc.async = true;
-                    lc.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'cdn.livechatinc.com/tracking.js';
-                    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(lc, s);
-                })();
-            </script>
+            <!--
+            [LiveChat] Your account has expired. Visit www.livechatinc.com to sign in and renew your subscription.
+            -->
+
+            {#<script type="text/javascript">#}
+                {#window.__lc = window.__lc || {};#}
+                {#window.__lc.license = 6821881;#}
+                {#(function() {#}
+                    {#var lc = document.createElement('script'); lc.type = 'text/javascript'; lc.async = true;#}
+                    {#lc.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'cdn.livechatinc.com/tracking.js';#}
+                    {#var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(lc, s);#}
+                {#})();#}
+            {#</script>#}
             <!-- End o1f LiveChat code -->
+
             <!-- Google Tag Manager -->
             <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-WS56JR"
                               height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>

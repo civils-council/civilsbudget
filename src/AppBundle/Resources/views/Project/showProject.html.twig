@@ -87,7 +87,8 @@
         <div class="fb-comments" data-href="{{ app.request.getUri }}" data-width="100%" data-numposts="5"></div>
         <div id="vk_comments"></div>
         <script type="text/javascript">
-            VK.Widgets.Comments("vk_comments", {limit: 5, width: 500, attach: "*"});
+// TODO delete comment on production
+//            VK.Widgets.Comments("vk_comments", {limit: 5, width: 500, attach: "*"});
         </script>
     </div>
 {% endblock notice %}
