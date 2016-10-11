@@ -78,20 +78,15 @@ class DefaultController extends Controller
      */
     public function additionalRegistrationAction(User $user, Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-        $form = $this->createForm(new ConfirmDataType(), $user);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em->flush();
+        if ($request->get('status') && $request->get('status') == 'new') {
+            $em = $this->getDoctrine()->getManager();
+            $form = $this->createForm(new ConfirmDataType(), $user);
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+                $em->flush();
 
-            $token = new PreAuthenticatedToken($user, $user->getClid(), 'main', $user->getRoles());
-            $this->get('security.token_storage')->setToken($token);
-            $this->get('session')->set('_security_main', serialize($token));
+                $this->setAuthenticateToken($user);
 
-            if ($this->get('app.session')->check()) {
-                return $this->redirect($this->generateUrl('projects_show', ['id' => $this->get('app.session')->getProjectId()]));
-            }
-            if ($request->get('status') && $request->get('status') == 'new') {
                 $this->addFlash('info', 'Дякуємо, Ви успішно зареєструвались');
                 $this->get('app.mail.sender')->sendEmail(
                     [$user->getEmail()],
@@ -99,17 +94,33 @@ class DefaultController extends Controller
                     'AppBundle:Email:new_user.html.twig',
                     ['user' => $user]
                 );
-            }
-            if ($error = $this->get('security.authentication_utils')->getLastAuthenticationError()) {
-                $this->addFlash('danger', $error->getMessage());
 
+                // if you put a check before send email, during registration of the project will not be sending mail
+                if ($this->get('app.session')->check()) {
+                    $this->redirect($this->generateUrl('projects_like', ['id' => $this->get('app.session')->getProjectId()]));
+                    return $this->redirect($this->generateUrl('projects_show', ['id' => $this->get('app.session')->getProjectId()]));
+                }
+
+                if ($error = $this->get('security.authentication_utils')->getLastAuthenticationError()) {
+                    $this->addFlash('danger', $error->getMessage());
+
+                    return $this->redirectToRoute('homepage');
+                }
                 return $this->redirectToRoute('homepage');
             }
-            return $this->redirectToRoute('homepage');
+            return [
+                'form' => $form->createView()
+            ];
+        } else {
+            if($this->get('app.session')->check()) {
+                $this->setAuthenticateToken($user);
+                $this->redirect($this->generateUrl('projects_like', ['id' => $this->get('app.session')->getProjectId()]));
+                return $this->redirect($this->generateUrl('projects_show', ['id' => $this->get('app.session')->getProjectId()]));
+            } else {
+                $this->setAuthenticateToken($user);
+                return $this->redirectToRoute('homepage');
+            }
         }
-        return [
-            'form' => $form->createView()
-        ];
     }
 
     /**
@@ -223,6 +234,13 @@ class DefaultController extends Controller
 
         return new \Symfony\Component\HttpFoundation\Response('ok');
 
+    }
+
+    public function setAuthenticateToken(User $user)
+    {
+        $token = new PreAuthenticatedToken($user, $user->getClid(), 'main', $user->getRoles());
+        $this->get('security.token_storage')->setToken($token);
+        $this->get('session')->set('_security_main', serialize($token));
     }
 
 }

@@ -74,10 +74,12 @@ class ProjectController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $user = $this->getUser();
+        //TODO new set vote_setting
         $limitVotes = $this->getParameter('limit_votes');
         $form = $this
             ->createForm(new LikeProjectType(), [], [
                 'user' => $user,
+                'method' => 'POST',
                 'action' => $this->generateUrl('projects_like', ['id' => $project->getId()]),
             ]);
 
@@ -88,7 +90,7 @@ class ProjectController extends Controller
                     if ($user->getCountVotes() < $limitVotes) {
                         if (!$user->getLikedProjects()->contains($project)) {
                             if (mb_strtolower($user->getLocation()->getCity()) == mb_strtolower($project->getCity())) {
-                                $user->setCountVotes(($user->getCountVotes())?($user->getCountVotes() + 1) : 1);
+                                $user->setCountVotes(($user->getCountVotes()) ? ($user->getCountVotes() + 1) : 1);
                                 $user->addLikedProjects($project);
                                 $project->addLikedUser($user);
                                 $em->flush();
@@ -134,8 +136,9 @@ class ProjectController extends Controller
                 $this->addFlash('danger', 'Ви не маєте доступу до голосуваня за проект.');
             }
 
-            return $this->redirectToRoute('projects_list');
-
+//          return $this->redirectToRoute('projects_list');
+            // into current project
+            return $this->redirect($this->generateUrl('projects_show', ['id' => $project->getId()]));
 //
 //            $vote = $project->getLikedUsers()->contains($this->getUser());
 //            $user_vote = $this->getUser()->getLikedProjects();
