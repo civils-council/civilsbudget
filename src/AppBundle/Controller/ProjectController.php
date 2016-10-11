@@ -79,7 +79,6 @@ class ProjectController extends Controller
         $form = $this
             ->createForm(new LikeProjectType(), [], [
                 'user' => $user,
-                'method' => 'POST',
                 'action' => $this->generateUrl('projects_like', ['id' => $project->getId()]),
             ]);
 

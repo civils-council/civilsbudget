@@ -3,10 +3,10 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\User;
+use AppBundle\Entity\Project;
 use AppBundle\Form\ConfirmDataType;
 use AppBundle\Form\LoginType;
 use AppBundle\Form\LoginUserType;
-use Guzzle\Http\Message\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -97,7 +97,12 @@ class DefaultController extends Controller
 
                 // if you put a check before send email, during registration of the project will not be sending mail
                 if ($this->get('app.session')->check()) {
-                    $this->redirect($this->generateUrl('projects_like', ['id' => $this->get('app.session')->getProjectId()]));
+
+                    $project = $this->getDoctrine()->getRepository('AppBundle:Project')->find($this->get('app.session')->getProjectId());
+                    $flashMessage = $this->get('app.like.service')->execute($user, $project);
+                    //TODO check return value
+                    $this->addFlash($flashMessage['status'], $flashMessage['text']);
+
                     return $this->redirect($this->generateUrl('projects_show', ['id' => $this->get('app.session')->getProjectId()]));
                 }
 
@@ -114,7 +119,11 @@ class DefaultController extends Controller
         } else {
             if($this->get('app.session')->check()) {
                 $this->setAuthenticateToken($user);
-                $this->redirect($this->generateUrl('projects_like', ['id' => $this->get('app.session')->getProjectId()]));
+                $project = $this->getDoctrine()->getRepository('AppBundle:Project')->find($this->get('app.session')->getProjectId());
+                $flashMessage = $this->get('app.like.service')->execute($user, $project);
+                //TODO check return value
+                $this->addFlash($flashMessage['status'], $flashMessage['text']);
+
                 return $this->redirect($this->generateUrl('projects_show', ['id' => $this->get('app.session')->getProjectId()]));
             } else {
                 $this->setAuthenticateToken($user);
