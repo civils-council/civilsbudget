@@ -87,14 +87,13 @@ class DefaultController extends Controller
 
                 $this->setAuthenticateToken($user);
 
-                $this->addFlash('info', 'Дякуємо, Ви успішно зареєструвались');
                 $this->get('app.mail.sender')->sendEmail(
                     [$user->getEmail()],
                     'Вітаємо Вас',
                     'AppBundle:Email:new_user.html.twig',
                     ['user' => $user]
                 );
-
+                $this->addFlash('info', 'Дякуємо, Ви успішно зареєструвались');
                 // if you put a check before send email, during registration of the project will not be sending mail
                 if ($this->get('app.session')->check()) {
 
