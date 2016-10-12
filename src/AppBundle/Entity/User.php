@@ -141,6 +141,10 @@ class User implements UserInterface, \JsonSerializable
      */
     private $isSubscribe;
 
+    /**
+     * @var boolean
+     */
+    private $isDataPublic;
 
     /**
      * Constructor
@@ -610,4 +614,21 @@ class User implements UserInterface, \JsonSerializable
     {
         $this->isSubscribe = $isSubscribe;
     }
+
+    /**
+     * @return boolean
+     */
+    public function isIsDataPublic()
+    {
+        return $this->isDataPublic;
+    }
+
+    /**
+     * @param boolean $isDataPublic
+     */
+    public function setIsDataPublic($isDataPublic)
+    {
+        $this->isDataPublic = $isDataPublic;
+    }
+
 }
