@@ -6,7 +6,7 @@
 
 {% form_theme form _self %}
 
-{% block button_size %}btn btn-info read_more {{ app.user is null ? 'not_auth' }} {% endblock button_size %}
+{% block button_size %}btn btn-info read_more btn-like-auth {{ app.user is null ? 'not_auth' }} {% endblock button_size %}
 {% block button_label %}{% endblock button_label %}
 
 {% block javascripts %}
