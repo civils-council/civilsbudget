@@ -93,13 +93,13 @@ class DefaultController extends Controller
                     'AppBundle:Email:new_user.html.twig',
                     ['user' => $user]
                 );
-                $this->addFlash('info', 'Дякуємо, Ви успішно зареєструвались');
                 // if you put a check before send email, during registration of the project will not be sending mail
                 if ($this->get('app.session')->check()) {
 
                     $project = $this->getDoctrine()->getRepository('AppBundle:Project')->find($this->get('app.session')->getProjectId());
                     $flashMessage = $this->get('app.like.service')->execute($user, $project);
                     //TODO check return value
+                    $flashMessage['text']='Дякуємо, Ви успішно зареєструвались. ' . $flashMessage['text'];
                     $this->addFlash($flashMessage['status'], $flashMessage['text']);
 
                     return $this->redirect($this->generateUrl('projects_show', ['id' => $this->get('app.session')->getProjectId()]));
@@ -110,6 +110,7 @@ class DefaultController extends Controller
 
                     return $this->redirectToRoute('homepage');
                 }
+                $this->addFlash('info', 'Дякуємо, Ви успішно зареєструвались');
                 return $this->redirectToRoute('homepage');
             }
             return [
