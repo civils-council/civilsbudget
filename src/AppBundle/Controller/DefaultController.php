@@ -90,7 +90,7 @@ class DefaultController extends Controller
                 $this->addFlash('info', 'Дякуємо, Ви успішно зареєструвались');
                 $this->get('app.mail.sender')->sendEmail(
                     [$user->getEmail()],
-                    'Golos.ck.ua: Вітаємо Вас',
+                    'Вітаємо Вас',
                     'AppBundle:Email:new_user.html.twig',
                     ['user' => $user]
                 );
