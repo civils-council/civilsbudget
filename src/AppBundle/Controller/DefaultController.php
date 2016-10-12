@@ -99,7 +99,7 @@ class DefaultController extends Controller
                     $project = $this->getDoctrine()->getRepository('AppBundle:Project')->find($this->get('app.session')->getProjectId());
                     $flashMessage = $this->get('app.like.service')->execute($user, $project);
                     //TODO check return value
-                    $flashMessage['text']='Дякуємо, Ви успішно зареєструвались. ' . $flashMessage['text'];
+                    $flashMessage['text']='Ви успішно зареєструвались. ' . $flashMessage['text'];
                     $this->addFlash($flashMessage['status'], $flashMessage['text']);
 
                     return $this->redirect($this->generateUrl('projects_show', ['id' => $this->get('app.session')->getProjectId()]));
