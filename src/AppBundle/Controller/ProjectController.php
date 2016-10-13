@@ -25,7 +25,7 @@ class ProjectController extends Controller
     {
         $projects = $this->getDoctrine()->getRepository('AppBundle:Project')->getProjectShow();
         $countVoted = $this->getDoctrine()->getRepository('AppBundle:User')->findCountVotedUsers();
-// TODO in safary style crash ^(
+        // TODO in safary style crash :(
         //$countVoted = substr('000000' . $countVoted, -6);
         return [
             'debug' => true,
