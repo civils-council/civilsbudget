@@ -7,6 +7,14 @@ AppBundle\Entity\Location:
         cityRegion: cityRegion<current()>
         address: <streetAddress()>
 
+AppBundle\Entity\City:
+    city0:
+        city: ЧЕРКАСИ
+    city1:
+        city: ПОЛТАВА
+    city2:
+        city: КИЇВ
+
 AppBundle\Entity\User:
     user{1..5}:
         firstName: <firstName('male')>

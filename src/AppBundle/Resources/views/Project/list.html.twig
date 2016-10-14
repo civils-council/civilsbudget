@@ -41,10 +41,14 @@
     {% if voteSetting %}
         {% if voteSetting.backgroundImg  %}
             {% set backgroundImg = asset(voteSetting.backgroundImg) %}
+        {% else %}
+            {% set backgroundImg = asset('bundles/app/img/default_bg.png') %}
         {% endif %}
 
         {% if voteSetting.logo  %}
             {% set logo = asset(voteSetting.logo) %}
+        {% else %}
+            {% set logo = asset('') %}
         {% endif %}
     {% else %}
         {#default img#}

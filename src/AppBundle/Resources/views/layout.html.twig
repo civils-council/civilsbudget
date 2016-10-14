@@ -62,14 +62,13 @@
                 </div>
                 <div class="modal-body">
                     <div>
-                        Якщо у Вас немає можливості підтримати проект онлайн, Ви його можете підримати прийшовши за адресою:</br></br>
                         {% if voteSetting is defined and voteSetting%}
-                            {{ voteSetting.address }}
-                        {% else %}
-                            some address
+                            Якщо у Вас немає можливості підтримати проект онлайн,
+                            Ви його можете підримати прийшовши за адресою:</br></br>   {{ voteSetting.address }}
+                            При собі мати паспорт та ідентифікаційний код.
                         {% endif %}
                         .</br></br>
-                        При собі мати паспорт та ідентифікаційний код.
+
                     </div>
                     <hr/>
                     <a href="{{ login_url }}">
@@ -148,12 +147,12 @@
             <a href="{{ path("homepage") }}">Громадський бюджет {% if voteSetting %} - {{ voteSetting.location.city }} {% endif %}</a>
 
             {#Logging#}
-            {#{% if app.user and is_granted('ROLE_USER') %}#}
-            {#<a href="{{ path('projects_add') }}">Add Project User</a>#}
-            {#{% endif %}#}
-            {#{% if app.user and is_granted('ROLE_ADMIN') %}#}
-            {#<a href="{{ path('admin_projects_add') }}">Add Project Admin</a>#}
-            {#{% endif %}#}
+            {% if app.user and is_granted('ROLE_USER') %}
+            <a href="{{ path('projects_add') }}">Add Project User</a>
+            {% endif %}
+            {% if app.user and is_granted('ROLE_ADMIN') %}
+            <a href="{{ path('admin_projects_add') }}">Add Project Admin</a>
+            {% endif %}
 
             {#{% if app.user %}#}
                 {#<p id="count_votes">{{ render(controller('AppBundle:User:countVotes', {'id': app.user.id})) }}</p>#}

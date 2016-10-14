@@ -3,7 +3,7 @@
 {% block content %}
     {#{{ dump(project) }}#}
     {% for project in projects %}
-            <div class="row hd-caption" style="background-image: url({% if project[0].picture %} {{ asset(project[0].picture) }} {% else %} {{ asset('images/gerb_goroda_cherkassy.png') }} {% endif %})">
+            <div class="row hd-caption" style="background-image: url({% if project[0].picture %} {{ asset(project[0].picture) }} {% else %} {{ asset('bundles/app/img/default_bg.png') }} {% endif %})">
                 <div class="row">
                     <div class="col-md-12">
                         <h3>

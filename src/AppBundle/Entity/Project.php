@@ -122,7 +122,7 @@ class Project implements \JsonSerializable
     /**
      * @var VoteSettings
      *
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(groups={"approve_admin"})
      * @ORM\ManyToOne(targetEntity="VoteSettings", inversedBy="project")
      * @ORM\JoinColumn(name="vote_setting_id", nullable = false, referencedColumnName="id")
      */
@@ -485,6 +485,9 @@ class Project implements \JsonSerializable
      */
     public function setVoteSetting(\AppBundle\Entity\VoteSettings $voteSetting = null)
     {
+        if ($voteSetting instanceof VoteSettings) {
+            $this->setCity($voteSetting->getLocation());
+        }
         $this->voteSetting = $voteSetting;
 
         return $this;

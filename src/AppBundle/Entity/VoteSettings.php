@@ -85,9 +85,10 @@ class VoteSettings
     private $description;    
 
     /**
-     * @var Location
+     * @var City
      *
-     * @ORM\ManyToOne(targetEntity="Location", inversedBy="voteSetting")
+     * @Assert\NotBlank()
+     * @ORM\ManyToOne(targetEntity="City", inversedBy="voteSetting")
      * @ORM\JoinColumn(name="location_id", nullable = true, referencedColumnName="id")
      */
     private $location;
@@ -105,7 +106,15 @@ class VoteSettings
      * @ORM\Column(name = "background_img", type="string", length=255, nullable=true)
      */
     private $backgroundImg;
-    
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->title;
+    }
+
     /**
      * Constructor
      */
@@ -122,6 +131,30 @@ class VoteSettings
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set titleH1
+     *
+     * @param string $titleH1
+     *
+     * @return VoteSettings
+     */
+    public function setTitleH1($titleH1)
+    {
+        $this->titleH1 = $titleH1;
+
+        return $this;
+    }
+
+    /**
+     * Get titleH1
+     *
+     * @return string
+     */
+    public function getTitleH1()
+    {
+        return $this->titleH1;
     }
 
     /**
@@ -149,6 +182,30 @@ class VoteSettings
     }
 
     /**
+     * Set address
+     *
+     * @param string $address
+     *
+     * @return VoteSettings
+     */
+    public function setAddress($address)
+    {
+        $this->address = $address;
+
+        return $this;
+    }
+
+    /**
+     * Get address
+     *
+     * @return string
+     */
+    public function getAddress()
+    {
+        return $this->address;
+    }
+
+    /**
      * Set voteLimits
      *
      * @param integer $voteLimits
@@ -170,64 +227,6 @@ class VoteSettings
     public function getVoteLimits()
     {
         return $this->voteLimits;
-    }
-
-    /**
-     * Add project
-     *
-     * @param \AppBundle\Entity\Project $project
-     *
-     * @return VoteSettings
-     */
-    public function addProject(\AppBundle\Entity\Project $project)
-    {
-        $this->project[] = $project;
-
-        return $this;
-    }
-
-    /**
-     * Remove project
-     *
-     * @param \AppBundle\Entity\Project $project
-     */
-    public function removeProject(\AppBundle\Entity\Project $project)
-    {
-        $this->project->removeElement($project);
-    }
-
-    /**
-     * Get project
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getProject()
-    {
-        return $this->project;
-    }
-
-    /**
-     * Set location
-     *
-     * @param \AppBundle\Entity\Location $location
-     *
-     * @return VoteSettings
-     */
-    public function setLocation(\AppBundle\Entity\Location $location = null)
-    {
-        $this->location = $location;
-
-        return $this;
-    }
-
-    /**
-     * Get location
-     *
-     * @return \AppBundle\Entity\Location
-     */
-    public function getLocation()
-    {
-        return $this->location;
     }
 
     /**
@@ -303,54 +302,6 @@ class VoteSettings
     }
 
     /**
-     * Set address
-     *
-     * @param string $address
-     *
-     * @return VoteSettings
-     */
-    public function setAddress($address)
-    {
-        $this->address = $address;
-
-        return $this;
-    }
-
-    /**
-     * Get address
-     *
-     * @return string
-     */
-    public function getAddress()
-    {
-        return $this->address;
-    }
-
-    /**
-     * Set titleH1
-     *
-     * @param string $titleH1
-     *
-     * @return VoteSettings
-     */
-    public function setTitleH1($titleH1)
-    {
-        $this->titleH1 = $titleH1;
-
-        return $this;
-    }
-
-    /**
-     * Get titleH1
-     *
-     * @return string
-     */
-    public function getTitleH1()
-    {
-        return $this->titleH1;
-    }
-
-    /**
      * Set logo
      *
      * @param string $logo
@@ -396,5 +347,63 @@ class VoteSettings
     public function getBackgroundImg()
     {
         return $this->backgroundImg;
+    }
+
+    /**
+     * Add project
+     *
+     * @param \AppBundle\Entity\Project $project
+     *
+     * @return VoteSettings
+     */
+    public function addProject(\AppBundle\Entity\Project $project)
+    {
+        $this->project[] = $project;
+
+        return $this;
+    }
+
+    /**
+     * Remove project
+     *
+     * @param \AppBundle\Entity\Project $project
+     */
+    public function removeProject(\AppBundle\Entity\Project $project)
+    {
+        $this->project->removeElement($project);
+    }
+
+    /**
+     * Get project
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProject()
+    {
+        return $this->project;
+    }
+
+    /**
+     * Set location
+     *
+     * @param \AppBundle\Entity\City $location
+     *
+     * @return VoteSettings
+     */
+    public function setLocation(\AppBundle\Entity\City $location = null)
+    {
+        $this->location = $location;
+
+        return $this;
+    }
+
+    /**
+     * Get location
+     *
+     * @return \AppBundle\Entity\City
+     */
+    public function getLocation()
+    {
+        return $this->location;
     }
 }

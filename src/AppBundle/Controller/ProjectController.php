@@ -167,9 +167,10 @@ class ProjectController extends Controller
     private function createCreateForm(Project $entity)
     {
         $form = $this->createForm(new ProjectType(), $entity, array(
+            'validation_groups' => ['user_post'],
             'action' => $this->generateUrl('projects_add'),
             'method' => 'POST',
-            'attr' => array('class' => 'formCreateClass'),
+            'attr' => array('class' => 'formCreateClass')
         ));
         $form->add('submit', 'submit', array('label' => 'Add Project'));
 

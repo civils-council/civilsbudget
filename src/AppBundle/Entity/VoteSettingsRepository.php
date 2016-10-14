@@ -27,7 +27,7 @@ class VoteSettingsRepository extends EntityRepository implements VoteSettingInte
 
         if ($city = $request->get(ProjectController::QUERY_CITY)) {
             $qb
-                ->andWhere('l.city = :city')
+                ->andWhere('l.city LIKE :city')
                 ->setParameter('city', $city);
         }
         $qb->orderBy('vs.createAt', Criteria::DESC);

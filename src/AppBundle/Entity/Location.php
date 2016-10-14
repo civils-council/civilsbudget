@@ -77,6 +77,7 @@ class Location
     {
         return $this->city;
     }
+    
     /**
      * Constructor
      */
