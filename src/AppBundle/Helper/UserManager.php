@@ -2,6 +2,7 @@
 
 namespace AppBundle\Helper;
 
+use AppBundle\Entity\City;
 use AppBundle\Entity\Location;
 use AppBundle\Entity\User;
 use Doctrine\ORM\EntityManager;
@@ -95,10 +96,17 @@ class UserManager
 
         /** @var User $user */
         $user = $this->em->getRepository('AppBundle:User')->findOneBy(['clid' => $clId]);
+
+        $existCity = $this->em->getRepository('AppBundle:City')->findOneBy(['city' => $city]);
+        if (!$existCity) {
+            $newCity = new City();
+            $newCity->setCity($city);
+            $this->em->persist($newCity);
+        }
+        
         if (empty($user)) {
             $user = new User();
             if(array_key_exists('city', $data['customer']['addresses'][0]) == true) {
-
                 $location = new Location();
 
                 $location
