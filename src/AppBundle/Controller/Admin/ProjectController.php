@@ -49,6 +49,7 @@ class ProjectController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $form = $this->createForm(new ProjectType(), $project, ['method' => 'PUT',
+            'validation_groups' => ['approve_admin'],            
             'admin' => true,
             'attr' => array('class' => 'formCreateClass'),
         ]);
@@ -88,26 +89,26 @@ class ProjectController extends Controller
     {
         //  project have an owner property. it's - User entity, not admin
 
-//        $project = new Project();
-//        $form = $this->createCreateForm($project);
-//        $form->submit($request);
-//            if ($request->isMethod('POST')) {
-//                if ($form->isValid()) {
-//                    $em = $this->getDoctrine()->getManager();
+        $project = new Project();
+        $form = $this->createCreateForm($project);
+        $form->submit($request);
+            if ($request->isMethod('POST')) {
+                if ($form->isValid()) {
+                    $em = $this->getDoctrine()->getManager();
 //                    $project->setOwner($this->getUser());
-//                    $project->setApproved(true);
-//                    $project->setConfirmedBy($this->getUser());
-//
-//                    $em->persist($project);
-//                    $em->flush();
-//
-//                    return $this->redirect($this->generateUrl('admin_project_show', array('id' => $project->getId())));
-//                }
-//            }
-//        return [
-//                'entity' => $project,
-//                'form' => $form->createView(),
-//        ];
+                    $project->setApproved(true);
+                    $project->setConfirmedBy($this->getUser());
+
+                    $em->persist($project);
+                    $em->flush();
+
+                    return $this->redirect($this->generateUrl('admin_project_show', array('id' => $project->getId())));
+                }
+            }
+        return [
+                'entity' => $project,
+                'form' => $form->createView(),
+        ];
     }
 
     // --------------------------------- Create Forms ---------------------------------
@@ -122,6 +123,7 @@ class ProjectController extends Controller
     private function createCreateForm(Project $entity)
     {
         $form = $this->createForm(new ProjectType(), $entity, array(
+            'validation_groups' => ['approve_admin'],
             'action' => $this->generateUrl('admin_projects_add', array('id' => $entity->getId())),
             'method' => 'POST',
             'attr' => array('class' => 'formCreateClass'),

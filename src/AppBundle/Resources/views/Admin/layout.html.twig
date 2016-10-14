@@ -10,9 +10,9 @@
             {#{% if app.user and is_granted('ROLE_USER') %}#}
             {#<a href="{{ path('projects_add') }}">Add Project User</a>#}
             {#{% endif %}#}
-            {#{% if app.user and is_granted('ROLE_ADMIN') %}#}
-            {#<a href="{{ path('admin_projects_add') }}">Add Project Admin</a>#}
-            {#{% endif %}#}
+            {% if app.user and is_granted('ROLE_ADMIN') %}
+            <a href="{{ path('admin_projects_add') }}">Add Project Admin</a>
+            {% endif %}
 
 
             <div class="header-controls">

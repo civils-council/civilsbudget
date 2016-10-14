@@ -122,7 +122,7 @@ class Project implements \JsonSerializable
     /**
      * @var VoteSettings
      *
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(groups={"approve_admin"})
      * @ORM\ManyToOne(targetEntity="VoteSettings", inversedBy="project")
      * @ORM\JoinColumn(name="vote_setting_id", nullable = false, referencedColumnName="id")
      */

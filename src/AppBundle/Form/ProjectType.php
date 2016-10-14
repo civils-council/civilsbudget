@@ -25,12 +25,11 @@ class ProjectType extends AbstractType
             // TODO check email/http/name ???
             ->add('source', 'email', ['label' => 'Відповідальна особа'])
             ->add('charge', 'number', ['label' => 'Бюджет'])
-            ->add('city', 'text', ['label' => 'Місто'])
         ;
         if (in_array('admin', $options) && $options['admin']) {
             $builder
-                ->add('lastDateOfVotes', 'date', [
-                    'label' => 'Кінцева дата голосування'
+                ->add('voteSetting', null, [
+                    'label' => 'налаштування голосування'
                 ])
                 ->add('approved', 'choice', [
                 'choices' => [

@@ -106,7 +106,15 @@ class VoteSettings
      * @ORM\Column(name = "background_img", type="string", length=255, nullable=true)
      */
     private $backgroundImg;
-    
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->title;
+    }
+
     /**
      * Constructor
      */
