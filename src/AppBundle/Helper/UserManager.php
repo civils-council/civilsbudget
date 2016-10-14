@@ -104,7 +104,7 @@ class UserManager
                 $location
                     ->setCity($city)
                     ->setDistrict($city);
-
+                //TODO check street->home number->flat and lineAddress = lineAddres . street
                 if (
                     array_key_exists('flatNo', $data['customer']['addresses'][0]) == true &&
                     array_key_exists('street', $data['customer']['addresses'][0]) == true &&

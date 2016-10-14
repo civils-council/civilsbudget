@@ -3,10 +3,10 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\User;
+use AppBundle\Entity\Project;
 use AppBundle\Form\ConfirmDataType;
 use AppBundle\Form\LoginType;
 use AppBundle\Form\LoginUserType;
-use Guzzle\Http\Message\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -80,40 +80,60 @@ class DefaultController extends Controller
      */
     public function additionalRegistrationAction(User $user, Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-        $form = $this->createForm(new ConfirmDataType(), $user);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em->flush();
+        if ($request->get('status') && $request->get('status') == 'new') {
+            $em = $this->getDoctrine()->getManager();
+            $form = $this->createForm(new ConfirmDataType(), $user);
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+                $em->flush();
 
-            $token = new PreAuthenticatedToken($user, $user->getClid(), 'main', $user->getRoles());
-            $this->get('security.token_storage')->setToken($token);
-            $this->get('session')->set('_security_main', serialize($token));
+                $this->setAuthenticateToken($user);
 
-            if ($this->get('app.session')->check()) {
-                return $this->redirect($this->generateUrl('projects_show', ['id' => $this->get('app.session')->getProjectId()]));
-            }
-            if ($request->get('status') && $request->get('status') == 'new') {
-                $this->addFlash('info', 'Дякуємо, Ви успішно зареєструвались');
                 $this->get('app.mail.sender')->sendEmail(
                     [$user->getEmail()],
-                    'Golos.ck.ua: Вітаємо Вас',
+                    'Вітаємо Вас',
                     'AppBundle:Email:new_user.html.twig',
                     ['user' => $user]
                 );
-            }
-            if ($error = $this->get('security.authentication_utils')->getLastAuthenticationError()) {
-                $this->addFlash('danger', $error->getMessage());
+                // if you put a check before send email, during registration of the project will not be sending mail
+                if ($this->get('app.session')->check()) {
 
+                    $project = $this->getDoctrine()->getRepository('AppBundle:Project')->find($this->get('app.session')->getProjectId());
+                    $flashMessage = $this->get('app.like.service')->execute($user, $project);
+                    //TODO check return value
+                    $flashMessage['text']='Ви успішно зареєструвались. ' . $flashMessage['text'];
+                    $this->addFlash($flashMessage['status'], $flashMessage['text']);
+
+                    return $this->redirect($this->generateUrl('projects_show', ['id' => $this->get('app.session')->getProjectId()]));
+                }
+
+                if ($error = $this->get('security.authentication_utils')->getLastAuthenticationError()) {
+                    $this->addFlash('danger', $error->getMessage());
+
+                    return $this->redirectToRoute('homepage');
+                }
+                $this->addFlash('info', 'Дякуємо, Ви успішно зареєструвались');
                 return $this->redirectToRoute('homepage');
             }
-            return $this->redirectToRoute('homepage');
+            return [
+                'form' => $form->createView(),
+                'voteSetting' => $this->getDoctrine()->getRepository('AppBundle:VoteSettings')
+                    ->getProjectVoteSettingShow($request)
+            ];
+        } else {
+            if($this->get('app.session')->check()) {
+                $this->setAuthenticateToken($user);
+                $project = $this->getDoctrine()->getRepository('AppBundle:Project')->find($this->get('app.session')->getProjectId());
+                $flashMessage = $this->get('app.like.service')->execute($user, $project);
+                //TODO check return value
+                $this->addFlash($flashMessage['status'], $flashMessage['text']);
+
+                return $this->redirect($this->generateUrl('projects_show', ['id' => $this->get('app.session')->getProjectId()]));
+            } else {
+                $this->setAuthenticateToken($user);
+                return $this->redirectToRoute('homepage');
+            }
         }
-        return [
-            'form' => $form->createView(),
-            'voteSetting' => $this->getDoctrine()->getRepository('AppBundle:VoteSettings')
-                ->getProjectVoteSettingShow($request)            
-        ];
     }
 
     /**
@@ -235,6 +255,13 @@ class DefaultController extends Controller
 
         return new \Symfony\Component\HttpFoundation\Response('ok');
 
+    }
+
+    public function setAuthenticateToken(User $user)
+    {
+        $token = new PreAuthenticatedToken($user, $user->getClid(), 'main', $user->getRoles());
+        $this->get('security.token_storage')->setToken($token);
+        $this->get('session')->set('_security_main', serialize($token));
     }
 
 }

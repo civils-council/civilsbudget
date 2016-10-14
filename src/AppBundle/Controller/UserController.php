@@ -34,19 +34,24 @@ class UserController extends Controller
         $userCountVotes = ($user->getCountVotes())?:0;
 
         $balanceVotes = $this->getParameter('limit_votes') - $userCountVotes;
-        $message = 'У Вас';
+        $messageLeft = $messageRight = '';
+
         // TODO If the vote is more than 5 - will test endings (залишилось 5 голосів)
         if ($balanceVotes >= 2) {
-            $message .= " залишилось $balanceVotes голоси";
+            $messageLeft .= 'У Вас залишилось ';
+            $messageRight .= ' голоси';
         } elseif ($balanceVotes == 1) {
-            $message .= ' залишився 1 голос';
+            $messageLeft .= 'У Вас залишився ';
+            $messageRight .= ' голос';
         } elseif ($balanceVotes == 0) {
-            $message .= ' залишилось 0 голосів';
+            $messageLeft .= 'У Вас залишилось ';
+            $messageRight .= ' голосів';
         }
 
-
         return [
-            'message' => $message,
+            'message_left' => $messageLeft,
+            'balanceVotes' => $balanceVotes,
+            'message_right' => $messageRight,
             'voteSetting' => $this->getDoctrine()->getRepository('AppBundle:VoteSettings')
                 ->getProjectVoteSettingShow($request)
         ];

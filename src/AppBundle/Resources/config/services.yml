@@ -48,3 +48,11 @@ services:
             - "@ses_client"
             - "@templating"
             - "@logger"
+
+    app.like.service:
+        class: AppBundle\Helper\LikeService
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@app.mail.sender"
+        calls:
+            - [ setLimitVotes, ["%limit_votes%"] ]

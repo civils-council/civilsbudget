@@ -39,7 +39,8 @@ class ServiceSES
     {
         try {
             $this->client->sendEmail([
-                    'Source' => "Golos.ck.ua <" . $this->email_sender . ">",
+//                    'Source' => "Golos.ck.ua <" . $this->email_sender . ">",
+                    'Source' => "Gromadskyi byudget <" . $this->email_sender . ">",
                     'Destination' => [
                         'ToAddresses' => $emails
                     ],

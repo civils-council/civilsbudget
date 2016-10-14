@@ -26,34 +26,33 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
 
-            <!-- if safari true -->
-                {#<div class="safari-header">#}
-                    {#<img src="{{ asset('images/bank-id.png') }}" alt="BankID" />#}
-                    {#<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>#}
-                {#</div>#}
-                {#<div class="safari-body">#}
-                    {#<div class="safari-content">#}
-                        {#<p>Для стабільної роботи всіх сервісів BankID рекомендує використовувати браузери</p>#}
-                        {#<div class="browsers clearfix">#}
-                            {#<div class="icon-wrapper">#}
-                                {#<img src="{{ asset('images/icon-chrome.ico') }}" alt="Chrome">#}
-                            {#</div>#}
-                            {#<div class="icon-wrapper">#}
-                                {#<img src="{{ asset('images/icon-firefox.ico') }}" alt="Chrome">#}
-                            {#</div>#}
-                            {#<div class="icon-wrapper">#}
-                                {#<img src="{{ asset('images/icon-opera.png') }}" alt="Chrome">#}
-                            {#</div>#}
-                        {#</div>#}
-                    {#</div>#}
-                {#</div>#}
-                {#<div class="safari-footer">#}
-                    {#<p>По всім питанням звертатись</p>#}
-                    {#<p><a href="mailto:info@bankid.org.ua">info@bankid.org.ua</a></p>#}
-                {#</div>#}
+                {% if isSafary() %}
+                    <div class="safari-header">
+                        <img src="{{ asset('images/bank-id.png') }}" alt="BankID"/>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    </div>
+                    <div class="safari-body">
+                        <div class="safari-content">
+                            <p>Для стабільної роботи всіх сервісів BankID рекомендує використовувати браузери</p>
 
-
-            <!-- else (safari false) -->
+                            <div class="browsers clearfix">
+                                <div class="icon-wrapper">
+                                    <img src="{{ asset('images/icon-chrome.ico') }}" alt="Chrome">
+                                </div>
+                                <div class="icon-wrapper">
+                                    <img src="{{ asset('images/icon-firefox.ico') }}" alt="Chrome">
+                                </div>
+                                <div class="icon-wrapper">
+                                    <img src="{{ asset('images/icon-opera.png') }}" alt="Chrome">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="safari-footer">
+                        <p>По всім питанням звертатись</p>
+                        <p><a href="mailto:info@bankid.org.ua">info@bankid.org.ua</a></p>
+                    </div>
+                {% else %}
                 <div class="modal-header">
                     <div class="row blh-auth">
                         <div class="col-md-6">крок "Авторизація"</div><span class="arrow"></span>
@@ -74,13 +73,14 @@
                     </div>
                     <hr/>
                     <a href="{{ login_url }}">
-                        <img src="{{ asset('images/bank-id.png') }}" alt="BankID" />
+                        {#<img src="{{ asset('images/bank-id.png') }}" alt="BankID" />#}
                         <button class="modal-btn"> Увійти та проголосувати онлайн </button>
                     </a>
                 </div>
+                {% endif %}
             </div>
         </div>
-     </div>
+    </div>
 {% endblock popauth %}
 
 {% block footer %}
@@ -98,7 +98,7 @@
                     <span class="icon-3"></span>
                     <span class="icon-2"></span>
                     <span class="icon-1"></span>
-                    <span class="icon-0"></span>
+                    <a href="https://www.facebook.com/groups/964585350255236" target="_blank"><span class="icon-0"></span></a>
                 </div>
                 <div class="col-md-2 footer-social">
                     <a href="https://www.facebook.com/civilscouncil" class="icon-facebook" target="_blank"></a>
@@ -154,16 +154,20 @@
             {#{% if app.user and is_granted('ROLE_ADMIN') %}#}
             {#<a href="{{ path('admin_projects_add') }}">Add Project Admin</a>#}
             {#{% endif %}#}
-            {% if app.user %}
-                <p id="count_votes">{{ render(controller('AppBundle:User:countVotes', {'id': app.user.id})) }}</p>
-            {% endif %}
+
+            {#{% if app.user %}#}
+                {#<p id="count_votes">{{ render(controller('AppBundle:User:countVotes', {'id': app.user.id})) }}</p>#}
+            {#{% endif %}#}
 
             <div class="header-controls">
                 {#<a href="#" class="lb-diagramm" title="Статистика"></a>#}
                 {% if app.user %}
-                <a href="{{ path('logout') }}" class="lb-signout" style="background-image: url( {% if app.user.avatar %} {{ asset(app.user.avatar) }} {% else %} {{ asset('bundles/app/img/icon_developer.png') }} {% endif %} );" title="Вихід"></a>
+                    {#<a href="{{ path('logout') }}" class="lb-signout" style="background-image: url( {% if app.user.avatar %} {{ asset(app.user.avatar) }} {% else %} {{ asset('bundles/app/img/icon_developer.png') }} {% endif %} );" title="Вихід"></a>#}
+                    <a href="{{ path('logout') }}"><img  class="lb-signout" src="{% if app.user.avatar %} {{ asset(app.user.avatar) }} {% else %} {{ asset('bundles/app/img/icon_developer.png') }} {% endif %} ">  Вихід</a>
+                    {#<i class="lb-signout" title="Вихід"></i>#}
+
                 {% elseif app.request.get('_route') != 'login' %}
-                <a href="" class="lb-signin" data-toggle="modal" data-target="#login-modal" title="Увійти">Увійти та проголосувати</a>
+                    <a href="" class="lb-signin" data-toggle="modal" data-target="#login-modal" title="Увійти">Увійти та проголосувати</a>
                 {% endif %}
             </div>
 
