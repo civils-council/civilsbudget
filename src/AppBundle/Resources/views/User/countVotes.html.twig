@@ -1,1 +1,3 @@
-{{ message_left }}<span>{{ balanceVotes }}</span>{{ message_right }}
+{% for key, value in response %}
+    <li>{{ key }}: {{ value }}</li>
+{% endfor %}

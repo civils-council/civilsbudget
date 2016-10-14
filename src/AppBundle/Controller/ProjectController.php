@@ -108,7 +108,9 @@ class ProjectController extends Controller
             } catch (ValidatorException $e) {
                 $this->addFlash('danger', $e->getMessage());
             } catch (\Exception $e) {
-                $this->addFlash('danger', self::SERVER_ERROR);
+                $this->addFlash('danger',
+                    self::SERVER_ERROR
+                );
             }
 
             return $this->redirectToRoute('projects_list');

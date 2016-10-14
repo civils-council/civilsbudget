@@ -6,3 +6,4 @@ services:
         class: "%app.application.project.project.class%"
         arguments:
             - "@app.domain.project"
+            - "@app.domain.user"

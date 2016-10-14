@@ -83,16 +83,43 @@ class UserRepository extends EntityRepository implements UserRepositoryInterface
 
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb
-            ->select('COUNT lp.id')
+            ->select('COUNT(lp.id)')
             ->distinct('lp.id')
             ->from('AppBundle:User', 'u')
             ->leftJoin('u.likedProjects', 'lp')
             ->leftJoin('lp.voteSetting', 'v')
-            ->where('v.id = voteId')
-            ->andWhere('u.id = userId')
+            ->where('v.id = :voteId')
+            ->andWhere('u.id = :userId')
             ->setParameters([
-                'voteId', $project->getVoteSetting()->getId(),
-                'userId', $user->getId()
+                'voteId' => $project->getVoteSetting()->getId(),
+                'userId' => $user->getId()
+            ]);
+
+        $query = $qb->getQuery();
+        $results = $query->getSingleScalarResult();
+
+        return $results;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getUserVotesBySettingVote(
+        VoteSettings $voteSettings,
+        User $user
+    ) {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb
+            ->select('COUNT(lp.id)')
+            ->distinct('lp.id')
+            ->from('AppBundle:User', 'u')
+            ->leftJoin('u.likedProjects', 'lp')
+            ->leftJoin('lp.voteSetting', 'v')
+            ->where('v.id = :voteId')
+            ->andWhere('u.id = :userId')
+            ->setParameters([
+                'voteId' => $voteSettings->getId(),
+                'userId' => $user->getId()
             ]);
 
         $query = $qb->getQuery();

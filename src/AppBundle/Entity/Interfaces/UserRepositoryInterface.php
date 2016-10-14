@@ -3,6 +3,7 @@
 namespace AppBundle\Entity\Interfaces;
 use AppBundle\Entity\Project;
 use AppBundle\Entity\User;
+use AppBundle\Entity\VoteSettings;
 use AppBundle\Exception\ValidatorException;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
@@ -46,4 +47,14 @@ interface UserRepositoryInterface
         Project $project,
         User $user    
     );
+
+    /**
+     * @param VoteSettings $voteSettings
+     * @param User $user
+     * @return integer
+     */
+    public function getUserVotesBySettingVote(
+        VoteSettings $voteSettings,
+        User $user
+    );    
 }

@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\User;
+use AppBundle\Entity\VoteSettings;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -29,29 +30,40 @@ class UserController extends Controller
      * @Route("/users/{id}/count_votes", name="user_count_votes", requirements={"id" = "\d+"})
      * @Template()
      */
-    public function countVotesAction(User $user, Request $request)
+        public function countVotesAction(User $user, Request $request)
     {
-        $userCountVotes = ($user->getCountVotes())?:0;
+        /** @var VoteSettings[] $voteSettings */
+        $voteSettings = $this->getDoctrine()->getRepository('AppBundle:VoteSettings')->getVoteSettingByUserCity($user);
 
-        $balanceVotes = $this->getParameter('limit_votes') - $userCountVotes;
-        $messageLeft = $messageRight = '';
+        $balanceVotes = [];
+        foreach ($voteSettings as $voteSetting) {
+            $limitVoteSetting = $voteSetting->getVoteLimits();
 
-        // TODO If the vote is more than 5 - will test endings (залишилось 5 голосів)
-        if ($balanceVotes >= 2) {
-            $messageLeft .= 'У Вас залишилось ';
-            $messageRight .= ' голоси';
-        } elseif ($balanceVotes == 1) {
-            $messageLeft .= 'У Вас залишився ';
-            $messageRight .= ' голос';
-        } elseif ($balanceVotes == 0) {
-            $messageLeft .= 'У Вас залишилось ';
-            $messageRight .= ' голосів';
+            $balanceVotes[$voteSetting->getId().', '.$voteSetting->getTitle()]=
+                $limitVoteSetting
+                - $this->getDoctrine()->getRepository('AppBundle:User')->getUserVotesBySettingVote($voteSetting, $user);
+
+        }
+
+        $response = [];
+        foreach ($balanceVotes as $key=>$balanceVote) {
+            $messageLeft = $messageRight = '';
+            if ($balanceVote >= 2) {
+                $messageLeft .= 'У Вас залишилось ';
+                $messageRight .= ' голоси';
+            } elseif ($balanceVote == 1) {
+                $messageLeft .= 'У Вас залишився ';
+                $messageRight .= ' голос';
+            } elseif ($balanceVote == 0) {
+                $messageLeft .= 'У Вас залишилось ';
+                $messageRight .= ' голосів';
+            }
+            
+            $response[$key] = $messageLeft . ' ' . $balanceVote . ' ' . $messageRight;  
         }
 
         return [
-            'message_left' => $messageLeft,
-            'balanceVotes' => $balanceVotes,
-            'message_right' => $messageRight,
+            'response' => $response,
             'voteSetting' => $this->getDoctrine()->getRepository('AppBundle:VoteSettings')
                 ->getProjectVoteSettingShow($request)
         ];

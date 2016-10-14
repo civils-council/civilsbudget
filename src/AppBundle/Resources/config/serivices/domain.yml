@@ -12,3 +12,4 @@ services:
         class:            "%app.domain.user.user.class%"
         arguments:
             - "@app.repository.user"
+            - "@app.repository.vote"

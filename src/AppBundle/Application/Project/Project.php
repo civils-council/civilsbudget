@@ -3,6 +3,7 @@
 namespace AppBundle\Application\Project;
 
 
+use AppBundle\Domain\Project\ProjectInterface as DomainProjectInterface;
 use AppBundle\Domain\User\UserInterface;
 use AppBundle\Entity\User;
 use AppBundle\Exception\ValidatorException;
@@ -12,7 +13,7 @@ use \AppBundle\Entity\Project as ProjectEntity;
 class Project implements ProjectInterface
 {
     /**
-     * @var ProjectInterface
+     * @var DomainProjectInterface
      */
     private $projectInterface;
 
@@ -24,11 +25,11 @@ class Project implements ProjectInterface
 
     /**
      * Project constructor.
-     * @param ProjectInterface $projectInterface
+     * @param DomainProjectInterface $projectInterface
      * @param UserInterface $userInterface
      */
     public function __construct(
-        ProjectInterface $projectInterface,
+        DomainProjectInterface $projectInterface,
         UserInterface $userInterface
     )
     {
@@ -50,10 +51,16 @@ class Project implements ProjectInterface
         
         $date = new \DateTime();
         
-        if (!$project->getVoteSetting()->getDateTo()->getTimestamp() < $date->getTimestamp()) {
+        if ($project->getVoteSetting()->getDateTo()->getTimestamp() < $date->getTimestamp()) {
             throw new ValidatorException(
                 'Вибачте. Кінцева дата голосування до '
                 .$project->getVoteSetting()->getDateTo()->format('d.m.Y'));
+        }
+
+        if ($project->getVoteSetting()->getDateFrom()->getTimestamp() > $date->getTimestamp()) {
+            throw new ValidatorException(
+                'Вибачте. Голосування розпочнется '
+                .$project->getVoteSetting()->getDateFrom()->format('d.m.Y'));
         }
         
         if ($this->getUserInterface()->getAccessVote($project, $user)
@@ -75,7 +82,7 @@ class Project implements ProjectInterface
     }
     
     /**
-     * @return ProjectInterface
+     * @return DomainProjectInterface
      */
     private function getProjectInterface()
     {
