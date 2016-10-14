@@ -64,7 +64,7 @@
                 <div class="modal-body">
                     <div>
                         Якщо у Вас немає можливості підтримати проект онлайн, Ви його можете підримати прийшовши за адресою:</br></br>
-                        {% if voteSetting %}
+                        {% if voteSetting is defined and voteSetting%}
                             {{ voteSetting.address }}
                         {% else %}
                             some address
@@ -145,7 +145,7 @@
     <header id="main-header">
         <div class="container main-block">
             <a href="{{ path("homepage") }}" id="home-icon" class="icon-home">Всі проекти</a>
-            <a href="{{ path("homepage") }}">Громадський бюджет - Черкаси</a>
+            <a href="{{ path("homepage") }}">Громадський бюджет {% if voteSetting %} - {{ voteSetting.location.city }} {% endif %}</a>
 
             {#Logging#}
             {#{% if app.user and is_granted('ROLE_USER') %}#}

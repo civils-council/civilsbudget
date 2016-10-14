@@ -7,7 +7,7 @@
 {% block content %}
 	    <div id="hp-logo"></div>
 		<h1 id="hp-title">
-			Громадський бюджет в місті Черкаси 2015
+			Громадський бюджет в місті {% if voteSetting %} {{ voteSetting.location.city }} {% endif %}
 		</h1>
 
     {% for project in projects %}

@@ -37,24 +37,40 @@
     {#</div>#}
 {#{% endblock herosection %}#}
 {% block herosection %}
-    <div class="hero-section">
-        <div class="hero-shadow">
+
+    {% if voteSetting %}
+        {% if voteSetting.backgroundImg  %}
+            {% set backgroundImg = asset(voteSetting.backgroundImg) %}
+        {% endif %}
+
+        {% if voteSetting.logo  %}
+            {% set logo = asset(voteSetting.logo) %}
+        {% endif %}
+    {% else %}
+        {#default img#}
+        {% set backgroundImg = asset('bundles/app/img/default_bg.png') %}
+        {% set logo = asset('') %}
+    {% endif %}
+
+    <div class="hero-section" style="background:url('{{ backgroundImg }}') top left/cover #ffffff">
+
+    <div class="hero-shadow">
             <div class="container">
-                <div id="hp-logo"></div>
+                <div id="hp-logo" style="background:url('{{ logo }}') no-repeat"></div>
+                {#background: url(../images/logo.png) no-repeat;#}
                 <div class="hp-text">
                     <h1 id="hp-title">
                             {% if voteSetting %}
-                                {{ voteSetting.titleH1 }}
+                                <p>{{ voteSetting.titleH1 }}</p>
+                                Голосування відкрито до
+                                {{ voteSetting.dateTo|date("m/d/Y") }}
                             {% else %}
-                                <p>виріши долю громадського бюджету міста Черкас на 2016 рік</p>
+                                <p>виріши долю громадського бюджету свого міста</p>
                             {% endif %}
-                        Голосування відкрито до {% if voteSetting %}
-                        {{ voteSetting.dateTo|date("m/d/Y") }}
-                    {% else %} some date {% endif %}<br>
                         <hr>
                     </h1>
                     <div id="hp-voted">
-                        <span class="voted-title">Вже проголосувало Черкащан:</span>
+                        <span class="voted-title">Вже проголосувало {% if voteSetting %} {{ voteSetting.location.city }} {% endif %}:</span>
                         {#{% set votes = 0 %}#}
                         {#{% for project in projects %}#}
                             {#{% set votes = votes + project['countLikes']|number_format(0, '.', ' ') %}#}
@@ -87,7 +103,7 @@
                 <div class="card" id="project{{ project[0].id }}">
                     <div class="card-image">
                         <a href="{{ path('projects_show', { id: project[0].id }) }}" class="img-lnk">
-                            <img src="{% if project[0].picture %} {{ asset(project[0].picture) }} {% else %} {{ asset('images/gerb_goroda_cherkassy.png') }} {% endif %}" class="img-responsive" alt="">
+                            <img src="{% if project[0].picture %} {{ asset(project[0].picture) }} {% else %} {{ asset('bundles/app/img/default_project_image.png') }} {% endif %}" class="img-responsive" alt="">
                         </a>
                     </div><!-- card image -->
 

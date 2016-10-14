@@ -14,4 +14,12 @@ interface VoteSettingInterface
     public function getProjectVoteSettingShow(
         Request $request
     );
+
+    /**
+     * @param Request $request
+     * @return array
+     */
+    public function getProjectVoteSettingByCity(
+        Request $request
+    );    
 }

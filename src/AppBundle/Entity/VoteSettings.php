@@ -91,6 +91,20 @@ class VoteSettings
      * @ORM\JoinColumn(name="location_id", nullable = true, referencedColumnName="id")
      */
     private $location;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $logo;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name = "background_img", type="string", length=255, nullable=true)
+     */
+    private $backgroundImg;
     
     /**
      * Constructor
@@ -334,5 +348,53 @@ class VoteSettings
     public function getTitleH1()
     {
         return $this->titleH1;
+    }
+
+    /**
+     * Set logo
+     *
+     * @param string $logo
+     *
+     * @return VoteSettings
+     */
+    public function setLogo($logo)
+    {
+        $this->logo = $logo;
+
+        return $this;
+    }
+
+    /**
+     * Get logo
+     *
+     * @return string
+     */
+    public function getLogo()
+    {
+        return $this->logo;
+    }
+
+    /**
+     * Set backgroundImg
+     *
+     * @param string $backgroundImg
+     *
+     * @return VoteSettings
+     */
+    public function setBackgroundImg($backgroundImg)
+    {
+        $this->backgroundImg = $backgroundImg;
+
+        return $this;
+    }
+
+    /**
+     * Get backgroundImg
+     *
+     * @return string
+     */
+    public function getBackgroundImg()
+    {
+        return $this->backgroundImg;
     }
 }

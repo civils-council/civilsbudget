@@ -13,6 +13,7 @@
                 <th>dateFrom</th>
                 <th>dateTo</th>
                 <th>description</th>
+                <th>logo</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -26,7 +27,9 @@
 
                 <td>{{ entity.dateFrom|date("m/d/Y") }}</td>
                 <td>{{ entity.dateTo|date("m/d/Y") }}</td>
-                <td>{{ entity.description }}</td>
+                <td>{{ entity.description|slice(1, 50) }}</td>
+
+                <td><img src="{{ asset(entity.logo) }}"></td>
 
                 <td>
                 <ul>
