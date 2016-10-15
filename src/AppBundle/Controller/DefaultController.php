@@ -23,6 +23,9 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
+            return $this->redirectToRoute('admin_dashboard');
+        }
         return $this->redirectToRoute('projects_list');
     }
 

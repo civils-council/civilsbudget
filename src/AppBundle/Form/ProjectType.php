@@ -25,6 +25,7 @@ class ProjectType extends AbstractType
             // TODO check email/http/name ???
             ->add('source', 'email', ['label' => 'Відповідальна особа'])
             ->add('charge', 'number', ['label' => 'Бюджет'])
+            ->add('picture', 'file', ['label' => 'Файл'])
         ;
         if (in_array('admin', $options) && $options['admin']) {
             $builder
