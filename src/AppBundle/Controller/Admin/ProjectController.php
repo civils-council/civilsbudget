@@ -98,6 +98,7 @@ class ProjectController extends Controller
 //                    $project->setOwner($this->getUser());
                     $project->setApproved(true);
                     $project->setConfirmedBy($this->getUser());
+                    $project->setConfirmedAt(new \DateTime());
 
                     $em->persist($project);
                     $em->flush();
