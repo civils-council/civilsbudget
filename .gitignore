@@ -18,6 +18,7 @@
 /composer.phar
 /vendor/
 /web/bundles/
+/web/uploads/
 /web-src/less/*.css
 *~
 .idea
