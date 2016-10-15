@@ -33,6 +33,13 @@ class City
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $city;
+
+    /**
+     * @var Location[]ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Location", mappedBy="cityObject", cascade={"persist"})
+     */
+    private $location;    
     
     /**
      * @var VoteSettings[]ArrayCollection
@@ -48,11 +55,13 @@ class City
     {
         return $this->city;
     }
+
     /**
      * Constructor
      */
     public function __construct()
     {
+        $this->location = new \Doctrine\Common\Collections\ArrayCollection();
         $this->voteSetting = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -88,6 +97,40 @@ class City
     public function getCity()
     {
         return $this->city;
+    }
+
+    /**
+     * Add location
+     *
+     * @param \AppBundle\Entity\Location $location
+     *
+     * @return City
+     */
+    public function addLocation(\AppBundle\Entity\Location $location)
+    {
+        $this->location[] = $location;
+
+        return $this;
+    }
+
+    /**
+     * Remove location
+     *
+     * @param \AppBundle\Entity\Location $location
+     */
+    public function removeLocation(\AppBundle\Entity\Location $location)
+    {
+        $this->location->removeElement($location);
+    }
+
+    /**
+     * Get location
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getLocation()
+    {
+        return $this->location;
     }
 
     /**

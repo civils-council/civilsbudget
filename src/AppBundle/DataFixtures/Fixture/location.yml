@@ -1,0 +1,8 @@
+AppBundle\Entity\Location:
+    location{1..5}:
+        district: district<current()>
+        region: region<current()>
+        cityObject: @city*
+        country: @country*
+        cityRegion: cityRegion<current()>
+        address: <streetAddress()>

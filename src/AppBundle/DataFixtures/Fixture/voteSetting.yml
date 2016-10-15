@@ -1,0 +1,8 @@
+AppBundle\Entity\VoteSettings:
+    voteSettings{1..3}:
+        title: <word(3)>
+        description: <text(2000)>
+        dateFrom: <datetime()>
+        dateTo: <datetime()>
+        voteLimits: <randomNumber($nbDigits = 2)>
+        location: @city*
