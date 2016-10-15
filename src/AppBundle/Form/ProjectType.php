@@ -24,9 +24,8 @@ class ProjectType extends AbstractType
             ])
             // TODO check email/http/name ???
             ->add('source', 'email', ['label' => 'Відповідальна особа'])
-            ->add('charge', 'number', ['label' => 'Бюджет'])
-            ->add('picture', 'file', ['label' => 'Файл'])
-        ;
+            ->add('charge', 'number', ['label' => 'Бюджет']);
+
         if (in_array('admin', $options) && $options['admin']) {
             $builder
                 ->add('voteSetting', null, [
@@ -39,6 +38,8 @@ class ProjectType extends AbstractType
                 ],
                 'choices_as_values' => true,
             ]);
+        } else {
+            $builder->add('picture', 'file', ['label' => 'Файл']);
         }
     }
 

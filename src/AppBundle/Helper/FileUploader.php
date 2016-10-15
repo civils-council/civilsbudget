@@ -119,7 +119,7 @@ class FileUploader
                 0777
             );
 
-            return $fullPathFile;
+            return $pathUrl;
         } else {
             throw new FileUploadException('Could not file files for uploading.');
         }

@@ -107,7 +107,11 @@
                 <div class="card" id="project{{ project[0].id }}">
                     <div class="card-image">
                         <a href="{{ path('projects_show', { id: project[0].id }) }}" class="img-lnk">
-                            <img src="{% if project[0].picture %} {{ asset(project[0].picture) }} {% else %} {{ asset('bundles/app/img/default_project_image.png') }} {% endif %}" class="img-responsive" alt="">
+                            <img src="{% if project[0].picture %}
+                                {{ asset(project[0].picture) }}
+                            {% else %}
+                                {{ asset('bundles/app/img/default_project_image.png') }}
+                            {% endif %}" class="img-responsive" alt="">
                         </a>
                     </div><!-- card image -->
 
