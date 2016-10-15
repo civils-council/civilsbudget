@@ -24,7 +24,7 @@ class Version20161015114041 extends AbstractMigration
         $this->addSql('ALTER TABLE location ADD CONSTRAINT FK_5E9E89CBF92F3E70 FOREIGN KEY (country_id) REFERENCES country (id)');
         $this->addSql('CREATE INDEX IDX_5E9E89CB64D218E ON location (location_id)');
         $this->addSql('CREATE INDEX IDX_5E9E89CBF92F3E70 ON location (country_id)');
-        $this->addSql('ALTER TABLE project CHANGE vote_setting_id vote_setting_id INT NOT NULL');
+//        $this->addSql('ALTER TABLE project CHANGE vote_setting_id vote_setting_id INT NOT NULL');
         $this->addSql('ALTER TABLE vote_settings ADD CONSTRAINT FK_1B1A09EC64D218E FOREIGN KEY (location_id) REFERENCES city (id)');
     }
 
@@ -41,7 +41,7 @@ class Version20161015114041 extends AbstractMigration
         $this->addSql('DROP INDEX IDX_5E9E89CB64D218E ON location');
         $this->addSql('DROP INDEX IDX_5E9E89CBF92F3E70 ON location');
         $this->addSql('ALTER TABLE location ADD country VARCHAR(255) DEFAULT NULL COLLATE utf8_unicode_ci, DROP location_id, DROP country_id');
-        $this->addSql('ALTER TABLE project CHANGE vote_setting_id vote_setting_id INT DEFAULT NULL');
+//        $this->addSql('ALTER TABLE project CHANGE vote_setting_id vote_setting_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE vote_settings DROP FOREIGN KEY FK_1B1A09EC64D218E');
     }
 }
