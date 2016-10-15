@@ -114,7 +114,7 @@ class User implements UserInterface, \JsonSerializable
     private $inn;
 
     /**
-     * @var Collection
+     * @var Project[]ArrayCollection
      *
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Project", inversedBy="likedUsers")
      */
