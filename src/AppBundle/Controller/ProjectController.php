@@ -12,6 +12,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -138,6 +139,9 @@ class ProjectController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 $project->setOwner($this->getUser());
                 $project->setApproved(false);
+                if ($form->getData()->getPicture() instanceof UploadedFile) {
+                    $project->setPicture($this->get('app.file_uploader')->uploadImage($form->getData()->getPicture()));
+                }
 
                 $em->persist($project);
                 $em->flush();

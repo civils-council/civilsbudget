@@ -128,14 +128,8 @@ class ProjectController extends Controller
             'method' => 'POST',
             'attr' => array('class' => 'formCreateClass'),
         ));
-//        $this->addFormFields($form);
         $form->add('submit', 'submit', array('label' => 'Add Project'));
 
         return $form;
-    }
-
-    private function addFormFields($form)
-    {
-//        $form->add('confirm', 'choice', array('choices' => array('approved' => 'approved', 'not_approved' => 'not_approved')));
     }
 }

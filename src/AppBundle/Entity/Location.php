@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Location
@@ -26,13 +27,6 @@ class Location
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $country;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
     private $district;
 
     /**
@@ -47,13 +41,6 @@ class Location
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $city;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
     private $cityRegion;
 
     /**
@@ -62,29 +49,30 @@ class Location
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $address;
-    
+
     /**
-     * @var VoteSettings[]ArrayCollection
+     * @var City
      *
-     * @ORM\OneToMany(targetEntity="VoteSettings", mappedBy="location", cascade={"persist"})
+     * @Assert\NotBlank()
+     * @ORM\ManyToOne(targetEntity="City", inversedBy="location")
+     * @ORM\JoinColumn(name="location_id", nullable = true, referencedColumnName="id")
      */
-    private $voteSetting;
-    
+    private $cityObject;
+
     /**
-     * @return string
+     * @var string
+     *
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    public function __toString()
-    {
-        return $this->city;
-    }
-    
+    private $city;
+
     /**
-     * Constructor
+     * @var Country
+     *
+     * @ORM\ManyToOne(targetEntity="Country", inversedBy="location")
+     * @ORM\JoinColumn(name="country_id", nullable = true, referencedColumnName="id")
      */
-    public function __construct()
-    {
-        $this->voteSetting = new \Doctrine\Common\Collections\ArrayCollection();
-    }
+    private $country;    
 
     /**
      * Get id
@@ -94,30 +82,6 @@ class Location
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set country
-     *
-     * @param string $country
-     *
-     * @return Location
-     */
-    public function setCountry($country)
-    {
-        $this->country = $country;
-
-        return $this;
-    }
-
-    /**
-     * Get country
-     *
-     * @return string
-     */
-    public function getCountry()
-    {
-        return $this->country;
     }
 
     /**
@@ -169,30 +133,6 @@ class Location
     }
 
     /**
-     * Set city
-     *
-     * @param string $city
-     *
-     * @return Location
-     */
-    public function setCity($city)
-    {
-        $this->city = $city;
-
-        return $this;
-    }
-
-    /**
-     * Get city
-     *
-     * @return string
-     */
-    public function getCity()
-    {
-        return $this->city;
-    }
-
-    /**
      * Set cityRegion
      *
      * @param string $cityRegion
@@ -241,36 +181,77 @@ class Location
     }
 
     /**
-     * Add voteSetting
+     * Set city
      *
-     * @param \AppBundle\Entity\VoteSettings $voteSetting
+     * @param string $city
      *
      * @return Location
      */
-    public function addVoteSetting(\AppBundle\Entity\VoteSettings $voteSetting)
+    public function setCity($city)
     {
-        $this->voteSetting[] = $voteSetting;
+        $this->city = $city;
 
         return $this;
     }
 
     /**
-     * Remove voteSetting
+     * Get city
      *
-     * @param \AppBundle\Entity\VoteSettings $voteSetting
+     * @return string
      */
-    public function removeVoteSetting(\AppBundle\Entity\VoteSettings $voteSetting)
+    public function getCity()
     {
-        $this->voteSetting->removeElement($voteSetting);
+        return $this->city;
     }
 
     /**
-     * Get voteSetting
+     * Set cityObject
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @param \AppBundle\Entity\City $cityObject
+     *
+     * @return Location
      */
-    public function getVoteSetting()
+    public function setCityObject(\AppBundle\Entity\City $cityObject = null)
     {
-        return $this->voteSetting;
+        if ($cityObject instanceof City) {
+            $this->setCity($cityObject->getCity());
+        }
+        $this->cityObject = $cityObject;
+
+        return $this;
+    }
+
+    /**
+     * Get cityObject
+     *
+     * @return \AppBundle\Entity\City
+     */
+    public function getCityObject()
+    {
+        return $this->cityObject;
+    }
+
+    /**
+     * Set country
+     *
+     * @param \AppBundle\Entity\Country $country
+     *
+     * @return Location
+     */
+    public function setCountry(\AppBundle\Entity\Country $country = null)
+    {
+        $this->country = $country;
+
+        return $this;
+    }
+
+    /**
+     * Get country
+     *
+     * @return \AppBundle\Entity\Country
+     */
+    public function getCountry()
+    {
+        return $this->country;
     }
 }

@@ -3,6 +3,7 @@
 namespace AppBundle\Helper;
 
 use AppBundle\Entity\City;
+use AppBundle\Entity\Country;
 use AppBundle\Entity\Location;
 use AppBundle\Entity\User;
 use Doctrine\ORM\EntityManager;
@@ -96,21 +97,30 @@ class UserManager
 
         /** @var User $user */
         $user = $this->em->getRepository('AppBundle:User')->findOneBy(['clid' => $clId]);
-
-        $existCity = $this->em->getRepository('AppBundle:City')->findOneBy(['city' => $city]);
-        if (!$existCity) {
-            $newCity = new City();
-            $newCity->setCity($city);
-            $this->em->persist($newCity);
+        if(array_key_exists('city', $data['customer']['addresses'][0]) == true) {
+            $existCity = $this->em->getRepository('AppBundle:City')->findOneBy(['city' => $city]);
+            if (!$existCity) {
+                $existCity = new City();
+                $existCity->setCity($city);
+                $this->em->persist($existCity);
+            }
         }
-        
+        if (array_key_exists('country', $data['customer']['addresses'][0]) == true) {
+            $existCountry = $this->em->getRepository('AppBundle:Country')->findOneBy(['country' => $country]);
+            if (!$existCountry) {
+                $existCountry = new Country();
+                $existCountry->setCountry($country);
+                $this->em->persist($existCountry);
+            }
+        }
         if (empty($user)) {
             $user = new User();
-            if(array_key_exists('city', $data['customer']['addresses'][0]) == true) {
+//            if(array_key_exists('city', $data['customer']['addresses'][0]) == true) {
                 $location = new Location();
 
                 $location
-                    ->setCity($city)
+                    ->setCityObject(isset($existCity) ? $existCity : null)
+                    ->setCountry(isset($existCountry) ? $existCountry : null)
                     ->setDistrict($city);
                 //TODO check street->home number->flat and lineAddress = lineAddres . street
                 if (
@@ -121,13 +131,13 @@ class UserManager
                     $location->setAddress($street . ',' . $houseNo . 'appartment' . $flatNo);
                 };
 
-                if (array_key_exists('country', $data['customer']['addresses'][0]) == true) {
-                    $location->setCountry($country);
-                };
+//                if (array_key_exists('country', $data['customer']['addresses'][0]) == true) {
+//                    $location->setCountry($country);
+//                };
 
                 $this->em->persist($location);
                 $user->setLocation($location);
-            }
+//            }
             if (array_key_exists('clId', $data['customer']) == true) {
                 $user->setClid($clId);
             };
