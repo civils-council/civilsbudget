@@ -146,13 +146,6 @@
             <a href="{{ path("homepage") }}" id="home-icon" class="icon-home">Всі проекти</a>
             <a href="{{ path("homepage") }}">Громадський бюджет {% if voteSetting %} - {{ voteSetting.location.city }} {% endif %}</a>
 
-            {#Logging#}
-            {% if app.user and is_granted('ROLE_USER') %}
-            <a href="{{ path('projects_add') }}">Add Project User</a>
-            {% endif %}
-            {% if app.user and is_granted('ROLE_ADMIN') %}
-            <a href="{{ path('admin_projects_add') }}">Add Project Admin</a>
-            {% endif %}
 
             {#{% if app.user %}#}
                 {#<p id="count_votes">{{ render(controller('AppBundle:User:countVotes', {'id': app.user.id})) }}</p>#}
@@ -167,6 +160,14 @@
 
                 {% elseif app.request.get('_route') != 'login' %}
                     <a href="" class="lb-signin" data-toggle="modal" data-target="#login-modal" title="Увійти">Увійти та проголосувати</a>
+                {% endif %}
+
+                {#Logging#}
+                {% if app.user and is_granted('ROLE_USER') %}
+                    <a href="{{ path('projects_add') }}">Додаты проект</a>
+                {% endif %}
+                {% if app.user and is_granted('ROLE_ADMIN') %}
+                    <a href="{{ path('admin_projects_add') }}">Add Project Admin</a>
                 {% endif %}
             </div>
 
