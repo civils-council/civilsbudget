@@ -64,5 +64,4 @@ services:
         arguments:
             - "@doctrine.orm.entity_manager"
             - "@app.mail.sender"
-        calls:
-            - [ setLimitVotes, ["%limit_votes%"] ]
+            - "@app.application.project"

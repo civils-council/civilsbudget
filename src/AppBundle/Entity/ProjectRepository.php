@@ -57,7 +57,7 @@ class ProjectRepository extends EntityRepository implements ProjectRepositoryInt
         }
         $qb
             ->groupBy('project.id')
-            ->orderBy('project.lastDateOfVotes', Criteria::DESC);
+            ->orderBy('vs.title', Criteria::ASC);
 
         $query = $qb->getQuery();
         $results = $query->getResult();
