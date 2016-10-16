@@ -30,5 +30,10 @@ interface VoteSettingInterface
      */
     public function getVoteSettingByUserCity(
         User $user
-    );    
+    );
+
+    /**
+     * @return array
+     */
+    public function getVoteSettingCities();    
 }

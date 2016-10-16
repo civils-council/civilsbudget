@@ -66,6 +66,24 @@ class VoteSettingsRepository extends EntityRepository implements VoteSettingInte
     /**
      * {@inheritdoc}
      */
+    public function getVoteSettingCities() {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb
+            ->select('l.city')
+            ->from('AppBundle:VoteSettings', 'vs')
+            ->leftJoin('vs.location', 'l')
+            ->groupBy('l.city')
+            ->orderBy('vs.createAt', Criteria::DESC);
+
+        $query = $qb->getQuery();
+        $results = $query->getArrayResult();
+
+        return $results;
+    }    
+
+    /**
+     * {@inheritdoc}
+     */
     public function getProjectVoteSettingShow(
         Request $request
     ) {

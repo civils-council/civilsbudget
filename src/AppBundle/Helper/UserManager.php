@@ -10,30 +10,52 @@ use Doctrine\ORM\EntityManager;
 
 class UserManager
 {
+    /**
+     * @var
+     */
     protected $_templateEngine;
+
+    /**
+     * @var EntityManager
+     */
     protected $em;
 
+    /**
+     * @var
+     */
     private $rootDir;
 
+    /**
+     * @param $rootDir
+     */
     public function setRootDir($rootDir)
     {
         $this->rootDir = $rootDir;
     }
 
+    /**
+     * UserManager constructor.
+     * @param $_templateEngine
+     * @param EntityManager $em
+     */
     public function __construct($_templateEngine, EntityManager $em)
     {
         $this->templateEngine = $_templateEngine;
         $this->em = $em;
     }
 
+    /**
+     * @param array $data
+     * @return array
+     */
     public function isUniqueUser($data)
     {
-        $fp = fopen ($this->rootDir.'/rsa_key.pem', "r");
-        $pub_key=fread ($fp,8192);
+        $fp = fopen($this->rootDir . '/rsa_key.pem', "r");
+        $pub_key = fread($fp, 8192);
         fclose($fp);
         $res = openssl_get_privatekey($pub_key);
 
-        if(array_key_exists('addresses', $data['customer']) == true) {
+        if (array_key_exists('addresses', $data['customer']) == true) {
             if (array_key_exists('country', $data['customer']['addresses'][0]) == true) {
                 $deceode_country = base64_decode($data['customer']['addresses'][0]['country']);
                 $result_field = openssl_private_decrypt($deceode_country, $country, $res);
@@ -65,39 +87,39 @@ class UserManager
             }
         }
 
-        if(array_key_exists('clId', $data['customer']) == true) {
+        if (array_key_exists('clId', $data['customer']) == true) {
             $deceode_clId = base64_decode($data['customer']['clId']);
             $result_field = openssl_private_decrypt($deceode_clId, $clId, $res);
         }
 
-        if(array_key_exists('inn', $data['customer']) == true) {
+        if (array_key_exists('inn', $data['customer']) == true) {
             $deceode_inn = base64_decode($data['customer']['inn']);
             $result_field = openssl_private_decrypt($deceode_inn, $inn, $res);
         }
 
-        if(array_key_exists('firstName', $data['customer']) == true) {
+        if (array_key_exists('firstName', $data['customer']) == true) {
             $deceode_firstName = base64_decode($data['customer']['firstName']);
             $result_field = openssl_private_decrypt($deceode_firstName, $firstName, $res);
         }
 
-        if(array_key_exists('lastName', $data['customer']) == true) {
+        if (array_key_exists('lastName', $data['customer']) == true) {
             $deceode_lastName = base64_decode($data['customer']['lastName']);
             $result_field = openssl_private_decrypt($deceode_lastName, $lastName, $res);
         }
 
-        if(array_key_exists('middleName', $data['customer']) == true) {
+        if (array_key_exists('middleName', $data['customer']) == true) {
             $deceode_middleName = base64_decode($data['customer']['middleName']);
             $result_field = openssl_private_decrypt($deceode_middleName, $middleName, $res);
         }
 
-        if(array_key_exists('sex', $data['customer']) == true) {
+        if (array_key_exists('sex', $data['customer']) == true) {
             $deceode_sex = base64_decode($data['customer']['sex']);
             $result_field = openssl_private_decrypt($deceode_sex, $sex, $res);
         }
 
         /** @var User $user */
         $user = $this->em->getRepository('AppBundle:User')->findOneBy(['clid' => $clId]);
-        if(array_key_exists('city', $data['customer']['addresses'][0]) == true) {
+        if (array_key_exists('city', $data['customer']['addresses'][0]) == true) {
             $existCity = $this->em->getRepository('AppBundle:City')->findOneBy(['city' => $city]);
             if (!$existCity) {
                 $existCity = new City();
@@ -115,29 +137,25 @@ class UserManager
         }
         if (empty($user)) {
             $user = new User();
-//            if(array_key_exists('city', $data['customer']['addresses'][0]) == true) {
-                $location = new Location();
 
-                $location
-                    ->setCityObject(isset($existCity) ? $existCity : null)
-                    ->setCountry(isset($existCountry) ? $existCountry : null)
-                    ->setDistrict($city);
-                //TODO check street->home number->flat and lineAddress = lineAddres . street
-                if (
-                    array_key_exists('flatNo', $data['customer']['addresses'][0]) == true &&
-                    array_key_exists('street', $data['customer']['addresses'][0]) == true &&
-                    array_key_exists('houseNo', $data['customer']['addresses'][0]) == true
-                ) {
-                    $location->setAddress($street . ',' . $houseNo . 'appartment' . $flatNo);
-                };
+            $location = new Location();
 
-//                if (array_key_exists('country', $data['customer']['addresses'][0]) == true) {
-//                    $location->setCountry($country);
-//                };
+            $location
+                ->setCityObject(isset($existCity) ? $existCity : null)
+                ->setCountry(isset($existCountry) ? $existCountry : null)
+                ->setDistrict($city);
+            //TODO check street->home number->flat and lineAddress = lineAddres . street
+            if (
+                array_key_exists('flatNo', $data['customer']['addresses'][0]) == true &&
+                array_key_exists('street', $data['customer']['addresses'][0]) == true &&
+                array_key_exists('houseNo', $data['customer']['addresses'][0]) == true
+            ) {
+                $location->setAddress($street . ',' . $houseNo . 'appartment' . $flatNo);
+            };
 
-                $this->em->persist($location);
-                $user->setLocation($location);
-//            }
+            $this->em->persist($location);
+            $user->setLocation($location);
+
             if (array_key_exists('clId', $data['customer']) == true) {
                 $user->setClid($clId);
             };
@@ -167,7 +185,6 @@ class UserManager
 
             return ['user' => $user, 'status' => 'new'];
         } else {
-
             return ['user' => $user, 'status' => 'old'];
         }
     }

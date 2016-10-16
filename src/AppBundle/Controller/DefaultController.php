@@ -57,8 +57,10 @@ class DefaultController extends Controller
             $data = $this->get('app.security.bank_id')->getBankIdUser($accessToken['access_token']);
             if ($data['state'] == 'ok') {
                 $usersData = $this->get('app.user.manager')->isUniqueUser($data);
-
-                return $this->redirectToRoute('additional_registration', ['id' => $usersData['user']->getid(), 'status' => $usersData['status']]);
+                /** @var User $userResponse */
+                $userResponse = $usersData['user'];
+                
+                return $this->redirectToRoute('additional_registration', ['id' => $userResponse->getId(), 'status' => $usersData['status']]);
             }
         }
 
@@ -91,13 +93,15 @@ class DefaultController extends Controller
                 $em->flush();
 
                 $this->setAuthenticateToken($user);
+                if ($user->isIsDataPublic()) {
+                    $this->get('app.mail.sender')->sendEmail(
+                        [$user->getEmail()],
+                        'Вітаємо Вас',
+                        'AppBundle:Email:new_user.html.twig',
+                        ['user' => $user]
+                    );                    
+                }
 
-                $this->get('app.mail.sender')->sendEmail(
-                    [$user->getEmail()],
-                    'Вітаємо Вас',
-                    'AppBundle:Email:new_user.html.twig',
-                    ['user' => $user]
-                );
                 // if you put a check before send email, during registration of the project will not be sending mail
                 if ($this->get('app.session')->check()) {
 
@@ -260,6 +264,10 @@ class DefaultController extends Controller
 
     }
 
+    /**
+     * @param User $user
+     * @return void
+     */
     public function setAuthenticateToken(User $user)
     {
         $token = new PreAuthenticatedToken($user, $user->getClid(), 'main', $user->getRoles());

@@ -21,6 +21,13 @@ class ServiceSES
     /** @var LoggerInterface  */
     private $logger;
 
+    /**
+     * ServiceSES constructor.
+     * @param $email_sender
+     * @param SesClient $client
+     * @param TwigEngine $twig
+     * @param LoggerInterface $logger
+     */
     public function __construct($email_sender, SesClient $client, TwigEngine $twig, LoggerInterface $logger)
     {
         $this->email_sender = $email_sender;

@@ -35,11 +35,15 @@ class ProjectController extends Controller
         $countVoted = $em->getRepository('AppBundle:User')->findCountVotedUsers($parameterBag);
         $vote =  $em->getRepository('AppBundle:VoteSettings')
             ->getProjectVoteSettingShow($request);
+
+        $voteCity =  $em->getRepository('AppBundle:VoteSettings')
+            ->getVoteSettingCities();
         return [
             'debug' => true,
             'projects' => $projects,
             'countVoted' => $countVoted,
-            'voteSetting' => $vote
+            'voteSetting' => $vote,
+            'voteCity' => $voteCity
         ];
     }
 
