@@ -3,6 +3,8 @@
 namespace AppBundle\Controller\Api;
 
 use AppBundle\Entity\Project;
+use AppBundle\Entity\User;
+use AppBundle\Exception\ValidatorException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -12,6 +14,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 class ProjectController extends Controller
 {
+    const SERVER_ERROR                    = 'Server Error';
+    
     /**
      * @Route("/api/projects", name="api_projects_list")
      * @Method({"GET"})
@@ -83,43 +87,30 @@ class ProjectController extends Controller
      */
     public function likeAction(Project $project, Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-        $clid = null;
-        $content = $this->get("request")->getContent();
-        if (!empty($content))
-        {
-            $params = json_decode($content, true);
-            $clid = $params['clid'];
-        }
-        if(empty($clid)) {
-            $clid = $this->get('request')->request->get('clid');
-        }
-
+        $user = $this->getUser();
         if ($request->getMethod() == Request::METHOD_POST) {
-            $user = $em->getRepository('AppBundle:User')->findOneByClid($clid);
-            if(!empty($user)) {
-                $user_vote = $user->getLikedProjects();
-                if ($user_vote != null) {
-                    if ($project->getLikedUsers()->contains($user)) {
-                        return new JsonResponse(['warning' => 'Ви вже підтримали цей проект.']);
-                    } elseif ($project->getLikedUsers()->contains($user) == false && $user->getLikedProjects()->getId() == $project->getId()) {
-                        $user->setLikedProjects($project);
-                        $this->getDoctrine()->getManager()->flush();
 
-                        return new JsonResponse(['success' => 'Ваший голос зараховано на підтримку проект.']);
-                    } else {
-                        return new JsonResponse(['warning' => 'Ви використали свiй голос.']);
-                    }
-                } else {
-                    $user->setLikedProjects($project);
-                    $this->getDoctrine()->getManager()->flush();
-                    return new JsonResponse(['success' => 'Ваший голос зараховано на підтримку проект.']);
-                }
-            }else{
-                return new JsonResponse(['warning' => 'Такого користувача не iснуэ.']);
+            try {
+                return new JsonResponse('success', $this->getProjectApplication()->crateUserLike(
+                    $user,
+                    $project
+                ));
+                
+            } catch (ValidatorException $e) {
+                return new JsonResponse('danger', $e->getMessage());
+            } catch (\Exception $e) {
+                return new JsonResponse('danger', self::SERVER_ERROR);
             }
         }
 
         return new JsonResponse(['project' => $project]);
     }
+
+    /**
+     * @return \AppBundle\Application\Project\Project
+     */
+    private function getProjectApplication()
+    {
+        return $this->get('app.application.project');
+    }    
 }

@@ -5,6 +5,9 @@ AppBundle\Entity\Project:
         charge: <randomDigit()>
         owner: @user*
         source: <url()>
-        confirm: <characterConfirm()>
+        approved: true
+        city: ЧЕРКАСИ
         confirmedAt: <datetime()>
         confirmedBy: @admin*
+        lastDateOfVotes: <dateTimeBetween("-10 days", "+200 days")>
+        voteSetting: @voteSettings*

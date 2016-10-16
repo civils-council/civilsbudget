@@ -6,6 +6,7 @@
 
     <main id="main-wrap">
         {{ block("flash") }}
+        {{ block("herosection") }}
         <div class="container">
             {{ block("content") }}
         </div>
@@ -14,14 +15,44 @@
     {{ block("popauth") }}
 {% endblock body %}
 
+{% block herosection %}
+{% endblock herosection %}
+
 {% block content %}
 {% endblock content %}
-
 
 {% block popauth %}
     <div id="login-modal" class="modal fade">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
+
+                {% if isSafary() %}
+                    <div class="safari-header">
+                        <img src="{{ asset('images/bank-id.png') }}" alt="BankID"/>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    </div>
+                    <div class="safari-body">
+                        <div class="safari-content">
+                            <p>Для стабільної роботи всіх сервісів BankID рекомендує використовувати браузери</p>
+
+                            <div class="browsers clearfix">
+                                <div class="icon-wrapper">
+                                    <img src="{{ asset('images/icon-chrome.ico') }}" alt="Chrome">
+                                </div>
+                                <div class="icon-wrapper">
+                                    <img src="{{ asset('images/icon-firefox.ico') }}" alt="Chrome">
+                                </div>
+                                <div class="icon-wrapper">
+                                    <img src="{{ asset('images/icon-opera.png') }}" alt="Chrome">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="safari-footer">
+                        <p>По всім питанням звертатись</p>
+                        <p><a href="mailto:info@bankid.org.ua">info@bankid.org.ua</a></p>
+                    </div>
+                {% else %}
                 <div class="modal-header">
                     <div class="row blh-auth">
                         <div class="col-md-6">крок "Авторизація"</div><span class="arrow"></span>
@@ -31,19 +62,25 @@
                 </div>
                 <div class="modal-body">
                     <div>
-                        Якщо у Вас немає можливості підтримати проект онлайн, Ви його можете підримати прийшовши за адресою:</br></br>
-                        м. Черкаси, вул. Б.Вишневецького, 36, к. 100 з 8.00 до 20.00 (крім вихідних).</br></br>
-                        При собі мати паспорт та ідентифікаційний код.
+                        {% if voteSetting is defined and voteSetting%}
+                            Якщо у Вас немає можливості підтримати проект онлайн,
+                            Ви його можете підримати прийшовши за адресою:</br></br>
+                            {{ voteSetting.address|nl2br }}
+                            При собі мати паспорт та ідентифікаційний код.
+                        {% endif %}
+                        .</br></br>
+
                     </div>
                     <hr/>
                     <a href="{{ login_url }}">
                         {#<img src="{{ asset('images/bank-id.png') }}" alt="BankID" />#}
-                        <button class="modal-btn">Продовжити</button>
+                        <button class="modal-btn"> Увійти та проголосувати онлайн </button>
                     </a>
                 </div>
+                {% endif %}
             </div>
         </div>
-     </div>
+    </div>
 {% endblock popauth %}
 
 {% block footer %}
@@ -51,18 +88,19 @@
         <div class="container main-block">
             <div class="row">
                 <div class="col-md-4 copyright">
-                    <span>&copy; 2015</span>
+                    <span>&copy; 2015-2016</span>
                     <a href="{{ path("rada_about") }}">Про проект</a>
                     <a href="{{ path("rada_developerss") }}">Розробники</a>
 
                 </div>
-                <div class="col-md-4 text-center icon-wrap">
+                <div class="col-md-6 text-center icon-wrap">
                     <span class="icon-4"></span>
                     <span class="icon-3"></span>
                     <span class="icon-2"></span>
                     <span class="icon-1"></span>
+                    <a href="https://www.facebook.com/groups/964585350255236" target="_blank"><span class="icon-0"></span></a>
                 </div>
-                <div class="col-md-4 footer-social">
+                <div class="col-md-2 footer-social">
                     <a href="https://www.facebook.com/civilscouncil" class="icon-facebook" target="_blank"></a>
                     <a href="https://vk.com/civilscouncil" class="icon-vk" target="_blank"></a>
                 </div>
@@ -106,24 +144,35 @@
 {% block header %}
     <header id="main-header">
         <div class="container main-block">
-            <a href="{{ path("homepage") }}" id="home-icon" class="icon-home"></a>
-            <a href="{{ path("homepage") }}">golos.ck.ua</a>
+            {% if app.request.get('city') is not empty %}
+                <a href="{{ path("homepage") }}?city={{ app.request.get('city') }}" id="home-icon" class="icon-home">Всі проекти</a>
+                <a href="{{ path("homepage") }}?city={{ app.request.get('city') }}">Громадський бюджет {% if voteSetting %} - {{ voteSetting.location.city }} {% endif %}</a>
+            {% else %}
+                <a href="{{ path("homepage") }}" id="home-icon" class="icon-home">Всі проекти</a>
+                <a href="{{ path("homepage") }}">Громадський бюджет {% if voteSetting %} - {{ voteSetting.location.city }} {% endif %}</a>
+            {% endif %}
 
-            {#Logging#}
-            {#{% if app.user and is_granted('ROLE_USER') %}#}
-            {#<a href="{{ path('projects_add') }}">Add Project User</a>#}
+            {#{% if app.user %}#}
+                {#<p id="count_votes">{{ render(controller('AppBundle:User:countVotes', {'id': app.user.id})) }}</p>#}
             {#{% endif %}#}
-            {#{% if app.user and is_granted('ROLE_ADMIN') %}#}
-            {#<a href="{{ path('admin_projects_add') }}">Add Project Admin</a>#}
-            {#{% endif %}#}
-
 
             <div class="header-controls">
                 {#<a href="#" class="lb-diagramm" title="Статистика"></a>#}
                 {% if app.user %}
-                <a href="{{ path('logout') }}" class="lb-signout" style="background-image: url( {% if app.user.avatar %} {{ asset(app.user.avatar) }} {% else %} {{ asset('bundles/app/img/icon_developer.png') }} {% endif %} );" title="Вихід"></a>
+                    {#<a href="{{ path('logout') }}" class="lb-signout" style="background-image: url( {% if app.user.avatar %} {{ asset(app.user.avatar) }} {% else %} {{ asset('bundles/app/img/icon_developer.png') }} {% endif %} );" title="Вихід"></a>#}
+                    <a href="{{ path('logout') }}"><img  class="lb-signout" src="{% if app.user.avatar %} {{ asset(app.user.avatar) }} {% else %} {{ asset('bundles/app/img/icon_developer.png') }} {% endif %} ">  Вихід</a>
+                    {#<i class="lb-signout" title="Вихід"></i>#}
+
                 {% elseif app.request.get('_route') != 'login' %}
-                <a href="" class="lb-signin" data-toggle="modal" data-target="#login-modal" title="Увійти"></a>
+                    <a href="" class="lb-signin" data-toggle="modal" data-target="#login-modal" title="Увійти">Увійти та проголосувати</a>
+                {% endif %}
+
+                {#Logging#}
+                {#{% if app.user and is_granted('ROLE_USER') %}#}
+                    {#<a href="{{ path('projects_add') }}">Додати проект</a>#}
+                {#{% endif %}#}
+                {% if app.user and is_granted('ROLE_ADMIN') %}
+                    <a href="{{ path('admin_projects_add') }}">Add Project Admin</a>
                 {% endif %}
             </div>
 

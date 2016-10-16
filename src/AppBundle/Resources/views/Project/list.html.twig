@@ -4,32 +4,73 @@
     Проекти
 {% endblock title %}
 
-{% block content %}
-	    <div id="hp-logo"></div>
+{% block herosection %}
 
-		<h1 id="hp-title">
-            <p>виріши долю громадського бюджету міста Черкас на 2016 рік</p>
-            Голосування відкрито до 14 грудня 2015 року<br>
-            <hr>
-            Вже проголосувало Черкащан:
-		</h1>
+    {% if voteSetting %}
+        {% if voteSetting.backgroundImg  %}
+            {% set backgroundImg = asset(voteSetting.backgroundImg) %}
+        {% else %}
+            {% set backgroundImg = asset('bundles/app/img/default_bg.png') %}
+        {% endif %}
 
-    {% set votes = 0 %}
-    {% for project in projects %}
-        {% set votes = votes + project['nMethods']|number_format(0, '.', ' ') %}
-    {% endfor %}
-    {% set digits = votes|split('') %}
+        {% if voteSetting.logo  %}
+            {% set logo = asset(voteSetting.logo) %}
+        {% else %}
+            {% set logo = asset('') %}
+        {% endif %}
+    {% else %}
+        {#default img#}
+        {% set backgroundImg = asset('bundles/app/img/default_bg.png') %}
+        {% set logo = asset('') %}
+    {% endif %}
 
-        <div class="counter">
-        {% for digit in digits %}
-            <span class="digit">
-                <span title="{{ digit }}">{{ digit }}</span>
-            </span>
-        {% endfor %}
+    <div class="hero-section" style="background:url('{{ backgroundImg }}') top left/cover #ffffff">
+
+    <div class="hero-shadow">
+            <div class="container">
+                <div id="hp-logo" style="background:url('{{ logo }}') no-repeat"></div>
+                {#background: url(../images/logo.png) no-repeat;#}
+                <div class="hp-text">
+                    <h1 id="hp-title">
+                            {% if voteSetting %}
+                                <p>{{ voteSetting.titleH1|nl2br }}</p>
+                                Голосування відкрито до
+                                {{ voteSetting.dateTo|date("d.m.Y") }}
+                            {% else %}
+                                <p>виріши долю громадського бюджету свого міста</p>
+                                {% if voteCity %}
+                                    {% for city in voteCity %}
+                                        <a href="{{ path("homepage") }}?city={{ city['city'] }}" style="color: oldlace">{{ city['city'] }}</a><br>
+                                    {% endfor %}
+                                {% endif %}
+                            {% endif %}
+                        <hr>
+                    </h1>
+                    <div id="hp-voted">
+                        <span class="voted-title">Вже проголосувало {% if voteSetting %} {{ voteSetting.location.city }} {% endif %}:</span>
+                        {#{% set votes = 0 %}#}
+                        {#{% for project in projects %}#}
+                            {#{% set votes = votes + project['countLikes']|number_format(0, '.', ' ') %}#}
+                        {#{% endfor %}#}
+                        {% set digits = countVoted|split('') %}
+
+                        <div class="counter">
+                            {% for digit in digits %}
+                                <span class="digit">
+                                    <span title="{{ digit }}">{{ digit }}</span>
+                                </span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+    </div>
+{% endblock herosection %}
+{% block content %}
 
     {% for project in projects %}
-        {% set votes = votes + project['nMethods']|number_format(0, '.', ' ') %}
+        {#{% set votes = votes + project['countLikes']|number_format(0, '.', ' ') %}#}
         {% if loop.index % 4 == 1 %}
          <div class="row">
         {% endif %}
@@ -39,7 +80,11 @@
                 <div class="card" id="project{{ project[0].id }}">
                     <div class="card-image">
                         <a href="{{ path('projects_show', { id: project[0].id }) }}" class="img-lnk">
-                            <img src="{% if project[0].picture %} {{ asset(project[0].picture) }} {% else %} {{ asset('images/gerb_goroda_cherkassy.png') }} {% endif %}" class="img-responsive" alt="">
+                            <img src="{% if project[0].picture %}
+                                {{ asset(project[0].picture) }}
+                            {% else %}
+                                {{ asset('bundles/app/img/default_project_image.png') }}
+                            {% endif %}" class="img-responsive" alt="">
                         </a>
                     </div><!-- card image -->
 
@@ -53,9 +98,11 @@
                         </button>
                     </div><!-- card actions -->
                     <div class="item-meta">
+                        {% if project[0].voteSetting %}
+                        <div>Тип: <span>{{ project[0].voteSetting.title }}</span></div>
+                        {% endif %}
                         <div>Створено: <span>{{ project[0].createAt|date('d-m-Y') }}</span></div>
-                        <div>Підтримало: <span>{{ project[0].likedUsers|length|number_format(0, '.', ' ') }}</span></div>
-                        <div>Зараховано: <span>{{ project['nMethods']|number_format(0, '.', ' ') }}</span></div>
+                        <div>Підтримало: <span>{{ project['countLikes']|number_format(0, '.', ' ') }}</span></div>
                         <div>Бюджет: <span>{{ project[0].charge|number_format(0, '.', ' ') }}</span> грн.</div>
                     </div>
                     <div class="card-reveal">

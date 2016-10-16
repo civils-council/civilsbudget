@@ -1,0 +1,7 @@
+AppBundle\Entity\City:
+    city0:
+        city: ЧЕРКАСИ
+    city1:
+        city: ПОЛТАВА
+    city2:
+        city: КИЇВ

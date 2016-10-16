@@ -15,8 +15,13 @@ class FixtureLoader extends DataFixtureLoader
         $prefix = __DIR__ . '/../Fixture/';
 
         return [
+            $prefix . 'admin.yml',
+            $prefix . 'city.yml',
+            $prefix . 'country.yml',
+            $prefix . 'location.yml',
             $prefix . 'user.yml',
-            $prefix . 'project.yml',
+            $prefix . 'voteSetting.yml',            
+            $prefix . 'project.yml'
         ];
     }
 

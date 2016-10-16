@@ -3,6 +3,9 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\User;
+use AppBundle\Entity\Project;
+use AppBundle\Entity\VoteSettings;
+use AppBundle\Form\ConfirmDataType;
 use AppBundle\Form\LoginType;
 use AppBundle\Form\LoginUserType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -10,6 +13,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Core\Authentication\Token\PreAuthenticatedToken;
 
 class DefaultController extends Controller
 {
@@ -18,9 +23,12 @@ class DefaultController extends Controller
      * @Template()
      * @Method({"GET"})
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
-        return $this->redirectToRoute('projects_list');
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
+            return $this->redirectToRoute('admin_dashboard');
+        }
+        return $this->redirectToRoute('projects_list', ['city' => $request->get('city')]);
     }
 
     /**
@@ -39,6 +47,8 @@ class DefaultController extends Controller
      */
     public function loginAction(Request $request)
     {
+        //http://i.prntscr.com/64388f0de71e4ea496ba43c9e1b2c704.png
+
         $authenticationUtils = $this->get('security.authentication_utils');
 
         $data = ['clid' => $authenticationUtils->getLastUsername()];
@@ -48,18 +58,18 @@ class DefaultController extends Controller
             $accessToken = $this->get('app.security.bank_id')->getAccessToken($code);
             $data = $this->get('app.security.bank_id')->getBankIdUser($accessToken['access_token']);
             if ($data['state'] == 'ok') {
-                $user = $this->get('app.user.manager')->isUniqueUser($data);
-
-                if($this->get('app.seesion')->check()) {
-                    return $this->redirect($this->generateUrl('projects_show', ['id' => $this->get('app.seesion')->getProjectId()]));
-                }
-                if($user[1] == 'new') {
-                    $this->addFlash('inforormation', 'congratulations');
-                    return $this->redirectToRoute('homepage');
-//                    $form = $this->createEditForm($user[0]);
-                } else {
-                    return $this->redirectToRoute('homepage');
-                }
+                $usersData = $this->get('app.user.manager')->isUniqueUser($data);
+                /** @var User $userResponse */
+                $userResponse = $usersData['user'];
+                
+                return $this->redirectToRoute(
+                    'additional_registration',
+                    [
+                        'id' => $userResponse->getId(),
+                        'status' => $usersData['status'],
+                        'city' => $request->get('city')
+                    ]
+                );
             }
         }
 
@@ -71,15 +81,120 @@ class DefaultController extends Controller
 
         return [
             'debug' => true,
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'voteSetting' => $this->getDoctrine()->getRepository('AppBundle:VoteSettings')
+                ->getProjectVoteSettingShow($request)            
         ];
+    }
+
+    /**
+     * @Route("/confirm_data/{id}", name="additional_registration")
+     * @Template()
+     * @Method({"GET","POST"})
+     */
+    public function additionalRegistrationAction(User $user, Request $request)
+    {
+        if ($request->get('status') && $request->get('status') == 'new') {
+            $em = $this->getDoctrine()->getManager();
+            $form = $this->createForm(new ConfirmDataType(), $user);
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+                $em->flush();
+
+                $this->setAuthenticateToken($user);
+                if ($user->isIsDataPublic()) {
+                    
+                    /** @var VoteSettings[] $voteSettings */
+                    $voteSettings = $this->getDoctrine()->getRepository('AppBundle:VoteSettings')->getVoteSettingByUserCity($user);
+
+                    $balanceVotes = [];
+                    foreach ($voteSettings as $voteSetting) {
+                        $limitVoteSetting = $voteSetting->getVoteLimits();
+
+                        $balanceVotes[$voteSetting->getTitle()]=
+                            $limitVoteSetting
+                            - $this->getDoctrine()->getRepository('AppBundle:User')->getUserVotesBySettingVote($voteSetting, $user);
+
+                    }
+
+                    $response = [];
+                    foreach ($balanceVotes as $key=>$balanceVote) {
+                        $messageLeft = $messageRight = '';
+                        if ($balanceVote >= 2) {
+                            $messageLeft .= 'У Вас ';
+                            $messageRight .= ' голоси';
+                        } elseif ($balanceVote == 1) {
+                            $messageLeft .= 'У Вас ';
+                            $messageRight .= ' голос';
+                        } elseif ($balanceVote == 0) {
+                            $messageLeft .= 'У Вас ';
+                            $messageRight .= ' голосів';
+                        }
+
+                        $response[$key] = $messageLeft . ' ' . $balanceVote . ' ' . $messageRight;
+                    }
+                    
+                    $this->get('app.mail.sender')->sendEmail(
+                        [$user->getEmail()],
+                        'Вітаємо Вас',
+                        'AppBundle:Email:new_user.html.twig',
+                        [
+                            'user' => $user,
+                            'response' => $response,
+                            'homePage' => $this->get('router')->generate(
+                                'projects_list',
+                                ['city' => $user->getLocation()->getCity()],
+                                UrlGeneratorInterface::ABSOLUTE_URL),
+                        ]
+                    );                    
+                }
+
+                // if you put a check before send email, during registration of the project will not be sending mail
+                if ($this->get('app.session')->check()) {
+
+                    $project = $this->getDoctrine()->getRepository('AppBundle:Project')->find($this->get('app.session')->getProjectId());
+                    $flashMessage = $this->get('app.like.service')->execute($user, $project);
+                    //TODO check return value
+                    $flashMessage['text']='Ви успішно зареєструвались. ' . $flashMessage['text'];
+                    $this->addFlash($flashMessage['status'], $flashMessage['text']);
+
+                    return $this->redirect($this->generateUrl('projects_show', ['id' => $this->get('app.session')->getProjectId()]));
+                }
+
+                if ($error = $this->get('security.authentication_utils')->getLastAuthenticationError()) {
+                    $this->addFlash('danger', $error->getMessage());
+
+                    return $this->redirectToRoute('homepage');
+                }
+                $this->addFlash('info', 'Дякуємо, Ви успішно зареєструвались');
+                return $this->redirectToRoute('homepage');
+            }
+            return [
+                'form' => $form->createView(),
+                'voteSetting' => $this->getDoctrine()->getRepository('AppBundle:VoteSettings')
+                    ->getProjectVoteSettingShow($request)
+            ];
+        } else {
+            if($this->get('app.session')->check()) {
+                $this->setAuthenticateToken($user);
+                $project = $this->getDoctrine()->getRepository('AppBundle:Project')->find($this->get('app.session')->getProjectId());
+                $flashMessage = $this->get('app.like.service')->execute($user, $project);
+                //TODO check return value
+                $this->addFlash($flashMessage['status'], $flashMessage['text']);
+
+                return $this->redirect($this->generateUrl('projects_show', ['id' => $this->get('app.session')->getProjectId()]));
+            } else {
+                $this->setAuthenticateToken($user);
+                return $this->redirectToRoute('homepage');
+            }
+        }
     }
 
     /**
      * @Route("/loginIncluded", name="login_included")
      * @Template()
      */
-    public function loginIncludedAction()
+    public function loginIncludedAction(Request $request)
     {
         $authenticationUtils = $this->get('security.authentication_utils');
 
@@ -89,10 +204,14 @@ class DefaultController extends Controller
         if ($error = $authenticationUtils->getLastAuthenticationError()) {
             $this->addFlash('danger', $error->getMessage());
 
-            return $this->redirectToRoute('homepage');
+            return $this->redirectToRoute('additional_registration');
         }
 
-        return ['form' => $form->createView()];
+        return [
+            'form' => $form->createView(),
+            'voteSetting' => $this->getDoctrine()->getRepository('AppBundle:VoteSettings')
+                ->getProjectVoteSettingShow($request)            
+        ];
     }
 
 
@@ -103,7 +222,7 @@ class DefaultController extends Controller
      * @Method("GET")
      * @Template()
      */
-    public function editAction($id)
+    public function editAction($id, Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -116,8 +235,10 @@ class DefaultController extends Controller
         $editForm = $this->createEditForm($entity);
 
         return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'entity' => $entity,
+            'edit_form' => $editForm->createView(),
+            'voteSetting' => $this->getDoctrine()->getRepository('AppBundle:VoteSettings')
+                ->getProjectVoteSettingShow($request)
         );
     }
 
@@ -151,8 +272,10 @@ class DefaultController extends Controller
         }
 
         return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'entity' => $entity,
+            'edit_form' => $editForm->createView(),
+            'voteSetting' => $this->getDoctrine()->getRepository('AppBundle:VoteSettings')
+                ->getProjectVoteSettingShow($request)            
         );
     }
 
@@ -174,4 +297,29 @@ class DefaultController extends Controller
 
         return $form;
     }
+
+    /**
+     * @Route("/verify", name="verify")
+     */
+    public function verifyAction()
+    {
+        $result = $this->get('app.mail.sender')->verifyEmail();
+
+        dump($result);
+
+        return new \Symfony\Component\HttpFoundation\Response('ok');
+
+    }
+
+    /**
+     * @param User $user
+     * @return void
+     */
+    public function setAuthenticateToken(User $user)
+    {
+        $token = new PreAuthenticatedToken($user, $user->getClid(), 'main', $user->getRoles());
+        $this->get('security.token_storage')->setToken($token);
+        $this->get('session')->set('_security_main', serialize($token));
+    }
+
 }

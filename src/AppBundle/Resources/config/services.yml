@@ -1,7 +1,17 @@
 parameters:
-#    app.example.class: AppBundle\Example
+    app.helper.image_worker.class:                              AppBundle\Helper\ImageWorker
+    app.helper.file_uploader.class:                             AppBundle\Helper\FileUploader
 
 services:
+    app.file_uploader:
+        class: "%app.helper.file_uploader.class%"
+        arguments:
+            - "@app.image_worker"
+            - "%kernel.root_dir%"
+
+    app.image_worker:
+        class: "%app.helper.image_worker.class%"
+
     app.security.bank_id:
         class: AppBundle\Security\BankIdService
         arguments:
@@ -23,12 +33,35 @@ services:
         arguments:
             - @templating
             - @doctrine.orm.entity_manager
-            - @security.token_storage
-            - @session
         calls:
             - [ setRootDir, ["%kernel.root_dir%"] ]
 
-    app.seesion:
+    app.session:
         class:  AppBundle\Helper\SessionSet
         arguments:
             - @session
+
+    ses_client:
+        class: Aws\Ses\SesClient
+        arguments:
+            -
+                region: "%aws_region%"
+                version: "2010-12-01"
+                credentials:
+                    key: "%aws_key%"
+                    secret: "%aws_secret%"
+
+    app.mail.sender:
+        class: AppBundle\AWS\ServiceSES
+        arguments:
+            - "%email_sender%"
+            - "@ses_client"
+            - "@templating"
+            - "@logger"
+
+    app.like.service:
+        class: AppBundle\Helper\LikeService
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@app.mail.sender"
+            - "@app.application.project"

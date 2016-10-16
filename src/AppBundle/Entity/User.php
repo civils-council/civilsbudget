@@ -114,9 +114,9 @@ class User implements UserInterface, \JsonSerializable
     private $inn;
 
     /**
-     * @var Collection
+     * @var Project[]ArrayCollection
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Project", inversedBy="likedUsers")
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Project", inversedBy="likedUsers")
      */
     private $likedProjects;
 
@@ -126,6 +126,34 @@ class User implements UserInterface, \JsonSerializable
      * @ORM\Column(name="avatar", type="string", length=255, nullable=true)
      */
     protected $avatar;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="count_votes", type="integer", options={"default": 0}, nullable = true)
+     */
+    private $countVotes;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_subscribe", type="boolean", options={"default": true}, nullable = true)
+     */
+    private $isSubscribe;
+
+    /**
+     * @var boolean
+     */
+    private $isDataPublic;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->projects = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->likedProjects = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -330,6 +358,9 @@ class User implements UserInterface, \JsonSerializable
      */
     public function addProject(Project $project)
     {
+        if (!$this->getProjects()->contains($project)) {
+            $this->getProjects()->add($project);
+        }
         $this->projects[] = $project;
 
         return $this;
@@ -342,6 +373,9 @@ class User implements UserInterface, \JsonSerializable
      */
     public function removeProject(Project $project)
     {
+        if ($this->getProjects()->contains($project)) {
+            $this->getProjects()->removeElement($project);
+        }
         $this->projects->removeElement($project);
     }
 
@@ -510,24 +544,31 @@ class User implements UserInterface, \JsonSerializable
     {
         return $this->inn;
     }
+
     /**
-     * Constructor
+     * @param Project $project
+     * @return $this
      */
-    public function __construct()
+    public function addLikedProjects(Project $project)
     {
-        $this->projects = new \Doctrine\Common\Collections\ArrayCollection();
+        if (!$this->getLikedProjects()->contains($project)) {
+            $this->getLikedProjects()->add($project);
+        }
+
+        return $this;
     }
 
     /**
-     * Set likedProjects
+     * Remove project
      *
-     * @param \AppBundle\Entity\Project $likedProjects
-     *
+     * @param Project $project
      * @return User
      */
-    public function setLikedProjects(\AppBundle\Entity\Project $likedProjects = null)
+    public function removeLikedProject(Project $project)
     {
-        $this->likedProjects = $likedProjects;
+        if ($this->getLikedProjects()->contains($project)) {
+            $this->getLikedProjects()->removeElement($project);
+        }
 
         return $this;
     }
@@ -535,10 +576,59 @@ class User implements UserInterface, \JsonSerializable
     /**
      * Get likedProjects
      *
-     * @return \AppBundle\Entity\Project
+     * @return Collection
      */
     public function getLikedProjects()
     {
         return $this->likedProjects;
     }
+
+    /**
+     * @return int
+     */
+    public function getCountVotes()
+    {
+        return $this->countVotes;
+    }
+
+    /**
+     * @param int $countVotes
+     */
+    public function setCountVotes($countVotes)
+    {
+        $this->countVotes = $countVotes;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isIsSubscribe()
+    {
+        return $this->isSubscribe;
+    }
+
+    /**
+     * @param boolean $isSubscribe
+     */
+    public function setIsSubscribe($isSubscribe)
+    {
+        $this->isSubscribe = $isSubscribe;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isIsDataPublic()
+    {
+        return $this->isDataPublic;
+    }
+
+    /**
+     * @param boolean $isDataPublic
+     */
+    public function setIsDataPublic($isDataPublic)
+    {
+        $this->isDataPublic = $isDataPublic;
+    }
+
 }

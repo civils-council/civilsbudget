@@ -1,0 +1,18 @@
+{% extends "@App/Admin/layout.html.twig" %}
+
+{% block content %}
+    <h1>VoteSettings creation</h1>
+
+    {{ form_start(form) }}
+    {{ form_errors(form) }}
+        {{ form(form) }}
+    {{ form_end(form) }}
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('vote_settings') }}">
+            Back to the list
+        </a>
+    </li>
+</ul>
+{% endblock %}

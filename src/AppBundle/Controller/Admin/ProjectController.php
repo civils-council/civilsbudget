@@ -25,9 +25,48 @@ class ProjectController extends Controller
      */
     public function listAction()
     {
-
         return ['projects' => $this->getDoctrine()->getRepository('AppBundle:Project')->findAll()];
+    }
 
+    /**
+     * @Route("/projects/not_approved", name="admin_projects_not_approved")
+     * @Template()
+     */
+    public function notApprovedProjectsAction()
+    {
+        $notApprovedProjects = $this->getDoctrine()->getRepository('AppBundle:Project')->findBy(['approved' => false]);
+
+        return ['projects' => $notApprovedProjects];
+    }
+
+    /**
+     * @Route("/not_approved/{id}/show", name="admin_not_approved_project_show", requirements={"id" = "\d+"})
+     * @Template()
+     * @Method({"GET", "PUT"})
+     * @ParamConverter("project", class="AppBundle:Project")
+     */
+    public function showNotApprovedProjectAction(Project $project, Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $form = $this->createForm(new ProjectType(), $project, ['method' => 'PUT',
+            'validation_groups' => ['approve_admin'],            
+            'admin' => true,
+            'attr' => array('class' => 'formCreateClass'),
+        ]);
+        $form->add('submit', 'submit', array('label' => 'Оновити проект'));
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->flush();
+            if ($project->isApproved()) {
+                $this->addFlash('success', 'Проект був успішно оновлений та опрелюднений');
+            } else {
+                $this->addFlash('info', 'Проект був успішно оновлений, але не буде опрелюднений');
+            }
+            return $this->redirectToRoute('admin_projects_not_approved');
+        }
+        return ['form' => $form->createView()];
     }
 
     /**
@@ -48,14 +87,18 @@ class ProjectController extends Controller
      */
     public function addProjectAction(Request $request)
     {
+        //  project have an owner property. it's - User entity, not admin
+
         $project = new Project();
         $form = $this->createCreateForm($project);
         $form->submit($request);
             if ($request->isMethod('POST')) {
                 if ($form->isValid()) {
                     $em = $this->getDoctrine()->getManager();
-                    $project->setConfirm($this->getUser());
+//                    $project->setOwner($this->getUser());
+                    $project->setApproved(true);
                     $project->setConfirmedBy($this->getUser());
+                    $project->setConfirmedAt(new \DateTime());
 
                     $em->persist($project);
                     $em->flush();
@@ -81,18 +124,13 @@ class ProjectController extends Controller
     private function createCreateForm(Project $entity)
     {
         $form = $this->createForm(new ProjectType(), $entity, array(
+            'validation_groups' => ['approve_admin'],
             'action' => $this->generateUrl('admin_projects_add', array('id' => $entity->getId())),
             'method' => 'POST',
             'attr' => array('class' => 'formCreateClass'),
         ));
-        $this->addFormFields($form);
         $form->add('submit', 'submit', array('label' => 'Add Project'));
 
         return $form;
-    }
-
-    private function addFormFields($form)
-    {
-        $form->add('confirm', 'choice', array('choices' => array('approved' => 'approved', 'not_approved' => 'not_approved')));
     }
 }
