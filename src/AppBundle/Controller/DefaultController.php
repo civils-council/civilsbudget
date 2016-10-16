@@ -21,12 +21,12 @@ class DefaultController extends Controller
      * @Template()
      * @Method({"GET"})
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
             return $this->redirectToRoute('admin_dashboard');
         }
-        return $this->redirectToRoute('projects_list');
+        return $this->redirectToRoute('projects_list', ['city' => $request->get('city')]);
     }
 
     /**
