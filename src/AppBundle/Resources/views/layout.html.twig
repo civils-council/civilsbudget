@@ -143,9 +143,14 @@
 {% block header %}
     <header id="main-header">
         <div class="container main-block">
-            <a href="{{ path("homepage") }}" id="home-icon" class="icon-home">Всі проекти</a>
-            <a href="{{ path("homepage") }}">Громадський бюджет {% if voteSetting %} - {{ voteSetting.location.city }} {% endif %}</a>
+            {% if app.request.get('city') is not empty %}
+                <a href="{{ path("homepage") }}?city={{ app.request.get('city') }}" id="home-icon" class="icon-home">Всі проекти</a>
+                <a href="{{ path("homepage") }}?city={{ app.request.get('city') }}">Громадський бюджет {% if voteSetting %} - {{ voteSetting.location.city }} {% endif %}</a>
 
+            {% else %}
+                <a href="{{ path("homepage") }}" id="home-icon" class="icon-home">Всі проекти</a>
+                <a href="{{ path("homepage") }}">Громадський бюджет {% if voteSetting %} - {{ voteSetting.location.city }} {% endif %}</a>
+            {% endif %}
 
             {#{% if app.user %}#}
                 {#<p id="count_votes">{{ render(controller('AppBundle:User:countVotes', {'id': app.user.id})) }}</p>#}
@@ -163,9 +168,9 @@
                 {% endif %}
 
                 {#Logging#}
-                {% if app.user and is_granted('ROLE_USER') %}
-                    <a href="{{ path('projects_add') }}">Додаты проект</a>
-                {% endif %}
+                {#{% if app.user and is_granted('ROLE_USER') %}#}
+                    {#<a href="{{ path('projects_add') }}">Додати проект</a>#}
+                {#{% endif %}#}
                 {% if app.user and is_granted('ROLE_ADMIN') %}
                     <a href="{{ path('admin_projects_add') }}">Add Project Admin</a>
                 {% endif %}

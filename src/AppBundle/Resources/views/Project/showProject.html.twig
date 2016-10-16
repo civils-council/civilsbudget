@@ -19,7 +19,7 @@
                         {#<h4 id="user-title"><a href="{{ path('users_profile', { id: project[0].owner.id }) }}">{{ project[0].owner.fullName }}</a></h4>#}
                     </div>
                     <div class="col-md-2">
-                        {% if project[0].lastDateOfVotes|date("Y:m:d") > "now"|date("Y:m:d") %}
+                        {% if project[0].voteSetting.dateTo.timestamp >= date().timestamp %}
                             <div {{ app.user is null ? ' data-toggle="modal" data-target="#login-modal"' }}>
                                 {{ render(controller('AppBundle:Project:like', { id: project[0].id })) }}
                             </div>
@@ -42,7 +42,7 @@
             <div class="row hd-statis">
                 <div class="col-md-6 support">
                     Підтримало: <span>{{ project['countLikes']|number_format(0, '.', ' ') }}</span></div>
-                <div class="col-md-6 date-voting">Кінцева дата голосування: <span>{{ project[0].lastDateOfVotes|date('d.m.Y') }}</span></div>
+                <div class="col-md-6 date-voting">Кінцева дата голосування: <span>{{ project[0].voteSetting.dateTo|date('d.m.Y') }}</span></div>
             </div>
             <div class="row hd-description">
                 <div class="col-md-12">
