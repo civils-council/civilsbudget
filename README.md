@@ -1,4 +1,4 @@
-### Welcome to the civilsbudget wiki!
+### Welcome to the civilsbudget wiki! [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/civils-council/civilsbudget/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/civils-council/civilsbudget/?branch=master) [![Code Coverage](https://scrutinizer-ci.com/g/civils-council/civilsbudget/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/civils-council/civilsbudget/?branch=master) [![Build Status](https://travis-ci.org/civils-council/civilsbudget.svg?branch=master)](https://travis-ci.org/civils-council/civilsbudget) 
 
 Hi :) My name is Vladimir Dybenko.
 I am happy to share my idea with you.

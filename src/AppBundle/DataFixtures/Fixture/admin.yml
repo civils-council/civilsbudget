@@ -1,0 +1,6 @@
+AppBundle\Entity\Admin:
+    admin{1..3}:
+        username: admin<current()>
+        firstName: <firstName('male')>
+        lastName: <lastName()>
+        password: <encodePassword(@self, @self->username)>

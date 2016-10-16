@@ -52,6 +52,13 @@ class Admin implements UserInterface
      *
      * @ORM\Column(length=255, nullable=true)
      */
+    private $avatar;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(length=255, nullable=true)
+     */
     private $middleName;
 
     /**
@@ -226,4 +233,20 @@ class Admin implements UserInterface
      */
     public function eraseCredentials()
     {}
+
+    /**
+     * @return string
+     */
+    public function getAvatar()
+    {
+        return $this->avatar;
+    }
+
+    /**
+     * @param string $avatar
+     */
+    public function setAvatar($avatar)
+    {
+        $this->avatar = $avatar;
+    }
 }

@@ -5,6 +5,7 @@ namespace AppBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Project
@@ -70,9 +71,9 @@ class Project implements \JsonSerializable
     /**
      * @var string
      *
-     * @ORM\Column(name="confirm", type="string", length=255, nullable=true)
+     * @ORM\Column(name="approved", type="boolean", options = {"default": true})
      */
-    private $confirm;
+    private $approved;
 
     /**
      * @var Admin
@@ -98,11 +99,43 @@ class Project implements \JsonSerializable
     private $owner;
 
     /**
-     * @var Collection
+     * @var User[]ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\User", mappedBy="likedProjects")
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\User", mappedBy="likedProjects")
      */
     private $likedUsers;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $city;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", nullable = true)
+     */
+    private $lastDateOfVotes;
+
+    /**
+     * @var VoteSettings
+     *
+     * @Assert\NotBlank(groups={"approve_admin"})
+     * @ORM\ManyToOne(targetEntity="VoteSettings", inversedBy="project")
+     * @ORM\JoinColumn(name="vote_setting_id", nullable = true, referencedColumnName="id")
+     */
+    private $voteSetting;    
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->likedUsers = new ArrayCollection();
+    }
+
 
     /**
      * Get id
@@ -314,27 +347,27 @@ class Project implements \JsonSerializable
     }
 
    /**
-    * Set confirm
+    * Set approved
     *
-    * @param string $confirm
+    * @param boolean $approved
     *
     * @return Project
     */
-    public function setConfirm($confirm)
+    public function setApproved($approved)
     {
-        $this->confirm = $confirm;
+        $this->approved = $approved;
 
         return $this;
     }
 
     /**
-     * Get confirm
+     * Get approved
      *
-     * @return string
+     * @return boolean
      */
-    public function getConfirm()
+    public function isApproved()
     {
-        return $this->confirm;
+        return $this->approved;
     }
 
     /**
@@ -360,13 +393,6 @@ class Project implements \JsonSerializable
     {
         return $this->charge;
     }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->likedUsers = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
     /**
      * Add likedUser
@@ -377,6 +403,9 @@ class Project implements \JsonSerializable
      */
     public function addLikedUser(\AppBundle\Entity\User $likedUser)
     {
+        if (!$this->getLikedUsers()->contains($likedUser)) {
+            $this->getLikedUsers()->add($likedUser);
+        }
         $this->likedUsers[] = $likedUser;
 
         return $this;
@@ -389,6 +418,9 @@ class Project implements \JsonSerializable
      */
     public function removeLikedUser(\AppBundle\Entity\User $likedUser)
     {
+        if ($this->getLikedUsers()->contains($likedUser)) {
+            $this->getLikedUsers()->removeElement($likedUser);
+        }
         $this->likedUsers->removeElement($likedUser);
     }
 
@@ -400,5 +432,74 @@ class Project implements \JsonSerializable
     public function getLikedUsers()
     {
         return $this->likedUsers;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCity()
+    {
+        return $this->city;
+    }
+
+    /**
+     * @param string $city
+     */
+    public function setCity($city)
+    {
+        $this->city = $city;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getLastDateOfVotes()
+    {
+        return $this->lastDateOfVotes;
+    }
+
+    /**
+     * @param \DateTime $lastDateOfVotes
+     */
+    public function setLastDateOfVotes($lastDateOfVotes)
+    {
+        $this->lastDateOfVotes = $lastDateOfVotes;
+    }
+
+    /**
+     * Get approved
+     *
+     * @return boolean
+     */
+    public function getApproved()
+    {
+        return $this->approved;
+    }
+
+    /**
+     * Set voteSetting
+     *
+     * @param \AppBundle\Entity\VoteSettings $voteSetting
+     *
+     * @return Project
+     */
+    public function setVoteSetting(\AppBundle\Entity\VoteSettings $voteSetting = null)
+    {
+        if ($voteSetting instanceof VoteSettings) {
+            $this->setCity($voteSetting->getLocation());
+        }
+        $this->voteSetting = $voteSetting;
+
+        return $this;
+    }
+
+    /**
+     * Get voteSetting
+     *
+     * @return \AppBundle\Entity\VoteSettings
+     */
+    public function getVoteSetting()
+    {
+        return $this->voteSetting;
     }
 }

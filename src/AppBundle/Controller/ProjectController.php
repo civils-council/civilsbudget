@@ -4,27 +4,46 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Project;
 use AppBundle\Entity\User;
+use AppBundle\Exception\ValidatorException;
 use AppBundle\Form\ProjectType;
 use AppBundle\Form\LikeProjectType;
+use Doctrine\Common\Collections\Expr\Expression;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ProjectController extends Controller
 {
+    const SERVER_ERROR                    = 'Server Error';
+    const QUERY_CITY                      = 'city';
+    
     /**
      * @Route("/projects", name="projects_list")
      * @Template()
      * @Method({"GET"})
      */
-    public function listAction()
+    public function listAction(Request $request)
     {
-        $projects =$this->getDoctrine()->getRepository('AppBundle:Project')->getProjectShow();
+        $parameterBag = $request->query;
+
+        $em = $this->getDoctrine()->getManager();
+        $projects = $em->getRepository('AppBundle:Project')->getProjectShow($parameterBag);
+        $countVoted = $em->getRepository('AppBundle:User')->findCountVotedUsers($parameterBag);
+        $vote =  $em->getRepository('AppBundle:VoteSettings')
+            ->getProjectVoteSettingShow($request);
+
+        $voteCity =  $em->getRepository('AppBundle:VoteSettings')
+            ->getVoteSettingCities();
         return [
             'debug' => true,
             'projects' => $projects,
+            'countVoted' => $countVoted,
+            'voteSetting' => $vote,
+            'voteCity' => $voteCity
         ];
     }
 
@@ -33,12 +52,15 @@ class ProjectController extends Controller
      * @Template()
      * @Method({"GET"})
      */
-    public function statisticsAction()
+    public function statisticsAction(Request $request)
     {
+        $em = $this->getDoctrine()->getManager();
         $projects = $this->getDoctrine()->getRepository('AppBundle:Project')->getProjectStat();
         return [
             'debug' => true,
             'projects' => $projects,
+            'voteSetting' => $em->getRepository('AppBundle:VoteSettings')
+                ->getProjectVoteSettingShow($request)            
         ];
     }
 
@@ -47,13 +69,23 @@ class ProjectController extends Controller
      * @Template()
      * @Method({"GET"})
      */
-    public function showProjectAction(Project $project, $id)
+    public function showProjectAction($id, Request $request)
     {
-        $project = $this->getDoctrine()->getRepository('AppBundle:Project')->getOneProjectShow($id);
-        if(empty($this->getUser())){
-            $sessionSet = $this->get('app.seesion')->setSession($project[0][0]->getId());
+        $em = $this->getDoctrine()->getManager();
+        $project = $em->getRepository('AppBundle:Project')->getOneProjectShow($id);
+
+        if (!$project) {
+            throw new NotFoundHttpException('This project not found in our source');
         }
-        return ['projects' => $project];
+
+        if (empty($this->getUser())) {
+            $sessionSet = $this->get('app.session')->setSession($project[0][0]->getId());
+        }
+        return [
+            'projects' => $project,
+            'voteSetting' => $em->getRepository('AppBundle:VoteSettings')
+                ->getProjectVoteSettingShow($request)
+        ];
     }
 
     /**
@@ -63,36 +95,37 @@ class ProjectController extends Controller
      */
     public function likeAction(Project $project, Request $request)
     {
+        $user = $this->getUser();
         $form = $this
             ->createForm(new LikeProjectType(), [], [
-                'user' => $this->getUser(),
+                'user' => $user,
                 'action' => $this->generateUrl('projects_like', ['id' => $project->getId()]),
             ]);
-
+        
         if ($request->getMethod() == Request::METHOD_POST) {
-            $vote = $project->getLikedUsers()->contains($this->getUser());
-            $user_vote = $this->getUser()->getLikedProjects();
-            if($user_vote != null) {
-                if ($vote != false) {
-                    $this->addFlash('', 'Ви вже підтримали цей проект.');
-                } elseif ($project->getLikedUsers()->contains($this->getUser()) == false && $this->getUser()->getLikedProjects()->getId() == $project->getId()) {
-                    $this->getUser()->setLikedProjects($project);
-                    $this->getDoctrine()->getManager()->flush();
-                    $this->addFlash('', 'Ваший голос зараховано на підтримку проект.');
-                } else {
-                    $this->addFlash('', 'Ви використали свiй голос.');
-                }
-            }else{
-                $this->getUser()->setLikedProjects($project);
-                $this->getDoctrine()->getManager()->flush();
-                $this->addFlash('', 'Ваший голос зараховано на підтримку проект.');
+
+            try {
+                $this->addFlash('success', $this->getProjectApplication()->crateUserLike(
+                    $user,
+                    $project
+                ));
+                
+            } catch (ValidatorException $e) {
+                $this->addFlash('danger', $e->getMessage());
+            } catch (\Exception $e) {
+                $this->addFlash('danger',
+                    self::SERVER_ERROR
+                );
             }
 
-
-            return $this->redirectToRoute('projects_show', ['id' => $project->getId()]);
+            return $this->redirectToRoute('projects_list');
         }
 
-        return ['form' => $form->createView()];
+        return [
+            'form' => $form->createView(),
+            'voteSetting' => $this->getDoctrine()->getRepository('AppBundle:VoteSettings')
+                ->getProjectVoteSettingShow($request)
+        ];
     }
 
     /**
@@ -104,21 +137,29 @@ class ProjectController extends Controller
     {
         $project = new Project();
         $form = $this->createCreateForm($project);
-            $form->submit($request);
-            if ($request->isMethod('POST')) {
-                if ($form->isValid()) {
-                    $em = $this->getDoctrine()->getManager();
-                    $project->setOwner($this->getUser());
-
-                    $em->persist($project);
-                    $em->flush();
-
-                    return $this->redirect($this->generateUrl('projects_show', array('id' => $project->getId())));
+        $form->submit($request);
+        if ($request->isMethod('POST')) {
+            if ($form->isValid()) {
+                $em = $this->getDoctrine()->getManager();
+                $project->setOwner($this->getUser());
+                $project->setApproved(false);
+                if ($form->getData()->getPicture() instanceof UploadedFile) {
+                    $project->setPicture($this->get('app.file_uploader')->uploadImage($form->getData()->getPicture()));
                 }
+
+                $em->persist($project);
+                $em->flush();
+
+                $this->addFlash('success', 'Проект був успішно створений. Після перегляду адміністратором, його буде опрелюднено.');
+
+                return $this->redirect($this->generateUrl('projects_list'));
             }
+        }
         return [
-                'entity' => $project,
-                'form' => $form->createView(),
+            'entity' => $project,
+            'form' => $form->createView(),
+            'voteSetting' => $this->getDoctrine()->getRepository('AppBundle:VoteSettings')
+                ->getProjectVoteSettingShow($request)            
         ];
     }
 
@@ -134,12 +175,21 @@ class ProjectController extends Controller
     private function createCreateForm(Project $entity)
     {
         $form = $this->createForm(new ProjectType(), $entity, array(
+            'validation_groups' => ['user_post'],
             'action' => $this->generateUrl('projects_add'),
             'method' => 'POST',
-            'attr' => array('class' => 'formCreateClass'),
+            'attr' => array('class' => 'formCreateClass')
         ));
         $form->add('submit', 'submit', array('label' => 'Add Project'));
 
         return $form;
+    }
+
+    /**
+     * @return \AppBundle\Application\Project\Project
+     */
+    private function getProjectApplication()
+    {
+        return $this->get('app.application.project');
     }
 }

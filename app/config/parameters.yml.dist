@@ -18,10 +18,18 @@ parameters:
     # A secret key that's used to generate certain security-related tokens
     secret:            ThisTokenIsNotSoSecretChangeIt
 
+    aws_key: ~
+    aws_secret: ~
+    aws_region: eu-west-1
+
+    email_sender: ~
+
     client_id: ~
     client_secret: ~
 
     bi_oauth_url: "https://bankid.org.ua"
     bi_get_data_url: "https://biprocessing.org.ua"
+
+    limit_votes: 4
 
 
