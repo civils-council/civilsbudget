@@ -146,10 +146,10 @@
         <div class="container main-block">
             {% if app.request.get('city') is not empty %}
                 <a href="{{ path("homepage") }}?city={{ app.request.get('city') }}" id="home-icon" class="icon-home">Всі проекти</a>
-                <a href="{{ path("homepage") }}?city={{ app.request.get('city') }}">Громадський бюджет {% if voteSetting is defined %} - {{ voteSetting.location.city }} {% endif %}</a>
+                <a href="{{ path("homepage") }}?city={{ app.request.get('city') }}">Громадський бюджет {% if (voteSetting is defined) and (voteSetting) %} - {{ voteSetting.location.city }} {% endif %}</a>
             {% else %}
                 <a href="{{ path("homepage") }}" id="home-icon" class="icon-home">Всі проекти</a>
-                <a href="{{ path("homepage") }}">Громадський бюджет {% if voteSetting is defined %} - {{ voteSetting.location.city }} {% endif %}</a>
+                <a href="{{ path("homepage") }}">Громадський бюджет {% if (voteSetting is defined) and (voteSetting) %} - {{ voteSetting.location.city }} {% endif %}</a>
             {% endif %}
 
             {#{% if app.user %}#}
