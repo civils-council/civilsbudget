@@ -10,7 +10,7 @@ interface ProjectInterface
     /**
      * @param $user
      * @param ProjectEntity $project
-     * @return mixed
+     * @return string
      * @throws ValidatorException
      */
     public function crateUserLike(

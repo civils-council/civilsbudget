@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\User;
 use AppBundle\Entity\Project;
+use AppBundle\Entity\VoteSettings;
 use AppBundle\Form\ConfirmDataType;
 use AppBundle\Form\LoginType;
 use AppBundle\Form\LoginUserType;
@@ -12,6 +13,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\PreAuthenticatedToken;
 
 class DefaultController extends Controller
@@ -60,7 +62,14 @@ class DefaultController extends Controller
                 /** @var User $userResponse */
                 $userResponse = $usersData['user'];
                 
-                return $this->redirectToRoute('additional_registration', ['id' => $userResponse->getId(), 'status' => $usersData['status']]);
+                return $this->redirectToRoute(
+                    'additional_registration',
+                    [
+                        'id' => $userResponse->getId(),
+                        'status' => $usersData['status'],
+                        'city' => $request->get('city')
+                    ]
+                );
             }
         }
 
@@ -94,11 +103,49 @@ class DefaultController extends Controller
 
                 $this->setAuthenticateToken($user);
                 if ($user->isIsDataPublic()) {
+                    
+                    /** @var VoteSettings[] $voteSettings */
+                    $voteSettings = $this->getDoctrine()->getRepository('AppBundle:VoteSettings')->getVoteSettingByUserCity($user);
+
+                    $balanceVotes = [];
+                    foreach ($voteSettings as $voteSetting) {
+                        $limitVoteSetting = $voteSetting->getVoteLimits();
+
+                        $balanceVotes[$voteSetting->getTitle()]=
+                            $limitVoteSetting
+                            - $this->getDoctrine()->getRepository('AppBundle:User')->getUserVotesBySettingVote($voteSetting, $user);
+
+                    }
+
+                    $response = [];
+                    foreach ($balanceVotes as $key=>$balanceVote) {
+                        $messageLeft = $messageRight = '';
+                        if ($balanceVote >= 2) {
+                            $messageLeft .= 'У Вас ';
+                            $messageRight .= ' голоси';
+                        } elseif ($balanceVote == 1) {
+                            $messageLeft .= 'У Вас ';
+                            $messageRight .= ' голос';
+                        } elseif ($balanceVote == 0) {
+                            $messageLeft .= 'У Вас ';
+                            $messageRight .= ' голосів';
+                        }
+
+                        $response[$key] = $messageLeft . ' ' . $balanceVote . ' ' . $messageRight;
+                    }
+                    
                     $this->get('app.mail.sender')->sendEmail(
                         [$user->getEmail()],
                         'Вітаємо Вас',
                         'AppBundle:Email:new_user.html.twig',
-                        ['user' => $user]
+                        [
+                            'user' => $user,
+                            'response' => $response,
+                            'homePage' => $this->get('router')->generate(
+                                'projects_list',
+                                ['city' => $user->getLocation()->getCity()],
+                                UrlGeneratorInterface::ABSOLUTE_URL),
+                        ]
                     );                    
                 }
 

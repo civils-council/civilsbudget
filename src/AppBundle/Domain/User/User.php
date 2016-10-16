@@ -2,6 +2,7 @@
 
 namespace AppBundle\Domain\User;
 
+use AppBundle\AWS\ServiceSES;
 use AppBundle\Entity\Interfaces\ProjectRepositoryInterface;
 use AppBundle\Entity\Interfaces\UserRepositoryInterface;
 use AppBundle\Entity\Interfaces\VoteSettingInterface;
@@ -22,16 +23,24 @@ class User implements UserInterface
     private $voteSettingInterface;
 
     /**
+     * @var ServiceSES
+     */
+    private $serviceSES;
+
+    /**
      * User constructor.
      * @param UserRepositoryInterface $userRepositoryInterface
      * @param VoteSettingInterface $voteSettingInterface
+     * @param ServiceSES $serviceSES
      */
     public function __construct(
         UserRepositoryInterface $userRepositoryInterface,
-        VoteSettingInterface $voteSettingInterface
+        VoteSettingInterface $voteSettingInterface,
+        ServiceSES $serviceSES
     ) {
         $this->userRepositoryInterface = $userRepositoryInterface;
         $this->voteSettingInterface = $voteSettingInterface;
+        $this->serviceSES = $serviceSES;
     }
 
     /**
@@ -88,6 +97,16 @@ class User implements UserInterface
             $response[] = $key. ' ' . $messageLeft . ' ' . $balanceVote . ' ' . $messageRight;
         }
 
+        $this->serviceSES->sendEmail(
+            [$user->getEmail()],
+            'Онлайн голосування',
+            'AppBundle:Email:votes_end.html.twig',
+            [
+                'user' => $user,
+                'response' => $response
+            ]
+        );
+        
         return
             "Дякуємо за Ваш голос. Ваш голос зараховано на підтримку проекту
             У вас залишилось: ".implode(', ', $response);

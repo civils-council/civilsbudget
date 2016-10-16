@@ -13,3 +13,4 @@ services:
         arguments:
             - "@app.repository.user"
             - "@app.repository.vote"
+            - "@app.mail.sender"
