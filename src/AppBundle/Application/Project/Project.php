@@ -59,7 +59,7 @@ class Project implements ProjectInterface
 
         if ($project->getVoteSetting()->getDateFrom()->getTimestamp() > $date->getTimestamp()) {
             throw new ValidatorException(
-                'Вибачте. Голосування розпочнется '
+                'Вибачте. Голосування розпочнеться '
                 .$project->getVoteSetting()->getDateFrom()->format('d.m.Y'));
         }
         
