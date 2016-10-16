@@ -486,7 +486,7 @@ class Project implements \JsonSerializable
     public function setVoteSetting(\AppBundle\Entity\VoteSettings $voteSetting = null)
     {
         if ($voteSetting instanceof VoteSettings) {
-            $this->setCity($voteSetting->getLocation());
+            $this->setCity($voteSetting->getLocation()->getCity());
         }
         $this->voteSetting = $voteSetting;
 
