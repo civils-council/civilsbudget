@@ -48,15 +48,18 @@ class LikeService
     {
         $arrayMessage = [];
         try {
-            $arrayMessage['success'] = $this->getProjectInterface()->crateUserLike(
+            $arrayMessage['status'] = 'success';
+            $arrayMessage['text'] = $this->getProjectInterface()->crateUserLike(
                 $user,
                 $project
             );
 
         } catch (ValidatorException $e) {
-            $arrayMessage['danger'] = $e->getMessage();
+            $arrayMessage['status'] = 'danger';
+            $arrayMessage['text'] = $e->getMessage();
         } catch (\Exception $e) {
-            $arrayMessage['danger'] = ProjectController::SERVER_ERROR;
+            $arrayMessage['status'] = 'danger';
+            $arrayMessage['text'] = ProjectController::SERVER_ERROR;
         }
 
         return $arrayMessage;
