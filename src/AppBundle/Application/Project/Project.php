@@ -64,7 +64,7 @@ class Project implements ProjectInterface
         }
         
         if ($this->getUserInterface()->getAccessVote($project, $user)
-            > $project->getVoteSetting()->getVoteLimits()
+            >= $project->getVoteSetting()->getVoteLimits()
         ) {
             throw new ValidatorException('Ви вже вичерпали свій ліміт голосів.');
         }
