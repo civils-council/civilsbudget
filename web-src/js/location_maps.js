@@ -22,7 +22,6 @@ var initMap;
     });
 
     if (editableLocation) {
-
       var centerControlDiv = document.createElement('div');
       new CenterControl(centerControlDiv, map);
       centerControlDiv.index = 1;
@@ -69,12 +68,14 @@ var initMap;
       });
     } else {
       if (window.appSingleProjectLocation) {
-        // Construct the polygon.
         createPolygone(appSingleProjectLocation);
       }
       if (window.appProjectsLocation) {
         appProjectsLocation.forEach(function (project) {
-          createPolygone(project.location);
+          project.polygon = createPolygone(project.location);
+          project.polygon.addListener('click', function (e) {
+            window.open(project.url, '_blank');
+          });
         });
 
       }
@@ -85,11 +86,17 @@ var initMap;
         paths: coords,
         strokeColor: '#22b15c',
         strokeOpacity: 0.8,
-        strokeWeight: 2,
+        strokeWeight: 1.2,
         fillColor: '#22b15c',
         fillOpacity: 0.35
       });
       polygon.setMap(map);
+      polygon.addListener('mouseover', function (e) {
+        polygon.setOptions({fillOpacity: 0.5});
+      });
+      polygon.addListener('mouseout', function (e) {
+        polygon.setOptions({fillOpacity: 0.35});
+      });
       return polygon;
     }
     function addBetweenClosestPoints (triangleCoords, newPoint) {
