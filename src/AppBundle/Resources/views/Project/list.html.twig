@@ -47,7 +47,7 @@
                         <hr>
                     </h1>
                     <div id="hp-voted">
-                        <span class="voted-title">Вже проголосувало {% if voteSetting %} {{ voteSetting.location.city }} {% endif %}:</span>
+                        <span class="voted-title">Вже підтримано проектів {% if voteSetting %} {{ voteSetting.location.city }} {% endif %}:</span>
                         {#{% set votes = 0 %}#}
                         {#{% for project in projects %}#}
                             {#{% set votes = votes + project['countLikes']|number_format(0, '.', ' ') %}#}
@@ -68,10 +68,21 @@
     </div>
 {% endblock herosection %}
 {% block content %}
-
+    {% set voteSettingTitle = '' %}
     {% for project in projects %}
+        {% if voteSettingTitle != project[0].voteSetting.title %}
+            {% set voteSettingTitle, loop_i = project[0].voteSetting.title, loop.index - 1 %}
+             <div class="row">
+                <div class="col-md-12  item-content">
+                    <div class="wrap-item">
+                        <h2 class="text-center">{{ project[0].voteSetting.location.city }} - {{ voteSettingTitle }}</h2>
+                    </div>
+                </div>
+             </div>
+        {% endif %}
+
         {#{% set votes = votes + project['countLikes']|number_format(0, '.', ' ') %}#}
-        {% if loop.index % 4 == 1 %}
+        {% if (loop.index-loop_i) % 4 == 1 %}
          <div class="row">
         {% endif %}
 
@@ -115,7 +126,7 @@
                 </div>
             </div>
         </div>
-        {% if loop.index % 4 == 0 %}
+        {% if (loop.index-loop_i) % 4 == 0 %}
         </div>
         {% endif %}
     {% endfor %}
