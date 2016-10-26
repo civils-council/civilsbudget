@@ -1,0 +1,57 @@
+{% extends '@App/layout.html.twig' %}
+
+{% block title %}Users{% endblock %}
+
+{% block content %}
+
+    <div class="count">
+       All Users {{ pagination.getTotalItemCount }}
+    </div>
+    <table>
+        <tr>
+            {# sorting of properties based on query components #}
+            <th>{{ knp_pagination_sortable(pagination, 'Id', 'a.id') }}</th>
+            <th{% if pagination.isSorted('a.firstName') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'First Name', 'a.firstName') }}</th>
+            <th{% if pagination.isSorted('a.lastName') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Last Name', 'a.lastName') }}</th>
+            <th{% if pagination.isSorted('a.middleName') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Middle Name', 'a.middleName') }}</th>
+            <th{% if pagination.isSorted('a.inn') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Inn', 'a.inn') }}</th>
+            <th{% if pagination.isSorted('a.sex') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Gender', 'a.sex') }}</th>
+            <th>{{ knp_pagination_sortable(pagination, 'createAt', ['a.createAt']) }}</th>
+        </tr>
+
+        {# table body #}
+        {% for article in pagination %}
+            <tr {% if loop.index is odd %}class="color"{% endif %}>
+                <td>{{ article.id }}</td>
+                <td>{{ article.firstName }}</td>
+                <td>{{ article.lastName }}</td>
+                <td>{{ article.middleName }}</td>
+                <td>{{ article.inn }}</td>
+                <td>{{ article.sex }}</td>
+                <td>{% if article.createAt %}{{ article.createAt|date('Y-m-d') }}{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('admin_users_show', { 'id': article.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('admin_users_edit', { 'id': article.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <div class="navigation">
+        {{ knp_pagination_render(pagination) }}
+    </div>
+
+        <ul>
+        <li>
+            <a href="{{ path('admin_users_new') }}">
+                Create a new entry
+            </a>
+        </li>
+    </ul>
+    {% endblock %}

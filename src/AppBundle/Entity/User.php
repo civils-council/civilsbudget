@@ -7,12 +7,20 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints as AssertBridge;
 
 /**
  * User
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="AppBundle\Entity\UserRepository")
+ *
+ * @AssertBridge\UniqueEntity(
+ *     groups={"admin_user_post"},
+ *     fields="inn",
+ *     errorPath="not valid",
+ *     message="This inn account is already in use."
+ * )
  */
 class User implements UserInterface, \JsonSerializable
 {
@@ -30,6 +38,7 @@ class User implements UserInterface, \JsonSerializable
     /**
      * @var string
      *
+     * @Assert\NotBlank(groups={"admin_user_post"})
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $firstName;
@@ -37,6 +46,7 @@ class User implements UserInterface, \JsonSerializable
     /**
      * @var string
      *
+     * @Assert\NotBlank(groups={"admin_user_post"})
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $lastName;
@@ -51,6 +61,7 @@ class User implements UserInterface, \JsonSerializable
     /**
      * @var string
      *
+     * @Assert\NotBlank(groups={"admin_user_post"})
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $sex;
@@ -58,6 +69,7 @@ class User implements UserInterface, \JsonSerializable
     /**
      * @var string
      *
+     * @Assert\NotBlank(groups={"admin_user_post"})
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $birthday;
@@ -72,6 +84,7 @@ class User implements UserInterface, \JsonSerializable
     /**
      * @var string
      *
+     * @Assert\NotBlank(groups={"admin_user_post"})
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $phone;
@@ -109,6 +122,7 @@ class User implements UserInterface, \JsonSerializable
     /**
      * @var string
      *
+     * @Assert\NotBlank(groups={"admin_user_post"})
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $inn;
@@ -530,6 +544,9 @@ class User implements UserInterface, \JsonSerializable
      */
     public function setInn($inn)
     {
+        if (!$this->clid) {
+            $this->setClid($inn);            
+        }
         $this->inn = $inn;
 
         return $this;

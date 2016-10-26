@@ -1,0 +1,109 @@
+{% extends '@App/layout.html.twig' %}
+
+{% block title %}Edit Users{% endblock %}
+
+{% block content %}
+    <h1>User</h1>
+
+    <table class="record_properties">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>
+            <tr>
+                <th>Firstname</th>
+                <td>{{ entity.firstName }}</td>
+            </tr>
+            <tr>
+                <th>Lastname</th>
+                <td>{{ entity.lastName }}</td>
+            </tr>
+            <tr>
+                <th>Middlename</th>
+                <td>{{ entity.middleName }}</td>
+            </tr>
+            <tr>
+                <th>Sex</th>
+                <td>{{ entity.sex }}</td>
+            </tr>
+            <tr>
+                <th>Birthday</th>
+                <td>{{ entity.birthday }}</td>
+            </tr>
+            <tr>
+                <th>Phone</th>
+                <td>{{ entity.phone }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ entity.email }}</td>
+            </tr>
+            <tr>
+                <th>Inn</th>
+                <td>{{ entity.inn }}</td>
+            </tr>
+            <tr>
+                <th>Createat</th>
+                <td>{{ entity.createAt|date('Y-m-d H:i:s') }}</td>
+            </tr>
+
+        </tbody>
+    </table>
+
+    <ul class="record_actions">
+    <li>
+        <a href="{{ path('admin_users') }}">
+            Back to the list
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('admin_users_edit', { 'id': entity.id }) }}">
+            Edit
+        </a>
+    </li>
+
+    {{ form_errors(delete_form) }}
+    {{ form_start(delete_form, {'action': path('admin_users_delete', {'id': entity.id}), 'method': 'POST'}) }}
+
+
+    <div class="margin-top-20 btn_save">
+        {{ form_widget(delete_form.submit, {'attr': {'class': 'btn green-haze'}}) }}
+    </div>
+    {{ form_end(delete_form) }}
+    </ul>
+
+    <div class="count">
+        All Project {{ pagination.getTotalItemCount }}
+    </div>
+    <table>
+        <tr>
+            {# sorting of properties based on query components #}
+            <th>{{ knp_pagination_sortable(pagination, 'Id', 'a.id') }}</th>
+            <th{% if pagination.isSorted('a.title') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Project Name', 'a.title') }}</th>
+            <th>{{ knp_pagination_sortable(pagination, 'createAt', ['a.createAt']) }}</th>
+        </tr>
+
+        {# table body #}
+        {% for article in pagination %}
+            <tr {% if loop.index is odd %}class="color"{% endif %}>
+                <td>{{ article.id }}</td>
+                <td>{{ article.title }}</td>
+                <td>{% if article.createAt %}{{ article.createAt|date('Y-m-d') }}{% endif %}</td>
+
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('admin_projects_like', { 'id_project': article.id, 'id_user': entity.id}) }}">vote</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <div class="navigation">
+        {{ knp_pagination_render(pagination) }}
+    </div>
+
+{% endblock %}
