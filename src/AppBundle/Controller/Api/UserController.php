@@ -36,33 +36,14 @@ class UserController extends Controller
                     $balanceVotes[$voteSetting->getTitle()]=
                         $limitVoteSetting
                         - $this->getDoctrine()->getRepository('AppBundle:User')->getUserVotesBySettingVote($voteSetting, $user);
-
                 }
-
-                $response = [];
-                foreach ($balanceVotes as $key=>$balanceVote) {
-                    $messageLeft = $messageRight = '';
-                    if ($balanceVote >= 2) {
-                        $messageLeft .= 'У Вас ';
-                        $messageRight .= ' голоси';
-                    } elseif ($balanceVote == 1) {
-                        $messageLeft .= 'У Вас ';
-                        $messageRight .= ' голос';
-                    } elseif ($balanceVote == 0) {
-                        $messageLeft .= 'У Вас ';
-                        $messageRight .= ' голосів';
-                    }
-
-                    $response[$key] = $messageLeft . ' ' . $balanceVote . ' ' . $messageRight;
-                }                
-                
                 
                 return new JsonResponse(
                     [
                         "id" => $user->getId(),
                         "full_name" => $user->getFullName(),
                         "clid" => $user->getClid(),
-                        "voted_project" => $response
+                        "voted_project" => $balanceVotes
                     ]
                 );
             }
