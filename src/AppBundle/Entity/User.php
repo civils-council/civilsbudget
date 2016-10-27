@@ -16,7 +16,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints as AssertBridge;
  * @ORM\Entity(repositoryClass="AppBundle\Entity\UserRepository")
  *
  * @AssertBridge\UniqueEntity(
- *     groups={"admin_user_post"},
+ *     groups={"admin_user_post", "admin_user_put"},
  *     fields="inn",
  *     errorPath="not valid",
  *     message="This inn account is already in use."
@@ -38,7 +38,7 @@ class User implements UserInterface, \JsonSerializable
     /**
      * @var string
      *
-     * @Assert\NotBlank(groups={"admin_user_post"})
+     * @Assert\NotBlank(groups={"admin_user_post", "admin_user_put"})
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $firstName;
@@ -46,7 +46,7 @@ class User implements UserInterface, \JsonSerializable
     /**
      * @var string
      *
-     * @Assert\NotBlank(groups={"admin_user_post"})
+     * @Assert\NotBlank(groups={"admin_user_post", "admin_user_put"})
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $lastName;
@@ -61,7 +61,7 @@ class User implements UserInterface, \JsonSerializable
     /**
      * @var string
      *
-     * @Assert\NotBlank(groups={"admin_user_post"})
+     * @Assert\NotBlank(groups={"admin_user_post", "admin_user_put"})
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $sex;
@@ -69,7 +69,7 @@ class User implements UserInterface, \JsonSerializable
     /**
      * @var string
      *
-     * @Assert\NotBlank(groups={"admin_user_post"})
+     * @Assert\NotBlank(groups={"admin_user_post", "admin_user_put"})
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $birthday;
@@ -84,7 +84,7 @@ class User implements UserInterface, \JsonSerializable
     /**
      * @var string
      *
-     * @Assert\NotBlank(groups={"admin_user_post"})
+     * @Assert\NotBlank(groups={"admin_user_post", "admin_user_put"})
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $phone;
@@ -122,7 +122,7 @@ class User implements UserInterface, \JsonSerializable
     /**
      * @var string
      *
-     * @Assert\NotBlank(groups={"admin_user_post"})
+     * @Assert\NotBlank(groups={"admin_user_post", "admin_user_put"})
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $inn;

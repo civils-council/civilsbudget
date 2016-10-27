@@ -115,17 +115,31 @@ class UserController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('AppBundle:User')->find($id);
+        /** @var User $entity */
+        $entity = $em->getRepository('AppBundle:User')->findOneBy(['id' => $id]);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find User entity.');
+            $this->addFlash('danger', 'No user was found for this id.');
+            return $this->redirectToRoute('admin_users');
+        }
+
+        if (!$entity->getLocation()) {
+            $this->addFlash('danger', 'User must have location.');
+            return $this->redirectToRoute('admin_users');
+        }
+
+        if ($entity->getLocation() && !$entity->getLocation()->getCity()) {
+            $this->addFlash('danger', 'User must have city in location.');
+            return $this->redirectToRoute('admin_users');
         }
 
         $deleteForm = $this->createDeleteForm($id);
 
         $em    = $this->get('doctrine.orm.entity_manager');
-        $dql   = "SELECT a FROM AppBundle:Project a ";
+        $dql   = "SELECT a FROM AppBundle:Project a LEFT JOIN a.voteSetting vs LEFT JOIN vs.location l WHERE l.city = :city";
+
         $query = $em->createQuery($dql);
+        $query->setParameter('city', $entity->getLocation()->getCity());
 
         $paginator  = $this->get('knp_paginator');
         $entitiesPagination = $paginator->paginate(
@@ -148,18 +162,32 @@ class UserController extends Controller
      * @Method("GET")
      * @Template()
      */
-    public function editAction($id)
+    public function editAction($id, Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('AppBundle:User')->find($id);
+        /** @var User $entity */
+        $entity = $em->getRepository('AppBundle:User')->findOneBy(['id' => $id]);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find User entity.');
+            $this->addFlash('danger', 'No user was found for this id.');
+            return $this->redirectToRoute('admin_users');
         }
 
-        $editForm = $this->createEditForm($entity);
+        $entityUserModel = new CreateUserModel();
+        $entityUserModel->setUser($entity);
+        $entityUserModel->setLocation($entity->getLocation());
+        
+        $editForm = $this->createEditForm($entityUserModel);
         $deleteForm = $this->createDeleteForm($id);
+
+        $editForm->handleRequest($request);
+
+        if ($editForm->isValid()) {
+            $em->flush();
+
+            return $this->redirect($this->generateUrl('admin_users_edit', array('id' => $id)));
+        }
 
         return array(
             'entity'      => $entity,
@@ -179,14 +207,21 @@ class UserController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('AppBundle:User')->find($id);
+        /** @var User $entity */
+        $entity = $em->getRepository('AppBundle:User')->findOneBy(['id' => $id]);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find User entity.');
+            $this->addFlash('danger', 'No user was found for this id.');
+            return $this->redirectToRoute('admin_users');
         }
 
+        $entityUserModel = new CreateUserModel();
+        $entityUserModel->setUser($entity);
+        $entityUserModel->setLocation($entity->getLocation());
+
         $deleteForm = $this->createDeleteForm($id);
-        $editForm = $this->createEditForm($entity);
+        $editForm = $this->createEditForm($entityUserModel);
+
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
@@ -274,14 +309,16 @@ class UserController extends Controller
     /**
      * Creates a form to edit a User entity.
      *
-     * @param User $entity The entity
+     * @param CreateUserModel $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createEditForm(User $entity)
+    private function createEditForm(CreateUserModel $entity)
     {
-        $form = $this->createForm(new UserType(), $entity, array(
-            'action' => $this->generateUrl('admin_users_update', array('id' => $entity->getId())),
+        $form = $this->createForm(new CreateUser(), $entity, array(
+            'validation_groups' => ['admin_user_put'],
+            'cascade_validation' => true,
+            'action' => $this->generateUrl('admin_users_update', array('id' => $entity->getUser()->getId())),
             'method' => 'PUT',
         ));
 

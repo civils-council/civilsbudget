@@ -7,12 +7,21 @@
 
     {{ form(edit_form) }}
 
-        <ul class="record_actions">
+    <ul class="record_actions">
     <li>
         <a href="{{ path('admin_users') }}">
             Back to the list
         </a>
     </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
+    {#<li>{{ form(delete_form) }}</li>#}
+
+        {{ form_errors(delete_form) }}
+        {{ form_start(delete_form, {'action': path('admin_users_delete', {'id': entity.id}), 'method': 'POST'}) }}
+
+
+        <div class="margin-top-20 btn_save">
+            {{ form_widget(delete_form.submit, {'attr': {'class': 'btn green-haze'}}) }}
+        </div>
+        {{ form_end(delete_form) }}
+    </ul>
 {% endblock %}

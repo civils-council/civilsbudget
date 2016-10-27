@@ -34,7 +34,7 @@ class UserType extends AbstractType
         $resolver->setDefaults(array(
             'data_class' => 'AppBundle\Entity\User',
             'csrf_protection' => false,
-            'validation_groups' => ['admin_user_post']
+//            'validation_groups' => ['admin_user_post']
         ));
     }
 

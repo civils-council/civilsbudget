@@ -15,7 +15,7 @@ class CreateUserModel
     public $user;
 
     /**
-     * @var Location
+     * @var Location|null
      * @Assert\NotBlank(groups={"admin_user_post"})
      */
     public $location;
@@ -45,9 +45,9 @@ class CreateUserModel
     }
 
     /**
-     * @param Location $location
+     * @param Location|null $location
      */
-    public function setLocation($location)
+    public function setLocation($location = null)
     {
         $this->location = $location;
     }

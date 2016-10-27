@@ -31,7 +31,7 @@ class CreateUser extends AbstractType
         $resolver->setDefaults(array(
             'data_class' => 'AdminBundle\Model\CreateUserModel',
             'csrf_protection' => false,
-            'validation_groups' => ['admin_user_post'],
+//            'validation_groups' => ['admin_user_post'],
             'cascade_validation' => true
         ));
     }
