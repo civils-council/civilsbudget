@@ -7,12 +7,27 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints as AssertBridge;
 
 /**
  * User
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="AppBundle\Entity\UserRepository")
+ *
+ * @AssertBridge\UniqueEntity(
+ *     groups={"admin_user_post", "admin_user_put"},
+ *     fields="inn",
+ *     errorPath="not valid",
+ *     message="This inn account is already in use."
+ * )
+ *
+ * @AssertBridge\UniqueEntity(
+ *     groups={"admin_user_post", "admin_user_put"},
+ *     fields="numberBlank",
+ *     errorPath="not valid",
+ *     message="This numberBlank account is already in use."
+ * )
  */
 class User implements UserInterface, \JsonSerializable
 {
@@ -30,6 +45,7 @@ class User implements UserInterface, \JsonSerializable
     /**
      * @var string
      *
+     * @Assert\NotBlank(groups={"admin_user_post", "admin_user_put"})
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $firstName;
@@ -37,6 +53,7 @@ class User implements UserInterface, \JsonSerializable
     /**
      * @var string
      *
+     * @Assert\NotBlank(groups={"admin_user_post", "admin_user_put"})
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $lastName;
@@ -51,6 +68,7 @@ class User implements UserInterface, \JsonSerializable
     /**
      * @var string
      *
+     * @Assert\NotBlank(groups={"admin_user_post", "admin_user_put"})
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $sex;
@@ -58,6 +76,7 @@ class User implements UserInterface, \JsonSerializable
     /**
      * @var string
      *
+     * @Assert\NotBlank(groups={"admin_user_post", "admin_user_put"})
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $birthday;
@@ -72,6 +91,7 @@ class User implements UserInterface, \JsonSerializable
     /**
      * @var string
      *
+     * @Assert\NotBlank(groups={"admin_user_post", "admin_user_put"})
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $phone;
@@ -109,6 +129,7 @@ class User implements UserInterface, \JsonSerializable
     /**
      * @var string
      *
+     * @Assert\NotBlank(groups={"admin_user_post", "admin_user_put"})
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $inn;
@@ -145,6 +166,14 @@ class User implements UserInterface, \JsonSerializable
      * @var boolean
      */
     private $isDataPublic;
+
+    /**
+     * @var integer
+     *
+     * @Assert\NotBlank(groups={"admin_user_post"})
+     * @ORM\Column(name="number_blank", type="integer", nullable=true)
+     */
+    private $numberBlank;    
 
     /**
      * Constructor
@@ -530,6 +559,9 @@ class User implements UserInterface, \JsonSerializable
      */
     public function setInn($inn)
     {
+        if (!$this->clid) {
+            $this->setClid($inn);            
+        }
         $this->inn = $inn;
 
         return $this;
@@ -631,4 +663,52 @@ class User implements UserInterface, \JsonSerializable
         $this->isDataPublic = $isDataPublic;
     }
 
+
+    /**
+     * Get isSubscribe
+     *
+     * @return boolean
+     */
+    public function getIsSubscribe()
+    {
+        return $this->isSubscribe;
+    }
+
+    /**
+     * Set numberBlank
+     *
+     * @param integer $numberBlank
+     *
+     * @return User
+     */
+    public function setNumberBlank($numberBlank)
+    {
+        $this->numberBlank = $numberBlank;
+
+        return $this;
+    }
+
+    /**
+     * Get numberBlank
+     *
+     * @return integer
+     */
+    public function getNumberBlank()
+    {
+        return $this->numberBlank;
+    }
+
+    /**
+     * Add likedProject
+     *
+     * @param \AppBundle\Entity\Project $likedProject
+     *
+     * @return User
+     */
+    public function addLikedProject(\AppBundle\Entity\Project $likedProject)
+    {
+        $this->likedProjects[] = $likedProject;
+
+        return $this;
+    }
 }

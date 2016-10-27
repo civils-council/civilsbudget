@@ -46,6 +46,7 @@ class Location
     /**
      * @var string
      *
+     * @Assert\NotBlank(groups={"admin_user_post", "admin_user_put"})
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $address;
@@ -53,7 +54,7 @@ class Location
     /**
      * @var City
      *
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(groups={"admin_user_post", "admin_user_put"})
      * @ORM\ManyToOne(targetEntity="City", inversedBy="location")
      * @ORM\JoinColumn(name="location_id", nullable = true, referencedColumnName="id")
      */
@@ -253,5 +254,13 @@ class Location
     public function getCountry()
     {
         return $this->country;
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->city;
     }
 }

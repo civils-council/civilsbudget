@@ -24,7 +24,8 @@
         "guzzle/guzzle": "^3.9",
         "mcfedr/json-form": "^3.1",
         "doctrine/doctrine-migrations-bundle": "^1.0",
-        "aws/aws-sdk-php": "^3.19"
+        "aws/aws-sdk-php": "^3.19",
+        "knplabs/knp-paginator-bundle": "2.5.3"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3",

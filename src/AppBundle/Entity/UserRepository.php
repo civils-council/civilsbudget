@@ -127,4 +127,30 @@ class UserRepository extends EntityRepository implements UserRepositoryInterface
 
         return $results;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getUserByInnOrClid(
+        $clid,
+        $inn
+    ) {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb
+            ->select('u')
+            ->from('AppBundle:User', 'u')
+            ->where('u.inn = :inn')
+            ->orWhere('u.clid = :clid')
+            ->setParameters([
+                'inn' => $inn,
+                'clid' => $clid
+            ])
+            ->orderBy('u.createAt', 'DESC')
+            ->setFirstResult(1);
+
+        $query = $qb->getQuery();
+        $results = $query->getSingleResult();
+
+        return $results;
+    }
 }
