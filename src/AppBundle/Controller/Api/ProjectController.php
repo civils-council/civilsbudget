@@ -22,9 +22,10 @@ class ProjectController extends Controller
      */
     public function listAction(Request $request)
     {
-        $projects = $this->getDoctrine()->getRepository('AppBundle:Project')->findAll();
-
+        $em = $this->getDoctrine()->getManager();
+        $projects = $em->getRepository('AppBundle:Project')->getProjectShow($request->query);
         $project_array = [];
+        
         for ($i = 0; $i < count($projects); $i++) {
             $em = $this->getDoctrine()->getManager();
             if(!empty($request->get('clid'))){
@@ -34,17 +35,16 @@ class ProjectController extends Controller
             }
 
             $project_array[$i]["vote"] = $voute;
-            $project_array[$i]["id"] = $projects[$i]->getId();
-            $project_array[$i]["title"] = $projects[$i]->getTitle();
-            $project_array[$i]["description"] = $projects[$i]->getDescription();
-            $project_array[$i]["charge"] = $projects[$i]->getCharge();
-            $project_array[$i]["source"] = $projects[$i]->getSource();
-            $project_array[$i]["picture"] = $projects[$i]->getPicture();
-            $project_array[$i]["createdAt"] = $projects[$i]->getCreateAt()->format('c');
-            $project_array[$i]["likes_count"] = $projects[$i]->getLikedUsers()->count();
-            $project_array[$i]["owner"] = $projects[$i]->getOwner()->getFullName();
-            $project_array[$i]["avatar_owner"] = $projects[$i]->getOwner()->getAvatar();
-
+            $project_array[$i]["id"] = $projects[$i][0]->getId();
+            $project_array[$i]["title"] = $projects[$i][0]->getTitle();
+            $project_array[$i]["description"] = $projects[$i][0]->getDescription();
+            $project_array[$i]["charge"] = $projects[$i][0]->getCharge();
+            $project_array[$i]["source"] = $projects[$i][0]->getSource();
+            $project_array[$i]["picture"] = $projects[$i][0]->getPicture();
+            $project_array[$i]["createdAt"] = $projects[$i][0]->getCreateAt()->format('c');
+            $project_array[$i]["likes_count"] = $projects[$i][0]->getLikedUsers()->count();
+            $project_array[$i]["owner"] = $projects[$i][0]->getOwner()->getFullName();
+            $project_array[$i]["avatar_owner"] = $projects[$i][0]->getOwner()->getAvatar();
         }
 
         return new JsonResponse(["projects" => $project_array]);

@@ -118,7 +118,7 @@ class UserManager
         }
 
         /** @var User $user */
-        $user = $this->em->getRepository('AppBundle:User')->findOneBy(['clid' => $clId]);
+        $user = $this->em->getRepository('AppBundle:User')->getUserByInnOrClid($clId, $inn);
         if (array_key_exists('city', $data['customer']['addresses'][0]) == true) {
             $existCity = $this->em->getRepository('AppBundle:City')->findOneBy(['city' => $city]);
             if (!$existCity) {
