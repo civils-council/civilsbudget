@@ -1,8 +1,16 @@
 parameters:
     app.helper.image_worker.class:                              AppBundle\Helper\ImageWorker
     app.helper.file_uploader.class:                             AppBundle\Helper\FileUploader
+    app.security.authenticator.class:                           AppBundle\Security\Authenticator
 
 services:
+    app.authenticator:
+        class: "%app.security.authenticator.class%"
+        arguments:
+            - "@security.token_storage"
+            - "@doctrine.orm.entity_manager"
+            - "@session"
+
     app.file_uploader:
         class: "%app.helper.file_uploader.class%"
         arguments:

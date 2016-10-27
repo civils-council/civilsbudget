@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Api;
 
 use AppBundle\Entity\Project;
 use AppBundle\Entity\User;
+use AppBundle\Exception\AuthException;
 use AppBundle\Exception\ValidatorException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -91,15 +92,17 @@ class ProjectController extends Controller
         if ($request->getMethod() == Request::METHOD_POST) {
 
             try {
-                return new JsonResponse('success', $this->getProjectApplication()->crateUserLike(
+                return new JsonResponse(['success', $this->getProjectApplication()->crateUserLike(
                     $user,
                     $project
-                ));
-                
+                )]);
+
             } catch (ValidatorException $e) {
-                return new JsonResponse('danger', $e->getMessage());
+                return new JsonResponse(['danger', $e->getMessage()]);
+            } catch (AuthException $e) {
+                return new JsonResponse(['danger', $e->getMessage()], 401);
             } catch (\Exception $e) {
-                return new JsonResponse('danger', self::SERVER_ERROR);
+                return new JsonResponse(['danger', $e->getMessage()]);
             }
         }
 

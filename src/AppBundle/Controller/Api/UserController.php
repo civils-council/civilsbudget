@@ -26,6 +26,7 @@ class UserController extends Controller
                 $response = $this->get('app.user.manager')->isUniqueUser($data);
                 /** @var User $user */
                 $user = $response['user'];
+                $this->getAuthenticator()->addAuth($user);
                 /** @var VoteSettings[] $voteSettings */
                 $voteSettings = $this->getDoctrine()->getRepository('AppBundle:VoteSettings')->getVoteSettingByUserCity($user);
 
@@ -57,8 +58,6 @@ class UserController extends Controller
      */
     public function loginAction(Request $request)
     {
-        $code = $request->query->get('code');
-
         if ($code = $request->query->get('code')) {
             $accessToken = $this->get('app.security.bank_id')->getApiAccessToken($code);
             return new JsonResponse($accessToken);
@@ -68,5 +67,11 @@ class UserController extends Controller
 
     }
 
-
+    /**
+     * @return \AppBundle\Security\Authenticator
+     */
+    private function getAuthenticator()
+    {
+        return $this->get('app.authenticator');
+    }
 }
