@@ -21,6 +21,13 @@ use Symfony\Bridge\Doctrine\Validator\Constraints as AssertBridge;
  *     errorPath="not valid",
  *     message="This inn account is already in use."
  * )
+ *
+ * @AssertBridge\UniqueEntity(
+ *     groups={"admin_user_post", "admin_user_put"},
+ *     fields="numberBlank",
+ *     errorPath="not valid",
+ *     message="This numberBlank account is already in use."
+ * )
  */
 class User implements UserInterface, \JsonSerializable
 {
@@ -159,6 +166,14 @@ class User implements UserInterface, \JsonSerializable
      * @var boolean
      */
     private $isDataPublic;
+
+    /**
+     * @var integer
+     *
+     * @Assert\NotBlank(groups={"admin_user_post"})
+     * @ORM\Column(name="number_blank", type="integer", nullable=true)
+     */
+    private $numberBlank;    
 
     /**
      * Constructor
@@ -648,4 +663,52 @@ class User implements UserInterface, \JsonSerializable
         $this->isDataPublic = $isDataPublic;
     }
 
+
+    /**
+     * Get isSubscribe
+     *
+     * @return boolean
+     */
+    public function getIsSubscribe()
+    {
+        return $this->isSubscribe;
+    }
+
+    /**
+     * Set numberBlank
+     *
+     * @param integer $numberBlank
+     *
+     * @return User
+     */
+    public function setNumberBlank($numberBlank)
+    {
+        $this->numberBlank = $numberBlank;
+
+        return $this;
+    }
+
+    /**
+     * Get numberBlank
+     *
+     * @return integer
+     */
+    public function getNumberBlank()
+    {
+        return $this->numberBlank;
+    }
+
+    /**
+     * Add likedProject
+     *
+     * @param \AppBundle\Entity\Project $likedProject
+     *
+     * @return User
+     */
+    public function addLikedProject(\AppBundle\Entity\Project $likedProject)
+    {
+        $this->likedProjects[] = $likedProject;
+
+        return $this;
+    }
 }

@@ -35,7 +35,7 @@ class UserController extends Controller
     public function indexAction(Request $request)
     {
         $em    = $this->get('doctrine.orm.entity_manager');
-        $dql   = "SELECT a FROM AppBundle:User a ";
+        $dql   = "SELECT a FROM AppBundle:User a LEFT JOIN a.location l ";
         $query = $em->createQuery($dql);
 
         $paginator  = $this->get('knp_paginator');

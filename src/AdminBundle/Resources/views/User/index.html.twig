@@ -15,7 +15,11 @@
             <th{% if pagination.isSorted('a.lastName') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Last Name', 'a.lastName') }}</th>
             <th{% if pagination.isSorted('a.middleName') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Middle Name', 'a.middleName') }}</th>
             <th{% if pagination.isSorted('a.inn') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Inn', 'a.inn') }}</th>
+            <th{% if pagination.isSorted('a.numberBlank') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Inn', 'a.numberBlank') }}</th>
             <th{% if pagination.isSorted('a.sex') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Gender', 'a.sex') }}</th>
+            <th{% if pagination.isSorted('l.city') %} class="sorted"{% endif %}>
+                {{ knp_pagination_sortable(pagination, 'City', 'l.city') }}
+            </th>
             <th>{{ knp_pagination_sortable(pagination, 'createAt', ['a.createAt']) }}</th>
         </tr>
 
@@ -27,7 +31,9 @@
                 <td>{{ article.lastName }}</td>
                 <td>{{ article.middleName }}</td>
                 <td>{{ article.inn }}</td>
+                <td>{{ article.numberBlank }}</td>
                 <td>{{ article.sex }}</td>
+                <td>{% if article.location %}{{ article.location.city }}{% else %}empty{% endif %}</td>
                 <td>{% if article.createAt %}{{ article.createAt|date('Y-m-d') }}{% endif %}</td>
                 <td>
                     <ul>

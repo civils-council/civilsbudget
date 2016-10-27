@@ -23,6 +23,7 @@ class UserType extends AbstractType
             ->add('birthday')
             ->add('phone')
             ->add('email')
+            ->add('numberBlank')
             ->add('inn');
     }
     
