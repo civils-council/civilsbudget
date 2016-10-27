@@ -134,19 +134,24 @@ class UserRepository extends EntityRepository implements UserRepositoryInterface
     public function getUserByInnOrClid(
         $clid,
         $inn
-    ) {
+    )
+    {
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb
             ->select('u')
-            ->from('AppBundle:User', 'u')
-            ->where('u.inn = :inn')
-            ->orWhere('u.clid = :clid')
+            ->from('AppBundle:User', 'u');
+
+        $orx = $qb->expr()->orX();
+        $orx->add($qb->expr()->eq('u.inn', ':inn'));
+        $orx->add($qb->expr()->eq('u.clid', ':clid'));
+
+        $qb->where($orx)
             ->setParameters([
                 'inn' => $inn,
                 'clid' => $clid
             ])
             ->orderBy('u.createAt', 'DESC')
-            ->setFirstResult(1);
+            ->setFirstResult(0);
 
         $query = $qb->getQuery();
         $results = $query->getOneOrNullResult();
