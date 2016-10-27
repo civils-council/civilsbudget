@@ -149,7 +149,7 @@ class UserRepository extends EntityRepository implements UserRepositoryInterface
             ->setFirstResult(1);
 
         $query = $qb->getQuery();
-        $results = $query->getSingleResult();
+        $results = $query->getOneOrNullResult();
 
         return $results;
     }
