@@ -2,6 +2,8 @@
 
 namespace AppBundle\Controller\Api;
 
+use AppBundle\Entity\User;
+use AppBundle\Entity\VoteSettings;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -21,19 +23,46 @@ class UserController extends Controller
         if(!empty($code)) {
             $data = $this->get('app.security.bank_id')->getBankIdUser($code);
             if ($data['state'] == 'ok') {
-                $user = $this->get('app.user.manager')->isUniqueUser($data);
-                $vote = $user[0]->getLikedProjects();
-                if(!is_null($vote)){
-                    $voted_project = $user[0]->getLikedProjects()->getId();
-                }else{
-                    $voted_project = false;
+                $response = $this->get('app.user.manager')->isUniqueUser($data);
+                /** @var User $user */
+                $user = $response['user'];
+                /** @var VoteSettings[] $voteSettings */
+                $voteSettings = $this->getDoctrine()->getRepository('AppBundle:VoteSettings')->getVoteSettingByUserCity($user);
+
+                $balanceVotes = [];
+                foreach ($voteSettings as $voteSetting) {
+                    $limitVoteSetting = $voteSetting->getVoteLimits();
+
+                    $balanceVotes[$voteSetting->getTitle()]=
+                        $limitVoteSetting
+                        - $this->getDoctrine()->getRepository('AppBundle:User')->getUserVotesBySettingVote($voteSetting, $user);
+
                 }
+
+                $response = [];
+                foreach ($balanceVotes as $key=>$balanceVote) {
+                    $messageLeft = $messageRight = '';
+                    if ($balanceVote >= 2) {
+                        $messageLeft .= 'У Вас ';
+                        $messageRight .= ' голоси';
+                    } elseif ($balanceVote == 1) {
+                        $messageLeft .= 'У Вас ';
+                        $messageRight .= ' голос';
+                    } elseif ($balanceVote == 0) {
+                        $messageLeft .= 'У Вас ';
+                        $messageRight .= ' голосів';
+                    }
+
+                    $response[$key] = $messageLeft . ' ' . $balanceVote . ' ' . $messageRight;
+                }                
+                
+                
                 return new JsonResponse(
                     [
-                        "id" => $user[0]->getId(),
-                        "full_name" => $user[0]->getFullName(),
-                        "clid" => $user[0]->getClid(),
-                        "voted_project" => $voted_project
+                        "id" => $user->getId(),
+                        "full_name" => $user->getFullName(),
+                        "clid" => $user->getClid(),
+                        "voted_project" => $response
                     ]
                 );
             }
