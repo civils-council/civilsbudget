@@ -6,6 +6,7 @@ namespace AppBundle\Application\Project;
 use AppBundle\Domain\Project\ProjectInterface as DomainProjectInterface;
 use AppBundle\Domain\User\UserInterface;
 use AppBundle\Entity\User;
+use AppBundle\Exception\AuthException;
 use AppBundle\Exception\ValidatorException;
 use Symfony\Component\HttpFoundation\Request;
 use \AppBundle\Entity\Project as ProjectEntity; 
@@ -37,12 +38,15 @@ class Project implements ProjectInterface
         $this->userInterface = $userInterface;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function crateUserLike(
         $user,
         ProjectEntity $project
     ) {
         if (!$user instanceof User) {
-            throw new ValidatorException('Ви не маєте доступу до голосуваня за проект.');
+            throw new AuthException('Ви не маєте доступу до голосуваня за проект.');
         }
         
         if (!$project->getVoteSetting()) {

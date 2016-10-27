@@ -47,8 +47,6 @@ class DefaultController extends Controller
      */
     public function loginAction(Request $request)
     {
-        //http://i.prntscr.com/64388f0de71e4ea496ba43c9e1b2c704.png
-
         $authenticationUtils = $this->get('security.authentication_utils');
 
         $data = ['clid' => $authenticationUtils->getLastUsername()];
