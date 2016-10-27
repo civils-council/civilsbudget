@@ -47,9 +47,10 @@
                 <th>Createat</th>
                 <td>{{ entity.createAt|date('Y-m-d H:i:s') }}</td>
             </tr>
-
         </tbody>
     </table>
+
+    {{ render(controller('AppBundle:User:countVotes', {'id': entity.id})) }}
 
     <ul class="record_actions">
     <li>
