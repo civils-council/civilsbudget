@@ -96,17 +96,17 @@ class ProjectController extends Controller
         if ($request->getMethod() == Request::METHOD_POST) {
 
             try {
-                return new JsonResponse(['success', $this->getProjectApplication()->crateUserLike(
+                return new JsonResponse(['success' => $this->getProjectApplication()->crateUserLike(
                     $user,
                     $project
                 )]);
 
             } catch (ValidatorException $e) {
-                return new JsonResponse(['danger', $e->getMessage()]);
+                return new JsonResponse(['danger' => $e->getMessage()]);
             } catch (AuthException $e) {
-                return new JsonResponse(['danger', $e->getMessage()], 401);
+                return new JsonResponse(['danger' => $e->getMessage()], 401);
             } catch (\Exception $e) {
-                return new JsonResponse(['danger', $e->getMessage()]);
+                return new JsonResponse(['danger' => $e->getMessage()]);
             }
         }
 
