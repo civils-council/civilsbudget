@@ -59,6 +59,7 @@ security:
         - { path: ^/admin/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/vote_settings/*, roles: ROLE_ADMIN }
+        - { path: ^/admin/users/*, roles: ROLE_ADMIN }
         - { path: ^/projects/*, roles: [ROLE_USER, ROLE_ADMIN] method: [GET, POST, PUT, DELETE]}
         - { path: ^/projects/add, roles: ROLE_USER }
         - { path: ^/users, roles: ROLE_USER }

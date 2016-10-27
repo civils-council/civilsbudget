@@ -56,5 +56,15 @@ interface UserRepositoryInterface
     public function getUserVotesBySettingVote(
         VoteSettings $voteSettings,
         User $user
+    );
+
+    /**
+     * @param $clid
+     * @param $inn
+     * @return mixed
+     */
+    public function getUserByInnOrClid(
+        $clid,
+        $inn
     );    
 }

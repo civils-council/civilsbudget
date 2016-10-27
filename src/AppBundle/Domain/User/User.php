@@ -97,15 +97,17 @@ class User implements UserInterface
             $response[] = $key. ' ' . $messageLeft . ' ' . $balanceVote . ' ' . $messageRight;
         }
 
-        $this->serviceSES->sendEmail(
-            [$user->getEmail()],
-            'Онлайн голосування',
-            'AppBundle:Email:votes_end.html.twig',
-            [
-                'user' => $user,
-                'response' => $response
-            ]
-        );
+        if ($user->getEmail()) {
+            $this->serviceSES->sendEmail(
+                [$user->getEmail()],
+                'Онлайн голосування',
+                'AppBundle:Email:votes_end.html.twig',
+                [
+                    'user' => $user,
+                    'response' => $response
+                ]
+            );
+        }
         
         return
             "Дякуємо за Ваш голос. Ваш голос зараховано на підтримку проекту
