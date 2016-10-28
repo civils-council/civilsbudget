@@ -44,6 +44,16 @@
                 <td>{{ entity.inn }}</td>
             </tr>
             <tr>
+                <th>numberBlank</th>
+                <td>{{ entity.numberBlank }}</td>
+            </tr>
+            {% if entity.addedByAdmin %}
+                <tr>
+                    <th>Admin Added</th>
+                    <td>{{ entity.addedByAdmin.firstName }} {{ entity.addedByAdmin.lastName }}</td>
+                </tr>
+            {% endif %}
+            <tr>
                 <th>Createat</th>
                 <td>{{ entity.createAt|date('Y-m-d H:i:s') }}</td>
             </tr>
@@ -82,6 +92,7 @@
             {# sorting of properties based on query components #}
             <th>{{ knp_pagination_sortable(pagination, 'Id', 'a.id') }}</th>
             <th{% if pagination.isSorted('a.title') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Project Name', 'a.title') }}</th>
+            <th{% if pagination.isSorted('vs.title') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Project Type', 'vs.title') }}</th>
             <th>{{ knp_pagination_sortable(pagination, 'createAt', ['a.createAt']) }}</th>
         </tr>
 
@@ -90,6 +101,7 @@
             <tr {% if loop.index is odd %}class="color"{% endif %}>
                 <td>{{ article.id }}</td>
                 <td>{{ article.title }}</td>
+                {% if article.voteSetting %}<td>{{ article.voteSetting.title }}</td>{% endif %}
                 <td>{% if article.createAt %}{{ article.createAt|date('Y-m-d') }}{% endif %}</td>
 
                 <td>

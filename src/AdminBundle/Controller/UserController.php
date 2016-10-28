@@ -35,8 +35,9 @@ class UserController extends Controller
     public function indexAction(Request $request)
     {
         $em    = $this->get('doctrine.orm.entity_manager');
-        $dql   = "SELECT a FROM AppBundle:User a LEFT JOIN a.location l ";
+        $dql   = "SELECT a FROM AppBundle:User a LEFT JOIN a.location l INNER JOIN a.addedByAdmin aba WHERE aba.id = :abaId";
         $query = $em->createQuery($dql);
+        $query->setParameter('abaId', $this->getUser()->getId());
 
         $paginator  = $this->get('knp_paginator');
         $entitiesPagination = $paginator->paginate(
@@ -71,6 +72,7 @@ class UserController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity->getLocation());
             $entity->getUser()->setLocation($entity->getLocation());
+            $entity->getUser()->setAddedByAdmin($this->getUser());
             $em->persist($entity->getUser());
             $em->flush();
             $user = $entity->getUser();
@@ -136,7 +138,7 @@ class UserController extends Controller
         $deleteForm = $this->createDeleteForm($id);
 
         $em    = $this->get('doctrine.orm.entity_manager');
-        $dql   = "SELECT a FROM AppBundle:Project a LEFT JOIN a.voteSetting vs LEFT JOIN vs.location l WHERE l.city = :city";
+        $dql   = "SELECT a FROM AppBundle:Project a LEFT JOIN a.voteSetting vs LEFT JOIN vs.location l WHERE l.city = :city ORDER BY a.id DESC";
 
         $query = $em->createQuery($dql);
         $query->setParameter('city', $entity->getLocation()->getCity());
@@ -145,7 +147,7 @@ class UserController extends Controller
         $entitiesPagination = $paginator->paginate(
             $query,
             $request->query->get('page', 1),
-            20
+            35
         );
 
         return array(

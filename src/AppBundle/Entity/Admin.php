@@ -69,6 +69,13 @@ class Admin implements UserInterface
     private $confirmedProjects;
 
     /**
+     * @var User[] ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\User", mappedBy="addedByAdmin")
+     */
+    private $user;
+
+    /**
      * @var string
      *
      * @ORM\Column(type="string", length=255)
@@ -248,5 +255,39 @@ class Admin implements UserInterface
     public function setAvatar($avatar)
     {
         $this->avatar = $avatar;
+    }
+
+    /**
+     * Add user
+     *
+     * @param \AppBundle\Entity\User $user
+     *
+     * @return Admin
+     */
+    public function addUser(\AppBundle\Entity\User $user)
+    {
+        $this->user[] = $user;
+
+        return $this;
+    }
+
+    /**
+     * Remove user
+     *
+     * @param \AppBundle\Entity\User $user
+     */
+    public function removeUser(\AppBundle\Entity\User $user)
+    {
+        $this->user->removeElement($user);
+    }
+
+    /**
+     * Get user
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 }

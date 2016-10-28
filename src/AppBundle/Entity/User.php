@@ -19,14 +19,14 @@ use Symfony\Bridge\Doctrine\Validator\Constraints as AssertBridge;
  *     groups={"admin_user_post", "admin_user_put"},
  *     fields="inn",
  *     errorPath="not valid",
- *     message="This inn account is already in use."
+ *     message="Цей iдентифiкацiйний код вже iснуе."
  * )
  *
  * @AssertBridge\UniqueEntity(
  *     groups={"admin_user_post", "admin_user_put"},
  *     fields="numberBlank",
  *     errorPath="not valid",
- *     message="This numberBlank account is already in use."
+ *     message="Цей номер бланка вже iснуе."
  * )
  */
 class User implements UserInterface, \JsonSerializable
@@ -91,7 +91,6 @@ class User implements UserInterface, \JsonSerializable
     /**
      * @var string
      *
-     * @Assert\NotBlank(groups={"admin_user_post", "admin_user_put"})
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $phone;
@@ -113,11 +112,16 @@ class User implements UserInterface, \JsonSerializable
     private $location;
 
     /**
-     * @var Collection
+     * @var Project[] ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Project", mappedBy="owner")
      */
     private $projects;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Admin", inversedBy="user")
+     */
+    private $addedByAdmin;
 
     /**
      * @var string
@@ -710,5 +714,29 @@ class User implements UserInterface, \JsonSerializable
         $this->likedProjects[] = $likedProject;
 
         return $this;
+    }
+
+    /**
+     * Set addedByAdmin
+     *
+     * @param \AppBundle\Entity\Admin $addedByAdmin
+     *
+     * @return User
+     */
+    public function setAddedByAdmin(\AppBundle\Entity\Admin $addedByAdmin = null)
+    {
+        $this->addedByAdmin = $addedByAdmin;
+
+        return $this;
+    }
+
+    /**
+     * Get addedByAdmin
+     *
+     * @return \AppBundle\Entity\Admin
+     */
+    public function getAddedByAdmin()
+    {
+        return $this->addedByAdmin;
     }
 }
