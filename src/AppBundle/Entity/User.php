@@ -19,14 +19,14 @@ use Symfony\Bridge\Doctrine\Validator\Constraints as AssertBridge;
  *     groups={"admin_user_post", "admin_user_put"},
  *     fields="inn",
  *     errorPath="not valid",
- *     message="This inn account is already in use."
+ *     message="Цей iдентифiкацiйний код вже iснуе."
  * )
  *
  * @AssertBridge\UniqueEntity(
  *     groups={"admin_user_post", "admin_user_put"},
  *     fields="numberBlank",
  *     errorPath="not valid",
- *     message="This numberBlank account is already in use."
+ *     message="Цей номер бланка вже iснуе."
  * )
  */
 class User implements UserInterface, \JsonSerializable
@@ -91,7 +91,6 @@ class User implements UserInterface, \JsonSerializable
     /**
      * @var string
      *
-     * @Assert\NotBlank(groups={"admin_user_post", "admin_user_put"})
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $phone;

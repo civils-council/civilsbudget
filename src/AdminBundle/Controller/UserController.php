@@ -138,7 +138,7 @@ class UserController extends Controller
         $deleteForm = $this->createDeleteForm($id);
 
         $em    = $this->get('doctrine.orm.entity_manager');
-        $dql   = "SELECT a FROM AppBundle:Project a LEFT JOIN a.voteSetting vs LEFT JOIN vs.location l WHERE l.city = :city";
+        $dql   = "SELECT a FROM AppBundle:Project a LEFT JOIN a.voteSetting vs LEFT JOIN vs.location l WHERE l.city = :city ORDER BY a.id DESC";
 
         $query = $em->createQuery($dql);
         $query->setParameter('city', $entity->getLocation()->getCity());
@@ -147,7 +147,7 @@ class UserController extends Controller
         $entitiesPagination = $paginator->paginate(
             $query,
             $request->query->get('page', 1),
-            20
+            35
         );
 
         return array(
