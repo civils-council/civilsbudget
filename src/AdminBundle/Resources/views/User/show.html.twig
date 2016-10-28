@@ -44,6 +44,16 @@
                 <td>{{ entity.inn }}</td>
             </tr>
             <tr>
+                <th>numberBlank</th>
+                <td>{{ entity.numberBlank }}</td>
+            </tr>
+            {% if entity.addedByAdmin %}
+                <tr>
+                    <th>Admin Added</th>
+                    <td>{{ entity.addedByAdmin.firstName }} {{ entity.addedByAdmin.lastName }}</td>
+                </tr>
+            {% endif %}
+            <tr>
                 <th>Createat</th>
                 <td>{{ entity.createAt|date('Y-m-d H:i:s') }}</td>
             </tr>

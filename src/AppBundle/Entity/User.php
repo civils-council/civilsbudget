@@ -113,11 +113,16 @@ class User implements UserInterface, \JsonSerializable
     private $location;
 
     /**
-     * @var Collection
+     * @var Project[] ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Project", mappedBy="owner")
      */
     private $projects;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Admin", inversedBy="user")
+     */
+    private $addedByAdmin;
 
     /**
      * @var string
@@ -710,5 +715,29 @@ class User implements UserInterface, \JsonSerializable
         $this->likedProjects[] = $likedProject;
 
         return $this;
+    }
+
+    /**
+     * Set addedByAdmin
+     *
+     * @param \AppBundle\Entity\Admin $addedByAdmin
+     *
+     * @return User
+     */
+    public function setAddedByAdmin(\AppBundle\Entity\Admin $addedByAdmin = null)
+    {
+        $this->addedByAdmin = $addedByAdmin;
+
+        return $this;
+    }
+
+    /**
+     * Get addedByAdmin
+     *
+     * @return \AppBundle\Entity\Admin
+     */
+    public function getAddedByAdmin()
+    {
+        return $this->addedByAdmin;
     }
 }
