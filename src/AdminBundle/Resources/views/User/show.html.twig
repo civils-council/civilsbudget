@@ -87,13 +87,14 @@
     <div class="count">
         All Project {{ pagination.getTotalItemCount }}
     </div>
-    <table>
+    <table class="table table-striped">
         <tr>
             {# sorting of properties based on query components #}
             <th>{{ knp_pagination_sortable(pagination, 'Id', 'a.id') }}</th>
             <th{% if pagination.isSorted('a.title') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Project Name', 'a.title') }}</th>
             <th{% if pagination.isSorted('vs.title') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Project Type', 'vs.title') }}</th>
             <th>{{ knp_pagination_sortable(pagination, 'createAt', ['a.createAt']) }}</th>
+            <th> Vote </th>
         </tr>
 
         {# table body #}

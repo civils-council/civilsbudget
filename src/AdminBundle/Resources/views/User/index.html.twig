@@ -7,7 +7,7 @@
     <div class="count">
        All Users {{ pagination.getTotalItemCount }}
     </div>
-    <table>
+    <table class="table table-striped">
         <tr>
             {# sorting of properties based on query components #}
             <th>{{ knp_pagination_sortable(pagination, 'Id', 'a.id') }}</th>
