@@ -15,14 +15,14 @@ class UserType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('numberBlank')
-            ->add('inn')
-            ->add('firstName')
-            ->add('lastName')
-            ->add('middleName')
+            ->add('numberBlank', null, array('label' => 'Номер бланка'))
+            ->add('middleName', null, array('label' => 'Призвiще'))
+            ->add('firstName', null, array('label' => 'Имя'))
+            ->add('lastName', null, array('label' => 'По батьковi'))
+            ->add('birthday', null, array('label' => 'Дата Народження'))
+            ->add('inn', null, array('label' => 'Идентифiкацiйний код'))
             ->add('sex', 'choice', array('label' => 'Gender', 'max_length' => 255,
                 'choices' => array('М' => 'Чоловік', 'Ж' => 'Жінка'), ))
-            ->add('birthday')
             ->add('phone')
             ->add('email');
     }

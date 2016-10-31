@@ -172,10 +172,10 @@ class User implements UserInterface, \JsonSerializable
     private $isDataPublic;
 
     /**
-     * @var integer
+     * @var string
      *
      * @Assert\NotBlank(groups={"admin_user_post"})
-     * @ORM\Column(name="number_blank", type="integer", nullable=true)
+     * @ORM\Column(name="number_blank", type="string", nullable=true)
      */
     private $numberBlank;    
 
@@ -679,30 +679,6 @@ class User implements UserInterface, \JsonSerializable
     }
 
     /**
-     * Set numberBlank
-     *
-     * @param integer $numberBlank
-     *
-     * @return User
-     */
-    public function setNumberBlank($numberBlank)
-    {
-        $this->numberBlank = $numberBlank;
-
-        return $this;
-    }
-
-    /**
-     * Get numberBlank
-     *
-     * @return integer
-     */
-    public function getNumberBlank()
-    {
-        return $this->numberBlank;
-    }
-
-    /**
      * Add likedProject
      *
      * @param \AppBundle\Entity\Project $likedProject
@@ -738,5 +714,29 @@ class User implements UserInterface, \JsonSerializable
     public function getAddedByAdmin()
     {
         return $this->addedByAdmin;
+    }
+
+    /**
+     * Set numberBlank
+     *
+     * @param string $numberBlank
+     *
+     * @return User
+     */
+    public function setNumberBlank($numberBlank)
+    {
+        $this->numberBlank = $numberBlank;
+
+        return $this;
+    }
+
+    /**
+     * Get numberBlank
+     *
+     * @return string
+     */
+    public function getNumberBlank()
+    {
+        return $this->numberBlank;
     }
 }

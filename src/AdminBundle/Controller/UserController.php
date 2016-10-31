@@ -147,7 +147,7 @@ class UserController extends Controller
         $entitiesPagination = $paginator->paginate(
             $query,
             $request->query->get('page', 1),
-            35
+            70
         );
 
         return array(
