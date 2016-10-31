@@ -22,7 +22,7 @@ class Version20161031130432 extends AbstractMigration
 
         $schemaTable = $schema->getTable('user');
 
-        if (!$schemaTable->hasColumn('number_blank')) {
+        if ($schemaTable->hasColumn('number_blank')) {
             $this->addSql('ALTER TABLE `user` CHANGE `number_blank` `number_blank` VARCHAR(255) DEFAULT NULL');
         }
     }
