@@ -19,7 +19,8 @@ class UserRepository extends EntityRepository implements UserRepositoryInterface
     public function findCountVotedUsers(
         ParameterBag $parameterBag
     ) {
-        $firstDay = new \DateTime('first day of this year');
+//        $firstDay = new \DateTime('first day of this year');
+        $firstDay = new \DateTime(date("Y")."-01-01");
         $lastDay = new \DateTime('last day of this year');
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb
