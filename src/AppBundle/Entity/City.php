@@ -39,8 +39,15 @@ class City
      *
      * @ORM\OneToMany(targetEntity="Location", mappedBy="cityObject", cascade={"persist"})
      */
-    private $location;    
-    
+    private $location;
+
+    /**
+     * @var Admin[]ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Admin", mappedBy="city", cascade={"persist"})
+     */
+    private $admin;
+
     /**
      * @var VoteSettings[]ArrayCollection
      *
@@ -165,5 +172,39 @@ class City
     public function getVoteSetting()
     {
         return $this->voteSetting;
+    }
+
+    /**
+     * Add admin
+     *
+     * @param \AppBundle\Entity\Admin $admin
+     *
+     * @return City
+     */
+    public function addAdmin(\AppBundle\Entity\Admin $admin)
+    {
+        $this->admin[] = $admin;
+
+        return $this;
+    }
+
+    /**
+     * Remove admin
+     *
+     * @param \AppBundle\Entity\Admin $admin
+     */
+    public function removeAdmin(\AppBundle\Entity\Admin $admin)
+    {
+        $this->admin->removeElement($admin);
+    }
+
+    /**
+     * Get admin
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAdmin()
+    {
+        return $this->admin;
     }
 }

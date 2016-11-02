@@ -53,9 +53,18 @@
                             {#{% set votes = votes + project['countLikes']|number_format(0, '.', ' ') %}#}
                         {#{% endfor %}#}
                         {% set digits = countVoted|split('') %}
+                        {% set digitsAdmin = countAdminVoted|split('') %}
 
                         <div class="counter">
                             {% for digit in digits %}
+                                <span class="digit">
+                                    <span title="{{ digit }}">{{ digit }}</span>
+                                </span>
+                            {% endfor %}
+                        </div>
+
+                        <div class="counter">
+                            {% for digit in digitsAdmin %}
                                 <span class="digit">
                                     <span title="{{ digit }}">{{ digit }}</span>
                                 </span>

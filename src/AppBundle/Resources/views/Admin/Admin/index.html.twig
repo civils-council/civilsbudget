@@ -7,4 +7,10 @@
     Не підтвердженні проекти:  <a href="{{ path('admin_projects_not_approved') }}" class="btn btn-default">Не підтвердженні проекти</a><br><br>
     Додати Юзера:  <a href="{{ path('admin_users_new') }}" class="btn btn-default">Додати Юзера</a><br><br>
     Список Юзерiв:  <a href="{{ path('admin_users') }}" class="btn btn-default">Список Юзерiв</a><br><br>
+
+    список Юзерiв якi додав адмiн {{ countAdminUsers }} <br>
+    список Юзерiв якi зарееструвались самi {{ countAuthUsers }} <br>
+
+    голоси юзерiв якi додав адмiн {{ countAdminVoted }} <br>
+    голоси юзерiв якi зарееструвались самi {{ countVoted }} <br>
 {% endblock content %}

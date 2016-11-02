@@ -18,8 +18,30 @@ interface UserRepositoryInterface
      */
     public function findCountVotedUsers(
         ParameterBag $parameterBag
-    );    
-    
+    );
+
+    /**
+     * @param ParameterBag $parameterBag
+     * @return integer
+     */
+    public function findCountAdminVotedUsers(
+        ParameterBag $parameterBag
+    );
+
+    /**
+     * @return integer
+     */
+    public function findCountAdminUsers(
+        ParameterBag $parameterBag
+    );
+
+    /**
+     * @return integer
+     */
+    public function findCountAuthUsers(
+        ParameterBag $parameterBag
+    );
+
     /**
      * @param User $entity
      * @return void
