@@ -1,7 +1,6 @@
 {% extends '@App/layout.html.twig' %}
 
 {% block content %}
-    {#{{ dump(project) }}#}
     {% for project in projects %}
             <div class="row hd-caption" style="background-image: url({% if project[0].picture %} {{ asset(project[0].picture) }} {% else %} {{ asset('bundles/app/img/default_bg.png') }} {% endif %})">
                 <div class="row">
@@ -44,12 +43,15 @@
             </div>
             <div class="row hd-statis">
                 <div class="col-md-6 support">
-                    Підтримало: <span>{{ project['countLikes']|number_format(0, '.', ' ') }}</span></div>
+                    Підтримало онлайн: <span>{{ countVoted|number_format(0, '.', ' ') }},</span>
+                    офлайн: <span>{{ countAdminVoted|number_format(0, '.', ' ') }},</span>
+                    всього: <span>{{ project['countLikes']|number_format(0, '.', ' ') }}</span>
+                </div>
                 <div class="col-md-6 date-voting">Кінцева дата голосування: <span>{{ project[0].voteSetting.dateTo|date('d.m.Y') }}</span></div>
             </div>
             <div class="row hd-description">
                 <div class="col-md-12">
-                    <p>{{ project[0].description }}</p>
+                    <p>{{ project[0].description|nl2br }}</p>
                 </div>
             </div>
            {{ block('notice') }}

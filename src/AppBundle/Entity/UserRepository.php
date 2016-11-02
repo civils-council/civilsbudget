@@ -35,6 +35,12 @@ class UserRepository extends EntityRepository implements UserRepositoryInterface
                 ->setParameter('city', $city);
 
         }
+        if ($project = $parameterBag->get(ProjectController::QUERY_PROJECT_ID)) {
+            $qb
+                ->andWhere('l.id = :project_id')
+                ->setParameter('project_id', $project);
+
+        }        
         $qb
             ->andWhere('u.numberBlank IS NULL')            
             ->andWhere($qb->expr()->between('l.createAt', ':dateFrom', ':dateTo'))
@@ -66,6 +72,13 @@ class UserRepository extends EntityRepository implements UserRepositoryInterface
                 ->leftJoin('vs.location', 'c')
                 ->andWhere('c.city = :city')
                 ->setParameter('city', $city);
+
+        }
+
+        if ($project = $parameterBag->get(ProjectController::QUERY_PROJECT_ID)) {
+            $qb
+                ->andWhere('l.id = :project_id')
+                ->setParameter('project_id', $project);
 
         }
         $qb

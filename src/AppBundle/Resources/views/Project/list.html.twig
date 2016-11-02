@@ -47,14 +47,16 @@
                         <hr>
                     </h1>
                     <div id="hp-voted">
-                        <span class="voted-title">Вже підтримано проектів электроним чином {% if voteSetting %} {{ voteSetting.location.city }} {% endif %}:</span>
+                        <span class="voted-title">Вже підтримано проектів {% if voteSetting %} {{ voteSetting.location.city }} {% endif %}</span><br>
                         {#{% set votes = 0 %}#}
                         {#{% for project in projects %}#}
                             {#{% set votes = votes + project['countLikes']|number_format(0, '.', ' ') %}#}
                         {#{% endfor %}#}
+                        {% set digitsAllDigit = countVoted + countAdminVoted %}
                         {% set digits = countVoted|split('') %}
                         {% set digitsAdmin = countAdminVoted|split('') %}
-
+                        {% set digitsAll = digitsAllDigit|split('') %}
+                        <span class="voted-title">онлайн:</span>
                         <div class="counter">
                             {% for digit in digits %}
                                 <span class="digit">
@@ -62,9 +64,19 @@
                                 </span>
                             {% endfor %}
                         </div>
-                        <span class="voted-title">Вже підтримано проектів паперовим чином {% if voteSetting %} {{ voteSetting.location.city }} {% endif %}:</span>
+                        <br>
+                        <span class="voted-title">офлайн:</span>
                         <div class="counter">
                             {% for digit in digitsAdmin %}
+                                <span class="digit">
+                                    <span title="{{ digit }}">{{ digit }}</span>
+                                </span>
+                            {% endfor %}
+                        </div>
+                        <br>
+                        <span class="voted-title">всього:</span>
+                        <div class="counter">
+                            {% for digit in digitsAll %}
                                 <span class="digit">
                                     <span title="{{ digit }}">{{ digit }}</span>
                                 </span>
