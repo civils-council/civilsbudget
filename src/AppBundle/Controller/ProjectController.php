@@ -20,6 +20,7 @@ class ProjectController extends Controller
 {
     const SERVER_ERROR                    = 'Server Error';
     const QUERY_CITY                      = 'city';
+    const QUERY_PROJECT_ID                = 'project_id';
     
     /**
      * @Route("/projects", name="projects_list")
@@ -77,18 +78,22 @@ class ProjectController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $project = $em->getRepository('AppBundle:Project')->getOneProjectShow($id);
-
         if (!$project) {
             throw new NotFoundHttpException('This project not found in our source');
         }
-
         if (empty($this->getUser())) {
             $sessionSet = $this->get('app.session')->setSession($project[0][0]->getId());
         }
+        $parameterBag = $request->query;
+        $parameterBag->set(ProjectController::QUERY_PROJECT_ID, $id);
+        $countAdminVoted = $em->getRepository('AppBundle:User')->findCountAdminVotedUsers($parameterBag);
+        $countVoted = $em->getRepository('AppBundle:User')->findCountVotedUsers($parameterBag);
         return [
             'projects' => $project,
             'voteSetting' => $em->getRepository('AppBundle:VoteSettings')
-                ->getProjectVoteSettingShow($request)
+                ->getProjectVoteSettingShow($request),
+            'countVoted' => $countVoted,
+            'countAdminVoted' => $countAdminVoted,
         ];
     }
 
