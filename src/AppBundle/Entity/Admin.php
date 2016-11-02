@@ -82,6 +82,14 @@ class Admin implements UserInterface
      */
     private $password;
 
+    /**
+     * @var City
+     *
+     * @ORM\ManyToOne(targetEntity="City", inversedBy="admin")
+     * @ORM\JoinColumn(name="city_id", nullable = false, referencedColumnName="id")
+     */
+    private $city;    
+
     public function __construct()
     {
         $this->confirmedProjects = new ArrayCollection();
@@ -289,5 +297,29 @@ class Admin implements UserInterface
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Set city
+     *
+     * @param \AppBundle\Entity\City $city
+     *
+     * @return Admin
+     */
+    public function setCity(\AppBundle\Entity\City $city)
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    /**
+     * Get city
+     *
+     * @return \AppBundle\Entity\City
+     */
+    public function getCity()
+    {
+        return $this->city;
     }
 }

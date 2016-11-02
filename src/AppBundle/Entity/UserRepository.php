@@ -13,8 +13,7 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 class UserRepository extends EntityRepository implements UserRepositoryInterface
 {
     /**
-     * @param ParameterBag $parameterBag
-     * @return mixed
+     * {@inheritdoc}
      */
     public function findCountVotedUsers(
         ParameterBag $parameterBag
@@ -37,9 +36,93 @@ class UserRepository extends EntityRepository implements UserRepositoryInterface
 
         }
         $qb
+            ->andWhere('u.numberBlank IS NULL')            
             ->andWhere($qb->expr()->between('l.createAt', ':dateFrom', ':dateTo'))
             ->setParameter(':dateFrom', $firstDay)
             ->setParameter(':dateTo', $lastDay);
+
+        $query = $qb->getQuery();
+        $result = $query->getSingleScalarResult();
+        return $result;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findCountAdminVotedUsers(
+        ParameterBag $parameterBag
+    ) {
+        $firstDay = new \DateTime(date("Y")."-01-01");
+        $lastDay = new \DateTime('last day of this year');
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb
+            ->select('COUNT(u.id)')
+            ->from('AppBundle:User', 'u')
+            ->leftJoin('u.likedProjects', 'l');
+
+        if ($city = $parameterBag->get(ProjectController::QUERY_CITY)) {
+            $qb
+                ->leftJoin('l.voteSetting', 'vs')
+                ->leftJoin('vs.location', 'c')
+                ->andWhere('c.city = :city')
+                ->setParameter('city', $city);
+
+        }
+        $qb
+            ->andWhere('u.numberBlank IS NOT NULL')
+            ->andWhere($qb->expr()->between('l.createAt', ':dateFrom', ':dateTo'))
+            ->setParameter(':dateFrom', $firstDay)
+            ->setParameter(':dateTo', $lastDay);
+
+        $query = $qb->getQuery();
+        $result = $query->getSingleScalarResult();
+        return $result;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findCountAdminUsers(
+        ParameterBag $parameterBag
+    ) {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb
+            ->select('COUNT(u.id)')
+            ->from('AppBundle:User', 'u')
+            ->where('u.numberBlank IS NOT NULL');
+        if ($city = $parameterBag->get(ProjectController::QUERY_CITY)) {
+            $qb
+                ->leftJoin('u.location', 'l')
+                ->leftJoin('l.cityObject', 'c')
+                ->andWhere('c.city = :city')
+                ->setParameter('city', $city);
+
+        }
+        $query = $qb->getQuery();
+        $result = $query->getSingleScalarResult();
+        return $result;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findCountAuthUsers(
+        ParameterBag $parameterBag
+    ) {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb
+            ->select('COUNT(u.id)')
+            ->from('AppBundle:User', 'u')
+            ->where('u.numberBlank IS NULL');
+
+        if ($city = $parameterBag->get(ProjectController::QUERY_CITY)) {
+            $qb
+                ->leftJoin('u.location', 'l')
+                ->leftJoin('l.cityObject', 'c')
+                ->andWhere('c.city = :city')
+                ->setParameter('city', $city);
+
+        }
 
         $query = $qb->getQuery();
         $result = $query->getSingleScalarResult();

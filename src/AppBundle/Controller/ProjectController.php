@@ -32,7 +32,10 @@ class ProjectController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $projects = $em->getRepository('AppBundle:Project')->getProjectShow($parameterBag);
+
+        $countAdminVoted = $em->getRepository('AppBundle:User')->findCountAdminVotedUsers($parameterBag);
         $countVoted = $em->getRepository('AppBundle:User')->findCountVotedUsers($parameterBag);
+        
         $vote =  $em->getRepository('AppBundle:VoteSettings')
             ->getProjectVoteSettingShow($request);
 
@@ -42,6 +45,7 @@ class ProjectController extends Controller
             'debug' => true,
             'projects' => $projects,
             'countVoted' => $countVoted,
+            'countAdminVoted' => $countAdminVoted,
             'voteSetting' => $vote,
             'voteCity' => $voteCity
         ];
