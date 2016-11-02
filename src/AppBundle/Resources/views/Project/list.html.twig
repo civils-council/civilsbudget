@@ -47,7 +47,7 @@
                         <hr>
                     </h1>
                     <div id="hp-voted">
-                        <span class="voted-title">Вже підтримано проектів {% if voteSetting %} {{ voteSetting.location.city }} {% endif %}:</span>
+                        <span class="voted-title">Вже підтримано проектів электроним чином {% if voteSetting %} {{ voteSetting.location.city }} {% endif %}:</span>
                         {#{% set votes = 0 %}#}
                         {#{% for project in projects %}#}
                             {#{% set votes = votes + project['countLikes']|number_format(0, '.', ' ') %}#}
@@ -62,7 +62,7 @@
                                 </span>
                             {% endfor %}
                         </div>
-
+                        <span class="voted-title">Вже підтримано проектів паперовим чином {% if voteSetting %} {{ voteSetting.location.city }} {% endif %}:</span>
                         <div class="counter">
                             {% for digit in digitsAdmin %}
                                 <span class="digit">
