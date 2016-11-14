@@ -13,8 +13,10 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="AppBundle\Entity\AdminRepository")
  */
-class Admin implements UserInterface
+class Admin extends AbstractUser implements UserInterface
 {
+    const ROLE_ADMIN = 'ROLE_ADMIN';
+    
     use GedmoTrait;
 
     /**
@@ -232,7 +234,7 @@ class Admin implements UserInterface
      */
     public function getRoles()
     {
-        return ['ROLE_ADMIN'];
+        return [self::ROLE_ADMIN];
     }
 
     /**

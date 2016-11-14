@@ -7,3 +7,4 @@ services:
         arguments:
             - "@app.domain.project"
             - "@app.domain.user"
+            - "@security.token_storage"
