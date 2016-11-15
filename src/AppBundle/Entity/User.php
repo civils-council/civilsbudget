@@ -29,7 +29,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints as AssertBridge;
  *     message="Цей номер бланка вже iснуе."
  * )
  */
-class User implements UserInterface, \JsonSerializable
+class User extends AbstractUser implements UserInterface, \JsonSerializable
 {
     use GedmoTrait;
 

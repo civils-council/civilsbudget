@@ -5,11 +5,14 @@ namespace AppBundle\Application\Project;
 
 use AppBundle\Domain\Project\ProjectInterface as DomainProjectInterface;
 use AppBundle\Domain\User\UserInterface;
+use AppBundle\Entity\Admin;
 use AppBundle\Entity\User;
 use AppBundle\Exception\AuthException;
 use AppBundle\Exception\ValidatorException;
 use Symfony\Component\HttpFoundation\Request;
-use \AppBundle\Entity\Project as ProjectEntity; 
+use \AppBundle\Entity\Project as ProjectEntity;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 
 class Project implements ProjectInterface
 {
@@ -23,19 +26,27 @@ class Project implements ProjectInterface
      */
     private $userInterface;
 
+    /**
+     * @var TokenStorage
+     */
+    private $tokenStorage;
+
 
     /**
      * Project constructor.
      * @param DomainProjectInterface $projectInterface
      * @param UserInterface $userInterface
+     * @param TokenStorage $tokenStorage
      */
     public function __construct(
         DomainProjectInterface $projectInterface,
-        UserInterface $userInterface
+        UserInterface $userInterface,
+        TokenStorage $tokenStorage
     )
     {
         $this->projectInterface = $projectInterface;
         $this->userInterface = $userInterface;
+        $this->tokenStorage = $tokenStorage;
     }
 
     /**
@@ -55,16 +66,18 @@ class Project implements ProjectInterface
         
         $date = new \DateTime();
         
-        if ($project->getVoteSetting()->getDateTo()->getTimestamp() < $date->getTimestamp()) {
-            throw new ValidatorException(
-                'Вибачте. Кінцева дата голосування до '
-                .$project->getVoteSetting()->getDateTo()->format('d.m.Y'));
-        }
+        if (($authUser = $this->tokenStorage->getToken()->getUser()) && !$authUser->hasRole(Admin::ROLE_ADMIN)) {
+            if ($project->getVoteSetting()->getDateTo()->getTimestamp() < $date->getTimestamp()) {
+                throw new ValidatorException(
+                    'Вибачте. Кінцева дата голосування до '
+                    .$project->getVoteSetting()->getDateTo()->format('d.m.Y'));
+            }
 
-        if ($project->getVoteSetting()->getDateFrom()->getTimestamp() > $date->getTimestamp()) {
-            throw new ValidatorException(
-                'Вибачте. Голосування розпочнеться '
-                .$project->getVoteSetting()->getDateFrom()->format('d.m.Y'));
+            if ($project->getVoteSetting()->getDateFrom()->getTimestamp() > $date->getTimestamp()) {
+                throw new ValidatorException(
+                    'Вибачте. Голосування розпочнеться '
+                    .$project->getVoteSetting()->getDateFrom()->format('d.m.Y'));
+            }
         }
         
         if ($this->getUserInterface()->getAccessVote($project, $user)
