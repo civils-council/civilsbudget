@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<h1>Sample map for displaying all projects location</h1>
+<div id="map"></div>
+<script>
+    var appProjectsLocation = [
+        {
+            url: 'project/1',
+            location: [{"lat":49.42984481494923,"lng":32.049007415771484},{"lat":49.428170112992,"lng":32.09999084472656},{"lat":49.415328831976495,"lng":32.08900451660156},{"lat":49.41231343540938,"lng":32.059993743896484}]
+        },
+        {
+            url: 'project/2',
+            location: [{"lat":49.43609653047201,"lng":32.039737701416016},{"lat":49.42202905002624,"lng":32.040252685546875},{"lat":49.41912573451713,"lng":32.05930709838867},{"lat":49.431631100690424,"lng":32.053985595703125}]
+        }
+    ];
+</script>
+<script src="js/app.js"></script>
+<script src="js/location_maps.js"></script>
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDkwgiSPZXWX0k2SGhQvbGJNUGwwdiuFzE&callback=initMap">
+</script>
+</body>
+</html>
