@@ -90,7 +90,8 @@ class Project implements ProjectInterface
         }
 
         if (mb_strtolower($user->getLocation()->getCity()) 
-            != mb_strtolower($project->getVoteSetting()->getLocation()->getCity())
+//            != mb_strtolower($project->getVoteSetting()->getLocation()->getCity())
+            != mb_strtolower('ЧЕРКАСИ')
         ) {
             throw new ValidatorException('Цей проект не стосується міста в якому ви зареєстровані.');
         }
