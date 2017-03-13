@@ -37,7 +37,7 @@
                                 Голосування відкрито до
                                 {{ voteSetting.dateTo|date("d.m.Y") }}
                             {% else %}
-                                <p>виріши долю громадського бюджету свого міста</p>
+                                <p>виріши долю свого міста</p>
                                 {% if voteCity %}
                                     {% for city in voteCity %}
                                         <a href="{{ path("homepage") }}?city={{ city['city'] }}" style="color: oldlace">{{ city['city'] }}</a><br>
