@@ -7,7 +7,7 @@
 __GET__ `/api/votings`
 
 
-####Response
+#### Response
 
 __200__
 
@@ -35,7 +35,7 @@ __200__
 
 __GET__ `/api/votings/{voting_id}/projects`
 
-####Response
+#### Response
 
 __200__
 
@@ -61,7 +61,7 @@ __200__
 __GET__ `/api/votings/{voting_id}/projects/{project_id}`
         `?clid={clid}`
 
-###Response
+### Response
 
 __200__
 
@@ -85,7 +85,7 @@ __200__
 
 __GET__ `/api/settings`    
 
-###Response
+### Response
 
 __200__
 
