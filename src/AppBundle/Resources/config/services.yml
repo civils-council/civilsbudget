@@ -74,3 +74,30 @@ services:
             - "@doctrine.orm.entity_manager"
             - "@app.mail.sender"
             - "@app.application.project"
+
+    app.model.voting:
+        class: AppBundle\Model\VotingModel
+        arguments:
+            - "@app.serializer.main"
+            - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:VoteSettings')"
+
+    app.serializer.main:
+        class: Symfony\Component\Serializer\Serializer
+        arguments:
+            -
+                - "@app.normalizer.date_time"
+                - "@app.normalizer.camel_case_to_snake_case"
+        tags:
+            - { name: serializer.normalizer }
+
+    app.normalizer.date_time:
+        class: Symfony\Component\Serializer\Normalizer\DateTimeNormalizer
+
+    app.normalizer.camel_case_to_snake_case:
+        class: Symfony\Component\Serializer\Normalizer\ObjectNormalizer
+        arguments:
+            - ~
+            - "@app.name_converter.camel_case_to_snake_case"
+
+    app.name_converter.camel_case_to_snake_case:
+        class: Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter

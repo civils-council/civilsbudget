@@ -2,16 +2,13 @@
 
 namespace AppBundle\Application\Project;
 
-
 use AppBundle\Domain\Project\ProjectInterface as DomainProjectInterface;
 use AppBundle\Domain\User\UserInterface;
 use AppBundle\Entity\Admin;
 use AppBundle\Entity\User;
 use AppBundle\Exception\AuthException;
 use AppBundle\Exception\ValidatorException;
-use Symfony\Component\HttpFoundation\Request;
 use \AppBundle\Entity\Project as ProjectEntity;
-use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 
 class Project implements ProjectInterface

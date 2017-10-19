@@ -5,7 +5,7 @@ parameters:
     app.repository.project.class:                              AppBundle\Entity\ProjectRepository
     app.entity.project.class:                                  AppBundle\Entity\Project
 
-    app.repository.vote.class:                                 AppBundle\Entity\VoteSettingsRepository
+    app.repository.vote.class:                                 AppBundle\Entity\Repository\VoteSettingsRepository
     app.entity.vote.class:                                     AppBundle\Entity\VoteSettings
 
 services:
