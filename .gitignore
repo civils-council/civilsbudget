@@ -4,13 +4,7 @@
 /web/fonts
 /node_modules
 /bower_components
-/app/bootstrap.php.cache
-/app/cache/*
-!app/cache/.gitkeep
 /app/config/parameters.yml
-/app/logs/*
-!app/logs/.gitkeep
-/app/phpunit.xml
 /bin/*
 !bin/base_script.php
 !bin/reload_database.php
@@ -24,3 +18,9 @@
 .idea
 /app/rsa_key.pem
 *.log
+/.web-server-pid
+/build/
+/phpunit.xml
+/var/*
+!var/SymfonyRequirements.php
+web-src/images/.DS_Store

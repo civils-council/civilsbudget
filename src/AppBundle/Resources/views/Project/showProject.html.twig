@@ -63,11 +63,6 @@
 
 {% block headscripts %}
 
-    <script type="text/javascript" src="//vk.com/js/api/openapi.js?121"></script>
-    <script type="text/javascript">
-        VK.init({apiId: 5179927, onlyWidgets: true});
-    </script>
-
 {% endblock headscripts %}
 
 {% block bodyscripts %}
@@ -95,11 +90,7 @@
             </div>
         {% endif %}
         <div class="fb-comments" data-href="{{ app.request.getUri }}" data-width="100%" data-numposts="5"></div>
-        <div id="vk_comments"></div>
-        <script type="text/javascript">
-            //TODO delete comment on production
-//            VK.Widgets.Comments("vk_comments", {limit: 5, width: 500, attach: "*"});
-        </script>
+
     </div>
 {% endblock notice %}
 

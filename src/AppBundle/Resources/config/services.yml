@@ -5,11 +5,11 @@ parameters:
 
 services:
     app.authenticator:
-        class: "%app.security.authenticator.class%"
-        arguments:
-            - "@security.token_storage"
-            - "@doctrine.orm.entity_manager"
-            - "@session"
+      class: "%app.security.authenticator.class%"
+      arguments:
+          - "@security.token_storage"
+          - "@doctrine.orm.entity_manager"
+          - "@session"
 
     app.file_uploader:
         class: "%app.helper.file_uploader.class%"
@@ -23,31 +23,32 @@ services:
     app.security.bank_id:
         class: AppBundle\Security\BankIdService
         arguments:
-            - %client_id%
-            - %client_secret%
-            - %bi_get_data_url%
-            - %bi_oauth_url%
-            - @router
+            - "%client_id%"
+            - "%client_secret%"
+            - "%bi_get_data_url%"
+            - "%bi_oauth_url%"
+            - "@router"
+
     app.twig_extension:
         class: AppBundle\Twig\AppExtension
         public: false
         arguments:
-            - @app.security.bank_id
+            - "@app.security.bank_id"
         tags:
             - { name: twig.extension }
 
     app.user.manager:
         class:  AppBundle\Helper\UserManager
         arguments:
-            - @templating
-            - @doctrine.orm.entity_manager
+            - "@templating"
+            - "@doctrine.orm.entity_manager"
         calls:
             - [ setRootDir, ["%kernel.root_dir%"] ]
 
     app.session:
         class:  AppBundle\Helper\SessionSet
         arguments:
-            - @session
+            - "@session"
 
     ses_client:
         class: Aws\Ses\SesClient
