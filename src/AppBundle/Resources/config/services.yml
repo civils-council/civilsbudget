@@ -80,6 +80,7 @@ services:
         arguments:
             - "@app.serializer.main"
             - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:VoteSettings')"
+            - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:User')"
 
     app.serializer.main:
         class: Symfony\Component\Serializer\Serializer
@@ -96,8 +97,21 @@ services:
     app.normalizer.camel_case_to_snake_case:
         class: Symfony\Component\Serializer\Normalizer\ObjectNormalizer
         arguments:
-            - ~
-            - "@app.name_converter.camel_case_to_snake_case"
+            - "@app.serializer.meta_data"
+            - "@app.serializer.name_converter.camel_case_to_snake_case"
 
-    app.name_converter.camel_case_to_snake_case:
+    app.serializer.name_converter.camel_case_to_snake_case:
         class: Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter
+
+    app.serializer.meta_data:
+        class: Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory
+        arguments:
+          - "@app.serializer.loader.anotation"
+
+    app.serializer.loader.anotation:
+        class: Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader
+        arguments:
+          - "@app.serializer.reader.anotation"
+
+    app.serializer.reader.anotation:
+        class: Doctrine\Common\Annotations\AnnotationReader
