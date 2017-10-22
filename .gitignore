@@ -9,6 +9,7 @@
 !bin/base_script.php
 !bin/reload_database.php
 !bin/clean.php
+!bin/console
 /composer.phar
 /vendor/
 /web/bundles/
