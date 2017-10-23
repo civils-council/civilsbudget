@@ -25,34 +25,6 @@
     <div id="login-modal" class="modal fade">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-
-                {% if isSafary() %}
-                    <div class="safari-header">
-                        <img src="{{ asset('images/bank-id.png') }}" alt="BankID"/>
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    </div>
-                    <div class="safari-body">
-                        <div class="safari-content">
-                            <p>Для стабільної роботи всіх сервісів BankID рекомендує використовувати браузери</p>
-
-                            <div class="browsers clearfix">
-                                <div class="icon-wrapper">
-                                    <img src="{{ asset('images/icon-chrome.ico') }}" alt="Chrome">
-                                </div>
-                                <div class="icon-wrapper">
-                                    <img src="{{ asset('images/icon-firefox.ico') }}" alt="Chrome">
-                                </div>
-                                <div class="icon-wrapper">
-                                    <img src="{{ asset('images/icon-opera.png') }}" alt="Chrome">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="safari-footer">
-                        <p>По всім питанням звертатись</p>
-                        <p><a href="mailto:info@bankid.org.ua">info@bankid.org.ua</a></p>
-                    </div>
-                {% else %}
                 <div class="modal-header">
                     <div class="row blh-auth">
                         <div class="col-md-6">крок "Авторизація"</div><span class="arrow"></span>
@@ -69,7 +41,6 @@
                             При собі мати паспорт та ідентифікаційний код.
                         {% endif %}
                         .</br></br>
-
                     </div>
                     <hr/>
                     <a href="{{ login_url }}">
@@ -77,7 +48,7 @@
                         <button class="modal-btn"> Увійти та проголосувати онлайн </button>
                     </a>
                 </div>
-                {% endif %}
+                {#{% /endif %}#}
             </div>
         </div>
     </div>

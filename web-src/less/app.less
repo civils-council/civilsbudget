@@ -1681,3 +1681,114 @@ button.close:hover {
 .btn-like-auth {
     padding: 12px 12px 8px 12px !important;
 }
+
+.download {
+    width: 100%;
+    background-color: #efefef;
+    .exit {
+        float: left;
+        padding: 50px 10px 50px 10px;
+        border: none;
+        outline: none;
+        cursor: pointer;
+    }
+    .img {
+        float: left;
+        margin: 20px 10px 0;
+        .logo {
+            width: 70px;
+            height: 70px;
+            border: none;
+            outline: none;
+            border-radius: 12px;
+        }
+    }
+    .download-description {
+        display: table;
+        width: calc(~"100% - (97px + 4%)");
+        p {
+            float: left;
+            max-width: calc(~"74% - 25px");
+            margin: 50px 2% 30px;
+            font-size: 15px;
+            font-weight: 400;
+            color: black;
+            letter-spacing: 1px;
+        }
+        a {
+            float: right;
+            margin-top: 35px;
+            padding: 10px 25px 30px 0;
+            width: 20%;
+            text-align: center;
+            font-size: 16px;
+            font-weight: 500;
+            color: #3f78a9;
+            letter-spacing: 1px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+    }
+}
+@media (max-width: 1120px) {
+    .download-description {
+        display: table;
+        z-index: 1;
+        position: relative;
+    }
+    .login,
+    .registration {
+        main {
+            z-index: 0;
+        }
+    }
+}
+@media (max-width: 720px) {
+    .download {
+        .download-description {
+            width: calc(~"100% - (143px + 4%)");
+            p {
+                max-width: calc(~"75% - 25px");
+                margin: 35px 2% 30px;
+                font-size: 13px;
+            }
+        }
+    }
+}
+@media (max-width: 500px) {
+    .download {
+        .img {
+            margin: 20px 10px 0 0;
+        }
+        .download-description {
+            width: calc(~"100% - (110px + 4%)");
+            p {
+                font-size: 12px;
+                margin: 30px 2% 30px;
+            }
+            a {
+                margin-top: 30px;
+                padding: 10px 0 30px 0;
+                width: calc(~"20% + 25px");
+            }
+        }
+    }
+}
+@media (max-width: 360px) {
+    .download {
+        .img {
+            margin: 25px 10px 0 0;
+        }
+        .download-description {
+            p {
+                max-width: calc(70% - 25px);
+                font-size: 12px;
+                margin: 20px 0;
+            }
+            a {
+                margin-top: 40px;
+                width: calc(~"30% + 25px");
+            }
+        }
+    }
+}
