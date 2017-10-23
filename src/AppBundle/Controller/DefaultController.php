@@ -50,7 +50,7 @@ class DefaultController extends Controller
         $authenticationUtils = $this->get('security.authentication_utils');
 
         $data = ['clid' => $authenticationUtils->getLastUsername()];
-        $form = $this->createForm(new LoginType(), $data, ['action' => $this->generateUrl('login_check')]);
+        $form = $this->createForm( LoginType::class, $data, ['action' => $this->generateUrl('login_check')]);
 
         if ($code = $request->query->get('code')) {
             $accessToken = $this->get('app.security.bank_id')->getAccessToken($code);
@@ -94,7 +94,7 @@ class DefaultController extends Controller
     {
         if ($request->get('status') && $request->get('status') == 'new') {
             $em = $this->getDoctrine()->getManager();
-            $form = $this->createForm(new ConfirmDataType(), $user);
+            $form = $this->createForm(ConfirmDataType::class, $user);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
                 $em->flush();
@@ -197,7 +197,7 @@ class DefaultController extends Controller
         $authenticationUtils = $this->get('security.authentication_utils');
 
         $data = ['secret' => $authenticationUtils->getLastUsername()];
-        $form = $this->createForm(new LoginType(), $data, ['action' => $this->generateUrl('login_check')]);
+        $form = $this->createForm(LoginType::class, $data, ['action' => $this->generateUrl('login_check')]);
 
         if ($error = $authenticationUtils->getLastAuthenticationError()) {
             $this->addFlash('danger', $error->getMessage());
@@ -286,7 +286,7 @@ class DefaultController extends Controller
      */
     private function createEditForm(User $entity)
     {
-        $form = $this->createForm(new LoginUserType(), $entity, array(
+        $form = $this->createForm(LoginUserType::class, $entity, array(
             'action' => $this->generateUrl('update_date_user', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));

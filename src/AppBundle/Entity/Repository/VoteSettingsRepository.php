@@ -1,11 +1,13 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace AppBundle\Entity\Repository;
+
 use AppBundle\Controller\ProjectController;
 use AppBundle\Entity\Interfaces\VoteSettingInterface;
+use AppBundle\Entity\Project;
+use AppBundle\Entity\User;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityRepository;
-use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -92,5 +94,22 @@ class VoteSettingsRepository extends EntityRepository implements VoteSettingInte
         }
 
         return [];
+    }
+
+    /**
+     * @return array
+     */
+    public function getVotedUsersCountPerVoting(): array
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb
+            ->select('vs.id, COUNT(DISTINCT u.id) as voted')
+            ->from(Project::class, 'p')
+            ->leftJoin('p.likedUsers', 'u')
+            ->leftJoin('p.voteSetting', 'vs')
+            ->groupBy('p.voteSetting')
+            ->orderBy('vs.id', Criteria::DESC);
+
+        return $qb->getQuery()->getResult();
     }
 }

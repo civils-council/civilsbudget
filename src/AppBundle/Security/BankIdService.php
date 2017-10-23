@@ -2,7 +2,7 @@
 
 namespace AppBundle\Security;
 
-use Guzzle\Http\Client;
+use GuzzleHttp\Client;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -49,7 +49,8 @@ class BankIdService
             $this->router->generate('login', [], UrlGeneratorInterface::ABSOLUTE_URL)
         );
 
-        $rawAccessToken = $client->get($url)->send()->getBody(true);
+        $rawAccessToken = $client->request('GET', $url)->getBody();
+
         $accessToken = json_decode($rawAccessToken, true);
         return $accessToken;
     }
@@ -67,7 +68,7 @@ class BankIdService
             $this->router->generate('api_login', [], UrlGeneratorInterface::ABSOLUTE_URL)
         );
 
-        $rawAccessToken = $client->get($url)->send()->getBody(true);
+        $rawAccessToken = $client->request('GET', $url)->getBody();
         $accessToken = json_decode($rawAccessToken, true);
         return $accessToken;
     }
@@ -78,31 +79,33 @@ class BankIdService
 //        $accessToken = json_decode($rawAccessToken, true);
 
         $bankUser = $client
-            ->post(
+            ->request(
+                'POST',
                 $this->bi_get_data_url."/ResourceService/checked/data",
                 [
-                    "Content-Type" => "application/json",
-                    "Accept" => "application/json",
-                    "Authorization" => "Bearer {$accessToken}, Id {$this->clientId}",
-                ],
-                json_encode([
-                    "type" => "physical",
-                    "fields" => ["firstName","middleName","lastName","phone","inn","clId","clIdText","birthDay","email","sex","resident","dateModification"],
-                    "addresses" =>  [[
-                        "type" => "factual",
-                        "fields" => ["country","state","area","city","street","houseNo","flatNo","dateModification"]
-                    ],[
-                        "type" => "birth",
-                        "fields" => ["country","state","area","city","street","houseNo","flatNo","dateModification"]
-                    ]],
-                    "documents" => [[
-                        "type" => "passport",
-                        "fields" => ["series","number","issue","dateIssue","dateExpiration","issueCountryIso2","dateModification"]
-                    ]]
-                ])
+                    'headers' => [
+                        "Content-Type" => "application/json",
+                        "Accept" => "application/json",
+                        "Authorization" => "Bearer {$accessToken}, Id {$this->clientId}",
+                    ],
+                    'body' => json_encode([
+                        "type" => "physical",
+                        "fields" => ["firstName","middleName","lastName","phone","inn","clId","clIdText","birthDay","email","sex","resident","dateModification"],
+                        "addresses" =>  [[
+                            "type" => "factual",
+                            "fields" => ["country","state","area","city","street","houseNo","flatNo","dateModification"]
+                        ],[
+                            "type" => "birth",
+                            "fields" => ["country","state","area","city","street","houseNo","flatNo","dateModification"]
+                        ]],
+                        "documents" => [[
+                            "type" => "passport",
+                            "fields" => ["series","number","issue","dateIssue","dateExpiration","issueCountryIso2","dateModification"]
+                        ]]
+                    ])
+                ]
             )
-            ->send()
-            ->getBody(true)
+            ->getBody()
         ;
 
         return json_decode($bankUser, true);

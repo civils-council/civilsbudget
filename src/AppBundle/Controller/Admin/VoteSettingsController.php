@@ -218,7 +218,7 @@ class VoteSettingsController extends Controller
      */
     private function createEditForm(VoteSettings $entity)
     {
-        $form = $this->createForm(new VoteSettingsType(), $entity, array(
+        $form = $this->createForm(VoteSettingsType::class, $entity, array(
             'action' => $this->generateUrl('vote_settings_update', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
@@ -237,7 +237,7 @@ class VoteSettingsController extends Controller
      */
     private function createCreateForm(VoteSettings $entity)
     {
-        $form = $this->createForm(new VoteSettingsType(), $entity, array(
+        $form = $this->createForm(VoteSettingsType::class, $entity, array(
             'action' => $this->generateUrl('vote_settings_create'),
             'method' => 'POST',
         ));

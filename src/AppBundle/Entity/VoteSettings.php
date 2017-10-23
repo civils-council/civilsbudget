@@ -3,14 +3,16 @@
 namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Faker\Provider\DateTime;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * VoteSettings
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="AppBundle\Entity\VoteSettingsRepository")
+ * @ORM\Entity(repositoryClass="AppBundle\Entity\Repository\VoteSettingsRepository")
  */
 class VoteSettings
 {
@@ -62,7 +64,7 @@ class VoteSettings
     private $project;
 
     /**
-     * @var string
+     * @var \DateTime
      *
      * @Assert\NotBlank()
      * @ORM\Column(name="date_from", type="datetime", nullable=false)
@@ -376,9 +378,9 @@ class VoteSettings
     /**
      * Get project
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
-    public function getProject()
+    public function getProject(): Collection
     {
         return $this->project;
     }

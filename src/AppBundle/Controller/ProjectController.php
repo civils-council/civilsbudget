@@ -106,7 +106,7 @@ class ProjectController extends Controller
     {
         $user = $this->getUser();
         $form = $this
-            ->createForm(new LikeProjectType(), [], [
+            ->createForm(LikeProjectType::class, [], [
                 'user' => $user,
                 'action' => $this->generateUrl('projects_like', ['id' => $project->getId()]),
             ]);
@@ -183,7 +183,7 @@ class ProjectController extends Controller
      */
     private function createCreateForm(Project $entity)
     {
-        $form = $this->createForm(new ProjectType(), $entity, array(
+        $form = $this->createForm(ProjectType::class, $entity, array(
             'validation_groups' => ['user_post'],
             'action' => $this->generateUrl('projects_add'),
             'method' => 'POST',
