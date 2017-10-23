@@ -48,7 +48,7 @@ class ProjectController extends Controller
     public function showNotApprovedProjectAction(Project $project, Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $form = $this->createForm(new ProjectType(), $project, ['method' => 'PUT',
+        $form = $this->createForm(ProjectType::class, $project, ['method' => 'PUT',
             'validation_groups' => ['approve_admin'],            
             'admin' => true,
             'attr' => array('class' => 'formCreateClass'),
@@ -123,7 +123,7 @@ class ProjectController extends Controller
      */
     private function createCreateForm(Project $entity)
     {
-        $form = $this->createForm(new ProjectType(), $entity, array(
+        $form = $this->createForm(ProjectType::class, $entity, array(
             'validation_groups' => ['approve_admin'],
             'action' => $this->generateUrl('admin_projects_add', array('id' => $entity->getId())),
             'method' => 'POST',
