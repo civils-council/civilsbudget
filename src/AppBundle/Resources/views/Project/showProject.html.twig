@@ -128,3 +128,8 @@
         {#</ul>#}
     {#</div>#}
 {% endblock navproject %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/app_notification.js') }}"></script>
+{% endblock %}
