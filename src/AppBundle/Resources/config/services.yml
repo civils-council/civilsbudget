@@ -79,8 +79,14 @@ services:
         class: AppBundle\Model\VotingModel
         arguments:
             - "@app.serializer.main"
+            - "@app.helper.url_generator"
             - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:VoteSettings')"
             - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:User')"
+
+    app.helper.url_generator:
+        class: AppBundle\Helper\UrlGeneratorHelper
+        arguments:
+            - "@request_stack"
 
     app.serializer.main:
         class: Symfony\Component\Serializer\Serializer

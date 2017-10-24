@@ -8,6 +8,16 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class ProjectDTO
 {
     /**
+     * @var string
+     */
+    private $picture;
+
+    /**
+     * @var string
+     */
+    private $ownerAvatar;
+
+    /**
      * @var Project
      */
     private $project;
@@ -15,14 +25,13 @@ class ProjectDTO
     /**
      * @var bool
      */
-    private $voted;
+    private $isVoted;
 
-
-
-    public function __construct(Project $project, bool $voted = false)
+    public function __construct(Project $project)
     {
         $this->project = $project;
-        $this->voted = $voted;
+        $this->ownerAvatar = $this->project->getOwner()->getAvatar();
+        $this->picture = $this->project->getPicture();
     }
 
     /**
@@ -82,7 +91,7 @@ class ProjectDTO
      */
     public function getPicture(): ?string
     {
-        return $this->project->getPicture();
+        return $this->picture;
     }
 
     /**
@@ -122,7 +131,7 @@ class ProjectDTO
      */
     public function getOwnerAvatar(): ?string
     {
-        return $this->project->getOwner()->getAvatar();
+        return $this->ownerAvatar;
     }
 
     /**
@@ -130,9 +139,43 @@ class ProjectDTO
      *
      * @return bool
      */
-    public function getVoted(): bool
+    public function getIsVoted(): bool
     {
-        return $this->voted;
+        return (bool)$this->isVoted;
+    }
+
+    /**
+     * @param bool|null $isVoted
+     *
+     * @return ProjectDTO
+     */
+    public function setIsVoted(bool $isVoted = false): ProjectDTO
+    {
+        $this->isVoted = $isVoted;
+
+        return $this;
+    }
+
+    /**
+     * @param string|null $picture
+     * @return ProjectDTO
+     */
+    public function setPicture(?string $picture): ProjectDTO
+    {
+        $this->picture = $picture;
+
+        return $this;
+    }
+
+    /**
+     * @param string|null $ownerAvatar
+     * @return ProjectDTO
+     */
+    public function setOwnerAvatar(?string $ownerAvatar): ProjectDTO
+    {
+        $this->ownerAvatar = $ownerAvatar;
+
+        return $this;
     }
 
     public function getVoteSetting()
