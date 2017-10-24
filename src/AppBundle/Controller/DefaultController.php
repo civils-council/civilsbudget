@@ -28,7 +28,7 @@ class DefaultController extends Controller
         if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
             return $this->redirectToRoute('admin_dashboard');
         }
-        return $this->redirectToRoute('projects_list', ['city' => $request->get('city')]);
+        return $this->redirectToRoute('votings_list', ['city' => $request->get('city')]);
     }
 
     /**
