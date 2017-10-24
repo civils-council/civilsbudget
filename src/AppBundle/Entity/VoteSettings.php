@@ -18,6 +18,11 @@ class VoteSettings
 {
     use GedmoTrait;
 
+    const
+        STATUS_ARCHIVED = 'archived',
+        STATUS_ACTIVE = 'active',
+        STATUS_FUTURE = 'future';
+
     /**
      * @var integer
      *
@@ -407,5 +412,23 @@ class VoteSettings
     public function getLocation()
     {
         return $this->location;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStatus(): string
+    {
+        $now = new \DateTime;
+
+        if ($this->getDateTo() < $now) {
+            return self::STATUS_ARCHIVED;
+        }
+
+        if ($this->getDateFrom() > $now) {
+            return self::STATUS_FUTURE;
+        }
+
+        return self::STATUS_ACTIVE;
     }
 }
