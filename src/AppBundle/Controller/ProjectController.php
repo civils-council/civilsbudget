@@ -23,7 +23,7 @@ class ProjectController extends Controller
     const QUERY_PROJECT_ID                = 'project_id';
 
     /**
-     * @Route("/{id}/projects", name="projects_list")
+     * @Route("/votings/{id}/projects", name="projects_list")
      * @Template()
      * @Method({"GET"})
      */
