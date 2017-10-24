@@ -55,6 +55,11 @@ class ProjectRepository extends EntityRepository implements ProjectRepositoryInt
                 ->andWhere('l.city = :city')
                 ->setParameter('city', $city);
         }
+
+        if ($parameterBag->get('voteSetting')) {
+            $qb->andWhere('vs.id = :voteSetting')
+                ->setParameter('voteSetting', $parameterBag->get('voteSetting'));
+        }
         $qb
             ->groupBy('project.id')
             ->orderBy('vs.title', Criteria::ASC);
