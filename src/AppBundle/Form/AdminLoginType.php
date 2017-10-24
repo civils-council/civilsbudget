@@ -3,6 +3,7 @@
 namespace AppBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 class AdminLoginType extends AbstractType
@@ -11,7 +12,13 @@ class AdminLoginType extends AbstractType
     {
         $builder
             ->add('username')
-            ->add('password', 'password')
+            ->add(
+                'password',
+                PasswordType::class,
+                [
+                    'attr' => ['class' => 'form-control']
+                ]
+            )
             ->setRequired(false)
         ;
     }
