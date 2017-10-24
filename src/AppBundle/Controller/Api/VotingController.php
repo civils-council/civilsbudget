@@ -2,9 +2,11 @@
 
 namespace AppBundle\Controller\Api;
 
+use AppBundle\Entity\Project;
 use AppBundle\Entity\VoteSettings;
 use AppBundle\Model\VotingModel;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,7 +30,7 @@ class VotingController extends Controller
             ['groups' => ['voting_list']]
         );
 
-        return new JsonResponse(["votings" => $normalisedVotingList]);
+        return new JsonResponse(['votings' => $normalisedVotingList]);
     }
 
     /**
@@ -43,12 +45,41 @@ class VotingController extends Controller
     public function projectsListAction(VoteSettings $voteSetting, Request $request): Response
     {
         $normalizedProjects = $this->getSerializer()->normalize(
-            $this->getVotingModel()->getVotingProjects($voteSetting, $request),
+            $this->getVotingModel()->getVotingProjectList($voteSetting, $request),
             null,
             ['groups' => ['project_list']]
         );
 
-        return new JsonResponse(["projects" => $normalizedProjects]);
+        return new JsonResponse(['projects' => $normalizedProjects]);
+    }
+
+    /**
+     * @Route(
+     *     "/api/votings/{id}/projects/{project_id}",
+     *     name="api_voting_project",
+     *     requirements={
+     *          "id" = "\d+",
+     *          "project_id" = "\d+"
+     *     }
+     * )
+     * @ParamConverter("project", class="AppBundle:Project", options={"id" = "project_id"})
+     * @Method({"GET"})
+     *
+     * @param VoteSettings $voteSetting
+     * @param Project $project
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function showVotingProjectAction(VoteSettings $voteSetting, Project $project, Request $request): Response
+    {
+        $normalizedProject = $this->getSerializer()->normalize(
+            $this->getVotingModel()->getVotingProject($voteSetting, $project, $request),
+            null,
+            ['groups' => ['project_list']]
+        );
+
+        return new JsonResponse(['project' => $normalizedProject]);
     }
 
     /**

@@ -7,10 +7,15 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 class VotingDTO
 {
-    const
-        STATUS_ARCHIVED = 'archived',
-        STATUS_ACTIVE = 'active',
-        STATUS_FUTURE = 'future';
+    /**
+     * @var string
+     */
+    private $logo;
+
+    /**
+     * @var string
+     */
+    private $backgroundImage;
 
     /**
      * @var VoteSettings
@@ -22,10 +27,11 @@ class VotingDTO
      */
     private $voted;
 
-    public function __construct(VoteSettings $voteSettings, ?int $voted = 0)
+    public function __construct(VoteSettings $voteSettings)
     {
         $this->voteSettings = $voteSettings;
-        $this->voted = $voted;
+        $this->logo = $voteSettings->getLogo();
+        $this->backgroundImage = $voteSettings->getBackgroundImg();
     }
 
     /**
@@ -45,17 +51,7 @@ class VotingDTO
      */
     public function getStatus(): string
     {
-        $now = new \DateTime;
-
-        if ($this->voteSettings->getDateTo() < $now) {
-            return self::STATUS_ARCHIVED;
-        }
-
-        if ($this->voteSettings->getDateFrom() > $now) {
-            return self::STATUS_FUTURE;
-        }
-
-        return self::STATUS_ACTIVE;
+        return $this->voteSettings->getStatus();
     }
 
     /**
@@ -95,7 +91,7 @@ class VotingDTO
      */
     public function getVoted(): int
     {
-        return $this->voted;
+        return (int)$this->voted;
     }
 
     /**
@@ -125,7 +121,7 @@ class VotingDTO
      */
     public function getLogo(): ?string
     {
-        return $this->voteSettings->getLogo();
+        return $this->logo;
     }
 
     /**
@@ -135,7 +131,7 @@ class VotingDTO
      */
     public function getBackgroundImage(): ?string
     {
-        return $this->voteSettings->getBackgroundImg();
+        return $this->backgroundImage;
     }
 
     /**
@@ -147,4 +143,41 @@ class VotingDTO
     {
         return $this->voteSettings->getLocation()->getCity();
     }
+
+    /**
+     * @param int|null $voted
+     *
+     * @return VotingDTO
+     */
+    public function setVoted(?int $voted = 0): VotingDTO
+    {
+        $this->voted = $voted;
+
+        return $this;
+    }
+
+    /**
+     * @param string $logo
+     *
+     * @return VotingDTO
+     */
+    public function setLogo(string $logo): VotingDTO
+    {
+        $this->logo = $logo;
+
+        return $this;
+    }
+
+    /**
+     * @param string $backgroundImage
+     *
+     * @return VotingDTO
+     */
+    public function setBackgroundImage(string $backgroundImage): VotingDTO
+    {
+        $this->backgroundImage = $backgroundImage;
+
+        return $this;
+    }
+
 }

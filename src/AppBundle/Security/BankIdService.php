@@ -38,7 +38,6 @@ class BankIdService
 
     public function getAccessToken($code)
     {
-//        dump($code);exit;
         $client = new Client();
         $sha1 = sha1($this->clientId . $this->secret. $code, false);
         $url =  sprintf(
@@ -57,7 +56,6 @@ class BankIdService
 
     public function getApiAccessToken($code)
     {
-//        dump($code);exit;
         $client = new Client();
         $sha1 = sha1($this->clientId . $this->secret. $code, false);
         $url =  sprintf(
@@ -76,7 +74,6 @@ class BankIdService
     public function getBankIdUser($accessToken)
     {
         $client = new Client();
-//        $accessToken = json_decode($rawAccessToken, true);
 
         $bankUser = $client
             ->request(

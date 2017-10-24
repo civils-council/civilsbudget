@@ -9,7 +9,9 @@ use AppBundle\Entity\Repository\VoteSettingsRepository;
 use AppBundle\Entity\User;
 use AppBundle\Entity\UserRepository;
 use AppBundle\Entity\VoteSettings;
+use AppBundle\Helper\UrlGeneratorHelper;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Serializer\Serializer;
 
 class VotingModel
@@ -29,14 +31,21 @@ class VotingModel
      */
     protected $userRepository;
 
+    /**
+     * @var UrlGeneratorHelper
+     */
+    protected $urlGeneratorHelper;
+
     public function __construct(
         Serializer $serializer,
+        UrlGeneratorHelper $urlGeneratorHelper,
         VoteSettingsRepository $voteSettingsRepository,
         UserRepository $userRepository
     ) {
         $this->serializer = $serializer;
         $this->voteSettingsRepository = $voteSettingsRepository;
         $this->userRepository = $userRepository;
+        $this->urlGeneratorHelper = $urlGeneratorHelper;
     }
 
     /**
@@ -51,7 +60,11 @@ class VotingModel
         /** @var VoteSettings $voteSetting */
         foreach ($voteSettings as $voteSetting) {
             $key = array_search($voteSetting->getId(), array_column($listVotedUserCount, 'id'));
-            $votingList[] = new VotingDTO($voteSetting, $listVotedUserCount[$key]['voted']);
+            $votingList[] = (new VotingDTO($voteSetting))
+                ->setVoted($listVotedUserCount[$key]['voted'])
+                ->setBackgroundImage($this->urlGeneratorHelper->prepareAbsoluteUrl($voteSetting->getBackgroundImg()))
+                ->setLogo($this->urlGeneratorHelper->prepareAbsoluteUrl($voteSetting->getLogo()))
+            ;
         }
 
         return $votingList;
@@ -61,20 +74,53 @@ class VotingModel
      * @param VoteSettings $voteSettings
      * @param Request $request
      *
-     * @return VotingDTO[]
+     * @return ProjectDTO[]
      */
-    public function getVotingProjects(VoteSettings $voteSettings, Request $request): array
+    public function getVotingProjectList(VoteSettings $voteSettings, Request $request): array
     {
         $projects = $voteSettings->getProject();
         /** @var User $user */
         $user = $this->userRepository->findOneBy(['clid' => $request->get('clid')]);
 
         $projectList = [];
+        /** @var Project $project */
         foreach ($projects as $project) {
-            $projectList[] = new ProjectDTO($project, $this->isUserVotedForProject($user, $project));
+            if (!$project->getApproved()) {
+                continue;
+            }
+            $projectList[] = (new ProjectDTO($project))
+                ->setIsVoted($this->isUserVotedForProject($user, $project))
+                ->setPicture($this->urlGeneratorHelper->prepareAbsoluteUrl($project->getPicture()))
+                ->setOwnerAvatar($this->urlGeneratorHelper->prepareAbsoluteUrl($project->getOwner()->getAvatar()))
+            ;
         }
 
         return $projectList;
+    }
+
+    /**
+     * @param VoteSettings $voteSettings
+     * @param Project $project
+     * @param Request $request
+     *
+     * @throws HttpException
+     *
+     * @return ProjectDTO
+     */
+    public function getVotingProject(VoteSettings $voteSettings, Project $project, Request $request): ProjectDTO
+    {
+        if ($voteSettings->getId() !== $project->getVoteSetting()->getId()) {
+            throw new HttpException(404, 'Project not fount for the voting');
+        }
+
+        /** @var User $user */
+        $user = $this->userRepository->findOneBy(['clid' => $request->get('clid')]);
+
+        return (new ProjectDTO($project))
+            ->setIsVoted($this->isUserVotedForProject($user, $project))
+            ->setPicture($this->urlGeneratorHelper->prepareAbsoluteUrl($project->getPicture()))
+            ->setOwnerAvatar($this->urlGeneratorHelper->prepareAbsoluteUrl($project->getOwner()->getAvatar()))
+        ;
     }
 
     /**
