@@ -134,4 +134,9 @@ class ProjectDTO
     {
         return $this->voted;
     }
+
+    public function getVoteSetting()
+    {
+        return $this->voteSetting;
+    }
 }

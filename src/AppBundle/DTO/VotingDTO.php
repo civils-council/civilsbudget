@@ -63,9 +63,19 @@ class VotingDTO
      *
      * @return string
      */
-    public function getTitle(): string
+    public function getTitleH1(): string
     {
         return $this->voteSettings->getTitleH1();
+    }
+
+    /**
+     * @Groups({"voting_list"})
+     *
+     * @return string
+     */
+    public function getTitle(): string
+    {
+        return $this->voteSettings->getTitle();
     }
 
     /**

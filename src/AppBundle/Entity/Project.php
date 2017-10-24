@@ -126,7 +126,7 @@ class Project implements \JsonSerializable
      * @ORM\ManyToOne(targetEntity="VoteSettings", inversedBy="project")
      * @ORM\JoinColumn(name="vote_setting_id", nullable = true, referencedColumnName="id")
      */
-    private $voteSetting;    
+    private $voteSetting;
 
     /**
      * Constructor

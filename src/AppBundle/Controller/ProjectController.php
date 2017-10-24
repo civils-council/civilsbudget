@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Project;
 use AppBundle\Entity\User;
+use AppBundle\Entity\VoteSettings;
 use AppBundle\Exception\ValidatorException;
 use AppBundle\Form\ProjectType;
 use AppBundle\Form\LikeProjectType;
@@ -21,34 +22,52 @@ class ProjectController extends Controller
     const SERVER_ERROR                    = 'Server Error';
     const QUERY_CITY                      = 'city';
     const QUERY_PROJECT_ID                = 'project_id';
-    
+
     /**
-     * @Route("/projects", name="projects_list")
+     * @Route("/categories", name="categories_list")
      * @Template()
      * @Method({"GET"})
      */
-    public function listAction(Request $request)
+    public function categoriesListAction(Request $request)
     {
         $parameterBag = $request->query;
-
         $em = $this->getDoctrine()->getManager();
-        $projects = $em->getRepository('AppBundle:Project')->getProjectShow($parameterBag);
+        $countAdminVoted = $em->getRepository(User::class)->findCountAdminVotedUsers($parameterBag);
+        $countVoted = $em->getRepository(User::class)->findCountVotedUsers($parameterBag);
+        $vote =  $em->getRepository(VoteSettings::class)->getProjectVoteSettingShow($request);
+        $voteCity =  $em->getRepository(VoteSettings::class)->getVoteSettingCities();
+        $votingList = $this->get('app.model.voting')->getVotingList();
 
-        $countAdminVoted = $em->getRepository('AppBundle:User')->findCountAdminVotedUsers($parameterBag);
-        $countVoted = $em->getRepository('AppBundle:User')->findCountVotedUsers($parameterBag);
-        
-        $vote =  $em->getRepository('AppBundle:VoteSettings')
-            ->getProjectVoteSettingShow($request);
+        return [
+            'debug' => true,
+            'countVoted' => $countVoted,
+            'countAdminVoted' => $countAdminVoted,
+            'voteSetting' => $vote,
+            'voteCity' => $voteCity,
+            "votings" => $votingList
+        ];
+    }
 
-        $voteCity =  $em->getRepository('AppBundle:VoteSettings')
-            ->getVoteSettingCities();
+    /**
+     * @Route("/{id}/projects", name="projects_list")
+     * @Template()
+     * @Method({"GET"})
+     */
+    public function listAction(VoteSettings $voteSetting, Request $request)
+    {
+        $parameterBag = $request->query;
+        $parameterBag->add(['voteSetting' => $voteSetting]);
+        $em = $this->getDoctrine()->getManager();
+        $projects = $em->getRepository(  Project::class)->getProjectShow($parameterBag);
+        $countAdminVoted = $em->getRepository(User::class)->findCountAdminVotedUsers($parameterBag);
+        $countVoted = $em->getRepository(User::class)->findCountVotedUsers($parameterBag);
+
         return [
             'debug' => true,
             'projects' => $projects,
             'countVoted' => $countVoted,
             'countAdminVoted' => $countAdminVoted,
-            'voteSetting' => $vote,
-            'voteCity' => $voteCity
+            'voteSetting' => $voteSetting
         ];
     }
 
@@ -64,8 +83,7 @@ class ProjectController extends Controller
         return [
             'debug' => true,
             'projects' => $projects,
-            'voteSetting' => $em->getRepository('AppBundle:VoteSettings')
-                ->getProjectVoteSettingShow($request)            
+            'voteSetting' => $em->getRepository('AppBundle:VoteSettings')->getProjectVoteSettingShow($request)
         ];
     }
 
