@@ -12,6 +12,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -181,7 +182,7 @@ class ProjectController extends Controller
             'method' => 'POST',
             'attr' => array('class' => 'formCreateClass')
         ));
-        $form->add('submit', 'submit', array('label' => 'Add Project'));
+        $form->add('submit', SubmitType::class, array('label' => 'Add Project'));
 
         return $form;
     }
