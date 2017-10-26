@@ -1,4 +1,3 @@
 imports:
-    - { resource: serivices/application.yml }
-    - { resource: serivices/domain.yml }
-    - { resource: serivices/repository.yml }
+    - { resource: services/application.yml }
+    - { resource: services/domain.yml }
