@@ -2,7 +2,6 @@
 
 namespace AppBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -13,7 +12,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints as AssertBridge;
  * User
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="AppBundle\Entity\UserRepository")
+ * @ORM\Entity(repositoryClass="AppBundle\Entity\Repository\UserRepository")
  *
  * @AssertBridge\UniqueEntity(
  *     groups={"admin_user_post", "admin_user_put"},
@@ -134,7 +133,16 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
      * @var string
      *
      * @Assert\NotBlank(groups={"admin_user_post", "admin_user_put"})
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=10, nullable=true, unique=true)
+     * @Assert\Type(
+     *     type="numeric",
+     *     message="Не коректне значення Ідентифікаційного коду."
+     * )
+     * @Assert\Length(
+     *      min = "10",
+     *      max = "10",
+     *      exactMessage = "Ідентифікаційний код має містити {{ limit }} символів",
+     * )
      */
     private $inn;
 

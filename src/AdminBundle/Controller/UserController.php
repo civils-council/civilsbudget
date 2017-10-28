@@ -13,7 +13,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use AppBundle\Entity\User;
-use AdminBundle\Form\UserType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 /**
@@ -341,6 +340,7 @@ class UserController extends Controller
     {
         $form = $this->createForm(CreateUser::class, $entity, array(
             'validation_groups' => ['admin_user_post'],
+            'constraints' => new \Symfony\Component\Validator\Constraints\Valid(),
 //            'cascade_validation' => true,
             'action' => $this->generateUrl('admin_users_create'),
             'method' => 'POST',

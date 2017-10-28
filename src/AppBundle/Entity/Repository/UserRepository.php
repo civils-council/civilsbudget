@@ -1,8 +1,12 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace AppBundle\Entity\Repository;
+
 use AppBundle\Controller\ProjectController;
 use AppBundle\Entity\Interfaces\UserRepositoryInterface;
+use AppBundle\Entity\User;
+use AppBundle\Entity\Project;
+use AppBundle\Entity\VoteSettings;
 use AppBundle\Exception\ValidatorException;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\ParameterBag;
