@@ -109,7 +109,7 @@ class ProjectDTO
      *
      * @return int
      */
-    public function getLikesCount(): int
+    public function getVoted(): int
     {
         return $this->project->getLikedUsers()->count();
     }
@@ -176,10 +176,5 @@ class ProjectDTO
         $this->ownerAvatar = $ownerAvatar;
 
         return $this;
-    }
-
-    public function getVoteSetting()
-    {
-        return $this->voteSetting;
     }
 }

@@ -81,7 +81,7 @@ class VotingController extends Controller
 
     /**
      * @Route(
-     *     "/api/votings/{id}/projects/{project_id}/like",
+     *     "/api/votings/{id}/projects/{project_id}/vote",
      *     name="api_voting_project_like",
      *     requirements={
      *          "id" = "\d+",
