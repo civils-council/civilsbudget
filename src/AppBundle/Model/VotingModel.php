@@ -12,7 +12,6 @@ use AppBundle\Entity\UserRepository;
 use AppBundle\Entity\VoteSettings;
 use AppBundle\Exception\NotFoundException;
 use AppBundle\Helper\UrlGeneratorHelper;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Serializer\Serializer;
 
@@ -29,11 +28,6 @@ class VotingModel
     private $serializer;
 
     /**
-     * @var UserRepository
-     */
-    private $userRepository;
-
-    /**
      * @var UrlGeneratorHelper
      */
     private $urlGeneratorHelper;
@@ -47,14 +41,12 @@ class VotingModel
         Serializer $serializer,
         UrlGeneratorHelper $urlGeneratorHelper,
         ProjectApplicationInterface $projectApplication,
-        VoteSettingsRepository $voteSettingsRepository,
-        UserRepository $userRepository
+        VoteSettingsRepository $voteSettingsRepository
     ) {
         $this->serializer = $serializer;
         $this->urlGeneratorHelper = $urlGeneratorHelper;
         $this->projectApplication = $projectApplication;
         $this->voteSettingsRepository = $voteSettingsRepository;
-        $this->userRepository = $userRepository;
     }
 
     /**
@@ -81,15 +73,13 @@ class VotingModel
 
     /**
      * @param VoteSettings $voteSettings
-     * @param Request $request
+     * @param User|null $user
      *
      * @return ProjectDTO[]
      */
-    public function getVotingProjectList(VoteSettings $voteSettings, Request $request): array
+    public function getVotingProjectList(VoteSettings $voteSettings, ?User $user): array
     {
         $projects = $voteSettings->getProject();
-        /** @var User $user */
-        $user = $this->userRepository->findOneBy(['clid' => $request->get('clid')]);
 
         $projectList = [];
         /** @var Project $project */
