@@ -59,7 +59,7 @@ class VotingDTO
      *
      * @return string
      */
-    public function getTitleH1(): string
+    public function getShortDescription(): string
     {
         return $this->voteSettings->getTitleH1();
     }
