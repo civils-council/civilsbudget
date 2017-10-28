@@ -83,6 +83,36 @@ class VotingController extends Controller
     }
 
     /**
+     * @Route(
+     *     "/api/votings/{id}/projects/{project_id}/like",
+     *     name="api_voting_project_like",
+     *     requirements={
+     *          "id" = "\d+",
+     *          "project_id" = "\d+"
+     *     }
+     * )
+     * @ParamConverter("project", class="AppBundle:Project", options={"id" = "project_id"})
+     * @Method({"POST"})
+     *
+     * @param VoteSettings $voteSetting
+     * @param Project $project
+     *
+     * @return Response
+     */
+    public function likeVotingProjectAction(VoteSettings $voteSetting, Project $project): Response
+    {
+        try {
+            return new JsonResponse([
+                'success' => $this->getVotingModel()->likeVotingProjectByUser($voteSetting, $project, $this->getUser())
+            ]);
+
+        } catch (\Exception $e) {
+            return new JsonResponse(['warning' => $e->getMessage()], $e->getCode());
+        }
+    }
+
+
+    /**
      * @return VotingModel
      */
     private function getVotingModel(): VotingModel
