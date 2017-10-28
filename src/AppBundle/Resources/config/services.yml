@@ -80,6 +80,7 @@ services:
         arguments:
             - "@app.serializer.main"
             - "@app.helper.url_generator"
+            - "@app.application.project"
             - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:VoteSettings')"
             - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:User')"
 
