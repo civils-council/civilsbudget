@@ -67,14 +67,13 @@ class VotingController extends Controller
      *
      * @param VoteSettings $voteSetting
      * @param Project $project
-     * @param Request $request
      *
      * @return Response
      */
-    public function showVotingProjectAction(VoteSettings $voteSetting, Project $project, Request $request): Response
+    public function showVotingProjectAction(VoteSettings $voteSetting, Project $project): Response
     {
         $normalizedProject = $this->getSerializer()->normalize(
-            $this->getVotingModel()->getVotingProject($voteSetting, $project, $request),
+            $this->getVotingModel()->getVotingProject($voteSetting, $project, $this->getUser()),
             null,
             ['groups' => ['project_list']]
         );
