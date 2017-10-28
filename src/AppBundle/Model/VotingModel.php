@@ -110,18 +110,15 @@ class VotingModel
     /**
      * @param VoteSettings $voteSettings
      * @param Project $project
-     * @param Request $request
+     * @param User|null $user
      *
      * @throws HttpException
      *
      * @return ProjectDTO
      */
-    public function getVotingProject(VoteSettings $voteSettings, Project $project, Request $request): ProjectDTO
+    public function getVotingProject(VoteSettings $voteSettings, Project $project, ?User $user): ProjectDTO
     {
         $this->validateVotingProject($voteSettings, $project);
-
-        /** @var User $user */
-        $user = $this->userRepository->findOneBy(['clid' => $request->get('clid')]);
 
         return (new ProjectDTO($project))
             ->setIsVoted($this->isUserVotedForProject($user, $project))
@@ -137,11 +134,8 @@ class VotingModel
      *
      * @return string
      */
-    public function likeVotingProjectByUser(
-        VoteSettings $voteSettings,
-        Project $project,
-        ?User $user
-    ): string {
+    public function likeVotingProjectByUser(VoteSettings $voteSettings, Project $project, ?User $user): string
+    {
         $this->validateVotingProject($voteSettings, $project);
 
         return $this->projectApplication->crateUserLike($user, $project);
