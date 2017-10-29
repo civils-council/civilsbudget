@@ -8,10 +8,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Security\Core\Authentication\Token\PreAuthenticatedToken;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use Symfony\Component\Validator\ConstraintViolation;
-use Symfony\Component\Validator\ConstraintViolationList;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
+
 
 class Authenticator
 {
@@ -25,11 +22,15 @@ class Authenticator
      */
     protected $entityManager;
 
-
     /**
      * @var Session
      */
     private $session;
+
+    /**
+     * @var TokenStorage
+     */
+    private $tokenStorage;
 
     /**
      * Authenticator constructor.
@@ -58,5 +59,23 @@ class Authenticator
         $token = new PreAuthenticatedToken($user, $user->getClid(), 'main', $user->getRoles());
         $this->tokenStorage->setToken($token);
         $this->session->set('_security_main', serialize($token));
+    }
+
+    /**
+     * @return User|null
+     */
+    public function getCurrentUser(): ?User
+    {
+        if (!$this->tokenStorage->getToken()) {
+            return null;
+        }
+
+        $user = $this->tokenStorage->getToken()->getUser();
+
+        if ($user instanceof User) {
+            return $user;
+        }
+
+        return null;
     }
 }
