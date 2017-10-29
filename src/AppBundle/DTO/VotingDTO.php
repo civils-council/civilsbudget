@@ -27,6 +27,11 @@ class VotingDTO
      */
     private $voted;
 
+    /**
+     * @var int
+     */
+    private $userVoted;
+
     public function __construct(VoteSettings $voteSettings)
     {
         $this->voteSettings = $voteSettings;
@@ -59,7 +64,7 @@ class VotingDTO
      *
      * @return string
      */
-    public function getTitleH1(): string
+    public function getShortDescription(): string
     {
         return $this->voteSettings->getTitleH1();
     }
@@ -190,4 +195,25 @@ class VotingDTO
         return $this;
     }
 
+    /**
+     * @param int|null $userVoted
+     *
+     * @return VotingDTO
+     */
+    public function setUserVoted(?int $userVoted = 0): VotingDTO
+    {
+        $this->userVoted = $userVoted;
+
+        return $this;
+    }
+
+    /**
+     * @Groups({"voting_list"})
+     *
+     * @return int
+     */
+    public function getUserVoted(): int
+    {
+        return $this->userVoted;
+    }
 }

@@ -12,8 +12,10 @@ use AppBundle\Entity\User;
 use AppBundle\Entity\VoteSettings;
 use AppBundle\Exception\NotFoundException;
 use AppBundle\Helper\UrlGeneratorHelper;
-use Symfony\Component\HttpFoundation\Request;
+use AppBundle\Security\Authenticator;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Serializer\Serializer;
 
 class VotingModel
@@ -24,14 +26,14 @@ class VotingModel
     private $voteSettingsRepository;
 
     /**
-     * @var Serializer
-     */
-    private $serializer;
-
-    /**
      * @var UserRepository
      */
     private $userRepository;
+
+    /**
+     * @var Serializer
+     */
+    private $serializer;
 
     /**
      * @var UrlGeneratorHelper
@@ -43,16 +45,23 @@ class VotingModel
      */
     private $projectApplication;
 
+    /**
+     * @var Authenticator
+     */
+    private $authenticator;
+
     public function __construct(
         Serializer $serializer,
         UrlGeneratorHelper $urlGeneratorHelper,
         ProjectApplicationInterface $projectApplication,
+        Authenticator $authenticator,
         VoteSettingsRepository $voteSettingsRepository,
         UserRepository $userRepository
     ) {
         $this->serializer = $serializer;
         $this->urlGeneratorHelper = $urlGeneratorHelper;
         $this->projectApplication = $projectApplication;
+        $this->authenticator = $authenticator;
         $this->voteSettingsRepository = $voteSettingsRepository;
         $this->userRepository = $userRepository;
     }
@@ -73,6 +82,7 @@ class VotingModel
                 ->setVoted($listVotedUserCount[$key]['voted'])
                 ->setBackgroundImage($this->urlGeneratorHelper->prepareAbsoluteUrl($voteSetting->getBackgroundImg()))
                 ->setLogo($this->urlGeneratorHelper->prepareAbsoluteUrl($voteSetting->getLogo()))
+                ->setUserVoted($this->getCurrentUserVotedTimes($voteSetting))
             ;
         }
 
@@ -81,15 +91,12 @@ class VotingModel
 
     /**
      * @param VoteSettings $voteSettings
-     * @param Request $request
      *
      * @return ProjectDTO[]
      */
-    public function getVotingProjectList(VoteSettings $voteSettings, Request $request): array
+    public function getVotingProjectList(VoteSettings $voteSettings): array
     {
         $projects = $voteSettings->getProject();
-        /** @var User $user */
-        $user = $this->userRepository->findOneBy(['clid' => $request->get('clid')]);
 
         $projectList = [];
         /** @var Project $project */
@@ -98,7 +105,7 @@ class VotingModel
                 continue;
             }
             $projectList[] = (new ProjectDTO($project))
-                ->setIsVoted($this->isUserVotedForProject($user, $project))
+                ->setIsVoted($this->isUserVotedForProject($this->authenticator->getCurrentUser(), $project))
                 ->setPicture($this->urlGeneratorHelper->prepareAbsoluteUrl($project->getPicture()))
                 ->setOwnerAvatar($this->urlGeneratorHelper->prepareAbsoluteUrl($project->getOwner()->getAvatar()))
             ;
@@ -110,21 +117,17 @@ class VotingModel
     /**
      * @param VoteSettings $voteSettings
      * @param Project $project
-     * @param Request $request
      *
      * @throws HttpException
      *
      * @return ProjectDTO
      */
-    public function getVotingProject(VoteSettings $voteSettings, Project $project, Request $request): ProjectDTO
+    public function getVotingProject(VoteSettings $voteSettings, Project $project): ProjectDTO
     {
         $this->validateVotingProject($voteSettings, $project);
 
-        /** @var User $user */
-        $user = $this->userRepository->findOneBy(['clid' => $request->get('clid')]);
-
         return (new ProjectDTO($project))
-            ->setIsVoted($this->isUserVotedForProject($user, $project))
+            ->setIsVoted($this->isUserVotedForProject($this->authenticator->getCurrentUser(), $project))
             ->setPicture($this->urlGeneratorHelper->prepareAbsoluteUrl($project->getPicture()))
             ->setOwnerAvatar($this->urlGeneratorHelper->prepareAbsoluteUrl($project->getOwner()->getAvatar()))
         ;
@@ -133,18 +136,14 @@ class VotingModel
     /**
      * @param VoteSettings $voteSettings
      * @param Project $project
-     * @param User|null $user
      *
      * @return string
      */
-    public function likeVotingProjectByUser(
-        VoteSettings $voteSettings,
-        Project $project,
-        ?User $user
-    ): string {
+    public function likeVotingProjectByUser(VoteSettings $voteSettings, Project $project): string
+    {
         $this->validateVotingProject($voteSettings, $project);
 
-        return $this->projectApplication->crateUserLike($user, $project);
+        return $this->projectApplication->crateUserLike($this->authenticator->getCurrentUser(), $project);
     }
 
     /**
@@ -170,5 +169,21 @@ class VotingModel
            throw new NotFoundException('Проект не знайдено для даного голосування', 404);
        }
 
+   }
+
+    /**
+     * @param VoteSettings $voteSettings
+     *
+     * @return int
+     */
+   private function getCurrentUserVotedTimes(VoteSettings $voteSettings): int
+   {
+       if ((null === $user = $this->authenticator->getCurrentUser()) &&
+           $voteSettings->getStatus() !== VoteSettings::STATUS_ACTIVE
+       ){
+           return 0;
+       }
+
+       return $this->userRepository->getUserVotesBySettingVote($voteSettings, $user);
    }
 }

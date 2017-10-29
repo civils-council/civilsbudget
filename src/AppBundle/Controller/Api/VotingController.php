@@ -9,7 +9,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Serializer;
@@ -38,14 +37,13 @@ class VotingController extends Controller
      * @Method({"GET"})
      *
      * @param VoteSettings $voteSetting
-     * @param Request $request
      *
      * @return Response
      */
-    public function projectsListAction(VoteSettings $voteSetting, Request $request): Response
+    public function projectsListAction(VoteSettings $voteSetting): Response
     {
         $normalizedProjects = $this->getSerializer()->normalize(
-            $this->getVotingModel()->getVotingProjectList($voteSetting, $request),
+            $this->getVotingModel()->getVotingProjectList($voteSetting),
             null,
             ['groups' => ['project_list']]
         );
@@ -67,14 +65,13 @@ class VotingController extends Controller
      *
      * @param VoteSettings $voteSetting
      * @param Project $project
-     * @param Request $request
      *
      * @return Response
      */
-    public function showVotingProjectAction(VoteSettings $voteSetting, Project $project, Request $request): Response
+    public function showVotingProjectAction(VoteSettings $voteSetting, Project $project): Response
     {
         $normalizedProject = $this->getSerializer()->normalize(
-            $this->getVotingModel()->getVotingProject($voteSetting, $project, $request),
+            $this->getVotingModel()->getVotingProject($voteSetting, $project),
             null,
             ['groups' => ['project_list']]
         );
@@ -84,7 +81,7 @@ class VotingController extends Controller
 
     /**
      * @Route(
-     *     "/api/votings/{id}/projects/{project_id}/like",
+     *     "/api/votings/{id}/projects/{project_id}/vote",
      *     name="api_voting_project_like",
      *     requirements={
      *          "id" = "\d+",
@@ -103,7 +100,7 @@ class VotingController extends Controller
     {
         try {
             return new JsonResponse([
-                'success' => $this->getVotingModel()->likeVotingProjectByUser($voteSetting, $project, $this->getUser())
+                'success' => $this->getVotingModel()->likeVotingProjectByUser($voteSetting, $project)
             ]);
 
         } catch (\Exception $e) {
