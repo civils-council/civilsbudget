@@ -81,7 +81,9 @@ services:
             - "@app.serializer.main"
             - "@app.helper.url_generator"
             - "@app.application.project"
+            - "@app.authenticator"
             - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:VoteSettings')"
+            - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:User')"
 
     app.helper.url_generator:
         class: AppBundle\Helper\UrlGeneratorHelper

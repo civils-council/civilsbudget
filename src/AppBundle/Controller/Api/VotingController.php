@@ -43,7 +43,7 @@ class VotingController extends Controller
     public function projectsListAction(VoteSettings $voteSetting): Response
     {
         $normalizedProjects = $this->getSerializer()->normalize(
-            $this->getVotingModel()->getVotingProjectList($voteSetting, $this->getUser()),
+            $this->getVotingModel()->getVotingProjectList($voteSetting),
             null,
             ['groups' => ['project_list']]
         );
@@ -71,7 +71,7 @@ class VotingController extends Controller
     public function showVotingProjectAction(VoteSettings $voteSetting, Project $project): Response
     {
         $normalizedProject = $this->getSerializer()->normalize(
-            $this->getVotingModel()->getVotingProject($voteSetting, $project, $this->getUser()),
+            $this->getVotingModel()->getVotingProject($voteSetting, $project),
             null,
             ['groups' => ['project_list']]
         );
@@ -100,7 +100,7 @@ class VotingController extends Controller
     {
         try {
             return new JsonResponse([
-                'success' => $this->getVotingModel()->likeVotingProjectByUser($voteSetting, $project, $this->getUser())
+                'success' => $this->getVotingModel()->likeVotingProjectByUser($voteSetting, $project)
             ]);
 
         } catch (\Exception $e) {
