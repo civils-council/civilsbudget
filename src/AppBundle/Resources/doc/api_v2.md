@@ -26,6 +26,7 @@ __200__
                 "logo": "http://imisto.com.ua/img/logo.png",        (optional)
                 "background_image": "http://imisto.com.ua/bg.png",  (optional)
                 "voted": 7654                                       (required)
+                "user_voted": current user voted times              (required)
             }
         ]
     }
