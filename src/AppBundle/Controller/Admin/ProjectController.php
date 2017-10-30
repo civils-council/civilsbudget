@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
@@ -53,7 +54,7 @@ class ProjectController extends Controller
             'admin' => true,
             'attr' => array('class' => 'formCreateClass'),
         ]);
-        $form->add('submit', 'submit', array('label' => 'Оновити проект'));
+        $form->add('submit', SubmitType::class, array('label' => 'Оновити проект'));
 
         $form->handleRequest($request);
 
@@ -129,7 +130,7 @@ class ProjectController extends Controller
             'method' => 'POST',
             'attr' => array('class' => 'formCreateClass'),
         ));
-        $form->add('submit', 'submit', array('label' => 'Add Project'));
+        $form->add('submit', SubmitType::class, array('label' => 'Add Project'));
 
         return $form;
     }

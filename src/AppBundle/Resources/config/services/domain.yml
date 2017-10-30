@@ -6,11 +6,11 @@ services:
     app.domain.project:
         class:            "%app.domain.project.project.class%"
         arguments:
-            - "@app.repository.project"
+            - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:Project')"
 
     app.domain.user:
         class:            "%app.domain.user.user.class%"
         arguments:
-            - "@app.repository.user"
-            - "@app.repository.vote"
+            - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:User')"
+            - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:VoteSettings')"
             - "@app.mail.sender"

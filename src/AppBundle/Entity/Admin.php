@@ -11,7 +11,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * Admin
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="AppBundle\Entity\AdminRepository")
+ * @ORM\Entity(repositoryClass="AppBundle\Entity\Repository\AdminRepository")
  */
 class Admin extends AbstractUser implements UserInterface
 {

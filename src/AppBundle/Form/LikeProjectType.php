@@ -20,6 +20,9 @@ class LikeProjectType extends AbstractType
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([

@@ -2,12 +2,13 @@
 
 namespace AppBundle\Controller\Api;
 
+use AppBundle\Entity\Project;
 use AppBundle\Entity\VoteSettings;
 use AppBundle\Model\VotingModel;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Serializer;
@@ -28,7 +29,7 @@ class VotingController extends Controller
             ['groups' => ['voting_list']]
         );
 
-        return new JsonResponse(["votings" => $normalisedVotingList]);
+        return new JsonResponse(['votings' => $normalisedVotingList]);
     }
 
     /**
@@ -36,20 +37,77 @@ class VotingController extends Controller
      * @Method({"GET"})
      *
      * @param VoteSettings $voteSetting
-     * @param Request $request
      *
      * @return Response
      */
-    public function projectsListAction(VoteSettings $voteSetting, Request $request): Response
+    public function projectsListAction(VoteSettings $voteSetting): Response
     {
         $normalizedProjects = $this->getSerializer()->normalize(
-            $this->getVotingModel()->getVotingProjects($voteSetting, $request),
+            $this->getVotingModel()->getVotingProjectList($voteSetting),
             null,
             ['groups' => ['project_list']]
         );
 
-        return new JsonResponse(["projects" => $normalizedProjects]);
+        return new JsonResponse(['projects' => $normalizedProjects]);
     }
+
+    /**
+     * @Route(
+     *     "/api/votings/{id}/projects/{project_id}",
+     *     name="api_voting_project",
+     *     requirements={
+     *          "id" = "\d+",
+     *          "project_id" = "\d+"
+     *     }
+     * )
+     * @ParamConverter("project", class="AppBundle:Project", options={"id" = "project_id"})
+     * @Method({"GET"})
+     *
+     * @param VoteSettings $voteSetting
+     * @param Project $project
+     *
+     * @return Response
+     */
+    public function showVotingProjectAction(VoteSettings $voteSetting, Project $project): Response
+    {
+        $normalizedProject = $this->getSerializer()->normalize(
+            $this->getVotingModel()->getVotingProject($voteSetting, $project),
+            null,
+            ['groups' => ['project_list']]
+        );
+
+        return new JsonResponse(['project' => $normalizedProject]);
+    }
+
+    /**
+     * @Route(
+     *     "/api/votings/{id}/projects/{project_id}/vote",
+     *     name="api_voting_project_like",
+     *     requirements={
+     *          "id" = "\d+",
+     *          "project_id" = "\d+"
+     *     }
+     * )
+     * @ParamConverter("project", class="AppBundle:Project", options={"id" = "project_id"})
+     * @Method({"POST"})
+     *
+     * @param VoteSettings $voteSetting
+     * @param Project $project
+     *
+     * @return Response
+     */
+    public function likeVotingProjectAction(VoteSettings $voteSetting, Project $project): Response
+    {
+        try {
+            return new JsonResponse([
+                'success' => $this->getVotingModel()->likeVotingProjectByUser($voteSetting, $project)
+            ]);
+
+        } catch (\Exception $e) {
+            return new JsonResponse(['warning' => $e->getMessage()], $e->getCode());
+        }
+    }
+
 
     /**
      * @return VotingModel

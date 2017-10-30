@@ -4,8 +4,7 @@ namespace AdminBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Component\Security\Core\SecurityContext;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Class RegistrationType
@@ -19,27 +18,25 @@ class CreateUser extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('user', new UserType());
-        $builder->add('location', new LocationType());
+        $builder->add('user', UserType::class);
+        $builder->add('location', LocationType::class);
     }
 
     /**
-     * @param OptionsResolverInterface $resolver
+     * {@inheritdoc}
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'data_class' => 'AdminBundle\Model\CreateUserModel',
             'csrf_protection' => false,
-//            'validation_groups' => ['admin_user_post'],
-            'cascade_validation' => true
         ));
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'create_users';
     }
