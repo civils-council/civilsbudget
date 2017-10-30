@@ -33,7 +33,7 @@
                 <div class="hp-text">
                     <h1 id="hp-title">
                         {% if voteSetting %}
-                            <p>{{ voteSetting.titleH1|nl2br }}</p>
+                            <p>{{ voteSetting.shortDescription|nl2br }}</p>
                             Голосування відкрито до
                             {{ voteSetting.dateTo|date("d.m.Y") }}
                         {% else %}
@@ -101,8 +101,10 @@
 
                     <div class="card-content">
                         <h2 class="item-title"><strong>{{ voting.title|humanize }}
-                                {% if voting.dateTo < date() %}
+                                {% if voting.status == 'archived' %}
                                     (архів)
+                                {% elseif voting.status == 'future' %}
+                                    (майбутнє)
                                 {% endif %}
                             </strong>
                             <div>
@@ -111,7 +113,7 @@
                         </h2>
                     </div><!-- card content -->
                     <div class="item-excerpt">
-                        <span>{{ voting.titleH1 | capitalize }}</span>
+                        <span>{{ voting.shortDescription | capitalize }}</span>
                         {#<button type="button" class="btn btn-custom pull-right cards desc-btn" aria-label="Left Align" data-value="project{{ project[0].id }}">#}
                         {#<i class="fa fa-ellipsis-v" data-value="project{{ project[0].id }}"></i>#}
                         {#</button>#}

@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Project
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="AppBundle\Entity\ProjectRepository")
+ * @ORM\Entity(repositoryClass="AppBundle\Entity\Repository\ProjectRepository")
  */
 class Project implements \JsonSerializable
 {

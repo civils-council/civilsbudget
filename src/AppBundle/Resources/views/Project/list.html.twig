@@ -33,7 +33,7 @@
                 <div class="hp-text">
                     <h1 id="hp-title">
                             {% if voteSetting %}
-                                <p>{{ voteSetting.titleH1|nl2br }}</p>
+                                <p>{{ voteSetting.shortDescription|nl2br }}</p>
                                 Голосування відкрито до
                                 {{ voteSetting.dateTo|date("d.m.Y") }}
                             {% else %}

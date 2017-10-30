@@ -74,7 +74,7 @@ class VoteSettingsRepository extends EntityRepository implements VoteSettingInte
             ->select('l.city')
             ->from('AppBundle:VoteSettings', 'vs')
             ->leftJoin('vs.location', 'l')
-            ->groupBy('l.city')
+            ->groupBy('l.city, vs.createAt')
             ->orderBy('vs.createAt', Criteria::DESC);
 
         $query = $qb->getQuery();

@@ -7,8 +7,8 @@ use AppBundle\DTO\ProjectDTO;
 use AppBundle\DTO\VotingDTO;
 use AppBundle\Entity\Project;
 use AppBundle\Entity\Repository\VoteSettingsRepository;
+use AppBundle\Entity\Repository\UserRepository;
 use AppBundle\Entity\User;
-use AppBundle\Entity\UserRepository;
 use AppBundle\Entity\VoteSettings;
 use AppBundle\Exception\NotFoundException;
 use AppBundle\Helper\UrlGeneratorHelper;
@@ -71,7 +71,7 @@ class VotingModel
      */
     public function getVotingList(): array
     {
-        $voteSettings = $this->voteSettingsRepository->findAll();
+        $voteSettings = $this->voteSettingsRepository->findBy([], ['dateFrom' => 'DESC']);
         $listVotedUserCount =  $this->voteSettingsRepository->getVotedUsersCountPerVoting();
 
         $votingList = [];
@@ -178,7 +178,7 @@ class VotingModel
      */
    private function getCurrentUserVotedTimes(VoteSettings $voteSettings): int
    {
-       if ((null === $user = $this->authenticator->getCurrentUser()) &&
+       if ((null === $user = $this->authenticator->getCurrentUser()) ||
            $voteSettings->getStatus() !== VoteSettings::STATUS_ACTIVE
        ){
            return 0;

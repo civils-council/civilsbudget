@@ -1,6 +1,7 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace AppBundle\Entity\Repository;
+
 use AppBundle\Controller\ProjectController;
 use AppBundle\Entity\Interfaces\ProjectRepositoryInterface;
 use Doctrine\Common\Collections\Criteria;
