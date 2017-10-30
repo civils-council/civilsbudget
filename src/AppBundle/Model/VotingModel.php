@@ -71,7 +71,7 @@ class VotingModel
      */
     public function getVotingList(): array
     {
-        $voteSettings = $this->voteSettingsRepository->findAll();
+        $voteSettings = $this->voteSettingsRepository->findBy([], ['dateFrom' => 'DESC']);
         $listVotedUserCount =  $this->voteSettingsRepository->getVotedUsersCountPerVoting();
 
         $votingList = [];
@@ -178,7 +178,7 @@ class VotingModel
      */
    private function getCurrentUserVotedTimes(VoteSettings $voteSettings): int
    {
-       if ((null === $user = $this->authenticator->getCurrentUser()) &&
+       if ((null === $user = $this->authenticator->getCurrentUser()) ||
            $voteSettings->getStatus() !== VoteSettings::STATUS_ACTIVE
        ){
            return 0;

@@ -66,7 +66,7 @@ class VotingDTO
      */
     public function getShortDescription(): string
     {
-        return $this->voteSettings->getTitleH1();
+        return $this->voteSettings->getShortDescription();
     }
 
     /**

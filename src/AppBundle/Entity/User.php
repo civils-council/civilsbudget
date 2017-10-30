@@ -129,10 +129,11 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
      */
     private $clid;
 
+//* @Assert\NotBlank(groups={"admin_user_post", "admin_user_put"})
+
     /**
      * @var string
      *
-     * @Assert\NotBlank(groups={"admin_user_post", "admin_user_put"})
      * @ORM\Column(type="string", length=10, nullable=true, unique=true)
      * @Assert\Type(
      *     type="numeric",

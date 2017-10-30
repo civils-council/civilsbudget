@@ -65,9 +65,12 @@ class UserController extends Controller
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
+        $errors = $this->get('validator')->validate($entity->getUser());
+
         if ($form->isValid()
             && $form->get('user')->isValid()
             && $form->get('location')->isValid()
+            && count($errors) === 0
         ) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity->getLocation());
@@ -83,6 +86,7 @@ class UserController extends Controller
         return array(
             'entity' => $entity,
             'form' => $form->createView(),
+            'errors' => $errors,
         );
     }
 

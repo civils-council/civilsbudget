@@ -16,14 +16,14 @@ class UserType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('inn', null, array('label' => 'Идентифiкацiйний код'))
             ->add('numberBlank', null, array('label' => 'Номер бланка'))
             ->add('middleName', null, array('label' => 'Призвiще'))
-            ->add('firstName', null, array('label' => 'Имя'))
+            ->add('firstName', null, array('label' => 'Им\'я'))
             ->add('lastName', null, array('label' => 'По батьковi'))
             ->add('birthday', null, array('label' => 'Дата Народження'))
-            ->add('inn', null, array('label' => 'Идентифiкацiйний код'))
             ->add('sex', ChoiceType::class, array('label' => 'Gender',
-                'choices' => array('М' => 'Чоловік', 'Ж' => 'Жінка'), ))
+                'choices' => array('Чоловік' => 'M', 'Жінка' => 'F'), ))
             ->add('phone')
             ->add('email');
     }
@@ -36,7 +36,7 @@ class UserType extends AbstractType
         $resolver->setDefaults(array(
             'data_class' => 'AppBundle\Entity\User',
             'csrf_protection' => false,
-            'validation_groups' => ['admin_user_post']
+//            'validation_groups' => ['admin_user_post']
         ));
     }
 

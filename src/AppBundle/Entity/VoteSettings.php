@@ -35,7 +35,7 @@ class VoteSettings
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $titleH1;
+    private $shortDescription;
 
     /**
      * @var string
@@ -141,25 +141,25 @@ class VoteSettings
     /**
      * Set titleH1
      *
-     * @param string $titleH1
+     * @param string|null $shortDescription
      *
      * @return VoteSettings
      */
-    public function setTitleH1($titleH1)
+    public function setShortDescription(?string $shortDescription = null)
     {
-        $this->titleH1 = $titleH1;
+        $this->shortDescription = $shortDescription;
 
         return $this;
     }
 
     /**
-     * Get titleH1
+     * Get shortDescription
      *
-     * @return string
+     * @return string|null
      */
-    public function getTitleH1()
+    public function getShortDescription(): ?string
     {
-        return $this->titleH1;
+        return $this->shortDescription;
     }
 
     /**
