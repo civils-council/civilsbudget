@@ -1,6 +1,6 @@
 # API DOC
 
-## Voting List
+## Votings
 
 ### List
 
@@ -25,7 +25,7 @@ __200__
                 "date_to": "2017-09-25T18:14:15+00:00",             (required)
                 "logo": "http://imisto.com.ua/img/logo.png",        (optional)
                 "background_image": "http://imisto.com.ua/bg.png",  (optional)
-                "voted": 7654                                       (required)
+                "voted": 7654,                                      (required)
                 "user_voted": current user voted times              (required)
             }
         ]
@@ -44,7 +44,7 @@ __200__
 
     {
         "projects": [{
-            "is_voted": "true/false"
+            "is_voted": "true/false",
             "id": 1,
             "title": "test title",
             "description": "test description",
@@ -69,7 +69,7 @@ __200__
 
     {
         "project": {
-            "is_voted": "true/false"
+            "is_voted": "true/false",
             "id": 1,
             "title": "test title",
             "description": "test description",
@@ -105,7 +105,6 @@ __200__
 __POST__ `/api/votings/{voting_id}/projects/{project_id}/vote`
           `{voting_id}  - voting id`
           `{project_id} - id project`
-
 __200__
 
     {
