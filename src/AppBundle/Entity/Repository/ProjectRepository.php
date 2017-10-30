@@ -1,6 +1,7 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace AppBundle\Entity\Repository;
+
 use AppBundle\Controller\ProjectController;
 use AppBundle\Entity\Interfaces\ProjectRepositoryInterface;
 use Doctrine\Common\Collections\Criteria;
@@ -54,6 +55,11 @@ class ProjectRepository extends EntityRepository implements ProjectRepositoryInt
             $qb
                 ->andWhere('l.city = :city')
                 ->setParameter('city', $city);
+        }
+
+        if ($parameterBag->get('voteSetting')) {
+            $qb->andWhere('vs.id = :voteSetting')
+                ->setParameter('voteSetting', $parameterBag->get('voteSetting'));
         }
         $qb
             ->groupBy('project.id')

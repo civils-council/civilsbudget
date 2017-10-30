@@ -5,11 +5,11 @@ parameters:
 
 services:
     app.authenticator:
-        class: "%app.security.authenticator.class%"
-        arguments:
-            - "@security.token_storage"
-            - "@doctrine.orm.entity_manager"
-            - "@session"
+      class: "%app.security.authenticator.class%"
+      arguments:
+          - "@security.token_storage"
+          - "@doctrine.orm.entity_manager"
+          - "@session"
 
     app.file_uploader:
         class: "%app.helper.file_uploader.class%"
@@ -23,31 +23,32 @@ services:
     app.security.bank_id:
         class: AppBundle\Security\BankIdService
         arguments:
-            - %client_id%
-            - %client_secret%
-            - %bi_get_data_url%
-            - %bi_oauth_url%
-            - @router
+            - "%client_id%"
+            - "%client_secret%"
+            - "%bi_get_data_url%"
+            - "%bi_oauth_url%"
+            - "@router"
+
     app.twig_extension:
         class: AppBundle\Twig\AppExtension
         public: false
         arguments:
-            - @app.security.bank_id
+            - "@app.security.bank_id"
         tags:
             - { name: twig.extension }
 
     app.user.manager:
         class:  AppBundle\Helper\UserManager
         arguments:
-            - @templating
-            - @doctrine.orm.entity_manager
+            - "@templating"
+            - "@doctrine.orm.entity_manager"
         calls:
             - [ setRootDir, ["%kernel.root_dir%"] ]
 
     app.session:
         class:  AppBundle\Helper\SessionSet
         arguments:
-            - @session
+            - "@session"
 
     ses_client:
         class: Aws\Ses\SesClient
@@ -73,3 +74,52 @@ services:
             - "@doctrine.orm.entity_manager"
             - "@app.mail.sender"
             - "@app.application.project"
+
+    app.model.voting:
+        class: AppBundle\Model\VotingModel
+        arguments:
+            - "@app.serializer.main"
+            - "@app.helper.url_generator"
+            - "@app.application.project"
+            - "@app.authenticator"
+            - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:VoteSettings')"
+            - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:User')"
+
+    app.helper.url_generator:
+        class: AppBundle\Helper\UrlGeneratorHelper
+        arguments:
+            - "@request_stack"
+
+    app.serializer.main:
+        class: Symfony\Component\Serializer\Serializer
+        arguments:
+            -
+                - "@app.normalizer.date_time"
+                - "@app.normalizer.camel_case_to_snake_case"
+        tags:
+            - { name: serializer.normalizer }
+
+    app.normalizer.date_time:
+        class: Symfony\Component\Serializer\Normalizer\DateTimeNormalizer
+
+    app.normalizer.camel_case_to_snake_case:
+        class: Symfony\Component\Serializer\Normalizer\ObjectNormalizer
+        arguments:
+            - "@app.serializer.meta_data"
+            - "@app.serializer.name_converter.camel_case_to_snake_case"
+
+    app.serializer.name_converter.camel_case_to_snake_case:
+        class: Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter
+
+    app.serializer.meta_data:
+        class: Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory
+        arguments:
+          - "@app.serializer.loader.anotation"
+
+    app.serializer.loader.anotation:
+        class: Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader
+        arguments:
+          - "@app.serializer.reader.anotation"
+
+    app.serializer.reader.anotation:
+        class: Doctrine\Common\Annotations\AnnotationReader

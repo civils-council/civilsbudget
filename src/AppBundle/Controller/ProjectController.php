@@ -4,14 +4,15 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Project;
 use AppBundle\Entity\User;
+use AppBundle\Entity\VoteSettings;
 use AppBundle\Exception\ValidatorException;
 use AppBundle\Form\ProjectType;
 use AppBundle\Form\LikeProjectType;
-use Doctrine\Common\Collections\Expr\Expression;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -21,34 +22,27 @@ class ProjectController extends Controller
     const SERVER_ERROR                    = 'Server Error';
     const QUERY_CITY                      = 'city';
     const QUERY_PROJECT_ID                = 'project_id';
-    
+
     /**
-     * @Route("/projects", name="projects_list")
+     * @Route("/votings/{id}/projects", name="projects_list")
      * @Template()
      * @Method({"GET"})
      */
-    public function listAction(Request $request)
+    public function listAction(VoteSettings $voteSetting, Request $request)
     {
         $parameterBag = $request->query;
-
+        $parameterBag->add(['voteSetting' => $voteSetting]);
         $em = $this->getDoctrine()->getManager();
-        $projects = $em->getRepository('AppBundle:Project')->getProjectShow($parameterBag);
+        $projects = $em->getRepository(  Project::class)->getProjectShow($parameterBag);
+        $countAdminVoted = $em->getRepository(User::class)->findCountAdminVotedUsers($parameterBag);
+        $countVoted = $em->getRepository(User::class)->findCountVotedUsers($parameterBag);
 
-        $countAdminVoted = $em->getRepository('AppBundle:User')->findCountAdminVotedUsers($parameterBag);
-        $countVoted = $em->getRepository('AppBundle:User')->findCountVotedUsers($parameterBag);
-        
-        $vote =  $em->getRepository('AppBundle:VoteSettings')
-            ->getProjectVoteSettingShow($request);
-
-        $voteCity =  $em->getRepository('AppBundle:VoteSettings')
-            ->getVoteSettingCities();
         return [
             'debug' => true,
             'projects' => $projects,
             'countVoted' => $countVoted,
             'countAdminVoted' => $countAdminVoted,
-            'voteSetting' => $vote,
-            'voteCity' => $voteCity
+            'voteSetting' => $voteSetting
         ];
     }
 
@@ -64,8 +58,7 @@ class ProjectController extends Controller
         return [
             'debug' => true,
             'projects' => $projects,
-            'voteSetting' => $em->getRepository('AppBundle:VoteSettings')
-                ->getProjectVoteSettingShow($request)            
+            'voteSetting' => $em->getRepository('AppBundle:VoteSettings')->getProjectVoteSettingShow($request)
         ];
     }
 
@@ -106,7 +99,7 @@ class ProjectController extends Controller
     {
         $user = $this->getUser();
         $form = $this
-            ->createForm(new LikeProjectType(), [], [
+            ->createForm(LikeProjectType::class, [], [
                 'user' => $user,
                 'action' => $this->generateUrl('projects_like', ['id' => $project->getId()]),
             ]);
@@ -183,13 +176,13 @@ class ProjectController extends Controller
      */
     private function createCreateForm(Project $entity)
     {
-        $form = $this->createForm(new ProjectType(), $entity, array(
+        $form = $this->createForm(ProjectType::class, $entity, array(
             'validation_groups' => ['user_post'],
             'action' => $this->generateUrl('projects_add'),
             'method' => 'POST',
             'attr' => array('class' => 'formCreateClass')
         ));
-        $form->add('submit', 'submit', array('label' => 'Add Project'));
+        $form->add('submit', SubmitType::class, array('label' => 'Add Project'));
 
         return $form;
     }

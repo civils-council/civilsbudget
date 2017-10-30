@@ -9,7 +9,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints as AssertBridge;
  * City
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="AppBundle\Entity\CityRepository")
+ * @ORM\Entity(repositoryClass="AppBundle\Entity\Repository\UserRepository")
  * @AssertBridge\UniqueEntity(
  *     fields="city",
  *     errorPath="not valid",

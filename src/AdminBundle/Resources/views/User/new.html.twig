@@ -1,16 +1,16 @@
 {% extends '@App/layout.html.twig' %}
 
-{% block title %}Add User{% endblock %}
+{% block title %}Додавання користувача{% endblock %}
 
 {% block content %}
-    <h1>User creation</h1>
+    <h1>Додавання користувача</h1>
 
     {{ form(form) }}
 
         <ul class="record_actions">
     <li>
         <a href="{{ path('admin_users') }}">
-            Back to the list
+            Назад до списку
         </a>
     </li>
 </ul>

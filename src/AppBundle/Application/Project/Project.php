@@ -2,16 +2,13 @@
 
 namespace AppBundle\Application\Project;
 
-
 use AppBundle\Domain\Project\ProjectInterface as DomainProjectInterface;
 use AppBundle\Domain\User\UserInterface;
 use AppBundle\Entity\Admin;
 use AppBundle\Entity\User;
 use AppBundle\Exception\AuthException;
 use AppBundle\Exception\ValidatorException;
-use Symfony\Component\HttpFoundation\Request;
 use \AppBundle\Entity\Project as ProjectEntity;
-use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 
 class Project implements ProjectInterface
@@ -57,11 +54,11 @@ class Project implements ProjectInterface
         ProjectEntity $project
     ) {
         if (!$user instanceof User) {
-            throw new AuthException('Ви не маєте доступу до голосуваня за проект.');
+            throw new AuthException('Ви не маєте доступу до голосуваня за проект.', 401);
         }
         
         if (!$project->getVoteSetting()) {
-            throw new ValidatorException('Проект без налаштувань голосування');
+            throw new ValidatorException('Проект без налаштувань голосування', 403);
         }   
         
         $date = new \DateTime();
@@ -70,29 +67,33 @@ class Project implements ProjectInterface
             if ($project->getVoteSetting()->getDateTo()->getTimestamp() < $date->getTimestamp()) {
                 throw new ValidatorException(
                     'Вибачте. Кінцева дата голосування до '
-                    .$project->getVoteSetting()->getDateTo()->format('d.m.Y'));
+                    .$project->getVoteSetting()->getDateTo()->format('d.m.Y'),
+                    403
+                );
             }
 
             if ($project->getVoteSetting()->getDateFrom()->getTimestamp() > $date->getTimestamp()) {
                 throw new ValidatorException(
                     'Вибачте. Голосування розпочнеться '
-                    .$project->getVoteSetting()->getDateFrom()->format('d.m.Y'));
+                    .$project->getVoteSetting()->getDateFrom()->format('d.m.Y'),
+                    403
+                );
             }
         }
         
         if ($this->getUserInterface()->getAccessVote($project, $user)
             >= $project->getVoteSetting()->getVoteLimits()
         ) {
-            throw new ValidatorException('Ви вже вичерпали свій ліміт голосів.');
+            throw new ValidatorException('Ви вже вичерпали свій ліміт голосів.', 403);
         }
         if ($user->getLikedProjects()->contains($project)) {
-            throw new ValidatorException('Ви вже підтримали цей проект.');
+            throw new ValidatorException('Ви вже підтримали цей проект.', 403);
         }
 
         if (mb_strtolower($user->getLocation()->getCity()) 
             != mb_strtolower($project->getVoteSetting()->getLocation()->getCity())
         ) {
-            throw new ValidatorException('Цей проект не стосується міста в якому ви зареєстровані.');
+            throw new ValidatorException('Цей проект не стосується міста в якому ви зареєстровані.', 403);
         }
         
         return $this->getUserInterface()->postVote($project, $user);

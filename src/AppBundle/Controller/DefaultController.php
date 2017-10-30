@@ -12,6 +12,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\PreAuthenticatedToken;
@@ -28,7 +29,7 @@ class DefaultController extends Controller
         if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
             return $this->redirectToRoute('admin_dashboard');
         }
-        return $this->redirectToRoute('projects_list', ['city' => $request->get('city')]);
+        return $this->redirectToRoute('votings_list', ['city' => $request->get('city')]);
     }
 
     /**
@@ -50,7 +51,7 @@ class DefaultController extends Controller
         $authenticationUtils = $this->get('security.authentication_utils');
 
         $data = ['clid' => $authenticationUtils->getLastUsername()];
-        $form = $this->createForm(new LoginType(), $data, ['action' => $this->generateUrl('login_check')]);
+        $form = $this->createForm( LoginType::class, $data, ['action' => $this->generateUrl('login_check')]);
 
         if ($code = $request->query->get('code')) {
             $accessToken = $this->get('app.security.bank_id')->getAccessToken($code);
@@ -94,7 +95,7 @@ class DefaultController extends Controller
     {
         if ($request->get('status') && $request->get('status') == 'new') {
             $em = $this->getDoctrine()->getManager();
-            $form = $this->createForm(new ConfirmDataType(), $user);
+            $form = $this->createForm(ConfirmDataType::class, $user);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
                 $em->flush();
@@ -197,7 +198,7 @@ class DefaultController extends Controller
         $authenticationUtils = $this->get('security.authentication_utils');
 
         $data = ['secret' => $authenticationUtils->getLastUsername()];
-        $form = $this->createForm(new LoginType(), $data, ['action' => $this->generateUrl('login_check')]);
+        $form = $this->createForm(LoginType::class, $data, ['action' => $this->generateUrl('login_check')]);
 
         if ($error = $authenticationUtils->getLastAuthenticationError()) {
             $this->addFlash('danger', $error->getMessage());
@@ -286,12 +287,12 @@ class DefaultController extends Controller
      */
     private function createEditForm(User $entity)
     {
-        $form = $this->createForm(new LoginUserType(), $entity, array(
+        $form = $this->createForm(LoginUserType::class, $entity, array(
             'action' => $this->generateUrl('update_date_user', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $form->add('submit', SubmitType::class, array('label' => 'Update'));
 
         return $form;
     }

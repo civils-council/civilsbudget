@@ -6,13 +6,13 @@ use AdminBundle\Form\CreateUser;
 use AdminBundle\Model\CreateUserModel;
 use AppBundle\Entity\Project;
 use AppBundle\Exception\ValidatorException;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use AppBundle\Entity\User;
-use AdminBundle\Form\UserType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 /**
@@ -65,9 +65,12 @@ class UserController extends Controller
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
+        $errors = $this->get('validator')->validate($entity->getUser());
+
         if ($form->isValid()
             && $form->get('user')->isValid()
             && $form->get('location')->isValid()
+            && count($errors) === 0
         ) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity->getLocation());
@@ -83,6 +86,7 @@ class UserController extends Controller
         return array(
             'entity' => $entity,
             'form' => $form->createView(),
+            'errors' => $errors,
         );
     }
 
@@ -303,7 +307,7 @@ class UserController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('admin_users_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
+            ->add('submit', SubmitType::class, array('label' => 'Delete'))
             ->getForm()
         ;
     }
@@ -317,14 +321,14 @@ class UserController extends Controller
      */
     private function createEditForm(CreateUserModel $entity)
     {
-        $form = $this->createForm(new CreateUser(), $entity, array(
+        $form = $this->createForm(CreateUser::class, $entity, array(
             'validation_groups' => ['admin_user_put'],
-            'cascade_validation' => true,
+//            'cascade_validation' => true,
             'action' => $this->generateUrl('admin_users_update', array('id' => $entity->getUser()->getId())),
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $form->add('submit', SubmitType::class, array('label' => 'Update'));
 
         return $form;
     }
@@ -338,14 +342,15 @@ class UserController extends Controller
      */
     private function createCreateForm(CreateUserModel $entity)
     {
-        $form = $this->createForm(new CreateUser(), $entity, array(
+        $form = $this->createForm(CreateUser::class, $entity, array(
             'validation_groups' => ['admin_user_post'],
-            'cascade_validation' => true,
+            'constraints' => new \Symfony\Component\Validator\Constraints\Valid(),
+//            'cascade_validation' => true,
             'action' => $this->generateUrl('admin_users_create'),
             'method' => 'POST',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Create'));
+        $form->add('submit', SubmitType::class, array('label' => 'Create'));
 
         return $form;
     }

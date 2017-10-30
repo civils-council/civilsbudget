@@ -15,8 +15,15 @@ login_check:
 logout:
     path: /logout
 
+projects:
+    path: /projects
+    defaults:
+        _controller: FrameworkBundle:Redirect:redirect
+        route: votings_list
+        permanent: true
+
 rada_about:
-    pattern: /about
+    path: /about
     defaults:
         _controller:  FrameworkBundle:Template:template
         template:     'AppBundle:Static:about.html.twig'
@@ -24,7 +31,7 @@ rada_about:
         sharedMaxAge: 86400
 
 rada_developerss:
-    pattern: /developers
+    path: /developers
     defaults:
         _controller:  FrameworkBundle:Template:template
         template:     'AppBundle:Static:developers.html.twig'

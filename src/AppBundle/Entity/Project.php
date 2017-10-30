@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Project
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="AppBundle\Entity\ProjectRepository")
+ * @ORM\Entity(repositoryClass="AppBundle\Entity\Repository\ProjectRepository")
  */
 class Project implements \JsonSerializable
 {
@@ -101,7 +101,7 @@ class Project implements \JsonSerializable
     /**
      * @var User[]ArrayCollection
      *
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\User", mappedBy="likedProjects")
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\User", mappedBy="likedProjects", fetch="EXTRA_LAZY")
      */
     private $likedUsers;
 
@@ -126,7 +126,7 @@ class Project implements \JsonSerializable
      * @ORM\ManyToOne(targetEntity="VoteSettings", inversedBy="project")
      * @ORM\JoinColumn(name="vote_setting_id", nullable = true, referencedColumnName="id")
      */
-    private $voteSetting;    
+    private $voteSetting;
 
     /**
      * Constructor

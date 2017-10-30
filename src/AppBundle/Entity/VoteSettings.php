@@ -2,7 +2,7 @@
 
 namespace AppBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -10,11 +10,16 @@ use Symfony\Component\Validator\Constraints as Assert;
  * VoteSettings
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="AppBundle\Entity\VoteSettingsRepository")
+ * @ORM\Entity(repositoryClass="AppBundle\Entity\Repository\VoteSettingsRepository")
  */
 class VoteSettings
 {
     use GedmoTrait;
+
+    const
+        STATUS_ARCHIVED = 'archived',
+        STATUS_ACTIVE = 'active',
+        STATUS_FUTURE = 'future';
 
     /**
      * @var integer
@@ -30,7 +35,7 @@ class VoteSettings
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $titleH1;
+    private $shortDescription;
 
     /**
      * @var string
@@ -62,7 +67,7 @@ class VoteSettings
     private $project;
 
     /**
-     * @var string
+     * @var \DateTime
      *
      * @Assert\NotBlank()
      * @ORM\Column(name="date_from", type="datetime", nullable=false)
@@ -136,25 +141,25 @@ class VoteSettings
     /**
      * Set titleH1
      *
-     * @param string $titleH1
+     * @param string|null $shortDescription
      *
      * @return VoteSettings
      */
-    public function setTitleH1($titleH1)
+    public function setShortDescription(?string $shortDescription = null)
     {
-        $this->titleH1 = $titleH1;
+        $this->shortDescription = $shortDescription;
 
         return $this;
     }
 
     /**
-     * Get titleH1
+     * Get shortDescription
      *
-     * @return string
+     * @return string|null
      */
-    public function getTitleH1()
+    public function getShortDescription(): ?string
     {
-        return $this->titleH1;
+        return $this->shortDescription;
     }
 
     /**
@@ -376,9 +381,9 @@ class VoteSettings
     /**
      * Get project
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
-    public function getProject()
+    public function getProject(): Collection
     {
         return $this->project;
     }
@@ -405,5 +410,23 @@ class VoteSettings
     public function getLocation()
     {
         return $this->location;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStatus(): string
+    {
+        $now = new \DateTime;
+
+        if ($this->getDateTo() < $now) {
+            return self::STATUS_ARCHIVED;
+        }
+
+        if ($this->getDateFrom() > $now) {
+            return self::STATUS_FUTURE;
+        }
+
+        return self::STATUS_ACTIVE;
     }
 }

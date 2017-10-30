@@ -3,8 +3,9 @@
 namespace AdminBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class UserType extends AbstractType
 {
@@ -15,22 +16,22 @@ class UserType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('inn', null, array('label' => 'Идентифiкацiйний код'))
             ->add('numberBlank', null, array('label' => 'Номер бланка'))
             ->add('middleName', null, array('label' => 'Призвiще'))
-            ->add('firstName', null, array('label' => 'Имя'))
+            ->add('firstName', null, array('label' => 'Им\'я'))
             ->add('lastName', null, array('label' => 'По батьковi'))
             ->add('birthday', null, array('label' => 'Дата Народження'))
-            ->add('inn', null, array('label' => 'Идентифiкацiйний код'))
-            ->add('sex', 'choice', array('label' => 'Gender', 'max_length' => 255,
-                'choices' => array('М' => 'Чоловік', 'Ж' => 'Жінка'), ))
+            ->add('sex', ChoiceType::class, array('label' => 'Gender',
+                'choices' => array('Чоловік' => 'M', 'Жінка' => 'F'), ))
             ->add('phone')
             ->add('email');
     }
-    
+
     /**
-     * @param OptionsResolverInterface $resolver
+     * {@inheritdoc}
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'data_class' => 'AppBundle\Entity\User',
@@ -40,9 +41,9 @@ class UserType extends AbstractType
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'adminbundle_user';
     }

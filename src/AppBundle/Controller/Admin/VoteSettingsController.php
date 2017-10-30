@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Admin;
 
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -204,7 +205,7 @@ class VoteSettingsController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('vote_settings_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
+            ->add('submit', SubmitType::class, array('label' => 'Delete'))
             ->getForm()
         ;
     }
@@ -218,12 +219,12 @@ class VoteSettingsController extends Controller
      */
     private function createEditForm(VoteSettings $entity)
     {
-        $form = $this->createForm(new VoteSettingsType(), $entity, array(
+        $form = $this->createForm(VoteSettingsType::class, $entity, array(
             'action' => $this->generateUrl('vote_settings_update', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $form->add('submit', SubmitType::class, array('label' => 'Update'));
 
         return $form;
     }
@@ -237,12 +238,12 @@ class VoteSettingsController extends Controller
      */
     private function createCreateForm(VoteSettings $entity)
     {
-        $form = $this->createForm(new VoteSettingsType(), $entity, array(
+        $form = $this->createForm(VoteSettingsType::class, $entity, array(
             'action' => $this->generateUrl('vote_settings_create'),
             'method' => 'POST',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Create'));
+        $form->add('submit', SubmitType::class, array('label' => 'Create'));
 
         return $form;
     }    

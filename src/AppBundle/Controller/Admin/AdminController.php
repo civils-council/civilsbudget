@@ -44,7 +44,7 @@ class AdminController extends Controller
         $authenticationUtils = $this->get('security.authentication_utils');
 
         $data = ['username' => $authenticationUtils->getLastUsername()];
-        $form = $this->createForm(new AdminLoginType(), $data, ['action' => $this->generateUrl('admin_login_check')]);
+        $form = $this->createForm(AdminLoginType::class, $data, ['action' => $this->generateUrl('admin_login_check')]);
 
         if ($error = $authenticationUtils->getLastAuthenticationError()) {
             $this->addFlash('danger', $error->getMessage());

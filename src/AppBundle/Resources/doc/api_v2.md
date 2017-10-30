@@ -17,13 +17,16 @@ __200__
                 "id": 1,                                            (required)
                 "status": "active",                                 (required, {"archived" | "active" | "future"})            
                 "title": "string title",                            (required)
+                "short_description": "string of short description", (optional)
                 "description": "string description",                (optional)
                 "location": "Cherkasy",                             (required)    
                 "max_votes_count": 4,                               (required)
                 "date_from": "2017-09-23T18:14:15+00:00",           (required)
                 "date_to": "2017-09-25T18:14:15+00:00",             (required)
                 "logo": "http://imisto.com.ua/img/logo.png",        (optional)
-                "background_image": "http://imisto.com.ua/bg.png"   (optional)
+                "background_image": "http://imisto.com.ua/bg.png",  (optional)
+                "voted": 7654,                                      (required)
+                "user_voted": current user voted times              (required)
             }
         ]
     }
@@ -41,7 +44,7 @@ __200__
 
     {
         "projects": [{
-            "vote": "true/false"
+            "is_voted": "true/false",
             "id": 1,
             "title": "test title",
             "description": "test description",
@@ -50,16 +53,15 @@ __200__
             "picture": "<url-picture>",
             "createdAt": "2015-10-03T09:11:04+00:00",
             "likes_count": 123,
-            "likes_user": user[],
             "owner": "fullName",
-            "avatar_owner": "avatar owner"
+            "avatar_owner": "avatar owner",
+            "voted": 95
         }]
     }
 
 ### One project
 
 __GET__ `/api/votings/{voting_id}/projects/{project_id}`
-        `?clid={clid}`
 
 ### Response
 
@@ -67,7 +69,7 @@ __200__
 
     {
         "project": {
-            "vote": "true/false"
+            "is_voted": "true/false",
             "id": 1,
             "title": "test title",
             "description": "test description",
@@ -77,7 +79,8 @@ __200__
             "createdAt": "2015-10-03T09:11:04+00:00",
             "likes_count": 123,
             "owner": "fullName",
-            "avatar_owner": "avatar owner"            
+            "avatar_owner": "avatar owner",    
+            "voted": 95   
         }
     }
 
@@ -99,51 +102,53 @@ __200__
 
 ### Vote
 
-__header__ `X-API-KEY`
-__POST__ `/api/votings/{voting_id}/projects/{project_id}/like`
+__POST__ `/api/votings/{voting_id}/projects/{project_id}/vote`
           `{voting_id}  - voting id`
           `{project_id} - id project`
-          `{clid} - uniq clid code request->parameters-get{'clid'}`                                          
-
 __200__
 
     {
-        {
-          "warning": "Ви вже підтримали цей проект."
-        }
-        
-        {
-          "success": "Ваший голос зараховано на підтримку проект."
-        }
-        
-        {
-          'warning', "Ви використали свiй голос."
-        }                        
+        "success": "Ваший голос зараховано на підтримку проект."
     }
     
-__GET__ `/api/votings/{voting_id}/projects/{project_id}/like`
+__401__
 
     {
-        "project": {
-            "id": 1,
-            "title": "test title",
-            "description": "test description",
-            "charge": "charge for project",
-            "source": "where",
-            "picture": "<url-picture>",
-            "createdAt": "2015-10-03T09:11:04+00:00",
-            "likes_count": 123,
-            "likes_user": user
-            [
-                    "user": {
-                        "id": 111
-                        "fullName": <fullName of user>,
-                        "clid": <very secret key>,
-                    }
-            ],
-            "owner": "fullName",
-            "avatar_owner": "avatar owner"            
+        "warning": "Ви не маєте доступу до голосуваня за проект."
+    }
+
+__403__
+
+    {
+        {
+            "warning": "Проект без налаштувань голосування."
         }
+
+        {
+            "warning": "Вибачте. Кінцева дата голосування до DATE"
+        }
+
+        {
+            "warning": "Вибачте. Голосування розпочнеться DATE"
+        }
+
+        {
+            "warning": "Ви вже вичерпали свій ліміт голосів."
+        }
+
+        {
+            "warning": "Ви вже підтримали цей проект."
+        }
+        
+        {
+            "warning": "Цей проект не стосується міста в якому ви зареєстровані."
+        }
+    }
+
+__404__
+
+    {
+        "warning": "Проект не знайдено для даного голосування"
     }
 
 ## User

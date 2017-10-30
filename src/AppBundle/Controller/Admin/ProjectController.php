@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
@@ -48,12 +49,12 @@ class ProjectController extends Controller
     public function showNotApprovedProjectAction(Project $project, Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $form = $this->createForm(new ProjectType(), $project, ['method' => 'PUT',
+        $form = $this->createForm(ProjectType::class, $project, ['method' => 'PUT',
             'validation_groups' => ['approve_admin'],            
             'admin' => true,
             'attr' => array('class' => 'formCreateClass'),
         ]);
-        $form->add('submit', 'submit', array('label' => 'Оновити проект'));
+        $form->add('submit', SubmitType::class, array('label' => 'Оновити проект'));
 
         $form->handleRequest($request);
 
@@ -123,13 +124,13 @@ class ProjectController extends Controller
      */
     private function createCreateForm(Project $entity)
     {
-        $form = $this->createForm(new ProjectType(), $entity, array(
+        $form = $this->createForm(ProjectType::class, $entity, array(
             'validation_groups' => ['approve_admin'],
             'action' => $this->generateUrl('admin_projects_add', array('id' => $entity->getId())),
             'method' => 'POST',
             'attr' => array('class' => 'formCreateClass'),
         ));
-        $form->add('submit', 'submit', array('label' => 'Add Project'));
+        $form->add('submit', SubmitType::class, array('label' => 'Add Project'));
 
         return $form;
     }
