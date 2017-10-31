@@ -21,7 +21,7 @@ class VotingController extends Controller
      * @Template()
      * @Method({"GET"})
      */
-    public function listAction(Request $request)
+    public function listAction()
     {
         $votingList = $this->get('app.model.voting')->getVotingList();
 
