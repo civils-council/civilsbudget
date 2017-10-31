@@ -34,9 +34,9 @@ class VoteSettingsType extends AbstractType
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'appbundle_votesettings';
     }

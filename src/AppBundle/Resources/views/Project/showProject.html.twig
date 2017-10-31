@@ -18,7 +18,7 @@
                 </div>
                 <div class="row hd-info-top">
                     <div class="col-md-5">
-                        <div id="user-avatar" style="background-image: url({% if project[0].owner.avatar %}{{ asset(project[0].owner.avatar) }}{% else %}{% if project[0].owner.sex == 'f' %}{{ asset('images/avatar-female.png') }}{% else %}{{ asset('images/avatar-male.png') }}{% endif %}{% endif %});"></div>
+                        <div id="user-avatar" style="background-image: url({% if project[0].owner.avatar %}{{ asset(project[0].owner.avatar) }}{% else %}{% if project[0].owner.sex|lower == 'f' %}{{ asset('images/avatar-female.png') }}{% else %}{{ asset('images/avatar-male.png') }}{% endif %}{% endif %});"></div>
                         <h4 id="user-title">{{ project[0].owner.fullName }}</h4>
                         {#<h4 id="user-title"><a href="{{ path('users_profile', { id: project[0].owner.id }) }}">{{ project[0].owner.fullName }}</a></h4>#}
                     </div>
