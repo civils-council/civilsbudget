@@ -31,11 +31,9 @@ class LikeProjectType extends AbstractType
     }
 
     /**
-     * Returns the name of this type.
-     *
-     * @return string The name of this type
+     * {@inheritdoc}
      */
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'like_form';
     }

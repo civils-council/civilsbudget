@@ -121,7 +121,6 @@
                         {% if project[0].voteSetting %}
                         <div>Тип: <span>{{ project[0].voteSetting.title }}</span></div>
                         {% endif %}
-                        <div>Створено: <span>{{ project[0].createAt|date('d-m-Y') }}</span></div>
                         <div>Підтримало: <span>{{ project['countLikes']|number_format(0, '.', ' ') }}</span></div>
                         <div>Бюджет: <span>{{ project[0].charge|number_format(0, '.', ' ') }}</span> грн.</div>
                     </div>

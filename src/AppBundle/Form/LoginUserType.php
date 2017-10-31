@@ -32,9 +32,9 @@ class LoginUserType extends AbstractType
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'civils_user';
     }

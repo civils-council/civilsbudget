@@ -22,9 +22,9 @@ function getMobileOperatingSystem() {
 
 function DetectAndServe(){
   var link = null;
-  // if (getMobileOperatingSystem() == "Android") {
-  //   link = "http://www.Androidexample.com";
-  // }
+  if (getMobileOperatingSystem() == "Android") {
+    link = "https://play.google.com/store/apps/details?id=org.tgs.civils.budget";
+  }
   if (getMobileOperatingSystem() == "iOS") {
     link = "itms://itunes.apple.com/ua/app/apple-store/id1063027091?mt=8";
   }

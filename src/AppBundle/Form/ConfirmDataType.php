@@ -65,7 +65,7 @@ class ConfirmDataType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'confirm_data';
     }
