@@ -23,20 +23,10 @@ class VotingController extends Controller
      */
     public function listAction(Request $request)
     {
-        $parameterBag = $request->query;
-        $em = $this->getDoctrine()->getManager();
-        $countAdminVoted = $em->getRepository(User::class)->findCountAdminVotedUsers($parameterBag);
-        $countVoted = $em->getRepository(User::class)->findCountVotedUsers($parameterBag);
-        $vote =  $em->getRepository(VoteSettings::class)->getProjectVoteSettingShow($request);
-        $voteCity =  $em->getRepository(VoteSettings::class)->getVoteSettingCities();
         $votingList = $this->get('app.model.voting')->getVotingList();
 
         return [
             'debug' => true,
-            'countVoted' => $countVoted,
-            'countAdminVoted' => $countAdminVoted,
-            'voteSetting' => $vote,
-            'voteCity' => $voteCity,
             "votings" => $votingList
         ];
     }

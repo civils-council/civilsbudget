@@ -1,93 +1,9 @@
 {% extends "@App/layout.html.twig" %}
 
 {% block title %}
-    Проекти
+    Голосування
 {% endblock title %}
 
-{% block herosection %}
-
-    {% if voteSetting %}
-        {% if voteSetting.backgroundImg  %}
-            {% set backgroundImg = asset(voteSetting.backgroundImg) %}
-        {% else %}
-            {% set backgroundImg = asset('bundles/app/img/default_bg.png') %}
-        {% endif %}
-
-        {% if voteSetting.logo  %}
-            {% set logo = asset(voteSetting.logo) %}
-        {% else %}
-            {% set logo = asset('') %}
-        {% endif %}
-    {% else %}
-        {#default img#}
-        {% set backgroundImg = asset('bundles/app/img/default_bg.png') %}
-        {% set logo = asset('') %}
-    {% endif %}
-
-    <div class="hero-section" style="background:url('{{ backgroundImg }}') top left/cover #ffffff">
-
-        <div class="hero-shadow">
-            <div class="container">
-                <div id="hp-logo" style="background:url('{{ logo }}') no-repeat"></div>
-                {#background: url(../images/logo.png) no-repeat;#}
-                <div class="hp-text">
-                    <h1 id="hp-title">
-                        {% if voteSetting %}
-                            <p>{{ voteSetting.shortDescription|nl2br }}</p>
-                            Голосування відкрито до
-                            {{ voteSetting.dateTo|date("d.m.Y") }}
-                        {% else %}
-                            <p>виріши долю громадського бюджету свого міста</p>
-                            {% if voteCity %}
-                                {% for city in voteCity %}
-                                    <a href="{{ path("homepage") }}?city={{ city['city'] }}" style="color: oldlace">{{ city['city'] }}</a><br>
-                                {% endfor %}
-                            {% endif %}
-                        {% endif %}
-                        <hr>
-                    </h1>
-                    <div id="hp-voted">
-                        <span class="voted-title">Вже підтримано проектів {% if voteSetting %} {{ voteSetting.location.city }} {% endif %}</span><br>
-                        {#{% set votes = 0 %}#}
-                        {#{% for project in projects %}#}
-                        {#{% set votes = votes + project['countLikes']|number_format(0, '.', ' ') %}#}
-                        {#{% endfor %}#}
-                        {% set digitsAllDigit = countVoted + countAdminVoted %}
-                        {% set digits = countVoted|split('') %}
-                        {% set digitsAdmin = countAdminVoted|split('') %}
-                        {% set digitsAll = digitsAllDigit|split('') %}
-                        <span class="voted-title">онлайн:</span>
-                        <div class="counter">
-                            {% for digit in digits %}
-                                <span class="digit">
-                                    <span title="{{ digit }}">{{ digit }}</span>
-                                </span>
-                            {% endfor %}
-                        </div>
-                        <br>
-                        <span class="voted-title">офлайн:</span>
-                        <div class="counter">
-                            {% for digit in digitsAdmin %}
-                                <span class="digit">
-                                    <span title="{{ digit }}">{{ digit }}</span>
-                                </span>
-                            {% endfor %}
-                        </div>
-                        <br>
-                        <span class="voted-title">всього:</span>
-                        <div class="counter">
-                            {% for digit in digitsAll %}
-                                <span class="digit">
-                                    <span title="{{ digit }}">{{ digit }}</span>
-                                </span>
-                            {% endfor %}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-{% endblock herosection %}
 {% block content %}
     {% for voting in votings %}
         <div class="col-md-4  item-content">
