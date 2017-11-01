@@ -475,6 +475,9 @@ a.description-btn:hover {
     /*top:-8px;*/
     /*right: 0;*/
     text-align: right;
+    a {
+        margin: 7px 2px;
+    }
 }
 
 #footer-social a {
@@ -1304,8 +1307,26 @@ a.description-btn:hover {
 .icon-facebook {
     display: inline-block;
     background: url(../images/icon-fb.png) no-repeat;
-    background-size: contain;
-    width: 27px;
+    background-size: cover;
+    width: 26px;
+    height: 25px;
+    margin-top: 7px;
+}
+
+.icon-android {
+    display: inline-block;
+    background: url(../images/android.png) no-repeat;
+    background-size: cover;
+    width: 25px;
+    height: 25px;
+    margin-top: 7px;
+}
+
+.icon-apple {
+    display: inline-block;
+    background: url(../images/apple.png) no-repeat;
+    background-size: cover;
+    width: 21px;
     height: 25px;
     margin-top: 7px;
 }
@@ -1384,8 +1405,8 @@ a.description-btn:hover {
 
 button.close {
     position: absolute;
-    top: -2px;
-    right: 4px;
+    top: 0px;
+    right: 0px;
     border: none;
     background: none;
     font-size: 45px;
@@ -1667,9 +1688,6 @@ button.close:hover {
     width: 500px;
     margin: auto;
     color: black;
-}
-.form-control {
-    line-height: 3.4;
 }
 
 @media screen and (max-width: 529px) {
