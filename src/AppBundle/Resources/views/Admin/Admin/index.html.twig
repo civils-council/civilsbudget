@@ -1,16 +1,33 @@
 {% extends "@App/Admin/layout.html.twig" %}
 
 {% block content %}
-    Адмін панель <a href="{{ path('admin_logout') }}" class="btn btn-default">Розлогінитись</a><br><br>
-    Список усіх налаштувань голосування:  <a href="{{ path('vote_settings') }}" class="btn btn-default">Усі налаштування</a><br><br>
-    Список усіх проектів:  <a href="{{ path('admin_projects_show') }}" class="btn btn-default">Усі проекти</a><br><br>
-    Не підтвердженні проекти:  <a href="{{ path('admin_projects_not_approved') }}" class="btn btn-default">Не підтвердженні проекти</a><br><br>
-    Додати Юзера:  <a href="{{ path('admin_users_new') }}" class="btn btn-default">Додати Юзера</a><br><br>
-    Список Юзерiв:  <a href="{{ path('admin_users') }}" class="btn btn-default">Список Юзерiв</a><br><br>
 
-    список Юзерiв якi додав адмiн {{ countAdminUsers }} <br>
-    список Юзерiв якi зарееструвались самi {{ countAuthUsers }} <br>
+    <p><b>Пошук виборця по ІНН:</b><br>
+        <input id="inn-search"
+               type="text"
+               title="Пошук по ІНН"
+               onkeypress="return isNumberKey(event)"
+               data-search-url="{{ url('admin_users') }}"
+        >
+    </p>
+    <div id="inn-search-result">
+    </div>
 
-    голоси юзерiв якi додав адмiн {{ countAdminVoted }} <br>
-    голоси юзерiв якi зарееструвались самi {{ countVoted }} <br>
+    Адмін панель <a href="{{ path('admin_logout') }}" class="btn btn-default">Вихід з адмін панелі</a><br><br>
+    Список голосуваннь:  <a href="{{ path('vote_settings') }}" class="btn btn-default">Переглянути</a><br><br>
+    Список проектів:  <a href="{{ path('admin_projects_show') }}" class="btn btn-default">Переглянути</a><br><br>
+    Не підтвердженні проекти:  <a href="{{ path('admin_projects_not_approved') }}" class="btn btn-default">Переглянути</a><br><br>
+    Додати Виборця:  <a href="{{ path('admin_users_new') }}" class="btn btn-default">Додати виборця</a><br><br>
+    Список Виборців:  <a href="{{ path('admin_users') }}" class="btn btn-default">До списку виборців</a><br><br>
+
+    список Виборців якi додав адмiн {{ countAdminUsers }} <br>
+    список Виборців якi зарееструвались самi {{ countAuthUsers }} <br>
+
+    голоси Виборців якi додав адмiн {{ countAdminVoted }} <br>
+    голоси Виборців якi зарееструвались самi {{ countVoted }} <br>
 {% endblock content %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/app_admin.js') }}"></script>
+{% endblock javascripts %}

@@ -46,7 +46,10 @@ class Location
     /**
      * @var string
      *
-     * @Assert\NotBlank(groups={"admin_user_post", "admin_user_put"})
+     * @Assert\NotBlank(
+     *     groups={"admin_user_post", "admin_user_put"},
+     *     message="Адреса має бути заповнена"
+     * )
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $address;
@@ -54,7 +57,10 @@ class Location
     /**
      * @var City
      *
-     * @Assert\NotBlank(groups={"admin_user_post", "admin_user_put"})
+     * @Assert\NotBlank(
+     *     groups={"admin_user_post", "admin_user_put"},
+     *     message="Місто не можу бути пустим"
+     * )
      * @ORM\ManyToOne(targetEntity="City", inversedBy="location")
      * @ORM\JoinColumn(name="location_id", nullable = true, referencedColumnName="id")
      */
