@@ -86,9 +86,7 @@ class VoteSettingsRepository extends EntityRepository implements VoteSettingInte
     /**
      * {@inheritdoc}
      */
-    public function getProjectVoteSettingShow(
-        Request $request
-    ) {
+    public function getProjectVoteSettingShow(Request $request) {
         if ($request->get(ProjectController::QUERY_CITY)) {
             return $this->getProjectVoteSettingByCity($request);
         }
