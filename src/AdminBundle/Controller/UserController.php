@@ -77,6 +77,7 @@ class UserController extends Controller
             $entity->getUser()->setLocation($entity->getLocation());
             $entity->getUser()->setAddedByAdmin($this->getUser());
             $em->persist($entity->getUser());
+            $entity->getLocation()->setUser($entity->getUser());
             $em->flush();
             $user = $entity->getUser();
 

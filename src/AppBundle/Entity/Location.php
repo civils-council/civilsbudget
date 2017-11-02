@@ -73,7 +73,15 @@ class Location
      * @ORM\ManyToOne(targetEntity="Country", inversedBy="location")
      * @ORM\JoinColumn(name="country_id", nullable = true, referencedColumnName="id")
      */
-    private $country;    
+    private $country;
+
+    /**
+     * @var User
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="location")
+     * @ORM\JoinColumn(name="user_id", nullable = true, referencedColumnName="id")
+     */
+    private $user;
 
     /**
      * Get id
@@ -262,5 +270,25 @@ class Location
     public function __toString()
     {
         return $this->city;
+    }
+
+    /**
+     * @param User $user
+     *
+     * @return Location
+     */
+    public function setUser(?User $user = null): Location
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return User|null
+     */
+    public function getUser(): ?User
+    {
+        return $this->user;
     }
 }
