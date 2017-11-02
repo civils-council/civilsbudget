@@ -24,7 +24,7 @@ class ProjectController extends Controller
     const QUERY_PROJECT_ID                = 'project_id';
 
     /**
-     * @Route("/votings/{id}/projects", name="projects_list")
+     * @Route("/votings/{id}/projects", name="votings_projects_list")
      * @Template()
      * @Method({"GET"})
      */
@@ -120,7 +120,7 @@ class ProjectController extends Controller
                 );
             }
 
-            return $this->redirectToRoute('projects_list');
+            return $this->redirectToRoute('votings_projects_list', ['id' => $project->getVoteSetting()->getId()] );
         }
 
         return [
@@ -154,7 +154,7 @@ class ProjectController extends Controller
 
                 $this->addFlash('success', 'Проект був успішно створений. Після перегляду адміністратором, його буде опрелюднено.');
 
-                return $this->redirect($this->generateUrl('projects_list'));
+                return $this->redirect($this->generateUrl('votings_projects_list', ['id' => $project->getVoteSetting()->getId()]));
             }
         }
         return [
