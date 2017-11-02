@@ -56,7 +56,7 @@ class Location
      *
      * @Assert\NotBlank(groups={"admin_user_post", "admin_user_put"})
      * @ORM\ManyToOne(targetEntity="City", inversedBy="location")
-     * @ORM\JoinColumn(name="location_id", nullable = true, referencedColumnName="id")
+     * @ORM\JoinColumn(name="city_id", nullable = true, referencedColumnName="id")
      */
     private $cityObject;
 
