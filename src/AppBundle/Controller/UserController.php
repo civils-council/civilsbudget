@@ -37,6 +37,12 @@ class UserController extends Controller
 
         $balanceVotes = [];
         foreach ($voteSettings as $voteSetting) {
+            if  ($voteSetting->getStatus() !== VoteSettings::STATUS_ACTIVE ||
+                $voteSetting->getLocation()->getCity() !== $user->getLocation()->getCity()
+            ) {
+                continue;
+            }
+
             $limitVoteSetting = $voteSetting->getVoteLimits();
 
             $balanceVotes[$voteSetting->getId().', '.$voteSetting->getTitle()]=

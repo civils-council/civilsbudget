@@ -74,7 +74,15 @@ class User implements UserInterface
         $voteSettings = $this->getVoteSettingInterface()->getVoteSettingByUserCity($user);
 
         $balanceVotes = [];
+
+        //TODO: Refactor code it duplicates in controller (user_count_votes)
         foreach ($voteSettings as $voteSetting) {
+            if  ($voteSetting->getStatus() !== VoteSettings::STATUS_ACTIVE ||
+                $voteSetting->getLocation()->getCity() !== $user->getLocation()->getCity()
+            ) {
+                continue;
+            }
+
             $limitVoteSetting = $voteSetting->getVoteLimits();
 
             $balanceVotes[$voteSetting->getTitle()]=
