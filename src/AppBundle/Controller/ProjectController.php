@@ -24,7 +24,7 @@ class ProjectController extends Controller
     const QUERY_PROJECT_ID                = 'project_id';
 
     /**
-     * @Route("/votings/{id}/projects", name="projects_list")
+     * @Route("/votings/{id}/projects", name="votings_projects_list")
      * @Template()
      * @Method({"GET"})
      */
@@ -70,21 +70,22 @@ class ProjectController extends Controller
     public function showProjectAction($id, Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $project = $em->getRepository('AppBundle:Project')->getOneProjectShow($id);
+        $project = $em->getRepository(Project::class)->getOneProjectShow($id);
         if (!$project) {
             throw new NotFoundHttpException('This project not found in our source');
         }
         if (empty($this->getUser())) {
-            $sessionSet = $this->get('app.session')->setSession($project[0][0]->getId());
+            $sessionSet = $this->get('app.session')->setSession($project[0]->getId());
         }
         $parameterBag = $request->query;
         $parameterBag->set(ProjectController::QUERY_PROJECT_ID, $id);
-        $countAdminVoted = $em->getRepository('AppBundle:User')->findCountAdminVotedUsers($parameterBag);
-        $countVoted = $em->getRepository('AppBundle:User')->findCountVotedUsers($parameterBag);
+        $countAdminVoted = $em->getRepository(User::class)->findCountAdminVotedUsers($parameterBag);
+        $countVoted = $em->getRepository(User::class)->findCountVotedUsers($parameterBag);
+        $request->attributes->set(ProjectController::QUERY_CITY, $project[0]->getCity());
+        $voteSetting = $em->getRepository(VoteSettings::class)->getProjectVoteSettingShow($request);
         return [
-            'projects' => $project,
-            'voteSetting' => $em->getRepository('AppBundle:VoteSettings')
-                ->getProjectVoteSettingShow($request),
+            'project' => $project,
+            'voteSetting' => $voteSetting,
             'countVoted' => $countVoted,
             'countAdminVoted' => $countAdminVoted,
         ];
@@ -120,12 +121,12 @@ class ProjectController extends Controller
                 );
             }
 
-            return $this->redirectToRoute('projects_list');
+            return $this->redirectToRoute('votings_projects_list', ['id' => $project->getVoteSetting()->getId()] );
         }
 
         return [
             'form' => $form->createView(),
-            'voteSetting' => $this->getDoctrine()->getRepository('AppBundle:VoteSettings')
+            'voteSetting' => $this->getDoctrine()->getRepository(VoteSettings::class)
                 ->getProjectVoteSettingShow($request)
         ];
     }
@@ -154,13 +155,13 @@ class ProjectController extends Controller
 
                 $this->addFlash('success', 'Проект був успішно створений. Після перегляду адміністратором, його буде опрелюднено.');
 
-                return $this->redirect($this->generateUrl('projects_list'));
+                return $this->redirect($this->generateUrl('votings_projects_list', ['id' => $project->getVoteSetting()->getId()]));
             }
         }
         return [
             'entity' => $project,
             'form' => $form->createView(),
-            'voteSetting' => $this->getDoctrine()->getRepository('AppBundle:VoteSettings')
+            'voteSetting' => $this->getDoctrine()->getRepository(VoteSettings::class)
                 ->getProjectVoteSettingShow($request)            
         ];
     }

@@ -141,7 +141,7 @@ class DefaultController extends Controller
                             'user' => $user,
                             'response' => $response,
                             'homePage' => $this->get('router')->generate(
-                                'projects_list',
+                                'votings_list',
                                 ['city' => $user->getLocation()->getCity()],
                                 UrlGeneratorInterface::ABSOLUTE_URL),
                         ]

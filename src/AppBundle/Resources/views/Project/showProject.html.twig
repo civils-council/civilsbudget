@@ -1,64 +1,59 @@
 {% extends '@App/layout.html.twig' %}
 
 {% block content %}
-    {% for project in projects %}
-            <div class="row hd-caption" style="background-image: url({% if project[0].picture %} {{ asset(project[0].picture) }} {% else %} {{ asset('bundles/app/img/default_bg.png') }} {% endif %})">
-                <div class="row">
-                    <div class="col-md-12">
-                        <h3>
-                            {#{{ block('title') }}#}
-                            {{ project[0].title|humanize }}
-                        </h3>
-                        <h4>
-                            {% if project[0].voteSetting %}
-                                <div class="col-md-12">Тип: {{ project[0].voteSetting.title }}</div>
-                            {% endif %}
-                        </h4>
-                    </div>
-                </div>
-                <div class="row hd-info-top">
-                    <div class="col-md-5">
-                        <div id="user-avatar" style="background-image: url({% if project[0].owner.avatar %}{{ asset(project[0].owner.avatar) }}{% else %}{% if project[0].owner.sex == 'f' %}{{ asset('images/avatar-female.png') }}{% else %}{{ asset('images/avatar-male.png') }}{% endif %}{% endif %});"></div>
-                        <h4 id="user-title">{{ project[0].owner.fullName }}</h4>
-                        {#<h4 id="user-title"><a href="{{ path('users_profile', { id: project[0].owner.id }) }}">{{ project[0].owner.fullName }}</a></h4>#}
-                    </div>
-                    <div class="col-md-2">
-                        <div {{ app.user is null ? ' data-toggle="modal" data-target="#login-modal"' }}>
-                            {{ render(controller('AppBundle:Project:like', { id: project[0].id })) }}
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-md-offset-1 tl-price">Бюджет проекту: <span class="price">{{ project[0].charge|number_format(0, '.', ' ') }}</span> грн.</div>
-                </div>
-                <div class="row hd-info-bot">
-                    <div class="col-md-12">
-                        {% if app.user %}
-                            <div id="user-voter">{{ render(controller('AppBundle:User:countVotes', {'id': app.user.id})) }}</div>
-                        {% endif %}
-                    </div>
+    <div class="row hd-caption" style="background-image: url({% if project[0].picture %} {{ asset(project[0].picture) }} {% else %} {{ asset('bundles/app/img/default_bg.png') }} {% endif %})">
+        <div class="row">
+            <div class="col-md-12">
+                <h3>
+                    {#{{ block('title') }}#}
+                    {{ project[0].title|humanize }}
+                </h3>
+                <h4>
+                    {% if project[0].voteSetting %}
+                        <div class="col-md-12">Тип: {{ project[0].voteSetting.title }}</div>
+                    {% endif %}
+                </h4>
+            </div>
+        </div>
+        <div class="row hd-info-top">
+            <div class="col-md-5">
+                <div id="user-avatar" style="background-image: url({% if project[0].owner.avatar %}{{ asset(project[0].owner.avatar) }}{% else %}{% if project[0].owner.sex|lower == 'f' %}{{ asset('images/avatar-female.png') }}{% else %}{{ asset('images/avatar-male.png') }}{% endif %}{% endif %});"></div>
+                <h4 id="user-title">{{ project[0].owner.fullName }}</h4>
+                {#<h4 id="user-title"><a href="{{ path('users_profile', { id: project[0].owner.id }) }}">{{ project[0].owner.fullName }}</a></h4>#}
+            </div>
+            <div class="col-md-2">
+                <div {{ app.user is null ? ' data-toggle="modal" data-target="#login-modal"' }}>
+                    {{ render(controller('AppBundle:Project:like', { id: project[0].id })) }}
                 </div>
             </div>
+            <div class="col-md-4 col-md-offset-1 tl-price">Бюджет проекту: <span class="price">{{ project[0].charge|number_format(0, '.', ' ') }}</span> грн.</div>
+        </div>
+        <div class="row hd-info-bot">
+            <div class="col-md-12">
+                {% if app.user %}
+                    <div id="user-voter">{{ render(controller('AppBundle:User:countVotes', {'id': app.user.id})) }}</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
 
-            <div class="row hd-title">
-                <div class="col-md-12"></div>
-            </div>
-            <div class="row hd-statis">
-                <div class="col-md-6 support">
-                    Підтримало онлайн: <span>{{ countVoted|number_format(0, '.', ' ') }},</span>
-                    офлайн: <span>{{ countAdminVoted|number_format(0, '.', ' ') }},</span>
-                    всього: <span>{{ project['countLikes']|number_format(0, '.', ' ') }}</span>
-                </div>
-                <div class="col-md-6 date-voting">Кінцева дата голосування: <span>{{ project[0].voteSetting.dateTo|date('d.m.Y') }}</span></div>
-            </div>
-            <div class="row hd-description">
-                <div class="col-md-12">
-                    <p>{{ project[0].description|nl2br }}</p>
-                </div>
-            </div>
-           {{ block('notice') }}
-             {#<div class="row hd-comments">#}
-                {#<div class="col-md-12"><a class="lb-comment" href="#">Коментарі</a><a class="lb-edit" href="#">Додати коментар</a></div>#}
-            {#</div>#}
-{% endfor %}
+    <div class="row hd-title">
+        <div class="col-md-12"></div>
+    </div>
+    <div class="row hd-statis">
+        <div class="col-md-6 support">
+            Підтримало онлайн: <span>{{ countVoted|number_format(0, '.', ' ') }},</span>
+            офлайн: <span>{{ countAdminVoted|number_format(0, '.', ' ') }},</span>
+            всього: <span>{{ project['countLikes']|number_format(0, '.', ' ') }}</span>
+        </div>
+        <div class="col-md-6 date-voting">Кінцева дата голосування: <span>{{ project[0].voteSetting.dateTo|date('d.m.Y') }}</span></div>
+    </div>
+    <div class="row hd-description">
+        <div class="col-md-12">
+            <p>{{ project[0].description|nl2br }}</p>
+        </div>
+    </div>
+    {{ block('notice') }}
 {% endblock %}
 
 {% block headscripts %}
@@ -95,12 +90,12 @@
 {% endblock notice %}
 
 {% block title %}
-    {{ projects[0][0].title|humanize }}
+    {{ project[0].title|humanize }}
 {% endblock title %}
 {% block og %}
-    <meta property="og:title" content="Народна Рада - {{ projects[0][0].title|humanize }}"/>
-    <meta property="og:image" content="{{ url('homepage')|trim('/') }}{% if projects[0][0].picture %}{{ asset(projects[0][0].picture) }}{% else %}{{ asset('images/gerb_goroda_cherkassy.png') }}{% endif %}"/>
-    <meta property="og:description" content="{{ projects[0][0].description[:100] ~'...' }}"/>
+    <meta property="og:title" content="Народна Рада - {{ project[0].title|humanize }}"/>
+    <meta property="og:image" content="{{ url('homepage')|trim('/') }}{% if project[0].picture %}{{ asset(project[0].picture) }}{% else %}{{ asset('images/gerb_goroda_cherkassy.png') }}{% endif %}"/>
+    <meta property="og:description" content="{{ project[0].description[:100] ~'...' }}"/>
     <meta property="og:url" content="{{ app.request.getUri }}"/>
 {% endblock og %}
 

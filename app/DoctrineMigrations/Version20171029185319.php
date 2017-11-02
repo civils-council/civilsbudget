@@ -14,7 +14,7 @@ class Version20171029185319 extends AbstractMigration
     {
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-//        $this->addSql('ALTER TABLE vote_settings CHANGE title_h1 short_description VARCHAR(255) DEFAULT NULL');
+        $this->addSql('ALTER TABLE vote_settings CHANGE title_h1 short_description VARCHAR(255) DEFAULT NULL');
         $this->addSql('ALTER TABLE user CHANGE inn inn VARCHAR(10) DEFAULT NULL');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_8D93D649E93323CB ON user (inn)');
     }
