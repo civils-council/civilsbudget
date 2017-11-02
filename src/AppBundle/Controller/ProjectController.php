@@ -79,8 +79,8 @@ class ProjectController extends Controller
         }
         $parameterBag = $request->query;
         $parameterBag->set(ProjectController::QUERY_PROJECT_ID, $id);
-        $countAdminVoted = $em->getRepository('AppBundle:User')->findCountAdminVotedUsers($parameterBag);
-        $countVoted = $em->getRepository('AppBundle:User')->findCountVotedUsers($parameterBag);
+        $countAdminVoted = $em->getRepository(User::class)->findCountAdminVotedUsers($parameterBag);
+        $countVoted = $em->getRepository(User::class)->findCountVotedUsers($parameterBag);
         $request->attributes->set(ProjectController::QUERY_CITY, $project[0]->getCity());
         $voteSetting = $em->getRepository(VoteSettings::class)->getProjectVoteSettingShow($request);
         return [
@@ -126,7 +126,7 @@ class ProjectController extends Controller
 
         return [
             'form' => $form->createView(),
-            'voteSetting' => $this->getDoctrine()->getRepository('AppBundle:VoteSettings')
+            'voteSetting' => $this->getDoctrine()->getRepository(VoteSettings::class)
                 ->getProjectVoteSettingShow($request)
         ];
     }
@@ -161,7 +161,7 @@ class ProjectController extends Controller
         return [
             'entity' => $project,
             'form' => $form->createView(),
-            'voteSetting' => $this->getDoctrine()->getRepository('AppBundle:VoteSettings')
+            'voteSetting' => $this->getDoctrine()->getRepository(VoteSettings::class)
                 ->getProjectVoteSettingShow($request)            
         ];
     }
