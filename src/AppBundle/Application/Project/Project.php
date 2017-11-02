@@ -93,7 +93,11 @@ class Project implements ProjectInterface
         if (mb_strtolower($user->getLocation()->getCity()) 
             != mb_strtolower($project->getVoteSetting()->getLocation()->getCity())
         ) {
-            throw new ValidatorException('Цей проект не стосується міста в якому ви зареєстровані.', 403);
+            throw new ValidatorException(
+                'Цей проект не стосується міста в якому ви зареєстровані. Ваша реєстрація: м.'.
+                $user->getLocation()->getCity(),
+                403
+            );
         }
         
         return $this->getUserInterface()->postVote($project, $user);
