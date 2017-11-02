@@ -55,71 +55,89 @@ class UserManager
         fclose($fp);
         $res = openssl_get_privatekey($pub_key);
 
+        $factualAddress = null;
+        $clId = null;
+        $inn = null;
+        $street = null;
+        $city = null;
+        $country = null;
+        $houseNo = null;
+        $flatNo = null;
+        $middleName = null;
+        $lastName = null;
+        $firstName = null;
+        $sex = null;
+
         if (array_key_exists('addresses', $data['customer']) == true) {
-            if (array_key_exists('country', $data['customer']['addresses'][0]) == true) {
-                $deceode_country = base64_decode($data['customer']['addresses'][0]['country']);
-                $result_field = openssl_private_decrypt($deceode_country, $country, $res);
+            $factualKey = array_search('factual', array_column($data['customer']['addresses'], 'type'));
+            $factualAddress = $data['customer']['addresses'][$factualKey];
+        }
+
+        if ($factualAddress) {
+            if (array_key_exists('country', $factualAddress) == true) {
+                $encoded_country = base64_decode($factualAddress['country']);
+                openssl_private_decrypt($encoded_country, $country, $res);
             }
 
-            if (array_key_exists('state', $data['customer']['addresses'][0]) == true) {
-                $deceode_state = base64_decode($city = $data['customer']['addresses'][0]['state']);
-                $result_field = openssl_private_decrypt($deceode_state, $state, $res);
+            if (array_key_exists('state', $factualAddress) == true) {
+                $encoded_state = base64_decode($city = $factualAddress['state']);
+                openssl_private_decrypt($encoded_state, $state, $res);
             }
 
-            if (array_key_exists('street', $data['customer']['addresses'][0]) == true) {
-                $deceode_street = base64_decode($data['customer']['addresses'][0]['street']);
-                $result_field = openssl_private_decrypt($deceode_street, $street, $res);
+            if (array_key_exists('street', $factualAddress) == true) {
+                $encoded_street = base64_decode($factualAddress['street']);
+                openssl_private_decrypt($encoded_street, $street, $res);
             }
 
-            if (array_key_exists('houseNo', $data['customer']['addresses'][0]) == true) {
-                $deceode_houseNo = base64_decode($data['customer']['addresses'][0]['houseNo']);
-                $result_field = openssl_private_decrypt($deceode_houseNo, $houseNo, $res);
+            if (array_key_exists('houseNo', $factualAddress) == true) {
+                $encoded_houseNo = base64_decode($factualAddress['houseNo']);
+                openssl_private_decrypt($encoded_houseNo, $houseNo, $res);
             }
 
-            if (array_key_exists('flatNo', $data['customer']['addresses'][0]) == true) {
-                $deceode_flatNo = base64_decode($data['customer']['addresses'][0]['flatNo']);
-                $result_field = openssl_private_decrypt($deceode_flatNo, $flatNo, $res);
+            if (array_key_exists('flatNo', $factualAddress) == true) {
+                $encoded_flatNo = base64_decode($factualAddress['flatNo']);
+                openssl_private_decrypt($encoded_flatNo, $flatNo, $res);
             }
 
-            if (array_key_exists('city', $data['customer']['addresses'][0]) == true) {
-                $deceode_city = base64_decode($data['customer']['addresses'][0]['city']);
-                $result_field = openssl_private_decrypt($deceode_city, $city, $res);
+            if (array_key_exists('city', $factualAddress) == true) {
+                $encoded_city = base64_decode($factualAddress['city']);
+                openssl_private_decrypt($encoded_city, $city, $res);
             }
         }
 
         if (array_key_exists('clId', $data['customer']) == true) {
-            $deceode_clId = base64_decode($data['customer']['clId']);
-            $result_field = openssl_private_decrypt($deceode_clId, $clId, $res);
+            $encoded_clId = base64_decode($data['customer']['clId']);
+            openssl_private_decrypt($encoded_clId, $clId, $res);
         }
 
         if (array_key_exists('inn', $data['customer']) == true) {
-            $deceode_inn = base64_decode($data['customer']['inn']);
-            $result_field = openssl_private_decrypt($deceode_inn, $inn, $res);
+            $encoded_inn = base64_decode($data['customer']['inn']);
+            openssl_private_decrypt($encoded_inn, $inn, $res);
         }
 
         if (array_key_exists('firstName', $data['customer']) == true) {
-            $deceode_firstName = base64_decode($data['customer']['firstName']);
-            $result_field = openssl_private_decrypt($deceode_firstName, $firstName, $res);
+            $encoded_firstName = base64_decode($data['customer']['firstName']);
+            openssl_private_decrypt($encoded_firstName, $firstName, $res);
         }
 
         if (array_key_exists('lastName', $data['customer']) == true) {
-            $deceode_lastName = base64_decode($data['customer']['lastName']);
-            $result_field = openssl_private_decrypt($deceode_lastName, $lastName, $res);
+            $encoded_lastName = base64_decode($data['customer']['lastName']);
+            openssl_private_decrypt($encoded_lastName, $lastName, $res);
         }
 
         if (array_key_exists('middleName', $data['customer']) == true) {
-            $deceode_middleName = base64_decode($data['customer']['middleName']);
-            $result_field = openssl_private_decrypt($deceode_middleName, $middleName, $res);
+            $encoded_middleName = base64_decode($data['customer']['middleName']);
+            openssl_private_decrypt($encoded_middleName, $middleName, $res);
         }
 
         if (array_key_exists('sex', $data['customer']) == true) {
-            $deceode_sex = base64_decode($data['customer']['sex']);
-            $result_field = openssl_private_decrypt($deceode_sex, $sex, $res);
+            $encoded_sex = base64_decode($data['customer']['sex']);
+            openssl_private_decrypt($encoded_sex, $sex, $res);
         }
 
         /** @var User $user */
         $user = $this->em->getRepository('AppBundle:User')->getUserByInnOrClid($clId, $inn);
-        if (array_key_exists('city', $data['customer']['addresses'][0]) == true) {
+        if (array_key_exists('city', $factualAddress) == true) {
             $existCity = $this->em->getRepository('AppBundle:City')->findOneBy(['city' => $city]);
             if (!$existCity) {
                 $existCity = new City();
@@ -127,7 +145,7 @@ class UserManager
                 $this->em->persist($existCity);
             }
         }
-        if (array_key_exists('country', $data['customer']['addresses'][0]) == true) {
+        if (array_key_exists('country', $factualAddress) == true) {
             $existCountry = $this->em->getRepository('AppBundle:Country')->findOneBy(['country' => $country]);
             if (!$existCountry) {
                 $existCountry = new Country();
@@ -146,9 +164,9 @@ class UserManager
                 ->setDistrict($city);
             //TODO check street->home number->flat and lineAddress = lineAddres . street
             if (
-                array_key_exists('flatNo', $data['customer']['addresses'][0]) == true &&
-                array_key_exists('street', $data['customer']['addresses'][0]) == true &&
-                array_key_exists('houseNo', $data['customer']['addresses'][0]) == true
+                array_key_exists('flatNo', $factualAddress) == true &&
+                array_key_exists('street', $factualAddress) == true &&
+                array_key_exists('houseNo', $factualAddress) == true
             ) {
                 $location->setAddress($street . ',' . $houseNo . 'appartment' . $flatNo);
             };
@@ -156,27 +174,27 @@ class UserManager
             $this->em->persist($location);
             $user->setLocation($location);
 
-            if (array_key_exists('clId', $data['customer']) == true) {
+            if ($clId) {
                 $user->setClid($clId);
             };
 
-            if (array_key_exists('sex', $data['customer']) == true) {
+            if ($sex) {
                 $user->setSex($sex);
             };
 
-            if (array_key_exists('middleName', $data['customer']) == true) {
+            if ($middleName) {
                 $user->setMiddleName($middleName);
             };
 
-            if (array_key_exists('lastName', $data['customer']) == true) {
+            if ($lastName) {
                 $user->setLastName($lastName);
             };
 
-            if (array_key_exists('firstName', $data['customer']) == true) {
+            if ($firstName) {
                 $user->setFirstName($firstName);
             };
 
-            if (array_key_exists('inn', $data['customer']) == true) {
+            if ($inn) {
                 $user->setInn($inn);
             };
 
