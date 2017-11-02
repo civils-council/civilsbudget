@@ -76,21 +76,15 @@ class ProjectRepository extends EntityRepository implements ProjectRepositoryInt
      */
     public function getOneProjectShow($id)
     {
-        $qb = $this->getEntityManager()->createQueryBuilder();
-        $qb
-            ->select('project')
-            ->from('AppBundle:Project', 'project')
-            ->addSelect('COUNT(user.id) as countLikes')
+        return $this->createQueryBuilder('project')
+            ->select('project', 'COUNT(user.id) as countLikes')
             ->leftJoin('project.likedUsers', 'user')
             ->andWhere('project.approved= :approved')
             ->andWhere('project.id = :id')
             ->setParameter('approved', true)
             ->setParameter('id', $id)
-            ->groupBy('project.id');
-
-        $query = $qb->getQuery();
-        $results = $query->getResult();
-
-        return $results;
+            ->groupBy('project.id')
+            ->getQuery()
+            ->getSingleResult();
     }
 }
