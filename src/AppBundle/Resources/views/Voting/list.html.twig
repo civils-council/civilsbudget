@@ -10,7 +10,7 @@
             <div class="wrap-item">
                 <div class="card" id="project{{ voting.id }}">
                     <div class="card-image">
-                        <a href="{{ path('projects_list', { id: voting.id })  }}" class="img-lnk">
+                        <a href="{{ path('votings_projects_list', { id: voting.id })  }}" class="img-lnk">
                             <img src="{{ asset(voting.logo) }}" class="img-responsive" alt="" style="margin: 0 auto;">
                         </a>
                     </div><!-- card image -->
@@ -46,7 +46,7 @@
                     {#{{ project[0].description }}#}
                     {#</p>#}
                     {#</div><!-- card reveal -->#}
-                    <a href="{{ path('projects_list', { id: voting.id }) }}" class="detail-btn">детальніше</a>
+                    <a href="{{ path('votings_projects_list', { id: voting.id }) }}" class="detail-btn">детальніше</a>
                 </div>
             </div>
         </div>
