@@ -84,6 +84,8 @@
     {{ form_end(delete_form) }}
     </ul>
 
+  {{ form(form) }}
+
     <div class="count">
         All Project {{ pagination.getTotalItemCount }}
     </div>
@@ -120,4 +122,53 @@
         {{ knp_pagination_render(pagination) }}
     </div>
 
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+      $('.form-collection').each(function(i, formCollection) {
+        var $formCollection = $(formCollection),
+          $elements = $formCollection.find('.form-collection-elements'),
+          idx = $elements.find('.form-collection-element').length;
+        $formCollection.find('.form-collection-add').on('click', function() {
+          var prototype = $(this).data('prototype');
+          prototype = prototype.replace(/__name__/g, idx++);
+          $(prototype).appendTo($(this).closest('.form-collection').find('.form-collection-elements'))
+          .children().children().children().children().find('select')
+          .select2({
+            placeholder: 'Project Name',
+            minimumInputLength: 2,
+            cache: true,
+            ajax: {
+              url:  "/project/typeahead",
+              dataType: "json",
+              type: "GET",
+              delay: 1000,
+              data: function (params) {
+                return {
+                  q: params.term
+                };
+              },
+              processResults: function (data) {
+                return {
+                  results: $.map(data, function (item) {
+//                    console.log(item)
+                    return {
+                      text: item.title,
+                      id: item.id
+                    }
+                  })
+            }
+          }
+        }
+      })
+
+        }).click();
+        $elements.on('click', '.form-collection-delete', function() {
+          $(this).parents('.form-collection-element').remove();
+        })
+      });
+
+    </script>
 {% endblock %}

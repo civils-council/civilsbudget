@@ -57,8 +57,11 @@ class VoteSettingsRepository extends EntityRepository implements VoteSettingInte
                 ->andWhere('l.city LIKE :city')
                 ->setParameter('city', $user->getLocation()->getCity());
         }
-        $qb->orderBy('vs.createAt', Criteria::DESC);
 
+        $qb
+            ->andWhere('vs.dateTo > :now')
+            ->setParameter('now', new \DateTime())
+            ->orderBy('vs.createAt', Criteria::DESC);
         $query = $qb->getQuery();
         $results = $query->getResult();
 

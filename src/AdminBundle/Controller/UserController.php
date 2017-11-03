@@ -3,10 +3,13 @@
 namespace AdminBundle\Controller;
 
 use AdminBundle\Form\CreateUser;
+use AdminBundle\Form\ProjectType;
 use AdminBundle\Model\CreateUserModel;
 use AppBundle\Entity\Project;
 use AppBundle\Exception\ValidatorException;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -91,6 +94,34 @@ class UserController extends Controller
     }
 
     /**
+     * @Route("/find", name="admin_user_find")
+     * @Template()
+     */
+    public function findAction(Request $request)
+    {
+        $form = $this->createFormBuilder()
+            ->add('inn', null)
+            ->add("Пошук", SubmitType::class)
+            ->getForm();
+
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            $em = $this->getDoctrine()->getManager();
+            $user = $em->getRepository(User::class)->findOneBy(['inn' => $data['inn']]);
+
+            if ($user) {
+                return $this->redirectToRoute('admin_users_show', ['id' => $user->getId()]);
+            } else {
+               return $this->redirectToRoute('admin_users_new');
+            }
+        }
+        return [
+            'form' => $form->createView()
+        ];
+    }
+
+    /**
      * Displays a form to create a new User entity.
      *
      * @Route("/new", name="admin_users_new")
@@ -109,43 +140,44 @@ class UserController extends Controller
     }
 
     /**
-     * Finds and displays a User entity.
-     * @param Request $request
-     * @return array
-     * 
      * @Route("/{id}", name="admin_users_show")
      * @Method("GET")
      * @Template()
      */
-    public function showAction($id, Request $request)
+    public function showAction(User $user, Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
-        /** @var User $entity */
-        $entity = $em->getRepository('AppBundle:User')->findOneBy(['id' => $id]);
-
-        if (!$entity) {
-            $this->addFlash('danger', 'No user was found for this id.');
-            return $this->redirectToRoute('admin_users');
-        }
-
-        if (!$entity->getLocation()) {
+        if (!$user->getLocation()) {
             $this->addFlash('danger', 'User must have location.');
             return $this->redirectToRoute('admin_users');
         }
 
-        if ($entity->getLocation() && !$entity->getLocation()->getCity()) {
+        if ($user->getLocation() && !$user->getLocation()->getCity()) {
             $this->addFlash('danger', 'User must have city in location.');
             return $this->redirectToRoute('admin_users');
         }
 
-        $deleteForm = $this->createDeleteForm($id);
+        $deleteForm = $this->createDeleteForm($user->getId());
 
-        $em    = $this->get('doctrine.orm.entity_manager');
-        $dql   = "SELECT a FROM AppBundle:Project a LEFT JOIN a.voteSetting vs LEFT JOIN vs.location l WHERE l.city = :city ORDER BY a.id DESC";
+        $addForm = $this->createFormBuilder()
+            ->add('projects', CollectionType::class, [
+                'entry_type' => ProjectType::class,
+                'allow_add' => true,
+                'allow_delete' => true,
+                'by_reference' => false,
+            ])
+            ->add('Додати', SubmitType::class)
+            ->getForm()
+        ;
 
-        $query = $em->createQuery($dql);
-        $query->setParameter('city', $entity->getLocation()->getCity());
+        $query = $em->getRepository(Project::class)
+            ->createQueryBuilder('p')
+            ->join('p.likedUsers', 'u')
+            ->andWhere('u.id = :user')
+            ->setParameter('user', $user)
+            ->orderBy('p.id', 'DESC')
+        ;
 
         $paginator  = $this->get('knp_paginator');
         $entitiesPagination = $paginator->paginate(
@@ -154,11 +186,12 @@ class UserController extends Controller
             70
         );
 
-        return array(
-            'entity'      => $entity,
+        return [
+            'entity'      => $user,
             'delete_form' => $deleteForm->createView(),
-            'pagination' => $entitiesPagination            
-        );
+            'pagination' => $entitiesPagination,
+            'form' => $addForm->createView()
+        ];
     }
 
     /**

@@ -14,6 +14,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -22,6 +23,30 @@ class ProjectController extends Controller
     const SERVER_ERROR                    = 'Server Error';
     const QUERY_CITY                      = 'city';
     const QUERY_PROJECT_ID                = 'project_id';
+
+    /**
+     * @Route("/project/typeahead", name="project_typeahead")
+     */
+    public function typeaheadAction(Request $request)
+    {
+
+        $q = $request->query->get('q', '');
+        if ($q) {
+            $projects = $this->getDoctrine()->getManager()->getRepository(Project::class)->
+                createQueryBuilder('p')
+                ->andWhere('p.title LIKE :q')
+                ->setParameter('q', '%'.$q.'%')
+                ->andWhere('p.createAt > :year')
+                ->setParameter('year', new \DateTime())
+                ->getQuery()
+                ->getResult();
+
+            return new JsonResponse($projects);
+        }
+        $projects = $this->getDoctrine()->getManager()->getRepository(Project::class)->findAll();
+
+        return new JsonResponse($projects);
+    }
 
     /**
      * @Route("/votings/{id}/projects", name="votings_projects_list")

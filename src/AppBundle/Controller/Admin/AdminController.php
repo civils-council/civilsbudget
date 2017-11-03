@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Admin;
 
 use AppBundle\Controller\ProjectController;
 use AppBundle\Entity\Admin;
+use AppBundle\Entity\User;
 use AppBundle\Form\AdminLoginType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -22,10 +23,10 @@ class AdminController extends Controller
         /** @var Admin $admin */
         $admin = $this->getUser();
         $request->query->set(ProjectController::QUERY_CITY, $admin->getCity()->getCity());
-        $countAdminVoted = $em->getRepository('AppBundle:User')->findCountAdminVotedUsers($request->query);
-        $countVoted = $em->getRepository('AppBundle:User')->findCountVotedUsers($request->query);
-        $countAdminUsers = $em->getRepository('AppBundle:User')->findCountAdminUsers($request->query);
-        $countAuthUsers = $em->getRepository('AppBundle:User')->findCountAuthUsers($request->query);
+        $countAdminVoted = $em->getRepository(User::class)->findCountAdminVotedUsers($request->query);
+        $countVoted = $em->getRepository(User::class)->findCountVotedUsers($request->query);
+        $countAdminUsers = $em->getRepository(User::class)->findCountAdminUsers($request->query);
+        $countAuthUsers = $em->getRepository(User::class)->findCountAuthUsers($request->query);
         
         return [
             'countVoted' => $countVoted,
