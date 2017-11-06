@@ -25,27 +25,22 @@ class ProjectController extends Controller
     const QUERY_PROJECT_ID                = 'project_id';
 
     /**
-     * @Route("/project/typeahead", name="project_typeahead")
+     * @Route("/projects/voting/{id}/typeahead", name="project_typeahead")
      */
-    public function typeaheadAction(Request $request)
+    public function typeaheadAction(VoteSettings $voteSettings, Request $request)
     {
+        $q = $request->query->get('q');
 
-        $q = $request->query->get('q', '');
-        if ($q) {
-            $projects = $this->getDoctrine()->getManager()->getRepository(Project::class)->
-                createQueryBuilder('p')
-                ->andWhere('p.title LIKE :q')
-                ->setParameter('q', '%'.$q.'%')
-                ->andWhere('p.createAt > :year')
-                ->setParameter('year', new \DateTime())
-                ->getQuery()
-                ->getResult();
+            $qb = $this->getDoctrine()->getManager()->getRepository(Project::class)->createQueryBuilder('p')
+                ->andWhere('p.voteSetting = :vs')
+                ->setParameter('vs', $voteSettings);
 
-            return new JsonResponse($projects);
-        }
-        $projects = $this->getDoctrine()->getManager()->getRepository(Project::class)->findAll();
+            if ($q) {
+                $qb->andWhere('p.title LIKE :q')
+                    ->setParameter('q', '%'.$q.'%');
+            }
 
-        return new JsonResponse($projects);
+        return new JsonResponse($qb->getQuery()->getResult());
     }
 
     /**

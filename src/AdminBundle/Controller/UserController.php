@@ -3,13 +3,11 @@
 namespace AdminBundle\Controller;
 
 use AdminBundle\Form\CreateUser;
-use AdminBundle\Form\ProjectType;
 use AdminBundle\Model\CreateUserModel;
 use AppBundle\Entity\Project;
+use AppBundle\Entity\VoteSettings;
 use AppBundle\Exception\ValidatorException;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -160,16 +158,16 @@ class UserController extends Controller
 
         $deleteForm = $this->createDeleteForm($user->getId());
 
-        $addForm = $this->createFormBuilder()
-            ->add('projects', CollectionType::class, [
-                'entry_type' => ProjectType::class,
-                'allow_add' => true,
-                'allow_delete' => true,
-                'by_reference' => false,
-            ])
-            ->add('Додати', SubmitType::class)
-            ->getForm()
-        ;
+        /** @var VoteSettings[] $voteSettings */
+        $voteSettings = $this->getDoctrine()->getRepository('AppBundle:VoteSettings')->getVoteSettingByUserCity($user);
+
+        $balanceVotes = [];
+        foreach ($voteSettings as $voteSetting) {
+            $limitVoteSetting = $voteSetting->getVoteLimits();
+
+            $balanceVotes[]= [$voteSetting,
+                'balance' => $limitVoteSetting - $this->getDoctrine()->getRepository(User::class)->getUserVotesBySettingVote($voteSetting, $user)];
+        }
 
         $query = $em->getRepository(Project::class)
             ->createQueryBuilder('p')
@@ -190,7 +188,7 @@ class UserController extends Controller
             'entity'      => $user,
             'delete_form' => $deleteForm->createView(),
             'pagination' => $entitiesPagination,
-            'form' => $addForm->createView()
+            'balanceVotes' => $balanceVotes
         ];
     }
 

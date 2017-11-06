@@ -1,0 +1,72 @@
+{% extends '@App/layout.html.twig' %}
+
+{% block title %}Edit Users{% endblock %}
+
+{% block content %}
+
+    {% for vote in balanceVotes %}
+        <ul>
+            <li>
+                <a href="#">
+                    {{ vote[0].title }} - {{ vote['balance'] }}
+                </a>
+            </li>
+        </ul>
+    {% endfor %}
+    {{ form(form) }}
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+      var prjcount = 1,
+        balance = {{ balanceVotes }};
+      $('.form-collection').each(function(i, formCollection) {
+        var $formCollection = $(formCollection),
+          $elements = $formCollection.find('.form-collection-elements'),
+          idx = $elements.find('.form-collection-element').length
+
+        $formCollection.find('.form-collection-add').on('click', function() {
+          if (prjcount <= balance) {
+            var prototype = $(this).data('prototype');
+            prototype = prototype.replace(/__name__/g, idx++);
+            $(prototype).appendTo($(this).closest('.form-collection').find('.form-collection-elements'))
+              .children().children().children().children().find('select')
+              .select2({
+                placeholder: 'Project Name',
+                minimumInputLength: 2,
+                cache: true,
+                ajax: {
+                  url:  "/projects/voting/{{ voteSettings.id }}/typeahead",
+                  dataType: "json",
+                  type: "GET",
+                  delay: 1000,
+                  data: function (params) {
+                    return {
+                      q: params.term
+                    };
+                  },
+                  processResults: function (data) {
+                    return {
+                      results: $.map(data, function (item) {
+                        return {
+                          text: item.title,
+                          id: item.id
+                        }
+                      })
+                    }
+                  }
+                }
+              })
+            prjcount++
+          }
+        }).click();
+        $elements.on('click', '.form-collection-delete', function() {
+          $(this).parents('.form-collection-element').remove()
+          prjcount--
+        })
+      });
+
+    </script>
+{% endblock %}
