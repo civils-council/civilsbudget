@@ -1,0 +1,17 @@
+{% extends '@App/layout.html.twig' %}
+
+{% block title %}Пошук користувача{% endblock %}
+
+{% block content %}
+    <h1>Пошук користувача</h1>
+
+    {{ form(form) }}
+
+    <ul class="record_actions">
+        <li>
+            <a href="{{ path('admin_dashboard') }}">
+                Назад до списку
+            </a>
+        </li>
+    </ul>
+{% endblock %}

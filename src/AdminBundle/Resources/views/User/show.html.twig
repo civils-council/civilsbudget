@@ -84,6 +84,16 @@
     {{ form_end(delete_form) }}
     </ul>
 
+    {% for vote in balanceVotes %}
+        <ul>
+            <li>
+                <a href="{{ vote['balance'] > 0 ? path('admin_user_new_paper_vote', {'user_id': entity.id, 'voting_id': vote[0].id}) : '#' }}">
+                    {{ vote[0].title }} - {{ vote['balance'] }}
+                </a>
+            </li>
+        </ul>
+    {% endfor %}
+
     <div class="count">
         All Project {{ pagination.getTotalItemCount }}
     </div>
@@ -119,5 +129,4 @@
     <div class="navigation">
         {{ knp_pagination_render(pagination) }}
     </div>
-
 {% endblock %}
