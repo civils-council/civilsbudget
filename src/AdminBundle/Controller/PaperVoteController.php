@@ -25,8 +25,14 @@ class PaperVoteController extends Controller
      * @Route("/user/{user_id}/voting/{voting_id}/new", name="admin_user_new_paper_vote")
      * @ParamConverter("user", class="AppBundle:User", options={"id" = "user_id"})
      * @ParamConverter("voteSettings", class="AppBundle:VoteSettings", options={"id" = "voting_id"})
-     * @Method("GET")
+     * @Method({"GET", "POST"})
      * @Template()
+     *
+     * @param User $user
+     * @param VoteSettings $voteSettings
+     * @param Request $request
+     *
+     * @return array | bool
      */
     public function newAction(User $user, VoteSettings $voteSettings, Request $request)
     {
@@ -35,6 +41,7 @@ class PaperVoteController extends Controller
         if ($balanceVotes == 0) {
             return false;
         }
+
         $addForm = $this->createFormBuilder()
             ->add('blank', null)
             ->add('projects', CollectionType::class, [
@@ -46,6 +53,17 @@ class PaperVoteController extends Controller
             ->add('Додати', SubmitType::class)
             ->getForm()
         ;
+
+        $addForm->handleRequest($request);
+
+        if ($addForm->isSubmitted()) {
+            $data = $addForm->getData();
+            return [
+                'balanceVotes' => $balanceVotes,
+                'voteSettings' => $voteSettings,
+                'form' => $addForm->createView()
+            ];
+        }
 
         return [
             'balanceVotes' => $balanceVotes,

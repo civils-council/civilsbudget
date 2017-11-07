@@ -72,17 +72,10 @@ class UserController extends Controller
         }
 
         $em = $this->get('doctrine.orm.entity_manager');
-//        if (null !== $voter = $em->getRepository('AppBundle:User')->findOneBy(['inn' => $inn])) {
-//            return ['voter' => $voter];
-//        }
 
         $voter = $em->getRepository('AppBundle:User')->findOneBy(['inn' => $inn]);
 
         return ['voter' => $voter];
-
-        return [
-//s            'voter' => $voter
-        ];
     }
 
     /**
