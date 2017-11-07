@@ -84,7 +84,7 @@ class Location
     /**
      * @var User
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="location")
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\User")
      * @ORM\JoinColumn(name="user_id", nullable = true, referencedColumnName="id")
      */
     private $user;

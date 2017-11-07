@@ -9,6 +9,7 @@ use AppBundle\Entity\VoteSettings;
 use AppBundle\Exception\ValidatorException;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -273,24 +274,23 @@ class UserController extends Controller
      * @Route("/{id}", name="admin_users_update")
      * @Method("PUT")
      * @Template("AdminBundle:User:edit.html.twig")
+     *
+     * @param User $user
+     * @param Request $request
+     *
+     * @return array|RedirectResponse
      */
-    public function updateAction(Request $request, $id)
+    public function updateAction(User $user, Request $request)
     {
+        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN', $user, 'You cannot edit this item.');
+
         $em = $this->getDoctrine()->getManager();
 
-        /** @var User $entity */
-        $entity = $em->getRepository('AppBundle:User')->findOneBy(['id' => $id]);
-
-        if (!$entity) {
-            $this->addFlash('danger', 'No user was found for this id.');
-            return $this->redirectToRoute('admin_users');
-        }
-
         $entityUserModel = new CreateUserModel();
-        $entityUserModel->setUser($entity);
-        $entityUserModel->setLocation($entity->getLocation());
+        $entityUserModel->setUser($user);
+        $entityUserModel->setLocation($user->getLocation());
 
-        $deleteForm = $this->createDeleteForm($id);
+        $deleteForm = $this->createDeleteForm($user->getId());
         $editForm = $this->createEditForm($entityUserModel);
 
         $editForm->handleRequest($request);
@@ -300,11 +300,11 @@ class UserController extends Controller
         if ($editForm->isValid() && count($errors) === 0) {
             $em->flush();
 
-            return $this->redirect($this->generateUrl('admin_users_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('admin_users_edit', array('id' => $user->getId())));
         }
 
         return array(
-            'entity'      => $entity,
+            'entity'      => $user,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
             'errors' => $errors
@@ -342,21 +342,22 @@ class UserController extends Controller
      *
      * @Route("/{id}", name="admin_users_delete")
      * @Method("DELETE")
+
+     * @param User $user
+     * @param Request $request
+     *
+     * @return RedirectResponse
      */
-    public function deleteAction(Request $request, $id)
+    public function deleteAction(User $user, Request $request)
     {
-        $form = $this->createDeleteForm($id);
+        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN', $user, 'You cannot delete this item.');
+
+        $form = $this->createDeleteForm($user->getId());
         $form->handleRequest($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('AppBundle:User')->find($id);
-
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find User entity.');
-            }
-
-            $em->remove($entity);
+            $em->remove($user);
             $em->flush();
         }
 

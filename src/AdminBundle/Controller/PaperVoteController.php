@@ -36,7 +36,9 @@ class PaperVoteController extends Controller
      */
     public function newAction(User $user, VoteSettings $voteSettings, Request $request)
     {
-        $balanceVotes = $voteSettings->getVoteLimits() - $this->getDoctrine()->getRepository(User::class)->getUserVotesBySettingVote($voteSettings, $user);
+        $balanceVotes = $voteSettings->getVoteLimits() -
+            $this->getDoctrine()->getRepository(User::class)
+                ->getUserVotesBySettingVote($voteSettings, $user);
 
         if ($balanceVotes == 0) {
             return false;
