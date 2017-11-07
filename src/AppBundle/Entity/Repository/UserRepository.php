@@ -76,7 +76,6 @@ class UserRepository extends EntityRepository implements UserRepositoryInterface
                 ->leftJoin('vs.location', 'c')
                 ->andWhere('c.city = :city')
                 ->setParameter('city', $city);
-
         }
 
         if ($project = $parameterBag->get(ProjectController::QUERY_PROJECT_ID)) {

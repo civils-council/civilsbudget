@@ -105,8 +105,9 @@ class VoteSettingsRepository extends EntityRepository implements VoteSettingInte
         $qb
             ->select('vs.id, COUNT(DISTINCT u.id) as voted')
             ->from(Project::class, 'p')
-            ->leftJoin('p.likedUsers', 'u')
+            ->leftJoin('p.userProjects', 'up')
             ->leftJoin('p.voteSetting', 'vs')
+            ->leftJoin('up.user', 'u')
             ->groupBy('p.voteSetting')
             ->orderBy('vs.id', Criteria::DESC);
 

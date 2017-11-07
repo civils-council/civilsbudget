@@ -33,7 +33,7 @@ class ProjectController extends Controller
         $parameterBag = $request->query;
         $parameterBag->add(['voteSetting' => $voteSetting]);
         $em = $this->getDoctrine()->getManager();
-        $projects = $em->getRepository(  Project::class)->getProjectShow($parameterBag);
+        $projects = $em->getRepository(Project::class)->getProjectShow($parameterBag);
         $countAdminVoted = $em->getRepository(User::class)->findCountAdminVotedUsers($parameterBag);
         $countVoted = $em->getRepository(User::class)->findCountVotedUsers($parameterBag);
 

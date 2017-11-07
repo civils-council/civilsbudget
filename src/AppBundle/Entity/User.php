@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -181,20 +182,35 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     private $isDataPublic;
 
     /**
+     * @deprecated
+     *
      * @var string
      *
      * @Assert\NotBlank(groups={"admin_user_post"})
      * @ORM\Column(name="number_blank", type="string", nullable=true)
      */
-    private $numberBlank;    
+    private $numberBlank;
+
+    /**
+     * @var UserProject[] ArrayCollection
+     *
+     * @ORM\OneToMany(
+     *     targetEntity="AppBundle\Entity\UserProject",
+     *     mappedBy="user",
+     *     cascade={"persist"},
+     *     orphanRemoval=true
+     * )
+     */
+    private $userProjects;
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->projects = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->likedProjects = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->projects = new ArrayCollection;
+        $this->likedProjects = new ArrayCollection;
+        $this->userProjects = new ArrayCollection;
     }
 
     /**
@@ -214,7 +230,7 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
      *
      * @return User
      */
-    public function setFirstName($firstName)
+    public function setFirstName($firstName): User
     {
         $this->firstName = $firstName;
 
@@ -238,7 +254,7 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
      *
      * @return User
      */
-    public function setLastName($lastName)
+    public function setLastName($lastName): User
     {
         $this->lastName = $lastName;
 
@@ -262,7 +278,7 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
      *
      * @return User
      */
-    public function setMiddleName($middleName)
+    public function setMiddleName($middleName): User
     {
         $this->middleName = $middleName;
 
@@ -286,7 +302,7 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
      *
      * @return User
      */
-    public function setBirthday($birthday)
+    public function setBirthday($birthday): User
     {
         $this->birthday = $birthday;
 
@@ -310,7 +326,7 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
      *
      * @return User
      */
-    public function setLastLoginAt($lastLoginAt)
+    public function setLastLoginAt($lastLoginAt): User
     {
         $this->lastLoginAt = $lastLoginAt;
 
@@ -337,9 +353,10 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
 
     /**
      * @param string $phone
-     * @return $this
+     *
+     * @return User
      */
-    public function setPhone($phone)
+    public function setPhone($phone): User
     {
         $this->phone = $phone;
 
@@ -356,9 +373,10 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
 
     /**
      * @param $clid
-     * @return $this
+     *
+     * @return User
      */
-    public function setClid($clid)
+    public function setClid($clid): User
     {
         $this->clid = $clid;
 
@@ -374,7 +392,7 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
      *
      * @return User
      */
-    public function setLocation(Location $location = null)
+    public function setLocation(Location $location = null): User
     {
         $this->location = $location;
 
@@ -424,9 +442,9 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     /**
      * Get projects
      *
-     * @return Collection
+     * @return Project[]|Collection
      */
-    public function getProjects()
+    public function getProjects(): Collection
     {
         return $this->projects;
     }
@@ -438,7 +456,7 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
      *
      * @return User
      */
-    public function setEmail($email)
+    public function setEmail($email): User
     {
         $this->email = $email;
 
@@ -462,7 +480,7 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
      *
      * @return User
      */
-    public function setSex($sex)
+    public function setSex($sex): User
     {
         $this->sex = $sex;
 
@@ -486,7 +504,7 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
      *
      * @return User
      */
-    public function setAvatar($avatar)
+    public function setAvatar($avatar): User
     {
         $this->avatar = $avatar;
 
@@ -570,7 +588,7 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
      *
      * @return User
      */
-    public function setInn($inn)
+    public function setInn($inn): User
     {
         if (!$this->clid) {
             $this->setClid($inn);            
@@ -592,12 +610,13 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
 
     /**
      * @param Project $project
-     * @return $this
+     *
+     * @return User
      */
-    public function addLikedProjects(Project $project)
+    public function addLikedProjects(Project $project): User
     {
         if (!$this->getLikedProjects()->contains($project)) {
-            $this->getLikedProjects()->add($project);
+            return $this->addUserProjects(new UserProject($this, $project));
         }
 
         return $this;
@@ -621,9 +640,9 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     /**
      * Get likedProjects
      *
-     * @return Collection
+     * @return Project[]|Collection
      */
-    public function getLikedProjects()
+    public function getLikedProjects(): Collection
     {
         return $this->likedProjects;
     }
@@ -690,13 +709,15 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     /**
      * Add likedProject
      *
-     * @param \AppBundle\Entity\Project $likedProject
+     * @param Project $likedProject
      *
      * @return User
      */
-    public function addLikedProject(\AppBundle\Entity\Project $likedProject)
+    public function addLikedProject(Project $likedProject): User
     {
-        $this->likedProjects[] = $likedProject;
+        if (!$this->getLikedProjects()->contains($likedProject)) {
+            $this->getLikedProjects()->add($likedProject);
+        }
 
         return $this;
     }
@@ -704,11 +725,11 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     /**
      * Set addedByAdmin
      *
-     * @param \AppBundle\Entity\Admin $addedByAdmin
+     * @param Admin $addedByAdmin
      *
      * @return User
      */
-    public function setAddedByAdmin(\AppBundle\Entity\Admin $addedByAdmin = null)
+    public function setAddedByAdmin(Admin $addedByAdmin = null): User
     {
         $this->addedByAdmin = $addedByAdmin;
 
@@ -727,7 +748,8 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
 
     /**
      * Set numberBlank
-     *
+     * @deprecated
+
      * @param string $numberBlank
      *
      * @return User
@@ -741,11 +763,34 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
 
     /**
      * Get numberBlank
+     * @deprecated
      *
      * @return string
      */
     public function getNumberBlank()
     {
         return $this->numberBlank;
+    }
+
+    /**
+     * @return UserProject[] | Collection
+     */
+    public function getUserProjects(): Collection
+    {
+        return $this->userProjects;
+    }
+
+    /**
+     * @param UserProject $userProject
+     *
+     * @return User
+     */
+    public function addUserProjects(UserProject $userProject): User
+    {
+        if (!$this->getUserProjects()->contains($userProject)) {
+            $this->getUserProjects()->add($userProject);
+        }
+
+        return $this;
     }
 }
