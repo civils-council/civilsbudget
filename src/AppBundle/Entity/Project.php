@@ -99,7 +99,7 @@ class Project implements \JsonSerializable
     private $owner;
 
     /**
-     * @var User[]ArrayCollection
+     * @var User[] ArrayCollection
      *
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\User", mappedBy="likedProjects", fetch="EXTRA_LAZY")
      */
@@ -129,11 +129,24 @@ class Project implements \JsonSerializable
     private $voteSetting;
 
     /**
+     * @var UserProject[] ArrayCollection
+     *
+     * @ORM\OneToMany(
+     *     targetEntity="AppBundle\Entity\UserProject",
+     *     mappedBy="project",
+     *     cascade={"persist"},
+     *     orphanRemoval=true
+     * )
+     */
+    private $userProjects;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
-        $this->likedUsers = new ArrayCollection();
+        $this->likedUsers = new ArrayCollection;
+        $this->userProjects = new ArrayCollection;
     }
 
 
@@ -401,12 +414,11 @@ class Project implements \JsonSerializable
      *
      * @return Project
      */
-    public function addLikedUser(\AppBundle\Entity\User $likedUser)
+    public function addLikedUser(User $likedUser): Project
     {
         if (!$this->getLikedUsers()->contains($likedUser)) {
-            $this->getLikedUsers()->add($likedUser);
+            return $this->addUserProjects(new UserProject($likedUser, $this));
         }
-        $this->likedUsers[] = $likedUser;
 
         return $this;
     }
@@ -414,9 +426,9 @@ class Project implements \JsonSerializable
     /**
      * Remove likedUser
      *
-     * @param \AppBundle\Entity\User $likedUser
+     * @param User $likedUser
      */
-    public function removeLikedUser(\AppBundle\Entity\User $likedUser)
+    public function removeLikedUser(User $likedUser): void
     {
         if ($this->getLikedUsers()->contains($likedUser)) {
             $this->getLikedUsers()->removeElement($likedUser);
@@ -427,9 +439,9 @@ class Project implements \JsonSerializable
     /**
      * Get likedUsers
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return User[]|Collection
      */
-    public function getLikedUsers()
+    public function getLikedUsers():Collection
     {
         return $this->likedUsers;
     }
@@ -479,11 +491,11 @@ class Project implements \JsonSerializable
     /**
      * Set voteSetting
      *
-     * @param \AppBundle\Entity\VoteSettings $voteSetting
+     * @param VoteSettings $voteSetting
      *
      * @return Project
      */
-    public function setVoteSetting(\AppBundle\Entity\VoteSettings $voteSetting = null)
+    public function setVoteSetting(VoteSettings $voteSetting = null): Project
     {
         if ($voteSetting instanceof VoteSettings) {
             $this->setCity($voteSetting->getLocation()->getCity());
@@ -502,4 +514,28 @@ class Project implements \JsonSerializable
     {
         return $this->voteSetting;
     }
+
+    /**
+     * @return UserProject[] | Collection
+     */
+    public function getUserProjects(): Collection
+    {
+        return $this->userProjects;
+    }
+
+    /**
+     * @param UserProject $userProject
+     *
+     * @return Project
+     */
+    public function addUserProjects(UserProject $userProject): Project
+    {
+        if (!$this->getUserProjects()->contains($userProject)) {
+            $this->getUserProjects()->add($userProject);
+        }
+
+        return $this;
+    }
+
 }
+

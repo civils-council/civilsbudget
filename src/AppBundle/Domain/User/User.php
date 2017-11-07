@@ -3,7 +3,6 @@
 namespace AppBundle\Domain\User;
 
 use AppBundle\AWS\ServiceSES;
-use AppBundle\Entity\Interfaces\ProjectRepositoryInterface;
 use AppBundle\Entity\Interfaces\UserRepositoryInterface;
 use AppBundle\Entity\Interfaces\VoteSettingInterface;
 use AppBundle\Entity\Project;
@@ -65,10 +64,8 @@ class User implements UserInterface
     ) {
         $user->setCountVotes(($user->getCountVotes()) ? ($user->getCountVotes() + 1) : 1);
         $user->addLikedProjects($project);
-        $project->addLikedUser($user);
-        
-        $this->getUserRepositoryInterface()->flushEntity();
 
+        $this->getUserRepositoryInterface()->flushEntity();
 
         /** @var VoteSettings[] $voteSettings */
         $voteSettings = $this->getVoteSettingInterface()->getVoteSettingByUserCity($user);
