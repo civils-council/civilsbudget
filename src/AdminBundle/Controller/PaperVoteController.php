@@ -2,8 +2,9 @@
 
 namespace AdminBundle\Controller;
 
-use AdminBundle\Form\ProjectType;
+use AppBundle\Entity\Project;
 use AppBundle\Entity\VoteSettings;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
@@ -44,10 +45,20 @@ class PaperVoteController extends Controller
             return false;
         }
 
+        $projects = $this->getDoctrine()->getManager()->getRepository(Project::class)->createQueryBuilder('p')
+            ->andWhere('p.voteSetting = :vs')
+            ->setParameter('vs', $voteSettings)
+            ->getQuery()
+            ->getResult();
+
         $addForm = $this->createFormBuilder()
             ->add('blank', null)
             ->add('projects', CollectionType::class, [
-                'entry_type' => ProjectType::class,
+                'entry_type' => EntityType::class,
+                'entry_options' => [
+                    'class' => Project::class,
+                    'choices' => $projects
+                ],
                 'allow_add' => true,
                 'allow_delete' => true,
                 'by_reference' => false,
@@ -60,11 +71,12 @@ class PaperVoteController extends Controller
 
         if ($addForm->isSubmitted()) {
             $data = $addForm->getData();
-            return [
-                'balanceVotes' => $balanceVotes,
-                'voteSettings' => $voteSettings,
-                'form' => $addForm->createView()
-            ];
+            dump($data);die();
+//            return [
+//                'balanceVotes' => $balanceVotes,
+//                'voteSettings' => $voteSettings,
+//                'form' => $addForm->createView()
+//            ];
         }
 
         return [
@@ -73,30 +85,5 @@ class PaperVoteController extends Controller
             'form' => $addForm->createView()
         ];
     }
-
-//    /**
-//     * @Route("/", name="admin_users")
-//     * @Method("GET")
-//     * @Template()
-//     */
-//    public function indexAction(Request $request)
-//    {
-//        $em    = $this->getDoctrine()->getManager();
-//        $dql   = "SELECT a FROM AppBundle:User a LEFT JOIN a.location l INNER JOIN a.addedByAdmin aba WHERE aba.id = :abaId";
-//        $query = $em->createQuery($dql);
-//        $query->setParameter('abaId', $this->getUser()->getId());
-//
-//        $paginator  = $this->get('knp_paginator');
-//        $entitiesPagination = $paginator->paginate(
-//            $query,
-//            $request->query->get('page', 1),
-//            20
-//        );
-//
-//        return array(
-//            'pagination' => $entitiesPagination,
-//        );
-//    }
-
 
 }

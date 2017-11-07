@@ -149,6 +149,10 @@ class Project implements \JsonSerializable
         $this->userProjects = new ArrayCollection;
     }
 
+    public function __toString()
+    {
+        return $this->getTitle();
+    }
 
     /**
      * Get id
