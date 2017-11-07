@@ -14,6 +14,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -22,6 +23,25 @@ class ProjectController extends Controller
     const SERVER_ERROR                    = 'Server Error';
     const QUERY_CITY                      = 'city';
     const QUERY_PROJECT_ID                = 'project_id';
+
+    /**
+     * @Route("/projects/voting/{id}/typeahead", name="project_typeahead")
+     */
+    public function typeaheadAction(VoteSettings $voteSettings, Request $request)
+    {
+        $q = $request->query->get('q');
+
+            $qb = $this->getDoctrine()->getManager()->getRepository(Project::class)->createQueryBuilder('p')
+                ->andWhere('p.voteSetting = :vs')
+                ->setParameter('vs', $voteSettings);
+
+            if ($q) {
+                $qb->andWhere('p.title LIKE :q')
+                    ->setParameter('q', '%'.$q.'%');
+            }
+
+        return new JsonResponse($qb->getQuery()->getResult());
+    }
 
     /**
      * @Route("/votings/{id}/projects", name="votings_projects_list")
@@ -70,21 +90,22 @@ class ProjectController extends Controller
     public function showProjectAction($id, Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $project = $em->getRepository('AppBundle:Project')->getOneProjectShow($id);
+        $project = $em->getRepository(Project::class)->getOneProjectShow($id);
         if (!$project) {
             throw new NotFoundHttpException('This project not found in our source');
         }
         if (empty($this->getUser())) {
-            $sessionSet = $this->get('app.session')->setSession($project[0][0]->getId());
+            $sessionSet = $this->get('app.session')->setSession($project[0]->getId());
         }
         $parameterBag = $request->query;
         $parameterBag->set(ProjectController::QUERY_PROJECT_ID, $id);
-        $countAdminVoted = $em->getRepository('AppBundle:User')->findCountAdminVotedUsers($parameterBag);
-        $countVoted = $em->getRepository('AppBundle:User')->findCountVotedUsers($parameterBag);
+        $countAdminVoted = $em->getRepository(User::class)->findCountAdminVotedUsers($parameterBag);
+        $countVoted = $em->getRepository(User::class)->findCountVotedUsers($parameterBag);
+        $request->attributes->set(ProjectController::QUERY_CITY, $project[0]->getCity());
+        $voteSetting = $em->getRepository(VoteSettings::class)->getProjectVoteSettingShow($request);
         return [
-            'projects' => $project,
-            'voteSetting' => $em->getRepository('AppBundle:VoteSettings')
-                ->getProjectVoteSettingShow($request),
+            'project' => $project,
+            'voteSetting' => $voteSetting,
             'countVoted' => $countVoted,
             'countAdminVoted' => $countAdminVoted,
         ];
@@ -125,7 +146,7 @@ class ProjectController extends Controller
 
         return [
             'form' => $form->createView(),
-            'voteSetting' => $this->getDoctrine()->getRepository('AppBundle:VoteSettings')
+            'voteSetting' => $this->getDoctrine()->getRepository(VoteSettings::class)
                 ->getProjectVoteSettingShow($request)
         ];
     }
@@ -160,7 +181,7 @@ class ProjectController extends Controller
         return [
             'entity' => $project,
             'form' => $form->createView(),
-            'voteSetting' => $this->getDoctrine()->getRepository('AppBundle:VoteSettings')
+            'voteSetting' => $this->getDoctrine()->getRepository(VoteSettings::class)
                 ->getProjectVoteSettingShow($request)            
         ];
     }
