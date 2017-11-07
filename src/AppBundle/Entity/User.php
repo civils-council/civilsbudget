@@ -18,14 +18,14 @@ use Symfony\Bridge\Doctrine\Validator\Constraints as AssertBridge;
  *     groups={"admin_user_post", "admin_user_put"},
  *     fields="inn",
  *     errorPath="not valid",
- *     message="Цей iдентифiкацiйний код вже iснуе."
+ *     message="Цей iдентифiкацiйний код вже iснує."
  * )
  *
  * @AssertBridge\UniqueEntity(
  *     groups={"admin_user_post", "admin_user_put"},
  *     fields="numberBlank",
  *     errorPath="not valid",
- *     message="Цей номер бланка вже iснуе."
+ *     message="Цей номер бланку вже iснує."
  * )
  */
 class User extends AbstractUser implements UserInterface, \JsonSerializable
@@ -44,7 +44,10 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     /**
      * @var string
      *
-     * @Assert\NotBlank(groups={"admin_user_post", "admin_user_put"})
+     * @Assert\NotBlank(
+     *     groups={"admin_user_post", "admin_user_put"},
+     *     message="Им'я не може бути пустим"
+     * )
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $firstName;
@@ -52,7 +55,10 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     /**
      * @var string
      *
-     * @Assert\NotBlank(groups={"admin_user_post", "admin_user_put"})
+     * @Assert\NotBlank(
+     *     groups={"admin_user_post", "admin_user_put"},
+     *     message="Прізвище не може бути пустим"
+     * )
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $lastName;
@@ -75,7 +81,7 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     /**
      * @var string
      *
-     * @Assert\NotBlank(groups={"admin_user_post", "admin_user_put"})
+     * @Assert\NotBlank(groups={"admin_user_put"})
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $birthday;
@@ -129,17 +135,22 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
      */
     private $clid;
 
-//* @Assert\NotBlank(groups={"admin_user_post", "admin_user_put"})
 
     /**
      * @var string
      *
      * @ORM\Column(type="string", length=10, nullable=true, unique=true)
      * @Assert\Type(
+     *     groups={"admin_user_post", "admin_user_put"},
      *     type="numeric",
      *     message="Не коректне значення Ідентифікаційного коду."
      * )
+     * @Assert\NotBlank(
+     *     groups={"admin_user_post", "admin_user_put"},
+     *     message="Ідентифікаційний код не може бути пустим"
+     * )
      * @Assert\Length(
+     *     groups={"admin_user_post", "admin_user_put"},
      *      min = "10",
      *      max = "10",
      *      exactMessage = "Ідентифікаційний код має містити {{ limit }} символів",
@@ -183,7 +194,10 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     /**
      * @var string
      *
-     * @Assert\NotBlank(groups={"admin_user_post"})
+     * @Assert\NotBlank(
+     *     groups={"admin_user_post"},
+     *     message="Номер бланку не може бути пустим"
+     * )
      * @ORM\Column(name="number_blank", type="string", nullable=true)
      */
     private $numberBlank;    

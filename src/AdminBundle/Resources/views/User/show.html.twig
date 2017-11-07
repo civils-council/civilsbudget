@@ -3,7 +3,7 @@
 {% block title %}Edit Users{% endblock %}
 
 {% block content %}
-    <h1>User</h1>
+    <h1>Список Виборців</h1>
 
     <table class="record_properties">
         <tbody>
@@ -12,44 +12,44 @@
                 <td>{{ entity.id }}</td>
             </tr>
             <tr>
-                <th>Firstname</th>
+                <th>Ім'я</th>
                 <td>{{ entity.firstName }}</td>
             </tr>
             <tr>
-                <th>Lastname</th>
+                <th>Прізвище</th>
                 <td>{{ entity.lastName }}</td>
             </tr>
             <tr>
-                <th>Middlename</th>
+                <th>По батькові</th>
                 <td>{{ entity.middleName }}</td>
             </tr>
             <tr>
-                <th>Sex</th>
+                <th>Cтать</th>
                 <td>{{ entity.sex }}</td>
             </tr>
             <tr>
-                <th>Birthday</th>
+                <th>Дата народження</th>
                 <td>{{ entity.birthday }}</td>
             </tr>
             <tr>
-                <th>Phone</th>
+                <th>Телефон</th>
                 <td>{{ entity.phone }}</td>
             </tr>
             <tr>
-                <th>Email</th>
+                <th>e-mail</th>
                 <td>{{ entity.email }}</td>
             </tr>
             <tr>
-                <th>Inn</th>
+                <th>ІНН</th>
                 <td>{{ entity.inn }}</td>
             </tr>
             <tr>
-                <th>numberBlank</th>
+                <th>Номер бланку</th>
                 <td>{{ entity.numberBlank }}</td>
             </tr>
             {% if entity.addedByAdmin %}
                 <tr>
-                    <th>Admin Added</th>
+                    <th>Добавлено:</th>
                     <td>{{ entity.addedByAdmin.firstName }} {{ entity.addedByAdmin.lastName }}</td>
                 </tr>
             {% endif %}
@@ -65,12 +65,12 @@
     <ul class="record_actions">
     <li>
         <a href="{{ path('admin_users') }}">
-            Back to the list
+            Повернутися до списку виборців
         </a>
     </li>
     <li>
         <a href="{{ path('admin_users_edit', { 'id': entity.id }) }}">
-            Edit
+            Редагувати
         </a>
     </li>
 
@@ -95,16 +95,16 @@
     {% endfor %}
 
     <div class="count">
-        All Project {{ pagination.getTotalItemCount }}
+        Список проектів: {{ pagination.getTotalItemCount }}
     </div>
     <table class="table table-striped">
         <tr>
             {# sorting of properties based on query components #}
-            <th>{{ knp_pagination_sortable(pagination, 'Id', 'a.id') }}</th>
-            <th{% if pagination.isSorted('a.title') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Project Name', 'a.title') }}</th>
-            <th{% if pagination.isSorted('vs.title') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Project Type', 'vs.title') }}</th>
-            <th>{{ knp_pagination_sortable(pagination, 'createAt', ['a.createAt']) }}</th>
-            <th> Vote </th>
+            <th>{{ knp_pagination_sortable(pagination, 'Номер в системі', 'a.id') }}</th>
+            <th{% if pagination.isSorted('a.title') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Назва проекту', 'a.title') }}</th>
+            <th{% if pagination.isSorted('vs.title') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Голосування', 'vs.title') }}</th>
+            <th>{{ knp_pagination_sortable(pagination, 'Створено', ['a.createAt']) }}</th>
+            <th> Проголосувати </th>
         </tr>
 
         {# table body #}
@@ -118,7 +118,7 @@
                 <td>
                     <ul>
                         <li>
-                            <a href="{{ path('admin_projects_like', { 'id_project': article.id, 'id_user': entity.id}) }}">vote</a>
+                            <a href="{{ path('admin_projects_like', { 'id_project': article.id, 'id_user': entity.id}) }}">Віддати голос</a>
                         </li>
                     </ul>
                 </td>

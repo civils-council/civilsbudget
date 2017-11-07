@@ -8,6 +8,7 @@ use AppBundle\Entity\Project;
 use AppBundle\Entity\VoteSettings;
 use AppBundle\Exception\ValidatorException;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -51,7 +52,39 @@ class UserController extends Controller
             'pagination' => $entitiesPagination,
         );
     }
-    
+
+    /**
+     * Search User entity by INN
+     * @param string $inn
+     * @param Request $request
+     *
+     * @Route("/{inn}/search", name="admin_users_search_by_inn")
+     * @Method("GET")
+     *
+     * @return array | JsonResponse
+     *
+     * @Template("@Admin/User/ajax-search.html.twig")
+     */
+    public function searchByInnAction(string $inn, Request $request)
+    {
+        if (!$request->isXmlHttpRequest()) {
+            return new JsonResponse(['message' => 'You are not able to access this resource!'], 400);
+        }
+
+        $em = $this->get('doctrine.orm.entity_manager');
+//        if (null !== $voter = $em->getRepository('AppBundle:User')->findOneBy(['inn' => $inn])) {
+//            return ['voter' => $voter];
+//        }
+
+        $voter = $em->getRepository('AppBundle:User')->findOneBy(['inn' => $inn]);
+
+        return ['voter' => $voter];
+
+        return [
+//s            'voter' => $voter
+        ];
+    }
+
     /**
      * Creates a new User entity.
      *
@@ -62,11 +95,12 @@ class UserController extends Controller
     public function createAction(Request $request)
     {
         $entity = new CreateUserModel();
-
         $form = $this->createCreateForm($entity);
+
         $form->handleRequest($request);
 
-        $errors = $this->get('validator')->validate($entity->getUser());
+        $errors = $this->get('validator')->validate($entity->getUser(), null, ['admin_user_post']);
+        $errors->addAll($this->get('validator')->validate($entity->getLocation(), null, ['admin_user_post']));
 
         if ($form->isValid()
             && $form->get('user')->isValid()
@@ -77,6 +111,11 @@ class UserController extends Controller
             $em->persist($entity->getLocation());
             $entity->getUser()->setLocation($entity->getLocation());
             $entity->getUser()->setAddedByAdmin($this->getUser());
+            if ($entity->getUser()->getBirthday() === null) {
+                $entity->getUser()->setBirthday(
+                    $this->getBirthDayFromInn($entity->getUser()->getInn())->format('Y-m-d')
+                );
+            }
             $em->persist($entity->getUser());
             $entity->getLocation()->setUser($entity->getUser());
             $em->flush();
@@ -135,6 +174,7 @@ class UserController extends Controller
         return array(
             'entity' => $entity,
             'form'   => $form->createView(),
+            'errors' => null
         );
     }
 
@@ -262,7 +302,9 @@ class UserController extends Controller
 
         $editForm->handleRequest($request);
 
-        if ($editForm->isValid()) {
+        $errors = $this->get('validator')->validate($entityUserModel->getUser(), null, ['admin_user_put']);
+
+        if ($editForm->isValid() && count($errors) === 0) {
             $em->flush();
 
             return $this->redirect($this->generateUrl('admin_users_edit', array('id' => $id)));
@@ -272,6 +314,7 @@ class UserController extends Controller
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
+            'errors' => $errors
         );
     }
 
@@ -355,7 +398,6 @@ class UserController extends Controller
     {
         $form = $this->createForm(CreateUser::class, $entity, array(
             'validation_groups' => ['admin_user_put'],
-//            'cascade_validation' => true,
             'action' => $this->generateUrl('admin_users_update', array('id' => $entity->getUser()->getId())),
             'method' => 'PUT',
         ));
@@ -375,9 +417,6 @@ class UserController extends Controller
     private function createCreateForm(CreateUserModel $entity)
     {
         $form = $this->createForm(CreateUser::class, $entity, array(
-            'validation_groups' => ['admin_user_post'],
-            'constraints' => new \Symfony\Component\Validator\Constraints\Valid(),
-//            'cascade_validation' => true,
             'action' => $this->generateUrl('admin_users_create'),
             'method' => 'POST',
         ));
@@ -393,5 +432,15 @@ class UserController extends Controller
     private function getProjectApplication()
     {
         return $this->get('app.application.project');
+    }
+
+    /**
+     * @return \DateTime
+     */
+    private function getBirthDayFromInn(string $inn): \DateTime
+    {
+        $day = substr($inn, 0, 5);
+
+        return (new \DateTime('1899-12-31'))->modify("+$day day");
     }
 }
