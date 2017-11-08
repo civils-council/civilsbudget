@@ -14,6 +14,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -27,21 +28,28 @@ class ProjectController extends Controller
      * @Route("/votings/{id}/projects", name="votings_projects_list")
      * @Template()
      * @Method({"GET"})
+     *
+     * @param VoteSettings $voteSetting
+     * @param Request $request
+     *
+     * @return array
      */
     public function listAction(VoteSettings $voteSetting, Request $request)
     {
         $parameterBag = $request->query;
         $parameterBag->add(['voteSetting' => $voteSetting]);
         $em = $this->getDoctrine()->getManager();
-        $projects = $em->getRepository(  Project::class)->getProjectShow($parameterBag);
-        $countAdminVoted = $em->getRepository(User::class)->findCountAdminVotedUsers($parameterBag);
-        $countVoted = $em->getRepository(User::class)->findCountVotedUsers($parameterBag);
+        $projects = $em->getRepository(Project::class)->getProjectShow($parameterBag);
+        $countAdminVotes = $em->getRepository(VoteSettings::class)->countAdminVotesPerVoting($voteSetting);
+        $countTotalVotes = $em->getRepository(VoteSettings::class)->countVotesPerVoting($voteSetting);
+        $countVoted = $em->getRepository(VoteSettings::class)->countVotedUsersPerVoting($voteSetting);
 
         return [
             'debug' => true,
             'projects' => $projects,
+            'countTotalVotes' => $countTotalVotes,
+            'countAdminVotes' => $countAdminVotes,
             'countVoted' => $countVoted,
-            'countAdminVoted' => $countAdminVoted,
             'voteSetting' => $voteSetting
         ];
     }
@@ -50,6 +58,10 @@ class ProjectController extends Controller
      * @Route("/statistics", name="projects_statistics")
      * @Template()
      * @Method({"GET"})
+     *
+     * @param Request $request
+     *
+     * @return array
      */
     public function statisticsAction(Request $request)
     {
@@ -66,25 +78,21 @@ class ProjectController extends Controller
      * @Route("/projects/{id}", name="projects_show", requirements={"id" = "\d+"})
      * @Template()
      * @Method({"GET"})
+     *
+     * @param Project $project
+     * @param Request $request
+     *
+     * @return array
      */
-    public function showProjectAction($id, Request $request)
+    public function showProjectAction(Project $project, Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $project = $em->getRepository('AppBundle:Project')->getOneProjectShow($id);
-        if (!$project) {
-            throw new NotFoundHttpException('This project not found in our source');
-        }
-        if (empty($this->getUser())) {
-            $sessionSet = $this->get('app.session')->setSession($project[0][0]->getId());
-        }
-        $parameterBag = $request->query;
-        $parameterBag->set(ProjectController::QUERY_PROJECT_ID, $id);
-        $countAdminVoted = $em->getRepository('AppBundle:User')->findCountAdminVotedUsers($parameterBag);
-        $countVoted = $em->getRepository('AppBundle:User')->findCountVotedUsers($parameterBag);
+        $countAdminVoted = $em->getRepository(Project::class)->countAdminVotesPerProject($project);
+        $countVoted = $em->getRepository(Project::class)->countVotesPerProject($project);
+        $request->attributes->set(ProjectController::QUERY_CITY, $project->getCity());
         return [
-            'projects' => $project,
-            'voteSetting' => $em->getRepository('AppBundle:VoteSettings')
-                ->getProjectVoteSettingShow($request),
+            'project' => $project,
+            'voteSetting' => $project->getVoteSetting(),
             'countVoted' => $countVoted,
             'countAdminVoted' => $countAdminVoted,
         ];
@@ -125,7 +133,7 @@ class ProjectController extends Controller
 
         return [
             'form' => $form->createView(),
-            'voteSetting' => $this->getDoctrine()->getRepository('AppBundle:VoteSettings')
+            'voteSetting' => $this->getDoctrine()->getRepository(VoteSettings::class)
                 ->getProjectVoteSettingShow($request)
         ];
     }
@@ -160,7 +168,7 @@ class ProjectController extends Controller
         return [
             'entity' => $project,
             'form' => $form->createView(),
-            'voteSetting' => $this->getDoctrine()->getRepository('AppBundle:VoteSettings')
+            'voteSetting' => $this->getDoctrine()->getRepository(VoteSettings::class)
                 ->getProjectVoteSettingShow($request)            
         ];
     }

@@ -1,6 +1,6 @@
 {% extends '@App/layout.html.twig' %}
 
-{% block title %}Users{% endblock %}
+{% block title %}Виборець{% endblock %}
 
 {% block content %}
 
@@ -11,16 +11,16 @@
         <tr>
             {# sorting of properties based on query components #}
             <th>{{ knp_pagination_sortable(pagination, 'Id', 'a.id') }}</th>
-            <th{% if pagination.isSorted('a.firstName') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'First Name', 'a.firstName') }}</th>
-            <th{% if pagination.isSorted('a.lastName') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Last Name', 'a.lastName') }}</th>
-            <th{% if pagination.isSorted('a.middleName') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Middle Name', 'a.middleName') }}</th>
-            <th{% if pagination.isSorted('a.inn') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Inn', 'a.inn') }}</th>
-            <th{% if pagination.isSorted('a.numberBlank') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'numberBlank', 'a.numberBlank') }}</th>
-            <th{% if pagination.isSorted('a.sex') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Gender', 'a.sex') }}</th>
+            <th{% if pagination.isSorted('a.firstName') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Ім\'я', 'a.firstName') }}</th>
+            <th{% if pagination.isSorted('a.lastName') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Прізвище', 'a.lastName') }}</th>
+            <th{% if pagination.isSorted('a.middleName') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'По батькові', 'a.middleName') }}</th>
+            <th{% if pagination.isSorted('a.inn') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'ІНН', 'a.inn') }}</th>
+            <th{% if pagination.isSorted('a.numberBlank') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Номер Бланку', 'a.numberBlank') }}</th>
+            <th{% if pagination.isSorted('a.sex') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Стать', 'a.sex') }}</th>
             <th{% if pagination.isSorted('l.city') %} class="sorted"{% endif %}>
-                {{ knp_pagination_sortable(pagination, 'City', 'l.city') }}
+                {{ knp_pagination_sortable(pagination, 'Місто', 'l.city') }}
             </th>
-            <th>{{ knp_pagination_sortable(pagination, 'createAt', ['a.createAt']) }}</th>
+            <th>{{ knp_pagination_sortable(pagination, 'Дата створення', ['a.createAt']) }}</th>
             <th> Edit </th>
         </tr>
 
@@ -57,7 +57,7 @@
         <ul>
         <li>
             <a href="{{ path('admin_users_new') }}">
-                Create a new entry
+                Створити нового виборця
             </a>
         </li>
     </ul>

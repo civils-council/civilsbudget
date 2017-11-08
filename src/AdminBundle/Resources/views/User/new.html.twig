@@ -1,16 +1,24 @@
 {% extends '@App/layout.html.twig' %}
 
-{% block title %}Додавання користувача{% endblock %}
+{% block title %}Додавання виборця{% endblock %}
 
 {% block content %}
-    <h1>Додавання користувача</h1>
+    <h1>Додавання виборця</h1>
 
-    {{ form(form) }}
+    <div style="color: red">
+        {% for error in errors %}
+            <li>{{ error.message }}</li>
+        {% endfor %}
+    </div>
 
-        <ul class="record_actions">
+    {{ form_errors(form) }}
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+
+<ul class="record_actions">
     <li>
-        <a href="{{ path('admin_users') }}">
-            Назад до списку
+        <a href="{{ path('admin_dashboard') }}">
+            Повернутися до адмін панелі
         </a>
     </li>
 </ul>

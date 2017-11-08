@@ -142,7 +142,7 @@ class DefaultController extends Controller
                             'response' => $response,
                             'homePage' => $this->get('router')->generate(
                                 'votings_list',
-                                ['city' => $user->getLocation()->getCity()],
+                                ['city' => $user->getCurrentLocation()->getCity()],
                                 UrlGeneratorInterface::ABSOLUTE_URL),
                         ]
                     );                    

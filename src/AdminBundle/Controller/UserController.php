@@ -5,8 +5,11 @@ namespace AdminBundle\Controller;
 use AdminBundle\Form\CreateUser;
 use AdminBundle\Model\CreateUserModel;
 use AppBundle\Entity\Project;
+use AppBundle\Entity\VoteSettings;
 use AppBundle\Exception\ValidatorException;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -50,7 +53,32 @@ class UserController extends Controller
             'pagination' => $entitiesPagination,
         );
     }
-    
+
+    /**
+     * Search User entity by INN
+     * @param string $inn
+     * @param Request $request
+     *
+     * @Route("/{inn}/search", name="admin_users_search_by_inn")
+     * @Method("GET")
+     *
+     * @return array | JsonResponse
+     *
+     * @Template("@Admin/User/ajax-search.html.twig")
+     */
+    public function searchByInnAction(string $inn, Request $request)
+    {
+        if (!$request->isXmlHttpRequest()) {
+            return new JsonResponse(['message' => 'You are not able to access this resource!'], 400);
+        }
+
+        $em = $this->get('doctrine.orm.entity_manager');
+
+        $voter = $em->getRepository('AppBundle:User')->findOneBy(['inn' => $inn]);
+
+        return ['voter' => $voter];
+    }
+
     /**
      * Creates a new User entity.
      *
@@ -61,11 +89,12 @@ class UserController extends Controller
     public function createAction(Request $request)
     {
         $entity = new CreateUserModel();
-
         $form = $this->createCreateForm($entity);
+
         $form->handleRequest($request);
 
-        $errors = $this->get('validator')->validate($entity->getUser());
+        $errors = $this->get('validator')->validate($entity->getUser(), null, ['admin_user_post']);
+        $errors->addAll($this->get('validator')->validate($entity->getLocation(), null, ['admin_user_post']));
 
         if ($form->isValid()
             && $form->get('user')->isValid()
@@ -74,8 +103,13 @@ class UserController extends Controller
         ) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity->getLocation());
-            $entity->getUser()->setLocation($entity->getLocation());
+            $entity->getUser()->addLocation($entity->getLocation());
             $entity->getUser()->setAddedByAdmin($this->getUser());
+            if ($entity->getUser()->getBirthday() === null) {
+                $entity->getUser()->setBirthday(
+                    $this->getBirthDayFromInn($entity->getUser()->getInn())->format('Y-m-d')
+                );
+            }
             $em->persist($entity->getUser());
             $entity->getLocation()->setUser($entity->getUser());
             $em->flush();
@@ -89,6 +123,34 @@ class UserController extends Controller
             'form' => $form->createView(),
             'errors' => $errors,
         );
+    }
+
+    /**
+     * @Route("/find", name="admin_user_find")
+     * @Template()
+     */
+    public function findAction(Request $request)
+    {
+        $form = $this->createFormBuilder()
+            ->add('inn', null)
+            ->add("Пошук", SubmitType::class)
+            ->getForm();
+
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            $em = $this->getDoctrine()->getManager();
+            $user = $em->getRepository(User::class)->findOneBy(['inn' => $data['inn']]);
+
+            if ($user) {
+                return $this->redirectToRoute('admin_users_show', ['id' => $user->getId()]);
+            } else {
+               return $this->redirectToRoute('admin_users_new');
+            }
+        }
+        return [
+            'form' => $form->createView()
+        ];
     }
 
     /**
@@ -106,47 +168,49 @@ class UserController extends Controller
         return array(
             'entity' => $entity,
             'form'   => $form->createView(),
+            'errors' => null
         );
     }
 
     /**
-     * Finds and displays a User entity.
-     * @param Request $request
-     * @return array
-     * 
      * @Route("/{id}", name="admin_users_show")
      * @Method("GET")
      * @Template()
      */
-    public function showAction($id, Request $request)
+    public function showAction(User $user, Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
-        /** @var User $entity */
-        $entity = $em->getRepository('AppBundle:User')->findOneBy(['id' => $id]);
-
-        if (!$entity) {
-            $this->addFlash('danger', 'No user was found for this id.');
-            return $this->redirectToRoute('admin_users');
-        }
-
-        if (!$entity->getLocation()) {
+        if (!$user->getCurrentLocation()) {
             $this->addFlash('danger', 'User must have location.');
             return $this->redirectToRoute('admin_users');
         }
 
-        if ($entity->getLocation() && !$entity->getLocation()->getCity()) {
+        if ($user->getCurrentLocation() && !$user->getCurrentLocation()->getCity()) {
             $this->addFlash('danger', 'User must have city in location.');
             return $this->redirectToRoute('admin_users');
         }
 
-        $deleteForm = $this->createDeleteForm($id);
+        $deleteForm = $this->createDeleteForm($user->getId());
 
-        $em    = $this->get('doctrine.orm.entity_manager');
-        $dql   = "SELECT a FROM AppBundle:Project a LEFT JOIN a.voteSetting vs LEFT JOIN vs.location l WHERE l.city = :city ORDER BY a.id DESC";
+        /** @var VoteSettings[] $voteSettings */
+        $voteSettings = $this->getDoctrine()->getRepository('AppBundle:VoteSettings')->getVoteSettingByUserCity($user);
 
-        $query = $em->createQuery($dql);
-        $query->setParameter('city', $entity->getLocation()->getCity());
+        $balanceVotes = [];
+        foreach ($voteSettings as $voteSetting) {
+            $limitVoteSetting = $voteSetting->getVoteLimits();
+
+            $balanceVotes[]= [$voteSetting,
+                'balance' => $limitVoteSetting - $this->getDoctrine()->getRepository(User::class)->getUserVotesBySettingVote($voteSetting, $user)];
+        }
+
+        $query = $em->getRepository(Project::class)
+            ->createQueryBuilder('p')
+            ->join('p.likedUsers', 'u')
+            ->andWhere('u.id = :user')
+            ->setParameter('user', $user)
+            ->orderBy('p.id', 'DESC')
+        ;
 
         $paginator  = $this->get('knp_paginator');
         $entitiesPagination = $paginator->paginate(
@@ -155,11 +219,12 @@ class UserController extends Controller
             70
         );
 
-        return array(
-            'entity'      => $entity,
+        return [
+            'entity'      => $user,
             'delete_form' => $deleteForm->createView(),
-            'pagination' => $entitiesPagination            
-        );
+            'pagination' => $entitiesPagination,
+            'balanceVotes' => $balanceVotes
+        ];
     }
 
     /**
@@ -183,7 +248,7 @@ class UserController extends Controller
 
         $entityUserModel = new CreateUserModel();
         $entityUserModel->setUser($entity);
-        $entityUserModel->setLocation($entity->getLocation());
+        $entityUserModel->setLocation($entity->getCurrentLocation());
         
         $editForm = $this->createEditForm($entityUserModel);
         $deleteForm = $this->createDeleteForm($id);
@@ -209,44 +274,49 @@ class UserController extends Controller
      * @Route("/{id}", name="admin_users_update")
      * @Method("PUT")
      * @Template("AdminBundle:User:edit.html.twig")
+     *
+     * @param User $user
+     * @param Request $request
+     *
+     * @return array|RedirectResponse
      */
-    public function updateAction(Request $request, $id)
+    public function updateAction(User $user, Request $request)
     {
+        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN', $user, 'You cannot edit this item.');
+
         $em = $this->getDoctrine()->getManager();
 
-        /** @var User $entity */
-        $entity = $em->getRepository('AppBundle:User')->findOneBy(['id' => $id]);
-
-        if (!$entity) {
-            $this->addFlash('danger', 'No user was found for this id.');
-            return $this->redirectToRoute('admin_users');
-        }
-
         $entityUserModel = new CreateUserModel();
-        $entityUserModel->setUser($entity);
-        $entityUserModel->setLocation($entity->getLocation());
+        $entityUserModel->setUser($user);
+        $entityUserModel->setLocation($user->getCurrentLocation());
 
-        $deleteForm = $this->createDeleteForm($id);
+        $deleteForm = $this->createDeleteForm($user->getId());
         $editForm = $this->createEditForm($entityUserModel);
 
         $editForm->handleRequest($request);
 
-        if ($editForm->isValid()) {
+        $errors = $this->get('validator')->validate($entityUserModel->getUser(), null, ['admin_user_put']);
+
+        if ($editForm->isValid() && count($errors) === 0) {
             $em->flush();
 
-            return $this->redirect($this->generateUrl('admin_users_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('admin_users_edit', array('id' => $user->getId())));
         }
 
         return array(
-            'entity'      => $entity,
+            'entity'      => $user,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
+            'errors' => $errors
         );
     }
 
     /**
      * @Route("/projects/{id_project}/like/user/{id_user}", name="admin_projects_like", requirements={"id_project" = "\d+", "id_user" = "\d+"})
      * @Template()
+     *
+     * @deprecated
+     *
      * @Method({"GET"})
      * @ParamConverter("project", class="AppBundle:Project", options={"mapping": {"id_project": "id"}})
      * @ParamConverter("user", class="AppBundle:User", options={"mapping": {"id_user": "id"}})
@@ -275,21 +345,22 @@ class UserController extends Controller
      *
      * @Route("/{id}", name="admin_users_delete")
      * @Method("DELETE")
+
+     * @param User $user
+     * @param Request $request
+     *
+     * @return RedirectResponse
      */
-    public function deleteAction(Request $request, $id)
+    public function deleteAction(User $user, Request $request)
     {
-        $form = $this->createDeleteForm($id);
+        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN', $user, 'You cannot delete this item.');
+
+        $form = $this->createDeleteForm($user->getId());
         $form->handleRequest($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('AppBundle:User')->find($id);
-
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find User entity.');
-            }
-
-            $em->remove($entity);
+            $em->remove($user);
             $em->flush();
         }
 
@@ -324,7 +395,6 @@ class UserController extends Controller
     {
         $form = $this->createForm(CreateUser::class, $entity, array(
             'validation_groups' => ['admin_user_put'],
-//            'cascade_validation' => true,
             'action' => $this->generateUrl('admin_users_update', array('id' => $entity->getUser()->getId())),
             'method' => 'PUT',
         ));
@@ -344,9 +414,6 @@ class UserController extends Controller
     private function createCreateForm(CreateUserModel $entity)
     {
         $form = $this->createForm(CreateUser::class, $entity, array(
-            'validation_groups' => ['admin_user_post'],
-            'constraints' => new \Symfony\Component\Validator\Constraints\Valid(),
-//            'cascade_validation' => true,
             'action' => $this->generateUrl('admin_users_create'),
             'method' => 'POST',
         ));
@@ -362,5 +429,15 @@ class UserController extends Controller
     private function getProjectApplication()
     {
         return $this->get('app.application.project');
+    }
+
+    /**
+     * @return \DateTime
+     */
+    private function getBirthDayFromInn(string $inn): \DateTime
+    {
+        $day = substr($inn, 0, 5);
+
+        return (new \DateTime('1899-12-31'))->modify("+$day day");
     }
 }

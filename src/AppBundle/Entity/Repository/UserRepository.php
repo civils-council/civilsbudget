@@ -17,6 +17,8 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 class UserRepository extends EntityRepository implements UserRepositoryInterface
 {
     /**
+     * @deprecated
+     *
      * {@inheritdoc}
      */
     public function findCountVotedUsers(
@@ -57,6 +59,8 @@ class UserRepository extends EntityRepository implements UserRepositoryInterface
     }
 
     /**
+     * @deprecated
+     *
      * {@inheritdoc}
      */
     public function findCountAdminVotedUsers(
@@ -76,7 +80,6 @@ class UserRepository extends EntityRepository implements UserRepositoryInterface
                 ->leftJoin('vs.location', 'c')
                 ->andWhere('c.city = :city')
                 ->setParameter('city', $city);
-
         }
 
         if ($project = $parameterBag->get(ProjectController::QUERY_PROJECT_ID)) {
@@ -97,6 +100,8 @@ class UserRepository extends EntityRepository implements UserRepositoryInterface
     }
 
     /**
+     * @deprecated
+     *
      * {@inheritdoc}
      */
     public function findCountAdminUsers(
@@ -121,6 +126,8 @@ class UserRepository extends EntityRepository implements UserRepositoryInterface
     }
 
     /**
+     * @deprecated
+     *
      * {@inheritdoc}
      */
     public function findCountAuthUsers(

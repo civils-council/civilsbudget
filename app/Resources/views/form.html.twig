@@ -37,3 +37,48 @@
                 class="{{ block('button_size') }}">{{ block('button_label') }}</button>
     </div>
 {% endblock %}
+
+{% block collection_widget %}
+    {% spaceless %}
+        <div class="form-collection">
+            <div class="form-collection-elements">
+                {% for subform in form %}
+                    <div class="form-collection-element">
+                        {% if allow_delete %}
+                            <div class="row">
+                                <div class="col-xs-10">
+                                    {{ form_widget(subform) }}
+                                </div>
+                                <div class="col-xs-2">
+                                    <a class="form-collection-delete btn btn-small btn-danger">Delete</a>
+                                </div>
+                            </div>
+                        {% else %}
+                            {{ form_widget(subform) }}
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+            {% if prototype is defined %}
+                {% set prototype %}
+                    <div class="form-collection-element">
+                        <div class="row">
+                            <div class="col-xs-10">
+                                {{ form_widget(prototype) }}
+                            </div>
+                            <div class="col-xs-2">
+                                <a class="form-collection-delete btn btn-small btn-danger">Delete</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endset %}
+                <div class="form-collection-footer">
+                    {% if label is empty %}
+                        {% set label = name|humanize %}
+                    {% endif %}
+                    <a data-prototype="{{ prototype|e }}" class="form-collection-add btn btn-small btn-success">New {{ label }}</a>
+                </div>
+            {% endif %}
+        </div>
+    {% endspaceless %}
+{% endblock %}

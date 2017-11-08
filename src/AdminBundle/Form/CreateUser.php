@@ -18,8 +18,8 @@ class CreateUser extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('user', UserType::class);
-        $builder->add('location', LocationType::class);
+        $builder->add('user', UserType::class, ['label' => false]);
+        $builder->add('location', LocationType::class, ['label' => false]);
     }
 
     /**
