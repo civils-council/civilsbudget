@@ -21,13 +21,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints as AssertBridge;
  *     errorPath="not valid",
  *     message="Цей iдентифiкацiйний код вже iснує."
  * )
- *
- * @AssertBridge\UniqueEntity(
- *     groups={"admin_user_post", "admin_user_put"},
- *     fields="numberBlank",
- *     errorPath="not valid",
- *     message="Цей номер бланку вже iснує."
- * )
  */
 class User extends AbstractUser implements UserInterface, \JsonSerializable
 {
@@ -110,12 +103,12 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     protected $email;
 
     /**
-     * @var Location
+     * @var Location[] | ArrayCollection
      *
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Location", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Location", mappedBy="user", cascade={"persist", "remove"})
      * @ORM\JoinColumn(onDelete="CASCADE")
      */
-    private $location;
+    private $locations;
 
     /**
      * @var Project[] ArrayCollection
@@ -193,19 +186,6 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     private $isDataPublic;
 
     /**
-     * @deprecated
-     *
-     * @var string
-     *
-     * @Assert\NotBlank(
-     *     groups={"admin_user_post"},
-     *     message="Номер бланку не може бути пустим"
-     * )
-     * @ORM\Column(name="number_blank", type="string", nullable=true)
-     */
-    private $numberBlank;
-
-    /**
      * @var UserProject[] ArrayCollection
      *
      * @ORM\OneToMany(
@@ -225,6 +205,7 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
         $this->projects = new ArrayCollection;
         $this->likedProjects = new ArrayCollection;
         $this->userProjects = new ArrayCollection;
+        $this->locations = new ArrayCollection;
     }
 
     /**
@@ -400,27 +381,37 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     /*-------------------------------relations methods----------------------------------------------------------------*/
 
     /**
-     * Set location
+     * Get Current User Location
+     *
+     * @return Location
+     */
+    public function getCurrentLocation()
+    {
+        return $this->getLocations()->last();
+    }
+
+    /**
+     * @return Location[]|Collection
+     */
+    public function getLocations(): Collection
+    {
+        return $this->locations;
+    }
+
+    /**
+     * Add Location to User
      *
      * @param Location $location
      *
      * @return User
      */
-    public function setLocation(Location $location = null): User
+    public function addLocation(Location $location): User
     {
-        $this->location = $location;
+        if (!$this->getLocations()->contains($location)) {
+            $this->getLocations()->add($location);
+        }
 
         return $this;
-    }
-
-    /**
-     * Get location
-     *
-     * @return Location
-     */
-    public function getLocation()
-    {
-        return $this->location;
     }
 
     /**
@@ -758,32 +749,6 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     public function getAddedByAdmin()
     {
         return $this->addedByAdmin;
-    }
-
-    /**
-     * Set numberBlank
-     * @deprecated
-
-     * @param string $numberBlank
-     *
-     * @return User
-     */
-    public function setNumberBlank($numberBlank)
-    {
-        $this->numberBlank = $numberBlank;
-
-        return $this;
-    }
-
-    /**
-     * Get numberBlank
-     * @deprecated
-     *
-     * @return string
-     */
-    public function getNumberBlank()
-    {
-        return $this->numberBlank;
     }
 
     /**

@@ -53,10 +53,10 @@ class VoteSettingsRepository extends EntityRepository implements VoteSettingInte
             ->from('AppBundle:VoteSettings', 'vs')
             ->leftJoin('vs.location', 'l');
 
-        if ($user->getLocation() && $user->getLocation()->getCity()) {
+        if ($user->getCurrentLocation() && $user->getCurrentLocation()->getCity()) {
             $qb
                 ->andWhere('l.city LIKE :city')
-                ->setParameter('city', $user->getLocation()->getCity());
+                ->setParameter('city', $user->getCurrentLocation()->getCity());
         }
 
         $qb

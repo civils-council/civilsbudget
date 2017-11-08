@@ -100,6 +100,8 @@ class UserRepository extends EntityRepository implements UserRepositoryInterface
     }
 
     /**
+     * @deprecated
+     *
      * {@inheritdoc}
      */
     public function findCountAdminUsers(
@@ -124,6 +126,8 @@ class UserRepository extends EntityRepository implements UserRepositoryInterface
     }
 
     /**
+     * @deprecated
+     *
      * {@inheritdoc}
      */
     public function findCountAuthUsers(

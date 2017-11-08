@@ -20,7 +20,6 @@ class UserType extends AbstractType
     {
         $builder
             ->add('inn', TextType::class, ['label' => 'Идентифiкацiйний код'])
-            ->add('numberBlank', null, ['label' => 'Номер бланка'])
             ->add('lastName', TextType::class, ['label' => 'Прізвище'])
             ->add('firstName', TextType::class, ['label' => 'Им\'я'])
             ->add('middleName', TextType::class, ['label' => 'По батьковi'])
