@@ -86,7 +86,7 @@ class UserManager
             )
         ) {
             $this->em->persist($location);
-            $user->setLocation($location);
+            $user->addLocation($location);
             $location->setUser($user);
             $this->em->flush();
         }
