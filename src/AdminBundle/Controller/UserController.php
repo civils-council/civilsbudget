@@ -103,7 +103,7 @@ class UserController extends Controller
         ) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity->getLocation());
-            $entity->getUser()->setLocation($entity->getLocation());
+            $entity->getUser()->addLocation($entity->getLocation());
             $entity->getUser()->setAddedByAdmin($this->getUser());
             if ($entity->getUser()->getBirthday() === null) {
                 $entity->getUser()->setBirthday(
@@ -181,12 +181,12 @@ class UserController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        if (!$user->getLocation()) {
+        if (!$user->getCurrentLocation()) {
             $this->addFlash('danger', 'User must have location.');
             return $this->redirectToRoute('admin_users');
         }
 
-        if ($user->getLocation() && !$user->getLocation()->getCity()) {
+        if ($user->getCurrentLocation() && !$user->getCurrentLocation()->getCity()) {
             $this->addFlash('danger', 'User must have city in location.');
             return $this->redirectToRoute('admin_users');
         }
@@ -248,7 +248,7 @@ class UserController extends Controller
 
         $entityUserModel = new CreateUserModel();
         $entityUserModel->setUser($entity);
-        $entityUserModel->setLocation($entity->getLocation());
+        $entityUserModel->setLocation($entity->getCurrentLocation());
         
         $editForm = $this->createEditForm($entityUserModel);
         $deleteForm = $this->createDeleteForm($id);
@@ -288,7 +288,7 @@ class UserController extends Controller
 
         $entityUserModel = new CreateUserModel();
         $entityUserModel->setUser($user);
-        $entityUserModel->setLocation($user->getLocation());
+        $entityUserModel->setLocation($user->getCurrentLocation());
 
         $deleteForm = $this->createDeleteForm($user->getId());
         $editForm = $this->createEditForm($entityUserModel);

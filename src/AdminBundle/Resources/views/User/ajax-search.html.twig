@@ -1,6 +1,6 @@
 {% block content %}
     {% if voter %}
-        Виборця знайдено: <a href="{{ path('admin_users_show', {id: voter.id}) }}" class="btn btn-info">Віддати голос за: {{ voter.fullName }}, м.{{ voter.location.city }}</a><br><br>
+        Виборця знайдено: <a href="{{ path('admin_users_show', {id: voter.id}) }}" class="btn btn-info">Віддати голос за: {{ voter.fullName }}, м.{{ voter.currentLocation.city }}</a><br><br>
     {% else %}
         <p><i>Виборця не знайдено</i></p>
     {% endif %}

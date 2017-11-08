@@ -23,11 +23,18 @@ class AdminController extends Controller
         /** @var Admin $admin */
         $admin = $this->getUser();
         $request->query->set(ProjectController::QUERY_CITY, $admin->getCity()->getCity());
-        $countAdminVoted = $em->getRepository(User::class)->findCountAdminVotedUsers($request->query);
-        $countVoted = $em->getRepository(User::class)->findCountVotedUsers($request->query);
-        $countAdminUsers = $em->getRepository(User::class)->findCountAdminUsers($request->query);
-        $countAuthUsers = $em->getRepository(User::class)->findCountAuthUsers($request->query);
-        
+
+        //        $countAdminVoted = $em->getRepository(User::class)->findCountAdminVotedUsers($request->query);
+//        $countVoted = $em->getRepository(User::class)->findCountVotedUsers($request->query);
+//        $countAdminUsers = $em->getRepository(User::class)->findCountAdminUsers($request->query);
+//        $countAuthUsers = $em->getRepository(User::class)->findCountAuthUsers($request->query);
+
+        // TODO: fix it if it is necessary
+        $countAdminVoted = 0;
+        $countVoted = 0;
+        $countAdminUsers =  0;
+        $countAuthUsers = 0;
+
         return [
             'countVoted' => $countVoted,
             'countAdminVoted' => $countAdminVoted,

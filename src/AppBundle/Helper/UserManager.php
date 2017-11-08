@@ -65,7 +65,7 @@ class UserManager
             $this->em->persist($location);
 
             $user = (new User)
-                ->setLocation($location)
+                ->addLocation($location)
                 ->setClid($clId)
                 ->setSex($sex)
                 ->setMiddleName($middleName)
