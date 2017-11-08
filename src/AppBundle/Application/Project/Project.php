@@ -51,8 +51,10 @@ class Project implements ProjectInterface
      */
     public function crateUserLike(
         $user,
-        ProjectEntity $project
-    ) {
+        ProjectEntity $project,
+        ?Admin $addedBy = null,
+        ?string $paperVoteBlankNumber = null
+    ): string {
         if (!$user instanceof User) {
             throw new AuthException('Ви не маєте доступу до голосуваня за проект.', 401);
         }
@@ -100,7 +102,7 @@ class Project implements ProjectInterface
             );
         }
         
-        return $this->getUserInterface()->postVote($project, $user);
+        return $this->getUserInterface()->postVote($project, $user, $addedBy, $paperVoteBlankNumber);
     }
     
     /**

@@ -28,6 +28,11 @@ class ProjectController extends Controller
      * @Route("/votings/{id}/projects", name="votings_projects_list")
      * @Template()
      * @Method({"GET"})
+     *
+     * @param VoteSettings $voteSetting
+     * @param Request $request
+     *
+     * @return array
      */
     public function listAction(VoteSettings $voteSetting, Request $request)
     {
@@ -35,14 +40,16 @@ class ProjectController extends Controller
         $parameterBag->add(['voteSetting' => $voteSetting]);
         $em = $this->getDoctrine()->getManager();
         $projects = $em->getRepository(Project::class)->getProjectShow($parameterBag);
-        $countAdminVoted = $em->getRepository(User::class)->findCountAdminVotedUsers($parameterBag);
-        $countVoted = $em->getRepository(User::class)->findCountVotedUsers($parameterBag);
+        $countAdminVotes = $em->getRepository(VoteSettings::class)->countAdminVotesPerVoting($voteSetting);
+        $countTotalVotes = $em->getRepository(VoteSettings::class)->countVotesPerVoting($voteSetting);
+        $countVoted = $em->getRepository(VoteSettings::class)->countVotedUsersPerVoting($voteSetting);
 
         return [
             'debug' => true,
             'projects' => $projects,
+            'countTotalVotes' => $countTotalVotes,
+            'countAdminVotes' => $countAdminVotes,
             'countVoted' => $countVoted,
-            'countAdminVoted' => $countAdminVoted,
             'voteSetting' => $voteSetting
         ];
     }
@@ -51,6 +58,10 @@ class ProjectController extends Controller
      * @Route("/statistics", name="projects_statistics")
      * @Template()
      * @Method({"GET"})
+     *
+     * @param Request $request
+     *
+     * @return array
      */
     public function statisticsAction(Request $request)
     {
@@ -67,26 +78,21 @@ class ProjectController extends Controller
      * @Route("/projects/{id}", name="projects_show", requirements={"id" = "\d+"})
      * @Template()
      * @Method({"GET"})
+     *
+     * @param Project $project
+     * @param Request $request
+     *
+     * @return array
      */
-    public function showProjectAction($id, Request $request)
+    public function showProjectAction(Project $project, Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $project = $em->getRepository(Project::class)->getOneProjectShow($id);
-        if (!$project) {
-            throw new NotFoundHttpException('This project not found in our source');
-        }
-        if (empty($this->getUser())) {
-            $sessionSet = $this->get('app.session')->setSession($project[0]->getId());
-        }
-        $parameterBag = $request->query;
-        $parameterBag->set(ProjectController::QUERY_PROJECT_ID, $id);
-        $countAdminVoted = $em->getRepository(User::class)->findCountAdminVotedUsers($parameterBag);
-        $countVoted = $em->getRepository(User::class)->findCountVotedUsers($parameterBag);
-        $request->attributes->set(ProjectController::QUERY_CITY, $project[0]->getCity());
-        $voteSetting = $em->getRepository(VoteSettings::class)->getProjectVoteSettingShow($request);
+        $countAdminVoted = $em->getRepository(Project::class)->countAdminVotesPerProject($project);
+        $countVoted = $em->getRepository(Project::class)->countVotesPerProject($project);
+        $request->attributes->set(ProjectController::QUERY_CITY, $project->getCity());
         return [
             'project' => $project,
-            'voteSetting' => $voteSetting,
+            'voteSetting' => $project->getVoteSetting(),
             'countVoted' => $countVoted,
             'countAdminVoted' => $countAdminVoted,
         ];

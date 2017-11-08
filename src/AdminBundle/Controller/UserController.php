@@ -314,6 +314,9 @@ class UserController extends Controller
     /**
      * @Route("/projects/{id_project}/like/user/{id_user}", name="admin_projects_like", requirements={"id_project" = "\d+", "id_user" = "\d+"})
      * @Template()
+     *
+     * @deprecated
+     *
      * @Method({"GET"})
      * @ParamConverter("project", class="AppBundle:Project", options={"mapping": {"id_project": "id"}})
      * @ParamConverter("user", class="AppBundle:User", options={"mapping": {"id_user": "id"}})

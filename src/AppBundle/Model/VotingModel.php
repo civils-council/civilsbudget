@@ -14,8 +14,6 @@ use AppBundle\Exception\NotFoundException;
 use AppBundle\Helper\UrlGeneratorHelper;
 use AppBundle\Security\Authenticator;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Serializer\Serializer;
 
 class VotingModel
@@ -72,7 +70,7 @@ class VotingModel
     public function getVotingList(): array
     {
         $voteSettings = $this->voteSettingsRepository->findBy([], ['dateFrom' => 'DESC']);
-        $listVotedUserCount =  $this->voteSettingsRepository->getVotedUsersCountPerVoting();
+        $listVotedUserCount =  $this->voteSettingsRepository->listCountVotedUsersPerVoting();
 
         $votingList = [];
         /** @var VoteSettings $voteSetting */

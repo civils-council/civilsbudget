@@ -3,10 +3,12 @@
 namespace AppBundle\Domain\User;
 
 use AppBundle\AWS\ServiceSES;
+use AppBundle\Entity\Admin;
 use AppBundle\Entity\Interfaces\UserRepositoryInterface;
 use AppBundle\Entity\Interfaces\VoteSettingInterface;
 use AppBundle\Entity\Project;
 use \AppBundle\Entity\User as UserEntity;
+use AppBundle\Entity\UserProject;
 use AppBundle\Entity\VoteSettings;
 
 class User implements UserInterface
@@ -60,10 +62,17 @@ class User implements UserInterface
      */
     public function postVote(
         Project $project,
-        UserEntity $user
-    ) {
+        UserEntity $user,
+        ?Admin $addedBy = null,
+        ?string $paperVoteBlankNumber = null
+    ): string {
         $user->setCountVotes(($user->getCountVotes()) ? ($user->getCountVotes() + 1) : 1);
-        $user->addLikedProjects($project);
+
+        $user->addUserProjects(
+            (new UserProject($user, $project))
+                ->setAddedBy($addedBy)
+                ->setBlankNumber($paperVoteBlankNumber)
+        );
 
         $this->getUserRepositoryInterface()->flushEntity();
 

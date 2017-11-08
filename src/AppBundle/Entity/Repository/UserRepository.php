@@ -17,6 +17,8 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 class UserRepository extends EntityRepository implements UserRepositoryInterface
 {
     /**
+     * @deprecated
+     *
      * {@inheritdoc}
      */
     public function findCountVotedUsers(
@@ -57,6 +59,8 @@ class UserRepository extends EntityRepository implements UserRepositoryInterface
     }
 
     /**
+     * @deprecated
+     *
      * {@inheritdoc}
      */
     public function findCountAdminVotedUsers(

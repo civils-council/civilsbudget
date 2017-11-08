@@ -34,12 +34,9 @@
         </tbody>
     </table>
 
+    <br><a href="{{ path('admin_dashboard') }}" class="btn btn-success">Повернутися до адмін панелі</a><br><br>
+
     <ul class="record_actions">
-    <li>
-        <a href="{{ path('admin_users') }}">
-            Повернутися до списку виборців
-        </a>
-    </li>
     {% if is_granted('ROLE_SUPER_ADMIN') %}
         <li>
             <a href="{{ path('admin_users_edit', { 'id': entity.id }) }}">
@@ -55,18 +52,33 @@
         </div>
         {{ form_end(delete_form) }}
     {% endif %}
-
     </ul>
 
-    {% for vote in balanceVotes %}
-        <ul>
-            <li>
-                <a href="{{ vote['balance'] > 0 ? path('admin_user_new_paper_vote', {'user_id': entity.id, 'voting_id': vote[0].id}) : '#' }}">
-                    {{ vote[0].title ~ ", залишилося " ~ vote['balance'] ~ " голосів" }}
-                </a>
-            </li>
-        </ul>
-    {% endfor %}
+    <br>
+    <div class="count">
+        Доступні голосування для виборця
+    </div>
+    <table class="table table-striped">
+        <tr>
+            <th>{{ 'Назва' }}</th>
+            <th>{{ 'Кількість доступних голосів' }}</th>
+            <th>{{ 'Віддати голос' }}</th>
+        </tr>
+        {% for vote in balanceVotes %}
+            <tr>
+                <td>
+                    {{ vote[0].title }}
+                </td>
+                <td>
+                    {{ "залишилося " ~ vote['balance'] ~ " гол." }}
+                </td>
+                <td><a href="{{ vote['balance'] > 0 ? path('admin_user_new_paper_vote', {'user_id': entity.id, 'voting_id': vote[0].id}) }}" class="btn btn-info btn-sm">Проголосувати</a></td>
+            </tr>
+        {% endfor %}
+    </table>
+    <br>
+
+
 
     <div class="count">
         Список проектів, за які віддав голос виборець: {{ pagination.getTotalItemCount }}
@@ -74,7 +86,9 @@
     <table class="table table-striped">
         <tr>
             {# sorting of properties based on query components #}
-            <th>{{ knp_pagination_sortable(pagination, 'Номер в системі', 'a.id') }}</th>
+            {% if is_granted('ROLE_SUPER_ADMIN') %}
+                <th>{{ knp_pagination_sortable(pagination, 'Номер в системі', 'a.id') }}</th>
+            {% endif %}
             <th{% if pagination.isSorted('a.title') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Назва проекту', 'a.title') }}</th>
             <th{% if pagination.isSorted('vs.title') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Голосування', 'vs.title') }}</th>
             <th>{{ knp_pagination_sortable(pagination, 'Створено', ['a.createAt']) }}</th>
@@ -83,7 +97,9 @@
         {# table body #}
         {% for article in pagination %}
             <tr {% if loop.index is odd %}class="color"{% endif %}>
-                <td>{{ article.id }}</td>
+                {% if is_granted('ROLE_SUPER_ADMIN') %}
+                    <td>{{ article.id }}</td>
+                {% endif %}
                 <td>{{ article.title }}</td>
                 {% if article.voteSetting %}<td>{{ article.voteSetting.title }}</td>{% endif %}
                 <td>{% if article.createAt %}{{ article.createAt|date('Y-m-d') }}{% endif %}</td>

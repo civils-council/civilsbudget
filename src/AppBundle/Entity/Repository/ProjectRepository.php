@@ -4,6 +4,7 @@ namespace AppBundle\Entity\Repository;
 
 use AppBundle\Controller\ProjectController;
 use AppBundle\Entity\Interfaces\ProjectRepositoryInterface;
+use AppBundle\Entity\Project;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\ParameterBag;
@@ -87,4 +88,40 @@ class ProjectRepository extends EntityRepository implements ProjectRepositoryInt
             ->getQuery()
             ->getSingleResult();
     }
+
+    /**
+     * @param Project $project
+     *
+     * @return int
+     */
+    public function countVotesPerProject(Project $project): int
+    {
+        return (int) $this->createQueryBuilder('p')
+            ->select('COUNT(u.id) as voted')
+            ->leftJoin('p.userProjects', 'up')
+            ->leftJoin('up.user', 'u')
+            ->where('p = :project')
+            ->setParameter('project', $project)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    /**
+     * @param Project $project
+     *
+     * @return int
+     */
+    public function countAdminVotesPerProject(Project $project): int
+    {
+        return (int) $this->createQueryBuilder('p')
+            ->select('COUNT(u.id) as voted')
+            ->leftJoin('p.userProjects', 'up')
+            ->leftJoin('up.user', 'u')
+            ->where('p = :project')
+            ->setParameter('project', $project)
+            ->andWhere('up.addedBy IS NOT NULL')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
 }

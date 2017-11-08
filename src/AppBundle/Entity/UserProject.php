@@ -75,11 +75,11 @@ class UserProject
     }
 
     /**
-     * @param Admin $addedBy
+     * @param Admin|null $addedBy
      *
      * @return UserProject
      */
-    public function setAddedBy(Admin $addedBy): UserProject
+    public function setAddedBy(?Admin $addedBy): UserProject
     {
         $this->addedBy = $addedBy;
 
@@ -95,11 +95,11 @@ class UserProject
     }
 
     /**
-     * @param string $blankNumber
+     * @param string|null $blankNumber
      *
      * @return UserProject
      */
-    public function setBlankNumber(string $blankNumber): UserProject
+    public function setBlankNumber(?string $blankNumber): UserProject
     {
         $this->blankNumber = $blankNumber;
 
