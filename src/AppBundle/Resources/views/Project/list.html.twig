@@ -48,14 +48,10 @@
                     </h1>
                     <div id="hp-voted">
                         <span class="voted-title">Вже підтримано проектів {% if voteSetting %} {{ voteSetting.location.city }} {% endif %}</span><br>
-                        {#{% set votes = 0 %}#}
-                        {#{% for project in projects %}#}
-                            {#{% set votes = votes + project['countLikes']|number_format(0, '.', ' ') %}#}
-                        {#{% endfor %}#}
-                        {% set digitsAllDigit = countVoted + countAdminVoted %}
-                        {% set digits = countVoted|split('') %}
-                        {% set digitsAdmin = countAdminVoted|split('') %}
-                        {% set digitsAll = digitsAllDigit|split('') %}
+                        {% set digits = (countTotalVotes-countAdminVotes)|split('') %}
+                        {% set digitsAdmin = countAdminVotes|split('') %}
+                        {% set digitsAll = countTotalVotes|split('') %}
+                        {% set digitsVoted = countVoted|split('') %}
                         <span class="voted-title">онлайн:</span>
                         <div class="counter">
                             {% for digit in digits %}
@@ -77,6 +73,16 @@
                         <span class="voted-title">всього:</span>
                         <div class="counter">
                             {% for digit in digitsAll %}
+                                <span class="digit">
+                                    <span title="{{ digit }}">{{ digit }}</span>
+                                </span>
+                            {% endfor %}
+                        </div>
+                        <br>
+                        <br>
+                        <span class="voted-title">Виборців віддало голоси:</span>
+                        <div class="counter">
+                            {% for digit in digitsVoted %}
                                 <span class="digit">
                                     <span title="{{ digit }}">{{ digit }}</span>
                                 </span>

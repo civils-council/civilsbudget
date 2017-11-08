@@ -60,6 +60,13 @@ doctrine:
         auto_generate_proxy_classes: "%kernel.debug%"
         naming_strategy: doctrine.orm.naming_strategy.underscore
         auto_mapping: true
+        dql:
+            datetime_functions:
+                FROM_UNIXTIME: DoctrineExtensions\Query\Mysql\FromUnixtime
+                DATE_FORMAT: DoctrineExtensions\Query\Mysql\DateFormat
+                YEAR: DoctrineExtensions\Query\Mysql\Year
+                MONTH: DoctrineExtensions\Query\Mysql\Month
+                DAY: DoctrineExtensions\Query\Mysql\Day
 
 # Swiftmailer Configuration
 swiftmailer:

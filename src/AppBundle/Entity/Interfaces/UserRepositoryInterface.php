@@ -21,6 +21,8 @@ interface UserRepositoryInterface
     );
 
     /**
+     * @deprecated
+     *
      * @param ParameterBag $parameterBag
      * @return integer
      */

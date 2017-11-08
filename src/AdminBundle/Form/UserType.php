@@ -2,8 +2,11 @@
 
 namespace AdminBundle\Form;
 
+use AppBundle\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -16,16 +19,20 @@ class UserType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('inn', null, array('label' => 'Идентифiкацiйний код'))
-            ->add('numberBlank', null, array('label' => 'Номер бланка'))
-            ->add('middleName', null, array('label' => 'Призвiще'))
-            ->add('firstName', null, array('label' => 'Им\'я'))
-            ->add('lastName', null, array('label' => 'По батьковi'))
-            ->add('birthday', null, array('label' => 'Дата Народження'))
-            ->add('sex', ChoiceType::class, array('label' => 'Gender',
-                'choices' => array('Чоловік' => 'M', 'Жінка' => 'F'), ))
-            ->add('phone')
-            ->add('email');
+            ->add('inn', TextType::class, ['label' => 'Идентифiкацiйний код'])
+            ->add('lastName', TextType::class, ['label' => 'Прізвище'])
+            ->add('firstName', TextType::class, ['label' => 'Им\'я'])
+            ->add('middleName', TextType::class, ['label' => 'По батьковi'])
+            ->add('birthday', TextType::class, [
+                'label' => 'Дата Народження',
+                'attr' => ['placeholder' => 'Формат: 1950-05-25, якщо є ІНН, Дата Народження буде вирахувано автоматично']
+            ])
+            ->add('sex', ChoiceType::class, [
+                'label' => 'Стать',
+                'choices' => ['Чоловік' => 'M', 'Жінка' => 'F'],
+            ]);
+//            ->add('phone', TextType::class, ['label' => 'Телефон'])
+//            ->add('email', EmailType::class, ['label' => 'E-mail'])
     }
 
     /**
@@ -34,9 +41,8 @@ class UserType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\User',
+            'data_class' => User::class,
             'csrf_protection' => false,
-//            'validation_groups' => ['admin_user_post']
         ));
     }
 

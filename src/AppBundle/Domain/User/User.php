@@ -3,11 +3,12 @@
 namespace AppBundle\Domain\User;
 
 use AppBundle\AWS\ServiceSES;
-use AppBundle\Entity\Interfaces\ProjectRepositoryInterface;
+use AppBundle\Entity\Admin;
 use AppBundle\Entity\Interfaces\UserRepositoryInterface;
 use AppBundle\Entity\Interfaces\VoteSettingInterface;
 use AppBundle\Entity\Project;
 use \AppBundle\Entity\User as UserEntity;
+use AppBundle\Entity\UserProject;
 use AppBundle\Entity\VoteSettings;
 
 class User implements UserInterface
@@ -61,14 +62,19 @@ class User implements UserInterface
      */
     public function postVote(
         Project $project,
-        UserEntity $user
-    ) {
+        UserEntity $user,
+        ?Admin $addedBy = null,
+        ?string $paperVoteBlankNumber = null
+    ): string {
         $user->setCountVotes(($user->getCountVotes()) ? ($user->getCountVotes() + 1) : 1);
-        $user->addLikedProjects($project);
-        $project->addLikedUser($user);
-        
-        $this->getUserRepositoryInterface()->flushEntity();
 
+        $user->addUserProjects(
+            (new UserProject($user, $project))
+                ->setAddedBy($addedBy)
+                ->setBlankNumber($paperVoteBlankNumber)
+        );
+
+        $this->getUserRepositoryInterface()->flushEntity();
 
         /** @var VoteSettings[] $voteSettings */
         $voteSettings = $this->getVoteSettingInterface()->getVoteSettingByUserCity($user);
@@ -78,7 +84,7 @@ class User implements UserInterface
         //TODO: Refactor code it duplicates in controller (user_count_votes)
         foreach ($voteSettings as $voteSetting) {
             if  ($voteSetting->getStatus() !== VoteSettings::STATUS_ACTIVE ||
-                $voteSetting->getLocation()->getCity() !== $user->getLocation()->getCity()
+                $voteSetting->getLocation()->getCity() !== $user->getCurrentLocation()->getCity()
             ) {
                 continue;
             }

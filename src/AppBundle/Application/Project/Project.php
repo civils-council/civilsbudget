@@ -51,8 +51,10 @@ class Project implements ProjectInterface
      */
     public function crateUserLike(
         $user,
-        ProjectEntity $project
-    ) {
+        ProjectEntity $project,
+        ?Admin $addedBy = null,
+        ?string $paperVoteBlankNumber = null
+    ): string {
         if (!$user instanceof User) {
             throw new AuthException('Ви не маєте доступу до голосуваня за проект.', 401);
         }
@@ -90,17 +92,17 @@ class Project implements ProjectInterface
             throw new ValidatorException('Ви вже підтримали цей проект.', 403);
         }
 
-        if (mb_strtolower($user->getLocation()->getCity()) 
+        if (mb_strtolower($user->getCurrentLocation()->getCity())
             != mb_strtolower($project->getVoteSetting()->getLocation()->getCity())
         ) {
             throw new ValidatorException(
                 'Цей проект не стосується міста в якому ви зареєстровані. Ваша реєстрація: м.'.
-                $user->getLocation()->getCity(),
+                $user->getCurrentLocation()->getCity(),
                 403
             );
         }
         
-        return $this->getUserInterface()->postVote($project, $user);
+        return $this->getUserInterface()->postVote($project, $user, $addedBy, $paperVoteBlankNumber);
     }
     
     /**

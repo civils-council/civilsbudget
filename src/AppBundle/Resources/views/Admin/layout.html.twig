@@ -10,10 +10,11 @@
             {#{% if app.user and is_granted('ROLE_USER') %}#}
             {#<a href="{{ path('projects_add') }}">Add Project User</a>#}
             {#{% endif %}#}
-            {% if app.user and is_granted('ROLE_ADMIN') %}
-            <a href="{{ path('admin_projects_add') }}">Add Project Admin</a>
-            {% endif %}
 
+            {#TODO: orginize it in better way #}
+            {#{% if app.user and is_granted('ROLE_ADMIN') %}#}
+            {#<a href="{{ path('admin_projects_add') }}">Add Project Admin</a>#}
+            {#{% endif %}#}
 
             <div class="header-controls">
                 {#<a href="#" class="lb-diagramm" title="Статистика"></a>#}
@@ -23,7 +24,6 @@
                     <a href="" class="lb-signin" data-toggle="modal" data-target="#login-modal" title="Увійти"></a>
                 {% endif %}
             </div>
-
         </div>
     </header>
 {% endblock header %}

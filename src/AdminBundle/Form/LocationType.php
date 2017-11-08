@@ -4,6 +4,7 @@ namespace AdminBundle\Form;
 
 use AppBundle\Entity\Location;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -16,8 +17,11 @@ class LocationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('address')
-            ->add('cityObject', null, array('attr' => array('placeholder' => 'Select city')));
+            ->add('address', TextType::class, ['label' => 'Адреса'])
+            ->add('cityObject', null, [
+                'label' => 'Місто',
+                'attr' => array('placeholder' => 'Оберіть місто')
+            ]);
     }
     
     /**
@@ -28,7 +32,6 @@ class LocationType extends AbstractType
         $resolver->setDefaults(array(
             'data_class' => Location::class,
             'csrf_protection' => false,
-            'validation_groups' => ['admin_user_post']
         ));
     }
 
