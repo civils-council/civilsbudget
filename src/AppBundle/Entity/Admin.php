@@ -15,9 +15,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class Admin extends AbstractUser implements UserInterface
 {
-    const ROLE_ADMIN = 'ROLE_ADMIN',
-        ROLE_REGIONAL_ADMIN = 'ROLE_ADMIN',
-        ROLE_SUPER_ADMIN = 'ROLE_ADMIN';
+    const ROLE_ADMIN = 'ROLE_ADMIN';
 
     use GedmoTrait;
 
