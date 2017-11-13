@@ -1,0 +1,49 @@
+{% extends '@App/layout.html.twig' %}
+
+{% block title %}Votes List{% endblock %}
+
+{% block content %}
+    <h1>Список відданих голосів за проекти</h1>
+
+    <div class="count">
+        Всього віддало голосів: {{ pagination.getTotalItemCount }}
+    </div>
+
+    <div class="navigation">
+        {{ knp_pagination_render(pagination) }}
+    </div>
+
+    <table class="table table-striped">
+        <tr>
+            <th>Проект</th>
+            <th>Виборець</th>
+            <th>ІНН</th>
+            <th {% if pagination.isSorted('up.blankNumber') %} class="sorted"{% endif %}>
+                {{ knp_pagination_sortable(pagination, 'Номер бланку', ['up.blankNumber']) }}
+            </th>
+            <th>Дані вніс(ла)</th>
+            <th{% if pagination.isSorted('up.createAt') %} class="sorted"{% endif %}>
+                {{ knp_pagination_sortable(pagination, 'Голос віддано', ['up.createAt']) }}
+            </th>
+        </tr>
+        {% for vote in pagination %}
+            <tr {% if loop.index is odd %}class="color"{% endif %}>
+                <td>{{ vote['title'] | truncate(50, true, '....') }}</td>
+                <td>{{ vote['lastName'] ~ ' ' ~ vote['firstName'] }}</td>
+                <td>{{ vote['inn'] }}</td>
+                <td>{{ vote['blankNumber'] }}</td>
+                <td>{{ (vote['adminLastName'] ~ ' ' ~ vote['adminFirstName']) | truncate(25, true, '....') }}</td>
+                <td>{{ vote['createAt'] | date('Y-m-d H:i:s') }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <div class="navigation">
+        {{ knp_pagination_render(pagination) }}
+    </div>
+
+    <br><a href="{{ path('admin_dashboard') }}" class="btn btn-success">Повернутися до адмін панелі</a><br><br>
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

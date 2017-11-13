@@ -8,6 +8,8 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class UserType extends AbstractType
@@ -18,8 +20,20 @@ class UserType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+            $user = $event->getData();
+            $form = $event->getForm();
+
+            if (!$user || null === $user->getId()) {
+                $form->add(
+                    'inn',
+                    TextType::class,
+                    ['label' => 'Идентифiкацiйний код', 'position' => 'first']
+                );
+            }
+        });
+
         $builder
-            ->add('inn', TextType::class, ['label' => 'Идентифiкацiйний код'])
             ->add('lastName', TextType::class, ['label' => 'Прізвище'])
             ->add('firstName', TextType::class, ['label' => 'Им\'я'])
             ->add('middleName', TextType::class, ['label' => 'По батьковi'])

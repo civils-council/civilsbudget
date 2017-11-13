@@ -37,7 +37,7 @@
     <br><a href="{{ path('admin_dashboard') }}" class="btn btn-success">Повернутися до адмін панелі</a><br><br>
 
     <ul class="record_actions">
-    {% if is_granted('ROLE_SUPER_ADMIN') %}
+    {% if is_granted('ROLE_REGIONAL_ADMIN') %}
         <li>
             <a href="{{ path('admin_users_edit', { 'id': entity.id }) }}">
                 Редагувати

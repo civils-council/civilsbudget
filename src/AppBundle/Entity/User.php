@@ -75,7 +75,10 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     /**
      * @var string
      *
-     * @Assert\NotBlank(groups={"admin_user_put"})
+     * @Assert\NotBlank(
+     *     groups={"admin_user_put"},
+     *     message="Дата народження не може бути пустою"
+     * )
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $birthday;
@@ -129,13 +132,12 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
      */
     private $clid;
 
-
     /**
      * @var string
      *
      * @ORM\Column(type="string", length=10, nullable=true, unique=true)
      * @Assert\Type(
-     *     groups={"admin_user_post", "admin_user_put"},
+     *     groups={"user_inn_numeric"},
      *     type="numeric",
      *     message="Не коректне значення Ідентифікаційного коду."
      * )
@@ -153,6 +155,8 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     private $inn;
 
     /**
+     * @deprecated
+     *
      * @var Project[]ArrayCollection
      *
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Project", inversedBy="likedUsers")
@@ -202,7 +206,6 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
      */
     public function __construct()
     {
-        $this->projects = new ArrayCollection;
         $this->likedProjects = new ArrayCollection;
         $this->userProjects = new ArrayCollection;
         $this->locations = new ArrayCollection;
@@ -614,6 +617,8 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     }
 
     /**
+     * @deprecated
+     *
      * @param Project $project
      *
      * @return User
@@ -628,6 +633,8 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     }
 
     /**
+     * @deprecated
+     *
      * Remove project
      *
      * @param Project $project
@@ -643,6 +650,8 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     }
 
     /**
+     * @deprecated
+     *
      * Get likedProjects
      *
      * @return Project[]|Collection
@@ -699,7 +708,6 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     {
         $this->isDataPublic = $isDataPublic;
     }
-
 
     /**
      * Get isSubscribe

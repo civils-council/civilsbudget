@@ -23,6 +23,7 @@ class AppKernel extends Kernel
             new AppBundle\AppBundle(),
             new AdminBundle\AdminBundle(),
             new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
+            new Ivory\OrderedFormBundle\IvoryOrderedFormBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

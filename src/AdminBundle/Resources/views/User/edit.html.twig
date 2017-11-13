@@ -5,14 +5,17 @@
 {% block content %}
     <h1>Редагування виборця</h1>
 
+    <div style="color: red">
+        {% for error in errors %}
+            <li>{{ error.message }}</li>
+        {% endfor %}
+    </div>
+
     {{ form(edit_form) }}
 
+    <br><a href="{{ path('admin_dashboard') }}" class="btn btn-success">Повернутися до адмін панелі</a><br><br>
+
     <ul class="record_actions">
-    <li>
-        <a href="{{ path('admin_users') }}">
-            повернутися до списку виборців
-        </a>
-    </li>
     {#<li>{{ form(delete_form) }}</li>#}
 
         {{ form_errors(delete_form) }}

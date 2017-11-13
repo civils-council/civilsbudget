@@ -1,0 +1,38 @@
+{% extends '@App/layout.html.twig' %}
+
+{% block title %}Votes List{% endblock %}
+
+{% block content %}
+    <h1>Список голосувань</h1>
+
+    <table class="table table-striped">
+        <tr>
+            <th>Id</th>
+            <th>Місто</th>
+            <th>Назва</th>
+            <th>Початок</th>
+            <th>Закінчення</th>
+            <th>Голосів</th>
+            <th>Статус</th>
+        </tr>
+
+        {# table body #}
+    {% for voting in votingList %}
+            <tr {% if loop.index is odd %}class="color"{% endif %}>
+                <td>{{ voting.id }}</td>
+                <td>{{ voting.location }}</td>
+                <td><a href="{{ path('admin_voted_list', { id: voting.id }) }}">{{ voting.title }}</a></td>
+                <td>{% if voting.dateFrom %}{{ voting.dateFrom|date('Y-m-d') }}{% endif %}</td>
+                <td>{% if voting.dateTo %}{{ voting.dateTo|date('Y-m-d') }}{% endif %}</td>
+                <td>{{ voting.voted }}</td>
+                <td>{{ voting.status }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <br><a href="{{ path('admin_dashboard') }}" class="btn btn-success">Повернутися до адмін панелі</a><br><br>
+
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}
