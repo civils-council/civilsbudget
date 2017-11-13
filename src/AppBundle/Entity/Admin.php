@@ -15,8 +15,10 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class Admin extends AbstractUser implements UserInterface
 {
-    const ROLE_ADMIN = 'ROLE_ADMIN';
-    
+    const ROLE_ADMIN = 'ROLE_ADMIN',
+        ROLE_REGIONAL_ADMIN = 'ROLE_ADMIN',
+        ROLE_SUPER_ADMIN = 'ROLE_ADMIN';
+
     use GedmoTrait;
 
     /**
@@ -90,7 +92,14 @@ class Admin extends AbstractUser implements UserInterface
      * @ORM\ManyToOne(targetEntity="City", inversedBy="admin")
      * @ORM\JoinColumn(name="city_id", nullable = false, referencedColumnName="id")
      */
-    private $city;    
+    private $city;
+
+    /**
+     * @var array
+     *
+     * @ORM\Column(type="simple_array", nullable=true)
+     */
+    private $roles = [];
 
     public function __construct()
     {
@@ -234,7 +243,19 @@ class Admin extends AbstractUser implements UserInterface
      */
     public function getRoles()
     {
-        return [self::ROLE_ADMIN];
+        return array_unique(array_merge($this->roles, [self::ROLE_ADMIN]));
+    }
+
+    /**
+     * @param array $roles
+     *
+     * @return Admin
+     */
+    public function setRoles(array $roles): Admin
+    {
+        $this->roles = $roles;
+
+        return $this;
     }
 
     /**

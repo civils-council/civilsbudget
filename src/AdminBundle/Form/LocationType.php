@@ -2,8 +2,11 @@
 
 namespace AdminBundle\Form;
 
+use AppBundle\Entity\City;
 use AppBundle\Entity\Location;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -18,7 +21,9 @@ class LocationType extends AbstractType
     {
         $builder
             ->add('address', TextType::class, ['label' => 'Адреса'])
-            ->add('cityObject', null, [
+            ->add('cityObject', EntityType::class, [
+                'class' => City::class,
+                'choices' => $options['cities'],
                 'label' => 'Місто',
                 'attr' => array('placeholder' => 'Оберіть місто')
             ]);
@@ -32,6 +37,7 @@ class LocationType extends AbstractType
         $resolver->setDefaults(array(
             'data_class' => Location::class,
             'csrf_protection' => false,
+            'cities' => null
         ));
     }
 

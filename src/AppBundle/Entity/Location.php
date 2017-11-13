@@ -13,6 +13,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Location
 {
+    use GedmoTrait;
+
     /**
      * @var integer
      *
@@ -84,10 +86,17 @@ class Location
     /**
      * @var User
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="location")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="locations")
      * @ORM\JoinColumn(name="user_id", nullable = true, referencedColumnName="id")
      */
     private $user;
+
+    /**
+     * @var Admin
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Admin")
+     */
+    private $addedByAdmin;
 
     /**
      * Get id
@@ -296,5 +305,17 @@ class Location
     public function getUser(): ?User
     {
         return $this->user;
+    }
+
+    /**
+     * @param Admin $admin
+     *
+     * @return Location
+     */
+    public function setAddedByAdmin(Admin $admin): Location
+    {
+        $this->addedByAdmin = $admin;
+
+        return $this;
     }
 }

@@ -81,12 +81,12 @@ class UserManager
         }
         if ($location &&
             (
-                $location->getCity() !== $user->getLocation()->getCity() ||
-                $location->getAddress() !== $user->getLocation()->getAddress()
+                $location->getCity() !== $user->getCurrentLocation()->getCity() ||
+                $location->getAddress() !== $user->getCurrentLocation()->getAddress()
             )
         ) {
             $this->em->persist($location);
-            $user->setLocation($location);
+            $user->addLocation($location);
             $location->setUser($user);
             $this->em->flush();
         }

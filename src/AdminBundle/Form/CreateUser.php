@@ -19,7 +19,7 @@ class CreateUser extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('user', UserType::class, ['label' => false]);
-        $builder->add('location', LocationType::class, ['label' => false]);
+        $builder->add('location', LocationType::class, ['label' => false, 'cities' => $options['cities']]);
     }
 
     /**
@@ -30,6 +30,7 @@ class CreateUser extends AbstractType
         $resolver->setDefaults(array(
             'data_class' => 'AdminBundle\Model\CreateUserModel',
             'csrf_protection' => false,
+            'cities' => null
         ));
     }
 

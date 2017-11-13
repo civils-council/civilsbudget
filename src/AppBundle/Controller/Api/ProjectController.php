@@ -18,6 +18,8 @@ class ProjectController extends Controller
     const SERVER_ERROR                    = 'Server Error';
     
     /**
+     * @deprecated
+     *
      * @Route("/api/projects", name="api_projects_list")
      * @Method({"GET"})
      */
@@ -56,8 +58,11 @@ class ProjectController extends Controller
     }
 
     /**
+     * @deprecated
+     *
      * @Route("/api/projects/{id}", name="api_projects_show", requirements={"id" = "\d+"})
      * @Method({"GET"})
+     *
      */
     public function showProjectAction(Request $request, Project $project)
     {
@@ -86,6 +91,8 @@ class ProjectController extends Controller
     }
 
     /**
+     * @deprecated
+     *
      * @Route("/api/projects/{id}/like", name="api_projects_like", requirements={"id" = "\d+"})
      * @Method({"GET", "POST"})
      * @ParamConverter("project", class="AppBundle:Project")
