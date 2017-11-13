@@ -1,0 +1,38 @@
+{% extends "@App/layout.html.twig" %}
+
+{% block title %}
+    Голосування
+{% endblock title %}
+
+{% block content %}
+    <h3>{{ voteSetting.location ~ ': ' ~ voteSetting.title }}</h3>
+    <h5>{{ 'Виборців віддало голоси: '~ countVoted ~
+        '. Проектів підтримало: ' ~ countTotalVotes  ~ ' (онлайн: ' ~
+        (countTotalVotes-countAdminVotes) ~ ', офлайн: ' ~  countAdminVotes ~ ')'}}</h5>
+<table class="table table-striped">
+    <tr>
+        <th>#</th>
+        <th>{{ knp_pagination_sortable(pagination, 'Назва', ['p.id']) }}</th>
+        <th>{{ 'Автор' }}</th>
+        <th>{{ 'Бюджет' }}</th>
+        <th>{{ knp_pagination_sortable(pagination, 'Онлайн голосів', ['selfVotes']) }}</th>
+        <th>{{ knp_pagination_sortable(pagination, 'Офлайн голосів', ['paperVotes']) }}</th>
+        <th>{{ knp_pagination_sortable(pagination, 'Всього голосів', ['totalVotes']) }}</th>
+    </tr>
+    {% for projectStat in pagination %}
+        <p></p>
+        <tr {% if loop.index is odd %}class="color"{% endif %}>
+            <td>{{ loop.index }}.</td>
+            <td><a href="{{ path('projects_show', {'id': projectStat['id']}) }}">{{ projectStat['title'] }}</a></td>
+            <td>{{ projectStat['lastName'] ~ ' ' ~ projectStat['firstName'] }}</td>
+            <td>{{ projectStat['charge']|number_format(0, '.')}}</td>
+            <td>{{ projectStat['selfVotes'] }}</td>
+            <td>{{ projectStat['paperVotes'] }}</td>
+            <td>{{ projectStat['totalVotes'] }}</td>
+        </tr>
+    {% endfor %}
+</table>
+{% endblock content %}
+
+{% block javascripts %}
+{% endblock %}
