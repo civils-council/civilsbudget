@@ -5,23 +5,40 @@
 {% endblock title %}
 
 {% block content %}
+    <div class="row">
     {% for voting in votings %}
+        {% if (loop.index-1) % 3 == 0 %}
+        </div>
+        <div class="row">
+        {% endif %}
+
+        {% set status = '' %}
+        {% set aditional_img_style = '' %}
+        {% set aditional_style = '' %}
+        {% if voting.status == 'archived' %}
+            {% set status = '(архів)' %}
+
+            {% set aditional_img_style = 'filter: grayscale(100%) opacity(50%);' %}
+            {% set aditional_style = 'color:#999 !important;' %}
+        {% elseif voting.status == 'future' %}
+            {% set status = '(майбутнє)' %}
+            {% set aditional_img_style = 'filter: grayscale(60%) opacity(50%);' %}
+            {% set aditional_style = 'color:#777 !important;' %}
+        {% endif %}
+
         <div class="col-md-4  item-content">
             <div class="wrap-item">
-                <div class="card" id="project{{ voting.id }}">
+                <div class="card" id="project{{ voting.id }}"  style="{{ aditional_style }}">
                     <div class="card-image">
                         <a href="{{ path('votings_projects_list', { id: voting.id })  }}" class="img-lnk">
-                            <img src="{{ asset(voting.logo) }}" class="img-responsive" alt="" style="margin: 0 auto;">
+                            <img src="{{ asset(voting.logo) }}" class="img-responsive" alt="" style="margin: 0 auto; {{ aditional_img_style }} ">
                         </a>
                     </div><!-- card image -->
 
                     <div class="card-content">
-                        <h2 class="item-title"><strong>{{ voting.title|humanize }}
-                                {% if voting.status == 'archived' %}
-                                    (архів)
-                                {% elseif voting.status == 'future' %}
-                                    (майбутнє)
-                                {% endif %}
+                        <h2 class="item-title" style="{{ aditional_style }}">
+                            <strong>{{ voting.title|humanize }}
+                                {{  status }}
                             </strong>
                             <div>
                                 {{ voting.location|capitalize }}
@@ -40,9 +57,8 @@
                 </div>
             </div>
         </div>
-
     {% endfor %}
-
+    </div>
 {% endblock content %}
 
 {% block javascripts %}

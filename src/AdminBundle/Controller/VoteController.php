@@ -123,7 +123,7 @@ class VoteController extends Controller
      * @param VoteSettings $voteSettings
      * @param Request $request
      *
-     * @return array | bool | RedirectResponse
+     * @return array
      */
     public function votedAction(VoteSettings $voteSettings, Request $request)
     {
