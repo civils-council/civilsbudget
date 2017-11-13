@@ -99,6 +99,8 @@ class Project implements \JsonSerializable
     private $owner;
 
     /**
+     * @deprecated
+     *
      * @var User[] ArrayCollection
      *
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\User", mappedBy="likedProjects", fetch="EXTRA_LAZY")
@@ -412,6 +414,8 @@ class Project implements \JsonSerializable
     }
 
     /**
+     * @deprecated
+     *
      * Add likedUser
      *
      * @param \AppBundle\Entity\User $likedUser
@@ -428,6 +432,8 @@ class Project implements \JsonSerializable
     }
 
     /**
+     * @deprecated
+     *
      * Remove likedUser
      *
      * @param User $likedUser
@@ -441,6 +447,8 @@ class Project implements \JsonSerializable
     }
 
     /**
+     * @deprecated
+     *
      * Get likedUsers
      *
      * @return User[]|Collection

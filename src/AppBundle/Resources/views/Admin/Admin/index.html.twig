@@ -15,8 +15,11 @@
     Пошук Виборця:  <a href="{{ path('admin_user_find') }}" class="btn btn-default">Пошук Виборця по ІНН</a><br><br>
     Додати Виборця:  <a href="{{ path('admin_users_new') }}" class="btn btn-success">Додати виборця</a><br><br>
 
+    {% if is_granted('ROLE_REGIONAL_ADMIN') %}
+        Список голосуваннь:  <a href="{{ path('admin_voting_list') }}" class="btn btn-default">Переглянути</a><br><br>
+    {% endif %}
     {% if is_granted('ROLE_SUPER_ADMIN') %}
-        Список голосуваннь:  <a href="{{ path('vote_settings') }}" class="btn btn-default">Переглянути</a><br><br>
+        Список голосуваннь (редагувати):  <a href="{{ path('vote_settings') }}" class="btn btn-default">Переглянути</a><br><br>
         Список проектів:  <a href="{{ path('admin_projects_show') }}" class="btn btn-default">Переглянути</a><br><br>
         Не підтвердженні проекти:  <a href="{{ path('admin_projects_not_approved') }}" class="btn btn-default">Переглянути</a><br><br>
         Список Виборців:  <a href="{{ path('admin_users') }}" class="btn btn-default">До списку виборців</a><br><br>

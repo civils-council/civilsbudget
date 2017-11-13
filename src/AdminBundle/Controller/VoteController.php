@@ -3,6 +3,7 @@
 namespace AdminBundle\Controller;
 
 use AppBundle\Entity\Project;
+use AppBundle\Entity\UserProject;
 use AppBundle\Entity\VoteSettings;
 use AppBundle\Exception\ValidatorException;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -22,7 +23,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
  *
  * @Route("/admin/vote")
  */
-class PaperVoteController extends Controller
+class VoteController extends Controller
 {
     /**
      * @Route("/user/{user_id}/voting/{voting_id}/new", name="admin_user_new_paper_vote")
@@ -111,6 +112,49 @@ class PaperVoteController extends Controller
             'balanceVotes' => $balanceVotes,
             'voteSettings' => $voteSettings,
             'form' => $addForm->createView()
+        ];
+    }
+
+    /**
+     * @Route("/list/{id}", name="admin_voted_list")
+     * @Method({"GET"})
+     * @Template()
+     *
+     * @param VoteSettings $voteSettings
+     * @param Request $request
+     *
+     * @return array
+     */
+    public function votedAction(VoteSettings $voteSettings, Request $request)
+    {
+        $userProject = $this->getDoctrine()
+            ->getRepository(UserProject::class)
+            ->getVotesListByVoteSetting($voteSettings);
+
+        $pagination = $this->get('knp_paginator')->paginate(
+            $userProject,
+            $request->query->getInt('page', 1),
+            $request->query->getInt('limit', 100),
+            ['distinct' => false]
+        );
+
+        return ['pagination' => $pagination];
+    }
+
+    /**
+     * @Route("/list", name="admin_voting_list")
+     * @Method({"GET"})
+     * @Template()
+     *
+     * @return array | bool | RedirectResponse
+     */
+    public function listAction()
+    {
+        $votingList = $this->get('app.model.voting')->getVotingList();
+
+        return [
+            'debug' => true,
+            "votingList" => $votingList
         ];
     }
 

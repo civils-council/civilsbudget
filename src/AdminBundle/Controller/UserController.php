@@ -4,6 +4,9 @@ namespace AdminBundle\Controller;
 
 use AdminBundle\Form\CreateUser;
 use AdminBundle\Model\CreateUserModel;
+use AppBundle\Entity\Admin;
+use AppBundle\Entity\City;
+use AppBundle\Entity\Location;
 use AppBundle\Entity\Project;
 use AppBundle\Entity\VoteSettings;
 use AppBundle\Exception\ValidatorException;
@@ -92,8 +95,13 @@ class UserController extends Controller
         $form = $this->createCreateForm($entity);
 
         $form->handleRequest($request);
+        $validationGroups = ['admin_user_post'];
 
-        $errors = $this->get('validator')->validate($entity->getUser(), null, ['admin_user_post']);
+        if (!$this->isGranted('ROLE_REGIONAL_ADMIN')) {
+            $validationGroups[] = 'user_inn_numeric';
+        }
+
+        $errors = $this->get('validator')->validate($entity->getUser(), null, $validationGroups);
         $errors->addAll($this->get('validator')->validate($entity->getLocation(), null, ['admin_user_post']));
 
         if ($form->isValid()
@@ -105,13 +113,13 @@ class UserController extends Controller
             $em->persist($entity->getLocation());
             $entity->getUser()->addLocation($entity->getLocation());
             $entity->getUser()->setAddedByAdmin($this->getUser());
-            if ($entity->getUser()->getBirthday() === null) {
+            if ($entity->getUser()->getBirthday() === null && $this->getBirthDayFromInn($entity->getUser()->getInn())) {
                 $entity->getUser()->setBirthday(
                     $this->getBirthDayFromInn($entity->getUser()->getInn())->format('Y-m-d')
                 );
             }
             $em->persist($entity->getUser());
-            $entity->getLocation()->setUser($entity->getUser());
+            $entity->getLocation()->setUser($entity->getUser())->setAddedByAdmin($this->getUser());
             $em->flush();
             $user = $entity->getUser();
 
@@ -163,7 +171,7 @@ class UserController extends Controller
     public function newAction()
     {
         $entity = new CreateUserModel();
-        $form   = $this->createCreateForm($entity);
+        $form   = $this->createCreateForm($entity, [$this->getUser()->getCity()]);
 
         return array(
             'entity' => $entity,
@@ -233,38 +241,36 @@ class UserController extends Controller
      * @Route("/{id}/edit", name="admin_users_edit")
      * @Method("GET")
      * @Template()
+     *
+     * @param User $user
+     * @param Request $request
+     *
+     * @return array|RedirectResponse
      */
-    public function editAction($id, Request $request)
+    public function editAction(User $user, Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
-        /** @var User $entity */
-        $entity = $em->getRepository('AppBundle:User')->findOneBy(['id' => $id]);
-
-        if (!$entity) {
-            $this->addFlash('danger', 'No user was found for this id.');
-            return $this->redirectToRoute('admin_users');
-        }
-
         $entityUserModel = new CreateUserModel();
-        $entityUserModel->setUser($entity);
-        $entityUserModel->setLocation($entity->getCurrentLocation());
-        
+        $entityUserModel->setUser($user);
+        $entityUserModel->setLocation($user->getCurrentLocation());
+
         $editForm = $this->createEditForm($entityUserModel);
-        $deleteForm = $this->createDeleteForm($id);
+        $deleteForm = $this->createDeleteForm($user->getId());
 
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
             $em->flush();
 
-            return $this->redirect($this->generateUrl('admin_users_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('admin_users_edit', array('id' => $user->getId())));
         }
 
         return array(
-            'entity'      => $entity,
+            'entity'      => $user,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
+            'errors' => []
         );
     }
 
@@ -282,13 +288,17 @@ class UserController extends Controller
      */
     public function updateAction(User $user, Request $request)
     {
-        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN', $user, 'You cannot edit this item.');
+        $this->denyAccessUnlessGranted(
+            [Admin::ROLE_REGIONAL_ADMIN, Admin::ROLE_SUPER_ADMIN],
+            $user,
+            'You cannot edit this item.'
+        );
 
         $em = $this->getDoctrine()->getManager();
 
         $entityUserModel = new CreateUserModel();
         $entityUserModel->setUser($user);
-        $entityUserModel->setLocation($user->getCurrentLocation());
+        $entityUserModel->setLocation(new Location);
 
         $deleteForm = $this->createDeleteForm($user->getId());
         $editForm = $this->createEditForm($entityUserModel);
@@ -298,6 +308,11 @@ class UserController extends Controller
         $errors = $this->get('validator')->validate($entityUserModel->getUser(), null, ['admin_user_put']);
 
         if ($editForm->isValid() && count($errors) === 0) {
+            $newLocation = $entityUserModel->getLocation();
+            if ($this->isNewLocation($newLocation, $user->getCurrentLocation())) {
+                $em->persist($entityUserModel->getLocation());
+                $user->addLocation($entityUserModel->getLocation()->setUser($user)->setAddedByAdmin($this->getUser()));
+            }
             $em->flush();
 
             return $this->redirect($this->generateUrl('admin_users_edit', array('id' => $user->getId())));
@@ -408,14 +423,16 @@ class UserController extends Controller
      * Creates a form to create a User entity.
      *
      * @param CreateUserModel $entity The entity
+     * @param array $cities
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(CreateUserModel $entity)
+    private function createCreateForm(CreateUserModel $entity, array $cities = [])
     {
         $form = $this->createForm(CreateUser::class, $entity, array(
             'action' => $this->generateUrl('admin_users_create'),
             'method' => 'POST',
+            'cities' => $cities
         ));
 
         $form->add('submit', SubmitType::class, array('label' => 'Create'));
@@ -432,12 +449,35 @@ class UserController extends Controller
     }
 
     /**
-     * @return \DateTime
+     * @param string $inn
+     *
+     * @return \DateTime | null
      */
-    private function getBirthDayFromInn(string $inn): \DateTime
+    private function getBirthDayFromInn(string $inn): ?\DateTime
     {
+        if (!is_numeric($inn)) {
+            return null;
+        }
         $day = substr($inn, 0, 5);
 
         return (new \DateTime('1899-12-31'))->modify("+$day day");
+    }
+
+    /**
+     * @param Location $locationNew
+     * @param Location $locationOld
+     *
+     * @return bool
+     */
+    private function isNewLocation(Location $locationNew, Location $locationOld): bool
+    {
+        if ($locationOld->getAddress() === $locationNew->getAddress() &&
+            $locationOld->getCity() === $locationNew->getCity() &&
+            $locationOld->getCityObject() === $locationNew->getCityObject()
+        ) {
+            return false;
+        }
+
+        return true;
     }
 }

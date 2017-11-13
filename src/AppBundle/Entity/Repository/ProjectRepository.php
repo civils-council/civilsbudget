@@ -5,6 +5,7 @@ namespace AppBundle\Entity\Repository;
 use AppBundle\Controller\ProjectController;
 use AppBundle\Entity\Interfaces\ProjectRepositoryInterface;
 use AppBundle\Entity\Project;
+use AppBundle\Entity\VoteSettings;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\ParameterBag;
@@ -124,4 +125,30 @@ class ProjectRepository extends EntityRepository implements ProjectRepositoryInt
             ->getSingleScalarResult();
     }
 
+    /**
+     * @param VoteSettings $voteSettings
+     *
+     * @return \Doctrine\ORM\Query
+     */
+    public function projectVoteStatisticByVoteSettings(VoteSettings $voteSettings)
+    {
+        return $this->createQueryBuilder('p')
+            ->select(
+                'p.id',
+                'p.title',
+                'p.charge',
+                'o.firstName',
+                'o.lastName',
+                'COUNT(up.user) AS totalVotes',
+                'SUM(CASE WHEN up.addedBy IS NOT NULL THEN 1 ELSE 0 END) AS paperVotes',
+                'SUM(CASE WHEN up.addedBy IS NULL THEN 1 ELSE 0 END) AS selfVotes'
+            )
+            ->leftJoin('p.userProjects', 'up')
+            ->innerJoin('p.owner', 'o')
+            ->where('p.voteSetting = :voteSetting')
+            ->groupBy('p')
+            ->setParameter('voteSetting', $voteSettings)
+            ->addOrderBy('totalVotes', 'DESC')
+            ->getQuery();
+    }
 }

@@ -55,6 +55,10 @@ class ProjectController extends Controller
     }
 
     /**
+     * @deprecated
+     *
+     * Working incorrectly
+     *
      * @Route("/statistics", name="projects_statistics")
      * @Template()
      * @Method({"GET"})
