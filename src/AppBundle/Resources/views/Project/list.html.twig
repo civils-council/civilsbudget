@@ -34,8 +34,15 @@
                     <h1 id="hp-title">
                             {% if voteSetting %}
                                 <p>{{ voteSetting.shortDescription|nl2br }}</p>
-                                Голосування відкрито до
-                                {{ voteSetting.dateTo|date("d.m.Y") }}
+                                {% if voteSetting.status == 'archived' %}
+                                    <p style="color: red">Голосування завершено</p>
+                                {%  elseif voteSetting.status == 'future' %}
+                                    Голосування розпочнеться
+                                    {{ voteSetting.dateFrom|date('d.m.Y H:i:s') }}
+                                {% else %}
+                                    Голосування відкрито до
+                                    {{ voteSetting.dateTo | date('d.m.Y H:i:s') }}
+                                {% endif %}
                             {% else %}
                                 <p>виріши долю громадського бюджету свого міста</p>
                                 {% if voteCity %}
@@ -88,6 +95,7 @@
                                 </span>
                             {% endfor %}
                         </div>
+                        <p class="voted-title" style="padding-top: 25px"> <a href="{{ path('voting_statistic', { id: voteSetting.id }) }}" >Статистика голосування</a></p>
                     </div>
                 </div>
             </div>
