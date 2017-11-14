@@ -171,7 +171,7 @@ class UserController extends Controller
     public function newAction()
     {
         $entity = new CreateUserModel();
-        $form   = $this->createCreateForm($entity, [$this->getUser()->getCity()]);
+        $form   = $this->createCreateForm($entity);
 
         return array(
             'entity' => $entity,
@@ -289,7 +289,7 @@ class UserController extends Controller
     public function updateAction(User $user, Request $request)
     {
         $this->denyAccessUnlessGranted(
-            [Admin::ROLE_REGIONAL_ADMIN, Admin::ROLE_SUPER_ADMIN],
+            ['ROLE_REGIONAL_ADMIN', 'ROLE_SUPER_ADMIN'],
             $user,
             'You cannot edit this item.'
         );
@@ -412,6 +412,7 @@ class UserController extends Controller
             'validation_groups' => ['admin_user_put'],
             'action' => $this->generateUrl('admin_users_update', array('id' => $entity->getUser()->getId())),
             'method' => 'PUT',
+            'cities' => $this->getAvailableCities()
         ));
 
         $form->add('submit', SubmitType::class, array('label' => 'Update'));
@@ -423,21 +424,32 @@ class UserController extends Controller
      * Creates a form to create a User entity.
      *
      * @param CreateUserModel $entity The entity
-     * @param array $cities
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(CreateUserModel $entity, array $cities = [])
+    private function createCreateForm(CreateUserModel $entity)
     {
         $form = $this->createForm(CreateUser::class, $entity, array(
             'action' => $this->generateUrl('admin_users_create'),
             'method' => 'POST',
-            'cities' => $cities
+            'cities' => $this->getAvailableCities()
         ));
 
         $form->add('submit', SubmitType::class, array('label' => 'Create'));
 
         return $form;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getAvailableCities(): ?array
+    {
+        if ($this->isGranted('ROLE_SUPER_ADMIN')) {
+            return null;
+        }
+
+        return [$this->getUser()->getCity()];
     }
 
     /**
