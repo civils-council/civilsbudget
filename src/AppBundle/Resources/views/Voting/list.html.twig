@@ -17,7 +17,6 @@
         {% set aditional_style = '' %}
         {% if voting.status == 'archived' %}
             {% set status = '(архів)' %}
-
             {% set aditional_img_style = 'filter: grayscale(100%) opacity(50%);' %}
             {% set aditional_style = 'color:#999 !important;' %}
         {% elseif voting.status == 'future' %}
