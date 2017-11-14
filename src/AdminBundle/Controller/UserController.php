@@ -187,8 +187,6 @@ class UserController extends Controller
      */
     public function showAction(User $user, Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-
         if (!$user->getCurrentLocation()) {
             $this->addFlash('danger', 'User must have location.');
             return $this->redirectToRoute('admin_users');
@@ -212,16 +210,25 @@ class UserController extends Controller
                 'balance' => $limitVoteSetting - $this->getDoctrine()->getRepository(User::class)->getUserVotesBySettingVote($voteSetting, $user)];
         }
 
-        $query = $em->getRepository(Project::class)
+        $query = $this->getDoctrine()->getRepository(Project::class)
             ->createQueryBuilder('p')
-            ->join('p.likedUsers', 'u')
-            ->andWhere('u.id = :user')
+            ->select('p.id',
+                'p.title as project_title',
+                'vs.title as vote_title',
+                'up.blankNumber',
+                'up.createAt',
+                'a.firstName',
+                'a.lastName'
+            )
+            ->join('p.userProjects', 'up')
+            ->join('p.voteSetting', 'vs')
+            ->leftJoin('up.addedBy', 'a')
+            ->andWhere('up.user = :user')
             ->setParameter('user', $user)
             ->orderBy('p.id', 'DESC')
         ;
 
-        $paginator  = $this->get('knp_paginator');
-        $entitiesPagination = $paginator->paginate(
+        $entitiesPagination = $this->get('knp_paginator')->paginate(
             $query,
             $request->query->get('page', 1),
             70
