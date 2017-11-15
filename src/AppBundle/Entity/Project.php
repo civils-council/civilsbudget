@@ -108,6 +108,8 @@ class Project implements \JsonSerializable
     private $likedUsers;
 
     /**
+     * @deprecated
+     *
      * @var string
      *
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -143,12 +145,25 @@ class Project implements \JsonSerializable
     private $userProjects;
 
     /**
+     * @var Gallery[] ArrayCollection
+     *
+     * @ORM\OneToMany(
+     *     targetEntity="AppBundle\Entity\Gallery",
+     *     mappedBy="project",
+     *     cascade={"persist"},
+     *     orphanRemoval=true
+     * )
+     */
+    private $gallery;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->likedUsers = new ArrayCollection;
         $this->userProjects = new ArrayCollection;
+        $this->gallery = new ArrayCollection;
     }
 
     public function __toString()
@@ -425,7 +440,7 @@ class Project implements \JsonSerializable
     public function addLikedUser(User $likedUser): Project
     {
         if (!$this->getLikedUsers()->contains($likedUser)) {
-            return $this->addUserProjects(new UserProject($likedUser, $this));
+            return $this->addUserProject(new UserProject($likedUser, $this));
         }
 
         return $this;
@@ -540,7 +555,7 @@ class Project implements \JsonSerializable
      *
      * @return Project
      */
-    public function addUserProjects(UserProject $userProject): Project
+    public function addUserProject(UserProject $userProject): Project
     {
         if (!$this->getUserProjects()->contains($userProject)) {
             $this->getUserProjects()->add($userProject);
@@ -549,5 +564,12 @@ class Project implements \JsonSerializable
         return $this;
     }
 
+    /**
+     * @return Gallery[] | Collection
+     */
+    public function getGallery(): Collection
+    {
+        return $this->gallery;
+    }
 }
 

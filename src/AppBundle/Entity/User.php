@@ -171,6 +171,8 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     protected $avatar;
 
     /**
+     * @deprecated
+     *
      * @var integer
      *
      * @ORM\Column(name="count_votes", type="integer", options={"default": 0}, nullable = true)
@@ -626,7 +628,7 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     public function addLikedProjects(Project $project): User
     {
         if (!$this->getLikedProjects()->contains($project)) {
-            return $this->addUserProjects(new UserProject($this, $project));
+            return $this->addUserProject(new UserProject($this, $project));
         }
 
         return $this;
@@ -772,7 +774,7 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
      *
      * @return User
      */
-    public function addUserProjects(UserProject $userProject): User
+    public function addUserProject(UserProject $userProject): User
     {
         if (!$this->getUserProjects()->contains($userProject)) {
             $this->getUserProjects()->add($userProject);
