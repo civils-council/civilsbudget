@@ -83,12 +83,6 @@ class User implements UserInterface
 
         //TODO: Refactor code it duplicates in controller (user_count_votes)
         foreach ($voteSettings as $voteSetting) {
-            if  ($voteSetting->getStatus() !== VoteSettings::STATUS_ACTIVE ||
-                $voteSetting->getLocation()->getCity() !== $user->getCurrentLocation()->getCity()
-            ) {
-                continue;
-            }
-
             $limitVoteSetting = $voteSetting->getVoteLimits();
 
             $balanceVotes[$voteSetting->getTitle()]=

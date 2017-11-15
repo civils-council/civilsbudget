@@ -44,29 +44,22 @@ class VoteSettingsRepository extends EntityRepository implements VoteSettingInte
     /**
      * {@inheritdoc}
      */
-    public function getVoteSettingByUserCity(
-        User $user
-    ) {
-        $qb = $this->getEntityManager()->createQueryBuilder();
-        $qb
-            ->select('vs')
-            ->from('AppBundle:VoteSettings', 'vs')
-            ->leftJoin('vs.location', 'l');
-
-        if ($user->getCurrentLocation() && $user->getCurrentLocation()->getCity()) {
-            $qb
-                ->andWhere('l.city LIKE :city')
-                ->setParameter('city', $user->getCurrentLocation()->getCity());
-        }
-
-        $qb
-            ->andWhere('vs.dateTo > :now')
-            ->setParameter('now', new \DateTime())
-            ->orderBy('vs.createAt', Criteria::DESC);
-        $query = $qb->getQuery();
-        $results = $query->getResult();
-
-        return $results;
+    public function getVoteSettingByUserCity(User $user, ?bool $paperVote = false): array
+    {
+        $to = $paperVote ? 'datePaperVoteTo' : 'dateTo';
+        return $this->createQueryBuilder('vs')
+            ->leftJoin('vs.location', 'l')
+            ->where('l.city = :city')
+            ->andWhere('vs.dateFrom < :now')
+            ->andWhere('vs.'.$to.' > :showToDate')
+            ->setParameters([
+                'city' => $user->getCurrentLocation()->getCity(),
+                'now' => new \DateTime,
+                'showToDate' => new \DateTime,
+            ])
+            ->orderBy('vs.createAt', Criteria::DESC)
+            ->getQuery()
+            ->getResult();
     }
 
     /**

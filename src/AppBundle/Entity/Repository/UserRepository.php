@@ -212,28 +212,21 @@ class UserRepository extends EntityRepository implements UserRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getUserVotesBySettingVote(
-        VoteSettings $voteSettings,
-        User $user
-    ) {
-        $qb = $this->getEntityManager()->createQueryBuilder();
-        $qb
-            ->select('COUNT(lp.id)')
-            ->distinct('lp.id')
-            ->from('AppBundle:User', 'u')
-            ->leftJoin('u.likedProjects', 'lp')
-            ->leftJoin('lp.voteSetting', 'v')
-            ->where('v.id = :voteId')
-            ->andWhere('u.id = :userId')
+    public function getUserVotesBySettingVote(VoteSettings $voteSettings, User $user): int
+    {
+        return (int)$this->createQueryBuilder('u')
+            ->select('COUNT(up.project)')
+            ->distinct('up.project')
+            ->leftJoin('u.userProjects', 'up')
+            ->leftJoin('up.project', 'p')
+            ->where('p.voteSetting = :voteSetting')
+            ->andWhere('u = :user')
             ->setParameters([
-                'voteId' => $voteSettings->getId(),
-                'userId' => $user->getId()
-            ]);
-
-        $query = $qb->getQuery();
-        $results = $query->getSingleScalarResult();
-
-        return $results;
+                'voteSetting' => $voteSettings,
+                'user' => $user
+            ])
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 
     /**
