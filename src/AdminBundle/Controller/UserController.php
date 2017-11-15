@@ -41,7 +41,7 @@ class UserController extends Controller
     public function indexAction(Request $request)
     {
         $em    = $this->get('doctrine.orm.entity_manager');
-        $dql   = "SELECT a FROM AppBundle:User a LEFT JOIN a.location l INNER JOIN a.addedByAdmin aba WHERE aba.id = :abaId";
+        $dql   = "SELECT a FROM AppBundle:User a INNER JOIN a.addedByAdmin aba WHERE aba.id = :abaId";
         $query = $em->createQuery($dql);
         $query->setParameter('abaId', $this->getUser()->getId());
 
@@ -200,7 +200,7 @@ class UserController extends Controller
         $deleteForm = $this->createDeleteForm($user->getId());
 
         /** @var VoteSettings[] $voteSettings */
-        $voteSettings = $this->getDoctrine()->getRepository('AppBundle:VoteSettings')->getVoteSettingByUserCity($user);
+        $voteSettings = $this->getDoctrine()->getRepository('AppBundle:VoteSettings')->getVoteSettingByUserCity($user, true);
 
         $balanceVotes = [];
         foreach ($voteSettings as $voteSetting) {
@@ -231,7 +231,7 @@ class UserController extends Controller
         $entitiesPagination = $this->get('knp_paginator')->paginate(
             $query,
             $request->query->get('page', 1),
-            70
+            10
         );
 
         return [

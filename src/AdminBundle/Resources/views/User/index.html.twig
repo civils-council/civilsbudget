@@ -15,11 +15,8 @@
             <th{% if pagination.isSorted('a.lastName') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Прізвище', 'a.lastName') }}</th>
             <th{% if pagination.isSorted('a.middleName') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'По батькові', 'a.middleName') }}</th>
             <th{% if pagination.isSorted('a.inn') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'ІНН', 'a.inn') }}</th>
-            <th{% if pagination.isSorted('a.numberBlank') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Номер Бланку', 'a.numberBlank') }}</th>
             <th{% if pagination.isSorted('a.sex') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Стать', 'a.sex') }}</th>
-            <th{% if pagination.isSorted('l.city') %} class="sorted"{% endif %}>
-                {{ knp_pagination_sortable(pagination, 'Місто', 'l.city') }}
-            </th>
+            <th>Місто</th>
             <th>{{ knp_pagination_sortable(pagination, 'Дата створення', ['a.createAt']) }}</th>
             <th> Edit </th>
         </tr>
@@ -32,9 +29,8 @@
                 <td>{{ article.lastName }}</td>
                 <td>{{ article.middleName }}</td>
                 <td>{{ article.inn }}</td>
-                <td>{{ article.numberBlank }}</td>
                 <td>{{ article.sex }}</td>
-                <td>{% if article.location %}{{ article.location.city }}{% else %}empty{% endif %}</td>
+                <td>{% if article.currentLocation %}{{ article.currentLocation.city }}{% else %}empty{% endif %}</td>
                 <td>{% if article.createAt %}{{ article.createAt|date('Y-m-d') }}{% endif %}</td>
                 <td>
                     <ul>

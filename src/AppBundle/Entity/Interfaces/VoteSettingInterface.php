@@ -26,11 +26,11 @@ interface VoteSettingInterface
 
     /**
      * @param User $user
+     * @param bool|null $paperVote
+     *
      * @return VoteSettings[]|[]
      */
-    public function getVoteSettingByUserCity(
-        User $user
-    );
+    public function getVoteSettingByUserCity(User $user, ?bool $paperVote = false): array;
 
     /**
      * @return array

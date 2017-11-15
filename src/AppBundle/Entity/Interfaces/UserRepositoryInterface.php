@@ -1,6 +1,7 @@
 <?php
 
 namespace AppBundle\Entity\Interfaces;
+
 use AppBundle\Entity\Project;
 use AppBundle\Entity\User;
 use AppBundle\Entity\VoteSettings;
@@ -80,7 +81,7 @@ interface UserRepositoryInterface
     public function getUserVotesBySettingVote(
         VoteSettings $voteSettings,
         User $user
-    );
+    ): int;
 
     /**
      * @param $clid
