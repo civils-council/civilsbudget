@@ -86,7 +86,7 @@ class VoteSettings
      * @var \DateTime
      *
      * @Assert\NotBlank()
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private $datePaperVoteTo;
 

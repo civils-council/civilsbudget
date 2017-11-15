@@ -51,6 +51,9 @@
             <p>{{ project.description|nl2br }}</p>
         </div>
     </div>
+    {% if project.gallery.count %}
+        {{ block('gallery') }}
+    {% endif  %}
     {{ block('notice') }}
 {% endblock %}
 
@@ -70,6 +73,18 @@
         }(document, 'script', 'facebook-jssdk'));</script>
 
 {% endblock %}
+
+{% block gallery %}
+    <div class="row hd-description">
+        <div class="col-md-12" style="text-align: center">
+            {% for picture in project.gallery %}
+                <picture>
+                    <img src="{{ picture.path }}" style="padding-bottom: 20px">
+                </picture>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock gallery %}
 
 {% block notice %}
     <div class="row hd-description">
