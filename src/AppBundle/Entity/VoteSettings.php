@@ -83,6 +83,14 @@ class VoteSettings
     private $dateTo;
 
     /**
+     * @var \DateTime
+     *
+     * @Assert\NotBlank()
+     * @ORM\Column(type="datetime")
+     */
+    private $datePaperVoteTo;
+
+    /**
      * @var string
      *
      * @ORM\Column(type="text", nullable=true)
@@ -428,5 +436,25 @@ class VoteSettings
         }
 
         return self::STATUS_ACTIVE;
+    }
+
+    /**
+     * @param \DateTime $datePaperVoteTo
+     *
+     * @return VoteSettings
+     */
+    public function setDatePaperVoteTo(\DateTime $datePaperVoteTo): VoteSettings
+    {
+        $this->datePaperVoteTo = $datePaperVoteTo;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getDatePaperVoteTo(): ?\DateTime
+    {
+        return $this->datePaperVoteTo;
     }
 }
