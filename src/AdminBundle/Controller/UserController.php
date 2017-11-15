@@ -171,7 +171,7 @@ class UserController extends Controller
     public function newAction()
     {
         $entity = new CreateUserModel();
-        $form   = $this->createCreateForm($entity, [$this->getUser()->getCity()]);
+        $form   = $this->createCreateForm($entity);
 
         return array(
             'entity' => $entity,
@@ -187,8 +187,6 @@ class UserController extends Controller
      */
     public function showAction(User $user, Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-
         if (!$user->getCurrentLocation()) {
             $this->addFlash('danger', 'User must have location.');
             return $this->redirectToRoute('admin_users');
@@ -212,19 +210,28 @@ class UserController extends Controller
                 'balance' => $limitVoteSetting - $this->getDoctrine()->getRepository(User::class)->getUserVotesBySettingVote($voteSetting, $user)];
         }
 
-        $query = $em->getRepository(Project::class)
+        $query = $this->getDoctrine()->getRepository(Project::class)
             ->createQueryBuilder('p')
-            ->join('p.likedUsers', 'u')
-            ->andWhere('u.id = :user')
+            ->select('p.id',
+                'p.title as project_title',
+                'vs.title as vote_title',
+                'up.blankNumber',
+                'up.createAt',
+                'a.firstName',
+                'a.lastName'
+            )
+            ->join('p.userProjects', 'up')
+            ->join('p.voteSetting', 'vs')
+            ->leftJoin('up.addedBy', 'a')
+            ->andWhere('up.user = :user')
             ->setParameter('user', $user)
             ->orderBy('p.id', 'DESC')
         ;
 
-        $paginator  = $this->get('knp_paginator');
-        $entitiesPagination = $paginator->paginate(
+        $entitiesPagination = $this->get('knp_paginator')->paginate(
             $query,
             $request->query->get('page', 1),
-            70
+            10
         );
 
         return [
@@ -289,7 +296,7 @@ class UserController extends Controller
     public function updateAction(User $user, Request $request)
     {
         $this->denyAccessUnlessGranted(
-            [Admin::ROLE_REGIONAL_ADMIN, Admin::ROLE_SUPER_ADMIN],
+            ['ROLE_REGIONAL_ADMIN', 'ROLE_SUPER_ADMIN'],
             $user,
             'You cannot edit this item.'
         );
@@ -412,6 +419,7 @@ class UserController extends Controller
             'validation_groups' => ['admin_user_put'],
             'action' => $this->generateUrl('admin_users_update', array('id' => $entity->getUser()->getId())),
             'method' => 'PUT',
+            'cities' => $this->getAvailableCities()
         ));
 
         $form->add('submit', SubmitType::class, array('label' => 'Update'));
@@ -423,21 +431,32 @@ class UserController extends Controller
      * Creates a form to create a User entity.
      *
      * @param CreateUserModel $entity The entity
-     * @param array $cities
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(CreateUserModel $entity, array $cities = [])
+    private function createCreateForm(CreateUserModel $entity)
     {
         $form = $this->createForm(CreateUser::class, $entity, array(
             'action' => $this->generateUrl('admin_users_create'),
             'method' => 'POST',
-            'cities' => $cities
+            'cities' => $this->getAvailableCities()
         ));
 
         $form->add('submit', SubmitType::class, array('label' => 'Create'));
 
         return $form;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getAvailableCities(): ?array
+    {
+        if ($this->isGranted('ROLE_SUPER_ADMIN')) {
+            return null;
+        }
+
+        return [$this->getUser()->getCity()];
     }
 
     /**

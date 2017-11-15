@@ -85,24 +85,27 @@
     </div>
     <table class="table table-striped">
         <tr>
-            {# sorting of properties based on query components #}
             {% if is_granted('ROLE_SUPER_ADMIN') %}
                 <th>{{ knp_pagination_sortable(pagination, 'Номер в системі', 'p.id') }}</th>
             {% endif %}
             <th{% if pagination.isSorted('p.title') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Назва проекту', 'p.title') }}</th>
             <th{% if pagination.isSorted('vs.title') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Голосування', 'vs.title') }}</th>
-            <th>{{ knp_pagination_sortable(pagination, 'Створено', ['a.createAt']) }}</th>
+            <th>Номер бланку</th>
+            <th>Вніс(ла)</th>
+            <th>Голос Віддано</th>
         </tr>
 
         {# table body #}
         {% for article in pagination %}
             <tr {% if loop.index is odd %}class="color"{% endif %}>
                 {% if is_granted('ROLE_SUPER_ADMIN') %}
-                    <td>{{ article.id }}</td>
+                    <td>{{ article['id'] }}</td>
                 {% endif %}
-                <td>{{ article.title }}</td>
-                {% if article.voteSetting %}<td>{{ article.voteSetting.title }}</td>{% endif %}
-                <td>{% if article.createAt %}{{ article.createAt|date('Y-m-d') }}{% endif %}</td>
+                <td>{{ article['project_title'] }}</td>
+                {% if article['vote_title'] %}<td>{{ article['vote_title'] }}</td>{% endif %}
+                <td>{{ article['blankNumber'] }}</td>
+                <td>{{ article['lastName'] ~ ' ' ~ article['firstName'] }}</td>
+                <td>{% if article['createAt'] %}{{ article['createAt']|date('Y-m-d H:m:s') }}{% endif %}</td>
             </tr>
         {% endfor %}
     </table>
