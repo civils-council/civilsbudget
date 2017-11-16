@@ -75,11 +75,11 @@
 {% endblock %}
 
 {% block gallery %}
-    <div class="row hd-description">
+    <div class="row">
         <div class="col-md-12" style="text-align: center">
             {% for picture in project.gallery %}
                 <picture>
-                    <img src="{{ picture.path }}" style="padding-bottom: 20px">
+                    <img src="{{ picture.path }}" style="padding-bottom: 20px; width: 80%; margin: 0 auto;">
                 </picture>
             {% endfor %}
         </div>
