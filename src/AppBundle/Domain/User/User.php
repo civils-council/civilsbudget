@@ -68,7 +68,7 @@ class User implements UserInterface
     ): string {
         $user->setCountVotes(($user->getCountVotes()) ? ($user->getCountVotes() + 1) : 1);
 
-        $user->addUserProjects(
+        $user->addUserProject(
             (new UserProject($user, $project))
                 ->setAddedBy($addedBy)
                 ->setBlankNumber($paperVoteBlankNumber)
