@@ -67,9 +67,10 @@ class VotingModel
     /**
      * @return VotingDTO[]
      */
-    public function getVotingList(): array
+    public function getVotingList(?array $ids = null): array
     {
-        $voteSettings = $this->voteSettingsRepository->findBy([], ['dateFrom' => 'DESC']);
+        $expression = $ids ? ['id' => $ids] : [];
+        $voteSettings = $this->voteSettingsRepository->findBy($expression, ['dateFrom' => 'DESC']);
         $listVotedUserCount =  $this->voteSettingsRepository->listCountVotedUsersPerVoting();
 
         $votingList = [];
