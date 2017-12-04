@@ -141,7 +141,7 @@ class ProjectRepository extends EntityRepository implements ProjectRepositoryInt
                 'o.lastName',
                 'COUNT(up.user) AS totalVotes',
                 'SUM(CASE WHEN up.addedBy IS NOT NULL THEN 1 ELSE 0 END) AS paperVotes',
-                'SUM(CASE WHEN up.addedBy IS NULL THEN 1 ELSE 0 END) AS selfVotes'
+                'COUNT(up.user) - SUM(CASE WHEN up.addedBy IS NOT NULL THEN 1 ELSE 0 END) AS selfVotes'
             )
             ->leftJoin('p.userProjects', 'up')
             ->innerJoin('p.owner', 'o')
