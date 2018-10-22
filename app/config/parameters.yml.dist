@@ -32,4 +32,6 @@ parameters:
 
     limit_votes: 4
 
-
+    turbosms_user: ~
+    turbosms_pass: ~
+    turbosms_from: ~
