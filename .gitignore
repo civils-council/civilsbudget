@@ -25,3 +25,4 @@
 /var/*
 !var/SymfonyRequirements.php
 web-src/images/.DS_Store
+/docker/mysql/db

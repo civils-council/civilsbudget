@@ -28,3 +28,32 @@ Project Owner posted a new project into set of projects.
 Observer receive notification about new project. 
 
 Observer approve or disapprove this project for publishing.
+
+# Docker commands
+
+### Initial commands to initiate docker-containers
+
+```bash
+docker-compose build --build-arg host_uid=$(id -u) --build-arg civils-app
+docker-compose build nginx
+docker-compose up -d
+```
+
+### Composer install 
+```bash
+docker exec -ti $(docker ps -aqf "name=civils-app") composer install -d /var/www/civils-app
+```
+
+### Doctrine migration
+```bash
+docker exec -ti $(docker ps -aqf "name=civils-app") /var/www/civils-app/bin/console d:m:m
+```
+
+### To build front run:
+```bash
+docker-compose run --rm node npm i 
+docker-compose run --rm node ./node_modules/.bin/bower install 
+docker-compose run --rm node ./node_modules/.bin/gulp
+```
+
+Finally project locally available: http://localhost:8080
