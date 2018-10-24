@@ -321,10 +321,10 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/policy", name="policy")
+     * @Route("/mobile", name="mobile")
      * @Template()
      */
-    public function policyAction()
+    public function mobileAction()
     {
         return [];
     }

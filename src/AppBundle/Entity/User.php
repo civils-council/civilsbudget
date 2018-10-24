@@ -14,7 +14,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints as AssertBridge;
  *
  * @ORM\Table(
  *     indexes={
- *          @ORM\Index(name="inn_idx", columns={"inn"}),
+ *          @ORM\Index(name="inn_idx", columns={"inn"})
  *     }
  * )
  * @ORM\Entity(repositoryClass="AppBundle\Entity\Repository\UserRepository")
@@ -43,7 +43,7 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
      * @var string
      *
      * @Assert\NotBlank(
-     *     groups={"admin_user_post", "admin_user_put", "offline_user"},
+     *     groups={"admin_user_post", "admin_user_put"},
      *     message="Им'я не може бути пустим"
      * )
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -54,7 +54,7 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
      * @var string
      *
      * @Assert\NotBlank(
-     *     groups={"admin_user_post", "admin_user_put", "offline_user"},
+     *     groups={"admin_user_post", "admin_user_put"},
      *     message="Прізвище не може бути пустим"
      * )
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -65,11 +65,6 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
      * @var string
      *
      * @ORM\Column(type="string", length=255, nullable=true)
-     *
-     * @Assert\NotBlank(
-     *     groups={"offline_user"},
-     *     message="По-батькові не може бути пустим"
-     * )
      */
     private $middleName;
 
@@ -215,11 +210,6 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\OtpToken", cascade={"persist", "remove"}, mappedBy="user")
      */
     private $otpTokens;
-
-    /**
-     * @var bool
-     */
-    private $withPolicy = false;
 
     /**
      * Constructor.
@@ -739,26 +729,6 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
         if (!$this->getUserProjects()->contains($userProject)) {
             $this->getUserProjects()->add($userProject);
         }
-
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isWithPolicy(): bool
-    {
-        return $this->withPolicy;
-    }
-
-    /**
-     * @param bool $withPolicy
-     *
-     * @return self
-     */
-    public function setWithPolicy(bool $withPolicy): self
-    {
-        $this->withPolicy = $withPolicy;
 
         return $this;
     }

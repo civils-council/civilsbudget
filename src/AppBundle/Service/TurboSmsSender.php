@@ -6,12 +6,14 @@ namespace AppBundle\Service;
 
 use AppBundle\Exception\TurboSmsException;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
  * Class TurboSmsSender.
  */
 class TurboSmsSender
 {
+    private const KERNEL_NOT_IGNORE_MODE = 'prod';
     private const STATUS_OK = 'ok';
     private const STATUS_ERROR = 'error';
     private const AUTH_RESULT_OK = 'Вы успешно авторизировались';
@@ -40,6 +42,11 @@ class TurboSmsSender
      * @var \SoapClient
      */
     private $client;
+
+    /**
+     * @var KernelInterface
+     */
+    private $kernel;
 
     /**
      * TurboSmsSender constructor.
@@ -85,7 +92,11 @@ class TurboSmsSender
                 throw new TurboSmsException($authResult->AuthResult, $text);
             }
 
-            $smsResult = $this->client->SendSMS($body);
+            if (self::KERNEL_NOT_IGNORE_MODE === $this->kernel->getEnvironment()) {
+                $smsResult = $this->client->SendSMS($body);
+            } else {
+                $smsResult = [];
+            }
             if (empty($result->SendSMSResult->ResultArray[0])) {
                 return $status;
             }
@@ -122,5 +133,13 @@ class TurboSmsSender
     public function setClient(\SoapClient $client): void
     {
         $this->client = $client;
+    }
+
+    /**
+     * @param KernelInterface $kernel
+     */
+    public function setKernel(KernelInterface $kernel): void
+    {
+        $this->kernel = $kernel;
     }
 }

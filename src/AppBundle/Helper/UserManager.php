@@ -232,10 +232,6 @@ class UserManager
         }
 
         try {
-            if ($user->isWithPolicy()) {
-                $this->smsSender->sendTurboSms($user->getPhone(), $this->router->generate('policy', [], Router::ABSOLUTE_URL));
-            }
-
             $user->expireOtpTokens();
             $otpToken = new OtpToken();
             $otpToken

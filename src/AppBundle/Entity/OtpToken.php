@@ -105,7 +105,7 @@ class OtpToken
      */
     public function getToken(): string
     {
-        return $this->token;
+        return (string) $this->token;
     }
 
     /**
@@ -167,7 +167,7 @@ class OtpToken
      */
     public function generateToken()
     {
-        $this->token = bin2hex(random_bytes(3));
+        $this->token = random_int(100, 999);
 
         return $this;
     }

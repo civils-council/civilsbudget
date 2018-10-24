@@ -29,5 +29,6 @@ services:
         calls:
             - ['setLogger', ['@logger']]
             - ['setClient', ['@app.turbosms_client']]
+            - ['setKernel', ['@kernel']]
         tags:
             - { name: sms_provider }
