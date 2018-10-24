@@ -24,8 +24,9 @@ class ProjectRepository extends EntityRepository implements ProjectRepositoryInt
         $qb
             ->select('project')
             ->from('AppBundle:Project', 'project')
+            ->leftJoin('project.userProjects', 'user_projects')
+            ->leftJoin('user_projects.user', 'user')
             ->addSelect('COUNT(user.id) as countLikes')
-            ->leftJoin('project.likedUsers', 'user')
             ->groupBy('project.id')
             ->orderBy("countLikes", 'DESC');
 
@@ -46,10 +47,11 @@ class ProjectRepository extends EntityRepository implements ProjectRepositoryInt
         $qb
             ->select('project')
             ->from('AppBundle:Project', 'project')
-            ->addSelect('COUNT(user.id) as countLikes')
-            ->leftJoin('project.likedUsers', 'user')
+            ->leftJoin('project.userProjects', 'user_projects')
+            ->leftJoin('user_projects.user', 'user')
             ->leftJoin('project.voteSetting', 'vs')
             ->leftJoin('vs.location', 'l')
+            ->addSelect('COUNT(user.id) as countLikes')
             ->where('project.approved = :approved')
             ->setParameter('approved', true);
 
@@ -80,7 +82,8 @@ class ProjectRepository extends EntityRepository implements ProjectRepositoryInt
     {
         return $this->createQueryBuilder('project')
             ->select('project', 'COUNT(user.id) as countLikes')
-            ->leftJoin('project.likedUsers', 'user')
+            ->leftJoin('project.userProjects', 'user_projects')
+            ->leftJoin('user_projects.user', 'user')
             ->andWhere('project.approved= :approved')
             ->andWhere('project.id = :id')
             ->setParameter('approved', true)
@@ -150,5 +153,19 @@ class ProjectRepository extends EntityRepository implements ProjectRepositoryInt
             ->setParameter('voteSetting', $voteSettings)
             ->addOrderBy('totalVotes', 'DESC')
             ->getQuery();
+    }
+
+    /**
+     * @param array $ids
+     *
+     * @return array|Project[]
+     */
+    public function findProjectsByIds(array $ids)
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p IN (:ids)')
+            ->setParameter('ids', $ids)
+            ->getQuery()
+            ->getResult();
     }
 }

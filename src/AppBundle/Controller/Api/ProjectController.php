@@ -3,7 +3,6 @@
 namespace AppBundle\Controller\Api;
 
 use AppBundle\Entity\Project;
-use AppBundle\Entity\User;
 use AppBundle\Exception\AuthException;
 use AppBundle\Exception\ValidatorException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -34,7 +33,7 @@ class ProjectController extends Controller
             /** @var Project $project */
             $project = $projects[$i][0];
             if(!empty($request->get('clid'))){
-                $voute = $project->getLikedUsers()
+                $voute = $project->getUserProjects()
                     ->contains($em->getRepository('AppBundle:User')
                         ->findOneBy(['clid' => $request->get('clid')]));
             }else{
@@ -49,7 +48,7 @@ class ProjectController extends Controller
             $project_array[$i]["source"] = $project->getSource();
             $project_array[$i]["picture"] = $project->getPicture();
             $project_array[$i]["createdAt"] = $project->getCreateAt()->format('c');
-            $project_array[$i]["likes_count"] = $project->getLikedUsers()->count();
+            $project_array[$i]["likes_count"] = $project->getUserProjects()->count();
             $project_array[$i]["owner"] = $project->getOwner()->getFullName();
             $project_array[$i]["avatar_owner"] = $project->getOwner()->getAvatar();
         }
@@ -68,7 +67,7 @@ class ProjectController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         if(!empty($request->get('clid'))){
-            $voute = $project->getLikedUsers()->contains($em->getRepository('AppBundle:User')->findOneByClid($request->get('clid')));
+            $voute = $project->getUserProjects()->contains($em->getRepository('AppBundle:User')->findOneByClid($request->get('clid')));
         }else{
             $voute = false;
         }
@@ -83,7 +82,7 @@ class ProjectController extends Controller
                  "source" => $project->getSource(),
                  "picture" => $project->getPicture(),
                  "createdAt" => $project->getCreateAt()->format('c'),
-                 "likes_count" => $project->getLikedUsers()->count(),
+                 "likes_count" => $project->getUserProjects()->count(),
                  "owner" => $project->getOwner()->getFullName(),
                  "avatar_owner" => $project->getOwner()->getAvatar(),
             ]

@@ -10,9 +10,13 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints as AssertBridge;
 
 /**
- * User
+ * User.
  *
- * @ORM\Table()
+ * @ORM\Table(
+ *     indexes={
+ *          @ORM\Index(name="inn_idx", columns={"inn"}),
+ *     }
+ * )
  * @ORM\Entity(repositoryClass="AppBundle\Entity\Repository\UserRepository")
  *
  * @AssertBridge\UniqueEntity(
@@ -27,7 +31,7 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     use GedmoTrait;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(type="integer")
      * @ORM\Id
@@ -39,7 +43,7 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
      * @var string
      *
      * @Assert\NotBlank(
-     *     groups={"admin_user_post", "admin_user_put"},
+     *     groups={"admin_user_post", "admin_user_put", "offline_user"},
      *     message="Им'я не може бути пустим"
      * )
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -50,7 +54,7 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
      * @var string
      *
      * @Assert\NotBlank(
-     *     groups={"admin_user_post", "admin_user_put"},
+     *     groups={"admin_user_post", "admin_user_put", "offline_user"},
      *     message="Прізвище не може бути пустим"
      * )
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -61,6 +65,11 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
      * @var string
      *
      * @ORM\Column(type="string", length=255, nullable=true)
+     *
+     * @Assert\NotBlank(
+     *     groups={"offline_user"},
+     *     message="По-батькові не може бути пустим"
+     * )
      */
     private $middleName;
 
@@ -94,6 +103,12 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
      * @var string
      *
      * @ORM\Column(type="string", length=255, nullable=true)
+     *
+     * @Assert\Regex(pattern="/^\+?380[0-9]{9}$/", groups={"Default", "offline_user"})
+     * @Assert\NotBlank(
+     *     groups={"offline_user"},
+     *     message="Телефон не може бути пустим"
+     * )
      */
     private $phone;
 
@@ -155,16 +170,7 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     private $inn;
 
     /**
-     * @deprecated
-     *
-     * @var Project[]ArrayCollection
-     *
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Project", inversedBy="likedUsers")
-     */
-    private $likedProjects;
-
-    /**
-     * @var string $image
+     * @var string
      *
      * @ORM\Column(name="avatar", type="string", length=255, nullable=true)
      */
@@ -173,21 +179,21 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     /**
      * @deprecated
      *
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="count_votes", type="integer", options={"default": 0}, nullable = true)
      */
     private $countVotes;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="is_subscribe", type="boolean", options={"default": true}, nullable = true)
      */
     private $isSubscribe;
 
     /**
-     * @var boolean
+     * @var bool
      */
     private $isDataPublic;
 
@@ -204,19 +210,31 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     private $userProjects;
 
     /**
-     * Constructor
+     * @var Collection
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\OtpToken", cascade={"persist", "remove"}, mappedBy="user")
+     */
+    private $otpTokens;
+
+    /**
+     * @var bool
+     */
+    private $withPolicy = false;
+
+    /**
+     * Constructor.
      */
     public function __construct()
     {
-        $this->likedProjects = new ArrayCollection;
-        $this->userProjects = new ArrayCollection;
-        $this->locations = new ArrayCollection;
+        $this->otpTokens = new ArrayCollection();
+        $this->userProjects = new ArrayCollection();
+        $this->locations = new ArrayCollection();
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -224,7 +242,7 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     }
 
     /**
-     * Set firstName
+     * Set firstName.
      *
      * @param string $firstName
      *
@@ -238,7 +256,7 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     }
 
     /**
-     * Get firstName
+     * Get firstName.
      *
      * @return string
      */
@@ -248,7 +266,7 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     }
 
     /**
-     * Set lastName
+     * Set lastName.
      *
      * @param string $lastName
      *
@@ -262,7 +280,7 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     }
 
     /**
-     * Get lastName
+     * Get lastName.
      *
      * @return string
      */
@@ -272,7 +290,7 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     }
 
     /**
-     * Set middleName
+     * Set middleName.
      *
      * @param string $middleName
      *
@@ -286,7 +304,7 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     }
 
     /**
-     * Get middleName
+     * Get middleName.
      *
      * @return string
      */
@@ -296,7 +314,7 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     }
 
     /**
-     * Set birthday
+     * Set birthday.
      *
      * @param string $birthday
      *
@@ -310,7 +328,7 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     }
 
     /**
-     * Get birthday
+     * Get birthday.
      *
      * @return string
      */
@@ -320,7 +338,7 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     }
 
     /**
-     * Set lastLoginAt
+     * Set lastLoginAt.
      *
      * @param \DateTime $lastLoginAt
      *
@@ -334,7 +352,7 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     }
 
     /**
-     * Get lastLoginAt
+     * Get lastLoginAt.
      *
      * @return \DateTime
      */
@@ -386,7 +404,7 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     /*-------------------------------relations methods----------------------------------------------------------------*/
 
     /**
-     * Get Current User Location
+     * Get Current User Location.
      *
      * @return Location
      */
@@ -404,7 +422,7 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     }
 
     /**
-     * Add Location to User
+     * Add Location to User.
      *
      * @param Location $location
      *
@@ -420,7 +438,7 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     }
 
     /**
-     * Add project
+     * Add project.
      *
      * @param Project $project
      *
@@ -437,20 +455,23 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     }
 
     /**
-     * Remove project
+     * Remove project.
      *
      * @param Project $project
+     *
+     * @return self
      */
     public function removeProject(Project $project)
     {
         if ($this->getProjects()->contains($project)) {
             $this->getProjects()->removeElement($project);
         }
-        $this->projects->removeElement($project);
+
+        return $this;
     }
 
     /**
-     * Get projects
+     * Get projects.
      *
      * @return Project[]|Collection
      */
@@ -460,7 +481,7 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     }
 
     /**
-     * Set email
+     * Set email.
      *
      * @param string $email
      *
@@ -474,7 +495,7 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     }
 
     /**
-     * Get email
+     * Get email.
      *
      * @return string
      */
@@ -484,7 +505,7 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     }
 
     /**
-     * Set sex
+     * Set sex.
      *
      * @param string $sex
      *
@@ -498,7 +519,7 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     }
 
     /**
-     * Get sex
+     * Get sex.
      *
      * @return string
      */
@@ -508,7 +529,7 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     }
 
     /**
-     * Set avatar
+     * Set avatar.
      *
      * @param string $avatar
      *
@@ -522,7 +543,7 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     }
 
     /**
-     * Get avatar
+     * Get avatar.
      *
      * @return string
      */
@@ -535,7 +556,7 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
 
     public function getFullName()
     {
-        return $this->getLastName() . ' ' . $this->getFirstName() . ' ' . $this->getMiddleName();
+        return $this->getLastName().' '.$this->getFirstName().' '.$this->getMiddleName();
     }
 
     /**
@@ -580,19 +601,19 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     /**
      * {@inheritdoc}
      */
-    function jsonSerialize()
+    public function jsonSerialize()
     {
         return [
-            "id" => $this->getId(),
-            "full_name" => $this->getFullName(),
-            "clid" => $this->getClid(),
+            'id' => $this->getId(),
+            'full_name' => $this->getFullName(),
+            'clid' => $this->getClid(),
         ];
     }
 
     /*----------------------------------------end other methods-----------------------------------------------------------*/
 
     /**
-     * Set inn
+     * Set inn.
      *
      * @param string $inn
      *
@@ -601,7 +622,7 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     public function setInn($inn): User
     {
         if (!$this->clid) {
-            $this->setClid($inn);            
+            $this->setClid($inn);
         }
         $this->inn = $inn;
 
@@ -609,58 +630,13 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     }
 
     /**
-     * Get inn
+     * Get inn.
      *
      * @return string
      */
     public function getInn()
     {
         return $this->inn;
-    }
-
-    /**
-     * @deprecated
-     *
-     * @param Project $project
-     *
-     * @return User
-     */
-    public function addLikedProjects(Project $project): User
-    {
-        if (!$this->getLikedProjects()->contains($project)) {
-            return $this->addUserProject(new UserProject($this, $project));
-        }
-
-        return $this;
-    }
-
-    /**
-     * @deprecated
-     *
-     * Remove project
-     *
-     * @param Project $project
-     * @return User
-     */
-    public function removeLikedProject(Project $project)
-    {
-        if ($this->getLikedProjects()->contains($project)) {
-            $this->getLikedProjects()->removeElement($project);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @deprecated
-     *
-     * Get likedProjects
-     *
-     * @return Project[]|Collection
-     */
-    public function getLikedProjects(): Collection
-    {
-        return $this->likedProjects;
     }
 
     /**
@@ -680,7 +656,7 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isIsSubscribe()
     {
@@ -688,7 +664,7 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     }
 
     /**
-     * @param boolean $isSubscribe
+     * @param bool $isSubscribe
      */
     public function setIsSubscribe($isSubscribe)
     {
@@ -696,7 +672,7 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isIsDataPublic()
     {
@@ -704,7 +680,7 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     }
 
     /**
-     * @param boolean $isDataPublic
+     * @param bool $isDataPublic
      */
     public function setIsDataPublic($isDataPublic)
     {
@@ -712,9 +688,9 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     }
 
     /**
-     * Get isSubscribe
+     * Get isSubscribe.
      *
-     * @return boolean
+     * @return bool
      */
     public function getIsSubscribe()
     {
@@ -722,23 +698,7 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     }
 
     /**
-     * Add likedProject
-     *
-     * @param Project $likedProject
-     *
-     * @return User
-     */
-    public function addLikedProject(Project $likedProject): User
-    {
-        if (!$this->getLikedProjects()->contains($likedProject)) {
-            $this->getLikedProjects()->add($likedProject);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Set addedByAdmin
+     * Set addedByAdmin.
      *
      * @param Admin $addedByAdmin
      *
@@ -752,7 +712,7 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     }
 
     /**
-     * Get addedByAdmin
+     * Get addedByAdmin.
      *
      * @return \AppBundle\Entity\Admin
      */
@@ -781,5 +741,86 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
         }
 
         return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isWithPolicy(): bool
+    {
+        return $this->withPolicy;
+    }
+
+    /**
+     * @param bool $withPolicy
+     *
+     * @return self
+     */
+    public function setWithPolicy(bool $withPolicy): self
+    {
+        $this->withPolicy = $withPolicy;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getOtpTokens(): Collection
+    {
+        return $this->otpTokens;
+    }
+
+    /**
+     * @param OtpToken $otpToken
+     *
+     * @return $this
+     */
+    public function addOtpToken(OtpToken $otpToken)
+    {
+        if (!$this->getOtpTokens()->contains($otpToken)) {
+            $this->getOtpTokens()->add($otpToken);
+            $otpToken->setUser($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param OtpToken $otpToken
+     *
+     * @return $this
+     */
+    public function removeOtpToken(OtpToken $otpToken)
+    {
+        if ($this->getOtpTokens()->contains($otpToken)) {
+            $this->getOtpTokens()->removeElement($otpToken);
+        }
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function expireOtpTokens()
+    {
+        $this->getOtpTokens()->filter(function (OtpToken $otpToken) {
+            return false === $otpToken->isUsed();
+        })->map(function (OtpToken $otpToken) {
+            return $otpToken->setUsed(true);
+        });
+    }
+
+    /**
+     * @param VoteSettings $voteSettings
+     *
+     * @return Collection
+     */
+    public function getVotesLength(VoteSettings $voteSettings)
+    {
+        return $this->userProjects->filter(function (UserProject $userProject) use ($voteSettings) {
+            return $voteSettings->getProject()->contains($userProject->getProject());
+        });
     }
 }

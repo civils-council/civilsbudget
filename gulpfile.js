@@ -17,7 +17,7 @@ gulp.task('lib-js', function() {
         'bower_components/select2/dist/js/select2.full.js'
     ])
         .pipe(concatJs('app.js'))
-        .pipe(minifyJs())
+        // .pipe(minifyJs())
         .pipe(gulp.dest('web/js/'));
 });
 

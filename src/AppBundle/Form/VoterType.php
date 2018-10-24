@@ -1,38 +1,34 @@
 <?php
 
-namespace AdminBundle\Form;
+declare(strict_types=1);
+
+namespace AppBundle\Form;
 
 use AppBundle\Entity\User;
+use AppBundle\Helper\UserManager;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class UserType extends AbstractType
+/**
+ * Class VoterType.
+ */
+class VoterType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
-            $user = $event->getData();
-            $form = $event->getForm();
-
-            if (!$user || null === $user->getId()) {
-                $form->add(
-                    'inn',
-                    TextType::class,
-                    ['label' => 'Ідентифiкацiйний код', 'position' => 'first']
-                );
-            }
-        });
-
         $builder
+            ->add('inn', TextType::class, [
+                'label' => 'Ідентифiкацiйний код',
+                'disabled' => true,
+            ])
             ->add('lastName', TextType::class, ['label' => 'Прізвище'])
             ->add('firstName', TextType::class, ['label' => 'Ім\'я'])
             ->add('middleName', TextType::class, ['label' => 'По-батьковi'])
@@ -43,27 +39,33 @@ class UserType extends AbstractType
             ->add('sex', ChoiceType::class, [
                 'label' => 'Стать',
                 'choices' => ['Чоловік' => 'M', 'Жінка' => 'F'],
+            ])
+            ->add('phone', TextType::class, [
+                'label' => 'Телефон',
+                'attr' => ['placeholder' => 'Формат: +380999999999', 'mask' => UserManager::PHONE_PATTERN],
+            ])
+            ->add('withPolicy', CheckboxType::class, [
+                'required' => false,
+                'label' => 'Вислати смс з посиланням про деталі обробки моїх персональних данних'
             ]);
-//            ->add('phone', TextType::class, ['label' => 'Телефон'])
-//            ->add('email', EmailType::class, ['label' => 'E-mail'])
     }
 
     /**
-     * {@inheritdoc}
+     * @param OptionsResolver $resolver
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'data_class' => User::class,
-            'csrf_protection' => false,
-        ));
+        ]);
     }
 
     /**
-     * {@inheritdoc}
+     * @return null|string
      */
     public function getBlockPrefix()
     {
-        return 'adminbundle_user';
+        return null;
     }
+
 }

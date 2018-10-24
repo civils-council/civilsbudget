@@ -33,8 +33,7 @@
 {% block submit_row %}
     {% set submit_id = form.vars.name ? form.vars.name ~ '_submit' : 'form_submit' %}
     <div class="form-group {{ block('button_parent') }} {{ block('button_centered') }}">
-        <button type="submit" id="{{ submit_id }}"
-                class="{{ block('button_size') }}">{{ block('button_label') }}</button>
+        <button type="submit" id="{{ submit_id }}" class="{{ block('button_size') }}" {{ block('attr') }}>{{ block('button_label') }}</button>
     </div>
 {% endblock %}
 

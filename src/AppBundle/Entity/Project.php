@@ -101,15 +101,6 @@ class Project implements \JsonSerializable
     /**
      * @deprecated
      *
-     * @var User[] ArrayCollection
-     *
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\User", mappedBy="likedProjects", fetch="EXTRA_LAZY")
-     */
-    private $likedUsers;
-
-    /**
-     * @deprecated
-     *
      * @var string
      *
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -161,7 +152,6 @@ class Project implements \JsonSerializable
      */
     public function __construct()
     {
-        $this->likedUsers = new ArrayCollection;
         $this->userProjects = new ArrayCollection;
         $this->gallery = new ArrayCollection;
     }
@@ -372,8 +362,8 @@ class Project implements \JsonSerializable
             "source" => $this->getSource(),
             "picture" => $this->getPicture(),
             "createdAt" => $this->getCreateAt()->format('c'),
-            "likes_count" => $this->getLikedUsers()->count(),
-            "likes_user" => $this->getLikedUsers()->getValues(),
+            "likes_count" => $this->getUserProjects()->count(),
+            "likes_user" => $this->getUserProjects()->getValues(),
             "owner" => $this->getOwner()->getFullName(),
             "avatar_owner" => $this->getOwner()->getAvatar(),
             "external_id" => $this->getExternalId(),
@@ -426,51 +416,6 @@ class Project implements \JsonSerializable
     public function getCharge()
     {
         return $this->charge;
-    }
-
-    /**
-     * @deprecated
-     *
-     * Add likedUser
-     *
-     * @param \AppBundle\Entity\User $likedUser
-     *
-     * @return Project
-     */
-    public function addLikedUser(User $likedUser): Project
-    {
-        if (!$this->getLikedUsers()->contains($likedUser)) {
-            return $this->addUserProject(new UserProject($likedUser, $this));
-        }
-
-        return $this;
-    }
-
-    /**
-     * @deprecated
-     *
-     * Remove likedUser
-     *
-     * @param User $likedUser
-     */
-    public function removeLikedUser(User $likedUser): void
-    {
-        if ($this->getLikedUsers()->contains($likedUser)) {
-            $this->getLikedUsers()->removeElement($likedUser);
-        }
-        $this->likedUsers->removeElement($likedUser);
-    }
-
-    /**
-     * @deprecated
-     *
-     * Get likedUsers
-     *
-     * @return User[]|Collection
-     */
-    public function getLikedUsers():Collection
-    {
-        return $this->likedUsers;
     }
 
     /**
@@ -570,6 +515,18 @@ class Project implements \JsonSerializable
     public function getGallery(): Collection
     {
         return $this->gallery;
+    }
+
+    /**
+     * @param User $user
+     *
+     * @return Collection
+     */
+    public function getUserProjectByUser(User $user)
+    {
+        return $this->getUserProjects()->filter(function (UserProject $userProjects) use ($user) {
+            return $user === $userProjects->getUser();
+        });
     }
 }
 

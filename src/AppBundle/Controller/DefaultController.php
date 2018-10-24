@@ -3,7 +3,6 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\User;
-use AppBundle\Entity\Project;
 use AppBundle\Entity\VoteSettings;
 use AppBundle\Form\ConfirmDataType;
 use AppBundle\Form\LoginType;
@@ -321,4 +320,12 @@ class DefaultController extends Controller
         $this->get('session')->set('_security_main', serialize($token));
     }
 
+    /**
+     * @Route("/policy", name="policy")
+     * @Template()
+     */
+    public function policyAction()
+    {
+        return [];
+    }
 }

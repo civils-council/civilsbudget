@@ -27,7 +27,7 @@ class TurboSmsSender
     private $turbosmsPass;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $turbosmsFrom;
 
@@ -48,7 +48,7 @@ class TurboSmsSender
      * @param string $turbosmsPass
      * @param string $turbosmsFrom
      */
-    public function __construct(string $turbosmsLogin, string $turbosmsPass, string $turbosmsFrom)
+    public function __construct(string $turbosmsLogin, string $turbosmsPass, ?string $turbosmsFrom = null)
     {
         $this->turbosmsLogin = $turbosmsLogin;
         $this->turbosmsPass = $turbosmsPass;
@@ -85,16 +85,15 @@ class TurboSmsSender
                 throw new TurboSmsException($authResult->AuthResult, $text);
             }
 
-            $result = $this->client->SendSMS($body);
+            $smsResult = $this->client->SendSMS($body);
             if (empty($result->SendSMSResult->ResultArray[0])) {
                 return $status;
             }
 
-            if ('Сообщения успешно отправлены' === ''.$result->SendSMSResult->ResultArray[0]
-            ) {
+            if ('Сообщения успешно отправлены' === ''.$smsResult->SendSMSResult->ResultArray[0]) {
                 $status['result'] = true;
             } else {
-                $status['message'] = implode(',', $result->SendSMSResult->ResultArray);
+                $status['message'] = implode(',', $smsResult->SendSMSResult->ResultArray);
             }
 
             $result['results']['status'] = true === $status['result'] ? self::STATUS_OK : self::STATUS_ERROR;

@@ -37,3 +37,5 @@ rada_developerss:
         template:     'AppBundle:Static:developers.html.twig'
         maxAge:       86400
         sharedMaxAge: 86400
+fos_js_routing:
+    resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"

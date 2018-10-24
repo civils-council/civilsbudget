@@ -4,12 +4,10 @@
 
     {{ block("header") }}
 
-    <main id="main-wrap">
+    <main id="main-wrap" class="container">
         {{ block("flash") }}
         {{ block("herosection") }}
-        <div class="container">
-            {{ block("content") }}
-        </div>
+        {{ block("content") }}
     </main>
     {{ block("footer") }}
     {{ block("popauth") }}
@@ -114,8 +112,8 @@
 {% endblock menu %}
 
 {% block header %}
-    <header id="main-header">
-        <div class="container main-block">
+    <header id="main-header" class="container">
+        <div class="main-block">
             {% if app.request.get('city') is not empty %}
                 <a href="{{ path("homepage") }}?city={{ app.request.get('city') }}" id="home-icon" class="icon-home">Всі голосування</a>
             {% else %}

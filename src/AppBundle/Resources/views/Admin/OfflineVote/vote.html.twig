@@ -1,0 +1,75 @@
+{% extends 'AppBundle:Admin:offline_layout.html.twig' %}
+
+{% block content %}
+    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+        {% set userVotes = user.getVotesLength(vote)|length %}
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="headingOne">
+                <h4 class="panel-title">
+                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse{{ vote.id }}" aria-expanded="true" aria-controls="collapseOne">
+                        {{ vote.title }}
+                    </a>
+                </h4>
+            </div>
+            <div id="collapse{{ vote.id }}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                <div class="panel-body">
+                    <h1>Проекти для голосування: лишилося <span id="user-limit">{{ vote.voteLimits - userVotes }}</span> голоси  </h1>
+                    <table class="table table-striped" data-user-limit="{{ vote.voteLimits - userVotes }}">
+                        {% for project in vote.project %}
+                            <tr id="project-{{ project.id }}" class="project">
+                                <td><h3>{{ project.title }}</h3></td>
+                                <td class="vote-column">
+                                    <label><input type="checkbox" data-project-id="{{ project.id }}" disabled {{ project.getUserProjectByUser(user)|length > 0 ? 'checked' }}/></label>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button id="vote-btn" class="btn btn-success btn-block">Завершити голосування</button>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        var generalUserLimit = parseInt($('.collapse table').attr('data-user-limit')) + parseInt($('.table input:checked').map(function () {
+                return $(this).attr('data-project-id');
+            }).toArray().length),
+            userLimitView = $('#user-limit');
+
+        $('.table  tr').click(function () {
+            var checkbox = $(this).find('input[type="checkbox"]');
+
+            if (0 === parseInt(userLimitView.html()) && false === checkbox.is(":checked")) {
+                return;
+            }
+
+            checkbox.attr('checked', !checkbox.is(':checked'));
+            userLimitView.html(generalUserLimit - $('.table input:checked').length);
+        });
+
+        $('#vote-btn').click(function () {
+            var votedProjects = $('.table input:checked').map(function () {
+                return $(this).attr('data-project-id');
+            }).toArray();
+
+            if (votedProjects.length > 0) {
+                $
+                    .post(Routing.generate('offline_votes_complete', {'inn': {{ user.inn }} }), {'projects': votedProjects})
+                    .done(function (data) {
+                        var href = $('.lb-signout').attr('href');
+                        if ('ok' === data) {
+                            window.location.href = href;
+                        }
+                    })
+                    .fail(function (data){
+                        console.log(data);
+                    });
+            }
+        });
+    </script>
+{% endblock javascripts %}
+
+

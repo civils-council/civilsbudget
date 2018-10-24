@@ -1,3 +1,7 @@
+* {
+    box-sizing: border-box;
+}
+
 @charset "utf-8";
 @import "../../bower_components/bootstrap/less/bootstrap.less";
 @import "../../bower_components/bootswatch/yeti/variables.less";
@@ -314,19 +318,10 @@ body {
 }
 
 #main-header {
-    //position:fixed;
-    //left:0;
-    //top:0;
-    width:100%;
-    height:52px;
-    padding-top:15px;
-    background:#fff;
-    box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    text-align:center;
-    font-size:20px;
-    z-index:10;
+    padding: 15px;
+    background: transparent;
+    text-align: center;
+    font-size: 20px;
 }
 
 #main-header a:focus {
@@ -336,7 +331,7 @@ body {
 
 #main-wrap {
     z-index: 2;
-    padding-bottom: 60px;
+    padding: 0 0 60px;
 }
 
 .container{
@@ -402,12 +397,11 @@ body {
 }
 
 #home-icon {
-    position:absolute; left:20px; top:-4px;
-    width: 185px;
-    height:27px;
+    height: 27px;
     background: url('../images/header-home.png') no-repeat left center;
-    text-align: right;
+    text-align: left;
     line-height: 34px;
+    padding-left: 30px;
 }
 
 #user-icon {
@@ -491,9 +485,6 @@ a.description-btn:hover {
     text-align:center;
     font-size:16px;
     color:#4c5c9c;
-    box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
     padding-top:4px;
 }
 
@@ -545,7 +536,7 @@ a.description-btn:hover {
     font-size:25px;
     font-weight:normal;
     text-align:center;
-    margin:40px 0px 20px;
+    margin:40px 0 20px;
     color:#fff;
 }
 #hp-title p {
@@ -655,7 +646,13 @@ a.description-btn:hover {
 .img-lnk img { max-width:100%; display:block;}
 
 .main-block {
-    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    &>a {
+        display: block;
+        flex-basis: 33.3%;
+    }
 }
 
 
@@ -838,22 +835,22 @@ a.description-btn:hover {
 }
 
 @media(max-width: 991px){
-    #home-icon {
-        position: static;
-        display: block;
-        margin: 0 auto 10px;
-    }
+    //#home-icon {
+    //    position: static;
+    //    display: block;
+    //    margin: 0 auto 10px;
+    //}
 
-    .main-block {
-        .header-controls {
-            position: static;
-            padding-bottom: 10px;
-        }
-    }
+    //.main-block {
+    //    .header-controls {
+    //        min-height: 37px;
+    //        position: static;
+    //    }
+    //}
 
-    header#main-header {
-        height: auto;
-    }
+    //header#main-header {
+    //    height: auto;
+    //}
 }
 #user-title {
     font-size: 20px;
@@ -913,12 +910,6 @@ a.description-btn:hover {
     margin-right: 30px;
 
 }
-.header-controls{
-    position:absolute;
-    right:20px;
-    top:-5px;
-    padding: 5px;
-}
 
 #count_votes {
     color: #6F6EA6;
@@ -947,16 +938,21 @@ a.description-btn:hover {
 }
 
 .lb-signout{
-    display: inline-block;
-    width: 27px;
-    height: 25px;
-    -webkit-border-radius: 50%;
-    -moz-border-radius: 50%;
-    border-radius: 50%;
-    -webkit-background-size: cover;
-    background-size: cover;
-    margin-right: 5px;
+    text-align: right;
+    //display: inline-block;
+    //width: 27px;
+    //height: 25px;
+    //-webkit-border-radius: 50%;
+    //-moz-border-radius: 50%;
+    //border-radius: 50%;
+    //-webkit-background-size: cover;
+    //background-size: cover;
+    //margin-right: 5px;
 }
+img.lb-signout {
+    max-height: 27px;
+}
+
 /*btn*/
 .vote-btn{
     display: block;

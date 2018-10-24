@@ -4,7 +4,6 @@ namespace AppBundle\Controller\Admin;
 
 use AppBundle\Controller\ProjectController;
 use AppBundle\Entity\Admin;
-use AppBundle\Entity\User;
 use AppBundle\Form\AdminLoginType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -16,6 +15,10 @@ class AdminController extends Controller
     /**
      * @Route("/admin", name="admin_dashboard")
      * @Template()
+     *
+     * @param Request $request
+     *
+     * @return array
      */
     public function indexAction(Request $request)
     {
@@ -32,14 +35,14 @@ class AdminController extends Controller
         // TODO: fix it if it is necessary
         $countAdminVoted = 0;
         $countVoted = 0;
-        $countAdminUsers =  0;
+        $countAdminUsers = 0;
         $countAuthUsers = 0;
 
         return [
             'countVoted' => $countVoted,
             'countAdminVoted' => $countAdminVoted,
             'countAdminUsers' => $countAdminUsers,
-            'countAuthUsers' => $countAuthUsers
+            'countAuthUsers' => $countAuthUsers,
         ];
     }
 

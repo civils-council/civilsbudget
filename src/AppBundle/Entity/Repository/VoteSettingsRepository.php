@@ -162,4 +162,22 @@ class VoteSettingsRepository extends EntityRepository implements VoteSettingInte
             ->getQuery()
             ->getSingleScalarResult();
     }
+
+    /**
+     * @return array|VoteSettings[]
+     */
+    public function getActiveVotingSettings()
+    {
+        $point = new \DateTime();
+
+        return $this->createQueryBuilder('vs')
+            ->leftJoin('vs.project', 'p')
+            -> andWhere('p.voteSetting = vs')
+            ->andWhere('vs.dateFrom <= :point')
+            ->andWhere('vs.dateTo >= :point')
+            ->setParameter('point', $point)
+            ->orderBy('vs.dateFrom', Criteria::DESC)
+            ->getQuery()
+            ->getResult();
+    }
 }
