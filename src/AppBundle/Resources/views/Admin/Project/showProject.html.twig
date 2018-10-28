@@ -66,7 +66,7 @@
         <ul class="nav nav-pills">
             <li><span>Створено: <span class="badge">{{ project.createAt|date('d-m-Y') }}</span></span></li>
             <li>
-                <span>Підтримало: <span class="badge">{{ project.userProjects|length|number_format(0, '.', ' ') }}</span></span>
+                <span>Підтримало: <span class="badge">{{ project.likedUsers|length|number_format(0, '.', ' ') }}</span></span>
             </li>
             <li>
                 <span>Статус: <span class="badge">{% if project.approved %} approved {% else %} not approved {% endif %}</span></span>

@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Project
+ * Project.
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="AppBundle\Entity\Repository\ProjectRepository")
@@ -18,7 +18,7 @@ class Project implements \JsonSerializable
     use GedmoTrait;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -101,6 +101,15 @@ class Project implements \JsonSerializable
     /**
      * @deprecated
      *
+     * @var User[] ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\User", mappedBy="likedProjects", fetch="EXTRA_LAZY")
+     */
+    private $likedUsers;
+
+    /**
+     * @deprecated
+     *
      * @var string
      *
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -148,12 +157,13 @@ class Project implements \JsonSerializable
     private $gallery;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
-        $this->userProjects = new ArrayCollection;
-        $this->gallery = new ArrayCollection;
+        $this->likedUsers = new ArrayCollection();
+        $this->userProjects = new ArrayCollection();
+        $this->gallery = new ArrayCollection();
     }
 
     public function __toString()
@@ -162,9 +172,9 @@ class Project implements \JsonSerializable
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -172,7 +182,7 @@ class Project implements \JsonSerializable
     }
 
     /**
-     * Set title
+     * Set title.
      *
      * @param string $title
      *
@@ -186,7 +196,7 @@ class Project implements \JsonSerializable
     }
 
     /**
-     * Get title
+     * Get title.
      *
      * @return string
      */
@@ -196,7 +206,7 @@ class Project implements \JsonSerializable
     }
 
     /**
-     * Set description
+     * Set description.
      *
      * @param string $description
      *
@@ -210,7 +220,7 @@ class Project implements \JsonSerializable
     }
 
     /**
-     * Get description
+     * Get description.
      *
      * @return string
      */
@@ -220,7 +230,7 @@ class Project implements \JsonSerializable
     }
 
     /**
-     * Set source
+     * Set source.
      *
      * @param string $source
      *
@@ -234,7 +244,7 @@ class Project implements \JsonSerializable
     }
 
     /**
-     * Get source
+     * Get source.
      *
      * @return string
      */
@@ -260,7 +270,7 @@ class Project implements \JsonSerializable
     }
 
     /**
-     * Set confirmedAt
+     * Set confirmedAt.
      *
      * @param \DateTime $confirmedAt
      *
@@ -274,7 +284,7 @@ class Project implements \JsonSerializable
     }
 
     /**
-     * Get confirmedAt
+     * Get confirmedAt.
      *
      * @return \DateTime
      */
@@ -284,8 +294,9 @@ class Project implements \JsonSerializable
     }
 
     /*-------------------------------relation methods------------------------------------------------------------------*/
+
     /**
-     * Set confirmedBy
+     * Set confirmedBy.
      *
      * @param Admin $confirmedBy
      *
@@ -299,7 +310,7 @@ class Project implements \JsonSerializable
     }
 
     /**
-     * Get confirmedBy
+     * Get confirmedBy.
      *
      * @return Admin
      */
@@ -307,7 +318,7 @@ class Project implements \JsonSerializable
     {
         return $this->confirmedBy;
     }
-	
+
     /**
      * @return string
      */
@@ -322,10 +333,10 @@ class Project implements \JsonSerializable
     public function setExternalId($externalId)
     {
         $this->externalId = $externalId;
-    }	
+    }
 
     /**
-     * Set owner
+     * Set owner.
      *
      * @param User $owner
      *
@@ -339,7 +350,7 @@ class Project implements \JsonSerializable
     }
 
     /**
-     * Get owner
+     * Get owner.
      *
      * @return User
      */
@@ -348,35 +359,34 @@ class Project implements \JsonSerializable
         return $this->owner;
     }
 
-
     /**
      * {@inheritdoc}
      */
-    function jsonSerialize()
+    public function jsonSerialize()
     {
         return [
-            "id" => $this->getId(),
-            "title" => $this->getTitle(),
-            "description" => $this->getDescription(),
-            "charge" => $this->getCharge(),
-            "source" => $this->getSource(),
-            "picture" => $this->getPicture(),
-            "createdAt" => $this->getCreateAt()->format('c'),
-            "likes_count" => $this->getUserProjects()->count(),
-            "likes_user" => $this->getUserProjects()->getValues(),
-            "owner" => $this->getOwner()->getFullName(),
-            "avatar_owner" => $this->getOwner()->getAvatar(),
-            "external_id" => $this->getExternalId(),
+            'id' => $this->getId(),
+            'title' => $this->getTitle(),
+            'description' => $this->getDescription(),
+            'charge' => $this->getCharge(),
+            'source' => $this->getSource(),
+            'picture' => $this->getPicture(),
+            'createdAt' => $this->getCreateAt()->format('c'),
+            'likes_count' => $this->getLikedUsers()->count(),
+            'likes_user' => $this->getLikedUsers()->getValues(),
+            'owner' => $this->getOwner()->getFullName(),
+            'avatar_owner' => $this->getOwner()->getAvatar(),
+            'external_id' => $this->getExternalId(),
         ];
     }
 
-   /**
-    * Set approved
-    *
-    * @param boolean $approved
-    *
-    * @return Project
-    */
+    /**
+     * Set approved.
+     *
+     * @param bool $approved
+     *
+     * @return Project
+     */
     public function setApproved($approved)
     {
         $this->approved = $approved;
@@ -385,9 +395,9 @@ class Project implements \JsonSerializable
     }
 
     /**
-     * Get approved
+     * Get approved.
      *
-     * @return boolean
+     * @return bool
      */
     public function isApproved()
     {
@@ -395,9 +405,9 @@ class Project implements \JsonSerializable
     }
 
     /**
-     * Set charge
+     * Set charge.
      *
-     * @param integer $charge
+     * @param int $charge
      *
      * @return Project
      */
@@ -409,13 +419,58 @@ class Project implements \JsonSerializable
     }
 
     /**
-     * Get charge
+     * Get charge.
      *
-     * @return integer
+     * @return int
      */
     public function getCharge()
     {
         return $this->charge;
+    }
+
+    /**
+     * @deprecated
+     *
+     * Add likedUser
+     *
+     * @param \AppBundle\Entity\User $likedUser
+     *
+     * @return Project
+     */
+    public function addLikedUser(User $likedUser): Project
+    {
+        if (!$this->getLikedUsers()->contains($likedUser)) {
+            return $this->addUserProject(new UserProject($likedUser, $this));
+        }
+
+        return $this;
+    }
+
+    /**
+     * @deprecated
+     *
+     * Remove likedUser
+     *
+     * @param User $likedUser
+     */
+    public function removeLikedUser(User $likedUser): void
+    {
+        if ($this->getLikedUsers()->contains($likedUser)) {
+            $this->getLikedUsers()->removeElement($likedUser);
+        }
+        $this->likedUsers->removeElement($likedUser);
+    }
+
+    /**
+     * @deprecated
+     *
+     * Get likedUsers
+     *
+     * @return User[]|Collection
+     */
+    public function getLikedUsers(): Collection
+    {
+        return $this->likedUsers;
     }
 
     /**
@@ -451,9 +506,9 @@ class Project implements \JsonSerializable
     }
 
     /**
-     * Get approved
+     * Get approved.
      *
-     * @return boolean
+     * @return bool
      */
     public function getApproved()
     {
@@ -461,7 +516,7 @@ class Project implements \JsonSerializable
     }
 
     /**
-     * Set voteSetting
+     * Set voteSetting.
      *
      * @param VoteSettings $voteSetting
      *
@@ -478,7 +533,7 @@ class Project implements \JsonSerializable
     }
 
     /**
-     * Get voteSetting
+     * Get voteSetting.
      *
      * @return \AppBundle\Entity\VoteSettings
      */
@@ -529,4 +584,3 @@ class Project implements \JsonSerializable
         });
     }
 }
-

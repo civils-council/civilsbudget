@@ -111,7 +111,7 @@ class ProjectDTO
      */
     public function getVoted(): int
     {
-        return $this->project->getUserProjects()->count();
+        return $this->project->getLikedUsers()->count();
     }
 
     /**

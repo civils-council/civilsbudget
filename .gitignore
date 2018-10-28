@@ -25,3 +25,4 @@
 !var/SymfonyRequirements.php
 web-src/images/.DS_Store
 /package-lock.json
+/web-src/*/*.map

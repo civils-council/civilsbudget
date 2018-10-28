@@ -1,4 +1,4 @@
-{% extends 'AppBundle:Admin:offline_layout.html.twig' %}
+{% extends 'AppBundle:Admin:layout.html.twig' %}
 
 {% block content %}
     <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
@@ -19,7 +19,11 @@
                             <tr id="project-{{ project.id }}" class="project">
                                 <td><h3>{{ project.title }}</h3></td>
                                 <td class="vote-column">
-                                    <label><input type="checkbox" data-project-id="{{ project.id }}" disabled {{ project.getUserProjectByUser(user)|length > 0 ? 'checked' }}/></label>
+                                    {% set projectChecked = project.getUserProjectByUser(user)|length > 0 %}
+                                    <div class="check">
+                                        <i class="fa fa-check fa-2x{{ false == projectChecked ? ' hidden' }}" aria-hidden="true" data-check="{{ project.id }}"></i>
+                                    </div>
+                                    <label class="hidden"><input type="checkbox" data-project-id="{{ project.id }}" disabled {{ projectChecked ? 'checked' }}/></label>
                                 </td>
                             </tr>
                         {% endfor %}
@@ -47,6 +51,7 @@
             }
 
             checkbox.attr('checked', !checkbox.is(':checked'));
+            checkbox.change();
             userLimitView.html(generalUserLimit - $('.table input:checked').length);
         });
 
@@ -61,7 +66,7 @@
                     .done(function (data) {
                         var href = $('.lb-signout').attr('href');
                         if ('ok' === data) {
-                            window.location.href = href;
+                            window.location.href = Routing.generate('offline_dashboard');
                         }
                     })
                     .fail(function (data){
@@ -69,6 +74,21 @@
                     });
             }
         });
+
+        $('table input[type="checkbox"]').change(function () {
+            var checkbox = $(this),
+                view = checkbox.parent().parent().find('.check i');
+
+            if (view.hasClass('hidden') && true === checkbox.is(':checked')) {
+                view.removeClass('hidden');
+
+                return;
+            }
+
+            if (false === view.hasClass('hidden') && false === checkbox.is(':checked')) {
+                view.addClass('hidden');
+            }
+        })
     </script>
 {% endblock javascripts %}
 

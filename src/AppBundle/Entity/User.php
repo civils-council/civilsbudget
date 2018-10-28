@@ -165,6 +165,15 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     private $inn;
 
     /**
+     * @deprecated
+     *
+     * @var Project[]ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Project", inversedBy="likedUsers")
+     */
+    private $likedProjects;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="avatar", type="string", length=255, nullable=true)
@@ -217,8 +226,9 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     public function __construct()
     {
         $this->otpTokens = new ArrayCollection();
-        $this->userProjects = new ArrayCollection();
-        $this->locations = new ArrayCollection();
+        $this->likedProjects = new ArrayCollection;
+        $this->userProjects = new ArrayCollection;
+        $this->locations = new ArrayCollection;
     }
 
     /**
@@ -630,6 +640,47 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     }
 
     /**
+     * @deprecated
+     *
+     * @param Project $project
+     *
+     * @return User
+     */
+    public function addLikedProjects(Project $project): User
+    {
+        if (!$this->getLikedProjects()->contains($project)) {
+            return $this->addUserProject(new UserProject($this, $project));
+        }
+        return $this;
+    }
+    /**
+     * @deprecated
+     *
+     * Remove project
+     *
+     * @param Project $project
+     * @return User
+     */
+    public function removeLikedProject(Project $project)
+    {
+        if ($this->getLikedProjects()->contains($project)) {
+            $this->getLikedProjects()->removeElement($project);
+        }
+        return $this;
+    }
+    /**
+     * @deprecated
+     *
+     * Get likedProjects
+     *
+     * @return Project[]|Collection
+     */
+    public function getLikedProjects(): Collection
+    {
+        return $this->likedProjects;
+    }
+
+    /**
      * @return int
      */
     public function getCountVotes()
@@ -685,6 +736,21 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     public function getIsSubscribe()
     {
         return $this->isSubscribe;
+    }
+
+    /**
+     * Add likedProject
+     *
+     * @param Project $likedProject
+     *
+     * @return User
+     */
+    public function addLikedProject(Project $likedProject): User
+    {
+        if (!$this->getLikedProjects()->contains($likedProject)) {
+            $this->getLikedProjects()->add($likedProject);
+        }
+        return $this;
     }
 
     /**

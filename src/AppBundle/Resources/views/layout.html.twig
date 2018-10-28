@@ -4,20 +4,20 @@
 
     {{ block("header") }}
 
-    <main id="main-wrap" class="container">
+    <main id="main-wrap" class="{{ block('mainWrapClass') }}">
         {{ block("flash") }}
         {{ block("herosection") }}
-        {{ block("content") }}
+        <div class="container">
+            {{ block("content") }}
+        </div>
     </main>
     {{ block("footer") }}
     {{ block("popauth") }}
 {% endblock body %}
 
-{% block herosection %}
-{% endblock herosection %}
+{% block herosection %}{% endblock herosection %}
 
-{% block content %}
-{% endblock content %}
+{% block content %}{% endblock content %}
 
 {% block popauth %}
     <div id="login-modal" class="modal fade">
@@ -112,9 +112,9 @@
 {% endblock menu %}
 
 {% block header %}
-    <header id="main-header" class="container">
-        <div class="main-block">
-            {% if app.request.get('city') is not empty %}
+    <header id="main-header">
+        <div class="container main-block">
+        {% if app.request.get('city') is not empty %}
                 <a href="{{ path("homepage") }}?city={{ app.request.get('city') }}" id="home-icon" class="icon-home">Всі голосування</a>
             {% else %}
                 <a href="{{ path("homepage") }}" id="home-icon" class="icon-home">Всі голосування</a>

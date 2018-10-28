@@ -47,8 +47,7 @@ class ProjectRepository extends EntityRepository implements ProjectRepositoryInt
         $qb
             ->select('project')
             ->from('AppBundle:Project', 'project')
-            ->leftJoin('project.userProjects', 'user_projects')
-            ->leftJoin('user_projects.user', 'user')
+            ->leftJoin('project.likedUsers', 'user')
             ->leftJoin('project.voteSetting', 'vs')
             ->leftJoin('vs.location', 'l')
             ->addSelect('COUNT(user.id) as countLikes')
@@ -82,8 +81,7 @@ class ProjectRepository extends EntityRepository implements ProjectRepositoryInt
     {
         return $this->createQueryBuilder('project')
             ->select('project', 'COUNT(user.id) as countLikes')
-            ->leftJoin('project.userProjects', 'user_projects')
-            ->leftJoin('user_projects.user', 'user')
+            ->leftJoin('project.likedUsers', 'user')
             ->andWhere('project.approved= :approved')
             ->andWhere('project.id = :id')
             ->setParameter('approved', true)
