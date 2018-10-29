@@ -1,37 +1,137 @@
 {% extends "@App/Admin/layout.html.twig" %}
 
 {% block content %}
-    <p><b>Пошук виборця по ІНН:</b><br>
-        <input id="inn-search"
-               type="text"
-               title="Пошук по ІНН"
-               onkeypress="return isNumberKey(event)"
-               data-search-url="{{ url('admin_users') }}"
-        >
-    </p>
-    <div id="inn-search-result">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Пошук виборця по ІНН:
+                </div>
+                <div class="panel-body">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="inn_title">IHH</span>
+                        <input
+                                id="inn-search"
+                                type="text"
+                                class="form-control"
+                                placeholder="Username"
+                                aria-describedby="inn_title"
+                                title="Пошук по ІНН"
+                                onkeypress="return isNumberKey(event)"
+                                data-search-url="{{ url('admin_users') }}"
+                        />
+                    </div>
+
+                    <div id="inn-search-result"></div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    Пошук Виборця:  <a href="{{ path('admin_user_find') }}" class="btn btn-default">Пошук Виборця по ІНН</a><br><br>
-    Додати Виборця:  <a href="{{ path('admin_users_new') }}" class="btn btn-success">Додати виборця</a><br><br>
 
-    {% if is_granted('ROLE_REGIONAL_ADMIN') %}
-        Список голосуваннь:  <a href="{{ path('admin_voting_list') }}" class="btn btn-default">Переглянути</a><br><br>
-    {% endif %}
-    {% if is_granted('ROLE_SUPER_ADMIN') %}
-        Список голосуваннь (редагувати):  <a href="{{ path('vote_settings') }}" class="btn btn-default">Переглянути</a><br><br>
-        Список проектів:  <a href="{{ path('admin_projects_show') }}" class="btn btn-default">Переглянути</a><br><br>
-        Не підтвердженні проекти:  <a href="{{ path('admin_projects_not_approved') }}" class="btn btn-default">Переглянути</a><br><br>
-        Список Виборців:  <a href="{{ path('admin_users') }}" class="btn btn-default">До списку виборців</a><br><br>
+    <div class="row">
+        <div class="col-sm-4 col-xs-6 col-md-">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Пошук Виборця:
+                </div>
+                <div class="panel-body">
+                    <a href="{{ path('admin_user_find') }}" class="btn btn-default btn-block">Пошук Виборця по ІНН</a><br><br>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4 col-xs-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Додати Виборця:
+                </div>
+                <div class="panel-body">
+                     <a href="{{ path('admin_users_new') }}" class="btn btn-success btn-block">Додати виборця</a><br><br>
+                </div>
+            </div>
+        </div>
+        {% if is_granted('ROLE_REGIONAL_ADMIN') %}
+        <div class="col-sm-4 col-xs-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Список голосуваннь:
+                </div>
+                <div class="panel-body">
+                    <a href="{{ path('admin_voting_list') }}" class="btn btn-default btn-block">Переглянути</a><br><br>
+                </div>
+            </div>
+        </div>
+        {% endif %}
 
-        список Виборців якi додав адмiн {{ countAdminUsers }} <br>
-        список Виборців якi зарееструвались самi {{ countAuthUsers }} <br>
+        {% if is_granted('ROLE_SUPER_ADMIN') %}
+        <div class="col-sm-4 col-xs-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Список голосуваннь (редагувати):
+                </div>
+                <div class="panel-body">
+                    <a href="{{ path('vote_settings') }}" class="btn btn-default btn-block">Переглянути</a><br><br>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4 col-xs-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Список проектів:
+                </div>
+                <div class="panel-body">
+                    <a href="{{ path('admin_projects_show') }}" class="btn btn-default btn-block">Переглянути</a><br><br>
+                </div>
+            </div>
 
-        голоси Виборців якi додав адмiн {{ countAdminVoted }} <br>
-        голоси Виборців якi зарееструвались самi {{ countVoted }} <br>
-    {% endif %}
+        </div>
+        <div class="col-sm-4 col-xs-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Не підтвердженні проекти:
+                </div>
+                <div class="panel-body">
+                    <a href="{{ path('admin_projects_not_approved') }}" class="btn btn-default btn-block">Переглянути</a><br><br>
+                </div>
+            </div>
 
-    Адмін панель <a href="{{ path('admin_logout') }}" class="btn btn-warning">Вихід з адмін панелі</a><br><br>
+        </div>
+        <div class="col-sm-4 col-xs-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Список Виборців:
+                </div>
+                <div class="panel-body">
+                    <a href="{{ path('admin_users') }}" class="btn btn-default btn-block">До списку виборців</a><br><br>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4 col-xs-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Публічне голосування:
+                </div>
+                <div class="panel-body">
+                    <a href="{{ path('offline_dashboard') }}" class="btn btn-info btn-block">Голосувати</a><br><br>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4 col-xs-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Статистика:
+                </div>
+                <div class="panel-body">
+                    список Виборців якi додав адмiн {{ countAdminUsers }} <br>
+                    список Виборців якi зарееструвались самi {{ countAuthUsers }} <br>
+
+                    голоси Виборців якi додав адмiн {{ countAdminVoted }} <br>
+                    голоси Виборців якi зарееструвались самi {{ countVoted }} <br>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
 
 {% endblock content %}
 

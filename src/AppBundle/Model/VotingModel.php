@@ -153,7 +153,7 @@ class VotingModel
      */
     private function isUserVotedForProject(?User $user, Project $project): bool
     {
-        return $user ? $project->getLikedUsers()->contains($user) : false;
+        return $user ? $project->getUserProjects()->contains($user) : false;
    }
 
     /**

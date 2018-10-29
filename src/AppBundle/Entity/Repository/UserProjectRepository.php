@@ -2,6 +2,8 @@
 
 namespace AppBundle\Entity\Repository;
 
+use AppBundle\Entity\User;
+use AppBundle\Entity\UserProject;
 use AppBundle\Entity\VoteSettings;
 use Doctrine\ORM\EntityRepository;
 
@@ -30,5 +32,27 @@ class UserProjectRepository extends EntityRepository
             ->where('p.voteSetting = :voteSetting')
             ->setParameter('voteSetting', $voteSettings)
             ->getQuery();
+    }
+
+    /**
+     * @param User  $user
+     * @param array $projects
+     * @param array $votedProjects
+     *
+     * @return array|UserProject[]
+     */
+    public function findVotesByUserAndNotInProject(User $user, array $projects = [], array $votedProjects = [])
+    {
+        return $this->createQueryBuilder('up')
+            ->leftJoin('up.user', 'user')
+            ->leftJoin('up.project', 'project')
+            ->andWhere('user = :user')
+            ->setParameter('user', $user)
+            ->andWhere('project NOT IN (:projects)')
+            ->setParameter('projects', $projects)
+            ->andWhere('project IN (:votedProjects)')
+            ->setParameter('votedProjects', $votedProjects)
+            ->getQuery()
+            ->getResult();
     }
 }

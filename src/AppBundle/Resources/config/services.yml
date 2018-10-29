@@ -42,6 +42,9 @@ services:
         arguments:
             - "@doctrine.orm.entity_manager"
             - "%kernel.root_dir%"
+        calls:
+            - ['setSmsSender', ['@app.turbosms_sender']]
+            - ['setRouter', ['@router']]
 
     app.session:
         class:  AppBundle\Helper\SessionSet

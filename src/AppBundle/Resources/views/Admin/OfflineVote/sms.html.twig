@@ -1,0 +1,8 @@
+{% extends 'AppBundle:Admin:layout.html.twig' %}
+
+{% form_theme form _self %}
+
+{% block content %}{{ form(form) }}{% endblock %}
+
+{% block button_size %}btn btn-success btn-block{% endblock button_size %}
+{% block button_label %}Вислати код підтвердження{% endblock button_label %}

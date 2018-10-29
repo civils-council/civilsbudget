@@ -1,28 +1,23 @@
 {% extends "@App/layout.html.twig" %}
 
+{% block title %}Адмін панель{% endblock title %}
+
 {% block header %}
-    <header id="main-header">
-        <div class="container main-block">
-            <a href="{{ path("homepage") }}" id="home-icon" class="icon-home"></a>
-            <a href="{{ path("admin_dashboard") }}">Адмін панель</a>
-
-            {#Logging#}
-            {#{% if app.user and is_granted('ROLE_USER') %}#}
-            {#<a href="{{ path('projects_add') }}">Add Project User</a>#}
-            {#{% endif %}#}
-
-            {#TODO: orginize it in better way #}
-            {#{% if app.user and is_granted('ROLE_ADMIN') %}#}
-            {#<a href="{{ path('admin_projects_add') }}">Add Project Admin</a>#}
-            {#{% endif %}#}
+    <header id="admin-main-header">
+        <div class="container">
+            <div class="brand">
+                <a href="{{ path("homepage") }}" id="admin-home-icon"></a>
+            </div>
 
             <div class="header-controls">
-                {#<a href="#" class="lb-diagramm" title="Статистика"></a>#}
-                {% if app.user %}
-                    <a href="{{ path('logout') }}" class="lb-signout" style="background-image: url( {% if app.user.avatar %} {{ asset(app.user.avatar) }} {% else %} {{ asset('bundles/app/img/icon_developer.png') }} {% endif %} );" title="Вихід"></a>
-                {% elseif app.request.get('_route') != 'login' %}
-                    <a href="" class="lb-signin" data-toggle="modal" data-target="#login-modal" title="Увійти"></a>
-                {% endif %}
+                <a href="{{ path("admin_dashboard") }}">{{ block('title')}}</a>
+                {% block user %}
+                    {% if app.user %}
+                        <a href="{{ path('logout') }}" class="lb-signout" title="Вихід">Вихід</a>
+                    {% elseif app.request.get('_route') != 'login' %}
+                        <a href="" class="lb-signin" data-toggle="modal" data-target="#login-modal" title="Увійти"></a>
+                    {% endif %}
+                {% endblock user %}
             </div>
         </div>
     </header>

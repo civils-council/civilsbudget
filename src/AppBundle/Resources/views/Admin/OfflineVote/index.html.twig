@@ -1,0 +1,45 @@
+{% extends "@App/Admin/layout.html.twig" %}
+{% form_theme form _self %}
+
+{% block button_size %}btn btn-success btn-block{% endblock button_size %}
+{% block button_label %}Вислати код підтвердження{% endblock button_label %}
+{% block attr %}disabled{% endblock attr %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Пошук виборця по ІНН:
+                </div>
+                <div class="panel-body">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="inn_title">IHH</span>
+                        <input
+                                id="inn-search"
+                                type="text"
+                                class="form-control"
+                                placeholder="Ідентифiкацiйний код"
+                                aria-describedby="inn_title"
+                                title="Пошук по ІНН"
+                                onkeypress="return isNumberKey(event)"
+                                value="{{ user.inn }}"
+                        />
+                    </div>
+
+                    <div id="inn-search-result" style="display: none;">
+                        {% if user.inn %}
+                            <h2>Інформація виборця</h2>
+                            {{ form(form) }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/offline.js') }}"></script>
+{% endblock javascripts %}

@@ -1,0 +1,1360 @@
+<html lang="en"><head><style type="text/css">@charset "UTF-8";[ng\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>
+    <link rel="stylesheet" type="text/css" href="http://l.ead.me/css/build/pages/dapp/template_normal.min.css?v=1.020">
+    <script type="text/javascript">
+        /*<![CDATA[*/
+        YII_CSRF_TOKEN='1f9333390d0c91246f1017a4c944b28e43870678';
+        /*]]>*/
+    </script>
+    <title>App Page</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <script type="text/javascript">
+        window.GLOBAL_CSRF_TOKEN = '1f9333390d0c91246f1017a4c944b28e43870678';
+    </script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+
+    <!--Facebook meta-->
+    <meta property="og:url" content="http://l.ead.me/bayDdJ?trackSharing=1">
+    <meta property="og:title" content="Скачав, подумав, проголосував">
+    <meta property="og:description" content="Civil Council">
+    <meta property="og:image" content="http://qrcgcustomers.s3-eu-west-1.amazonaws.com/account3825712/1495932_2.jpg?0.010521242859136914">
+    <meta property="og:image:width" content="200">
+    <meta property="og:image:height" content="200">
+
+    <!-- Twitter Card data -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:url" content="http://l.ead.me/bayDdJ?trackSharing=1">
+    <meta name="twitter:title" content="Скачав, подумав, проголосував">
+    <meta name="twitter:description" content="Civil Council">
+    <meta name="twitter:image" content="http://qrcgcustomers.s3-eu-west-1.amazonaws.com/account3825712/1495932_2.jpg?0.010521242859136914">
+    <meta name="twitter:image:width" content="200">
+    <meta name="twitter:image:height" content="200">
+
+    <!-- Schema.org markup for Google+ -->
+    <meta itemprop="name" content="Скачав, подумав, проголосував">
+    <meta itemprop="description" content="Civil Council">
+    <meta itemprop="image" content="http://qrcgcustomers.s3-eu-west-1.amazonaws.com/account3825712/1495932_2.jpg?0.010521242859136914">
+    <style type="text/css">/*.lleo_errorSelection *::-moz-selection,
+.lleo_errorSelection *::selection,
+.lleo_errorSelection *::-webkit-selection {
+    background-color: red !important;
+    color: #fff !important;;
+}*/
+
+        #lleo_dialog,
+        #lleo_dialog * {
+            color: #000 !important;
+            font: normal 13px Arial, Helvetica !important;
+            line-height: 15px !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            background: none !important;
+            border: none 0 !important;
+            position: static !important;
+            vertical-align: baseline !important;
+            overflow: visible !important;
+            width: auto !important;
+            height: auto !important;
+            max-width: none !important;
+            max-height: none !important;
+            float: none !important;
+            visibility: visible !important;
+            text-align: left !important;
+            text-transform: none !important;
+            border-collapse: separate !important;
+            border-spacing: 2px !important;
+            box-sizing: content-box !important;
+            box-shadow: none !important;
+            opacity: 1 !important;
+            text-shadow: none !important;
+            letter-spacing: normal !important;
+            -webkit-filter: none !important;
+            -moz-filter: none !important;
+            filter: none !important;
+        }
+        #lleo_dialog *:before,
+        #lleo_dialog *:after {
+            content: '';
+        }
+
+        #lleo_dialog iframe {
+            height: 0 !important;
+            width: 0 !important;
+        }
+
+        #lleo_dialog {
+            position: absolute !important;
+            background: #fff !important;
+            border: solid 1px #ccc !important;
+            padding: 7px 0 0 !important;
+            left: -999px;
+            top: -999px;
+            width: 440px !important;
+            overflow: hidden;
+            display: block !important;
+            z-index: 999999999 !important;
+            box-shadow: 8px 16px 30px rgba(0, 0, 0, 0.16) !important;
+            border-radius: 3px !important;
+            opacity: 0 !important;
+            -webkit-transform: translateY(15px);
+            -moz-transform: translateY(15px);
+            -ms-transform: translateY(15px);
+            -o-transform: translateY(15px);
+            transform: translateY(15px);
+        }
+        #lleo_dialog.lleo_show_small {
+            width: 150px !important;
+        }
+        #lleo_dialog.lleo_show {
+            opacity: 1 !important;
+            -webkit-transform: translateY(0);
+            -moz-transform: translateY(0);
+            -ms-transform: translateY(0);
+            -o-transform: translateY(0);
+            transform: translateY(0);
+            -webkit-transition: -webkit-transform 0.3s, opacity 0.3s !important;
+            -moz-transition: -moz-transform 0.3s, opacity 0.3s !important;
+            -ms-transition: -ms-transform 0.3s, opacity 0.3s !important;
+            -o-transition: -o-transform 0.3s, opacity 0.3s !important;
+            transition: transform 0.3s, opacity 0.3s !important;
+        }
+        #lleo_dialog.lleo_collapse {
+            opacity: 0 !important;
+            -webkit-transform: scale(0.25, 0.1) translate(-550px, 100px);
+            -moz-transform: scale(0.25, 0.1) translate(-550px, 100px);
+            -ms-transform: scale(0.25, 0.1) translate(-550px, 100px);
+            -o-transform: scale(0.25, 0.1) translate(-550px, 100px);
+            transform: scale(0.25, 0.1) translate(-550px, 100px);
+            -webkit-transition: -webkit-transform 0.4s, opacity 0.4s !important;
+            -moz-transition: -moz-transform 0.4s, opacity 0.4s !important;
+            -ms-transition: -ms-transform 0.4s, opacity 0.4s !important;
+            -o-transition: -o-transform 0.4s, opacity 0.4s !important;
+            transition: transform 0.4s, opacity 0.4s !important;
+        }
+        #lleo_dialog input::-webkit-input-placeholder {
+            color: #aaa !important;
+        }
+        #lleo_dialog .lleo_has_pic #lleo_word {
+            margin-right: 80px !important;
+        }
+        #lleo_dialog #lleo_translationsContainer1 {
+            position: relative !important;
+        }
+        #lleo_dialog #lleo_translationsContainer2 {
+            padding: 7px 0 0 !important;
+            vertical-align: middle !important;
+        }
+        #lleo_dialog #lleo_word {
+            color: #000 !important;
+            margin: 0 5px 2px 0 !important;
+            /*float: left !important;*/
+        }
+        #lleo_dialog .lleo_has_sound #lleo_word {
+            margin-left: 30px !important;
+        }
+        #lleo_dialog #lleo_text {
+            font-weight: bold !important;
+            color: #d56e00 !important;
+            text-decoration: none !important;
+            cursor: default !important;
+        }
+        /*
+        #lleo_dialog #lleo_text.lleo_known {
+            cursor: pointer !important;
+            text-decoration: underline !important;
+        }
+        */
+        /*#lleo_dialog #lleo_closeBtn {
+            position: absolute !important;
+            right: 6px !important;
+            top: 5px !important;
+            line-height: 1px !important;
+            text-decoration: none !important;
+            font-weight: bold !important;
+            font-size: 0 !important;
+            color: #aaa !important;
+            display: block !important;
+            z-index: 9999999999 !important;
+            width: 7px !important;
+            height: 7px !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }*/
+
+        #lleo_dialog #lleo_optionsBtn {
+            position: absolute !important;
+            right: 3px !important;
+            top: 5px !important;
+            line-height: 1px !important;
+            text-decoration: none !important;
+            font-weight: bold !important;
+            font-size: 13px !important;
+            color: #aaa !important;
+            padding: 2px !important;
+            display: none;
+        }
+        #lleo_dialog.lleo_optionsShown #lleo_optionsBtn {
+            display: block !important;
+        }
+        #lleo_dialog #lleo_optionsBtn img {
+            width: 12px !important;
+            height: 12px !important;
+        }
+        #lleo_dialog #lleo_sound {
+            float: left !important;
+            width: 16px !important;
+            height: 16px !important;
+            margin-left: 9px !important;
+            margin-right: 3px !important;
+            background: 0 0 no-repeat !important;
+            cursor: pointer !important;
+            display: none !important;
+            background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAfNJREFUeNq0U01IVFEU/u57Oo5WhBRIBBptykWLYBa2soWiEKQQEbrSFsGbVRQKQc2iFqGitXqvjQxCoCJCqyI0aBUtZILaJNUuYWYWo8HovJ/707nP94bnz0rxwvfOuefd8517fi5TSuE4i50YwZ3l37ZhNlpgzFkaaM/G9sHF1YskNrT+7l4PjMOcb78t2JL71uxgB+2UlfxHTtq5N94fIOh/88kWgWfl73ZCSQkpeGg3H091JY6dI2S00qA/N3KO3dDUYhFgEmZGurG+w9FqApIHsVM7kaTF9Nhn0r8Q7hPWQgIRuNaH3AMUA4W/Lkdh04cpFS43G0TgxQTvCdMETVAk3KynIHwXZU/ge8XDt7KH9bKLjU0P2zVO5LsEpSejVRJ9UR18EtfqKegovs9R3Q6w9c/H1o4Aa2Jwm1lIvn9RJ4w9RdRRzqcYrpwycCll4Cy1lnkS3Bc6vfBg28v8aRIfI78zhB/1GygROH3jLyyzMQ0zlUZuZBSlKkeLoegGtTjYLcJ8pF+NakHOFC2J6w+f25mxSfWrWFF/ShXVPTGvtN14NNkVnxlYWJkgZEL7/vwKr55lKSVnaGYWkuYgrgG172uUv47+U7fw0EHaJXmalUQy/HqO6lBzEsVjJC4Q8kd6TETQpjuaGOvjv8b/AgwA/ij1XMx58NIAAAAASUVORK5CYII=) !important;
+        }
+        #lleo_dialog .lleo_has_sound #lleo_sound {
+            display: block !important;
+        }
+
+        #lleo_dialog #lleo_soundWave {
+            border: solid 5px #4495CC !important;
+            border-radius: 5px !important;
+            position: absolute !important;
+            left: -5px !important;
+            top: -5px !important;
+            right: -5px !important;
+            bottom: -5px !important;
+            z-index: 0 !important;
+            opacity: 0.9 !important;
+            display: none !important;
+        }
+        #lleo_dialog #lleo_soundWave.lleo_beforePlaying {
+            display: block !important;
+        }
+        #lleo_dialog #lleo_soundWave.lleo_playing {
+            opacity: 0 !important;
+            border-width: 20px !important;
+            border-radius: 30px !important;
+
+            -webkit-transform: scale(1.07,1.1) !important;
+            -moz-transform: scale(1.07,1.1) !important;
+            -ms-transform: scale(1.07,1.1) !important;
+            transform: scale(1.07,1.1) !important;
+
+            -webkit-transition: all 0.6s !important;
+            -moz-transition: all 0.6s !important;
+            -ms-transition: all 0.6s !important;
+            transition: all 0.6s !important;
+        }
+
+
+        #lleo_dialog #lleo_picOuter {
+            position: absolute !important;
+            float: right !important;
+            top: 4px;
+            right: 5px;
+            z-index: 9 !important;
+            display: none !important;
+            width: 100px !important;
+        }
+        #lleo_dialog.lleo_optionsShown #lleo_picOuter {
+            right: 25px;
+        }
+        #lleo_dialog .lleo_has_pic #lleo_picOuter {
+            display: block !important;
+        }
+        #lleo_dialog #lleo_picOuter:hover {
+            width: auto !important;
+            z-index: 11 !important;
+        }
+        #lleo_dialog #lleo_pic,
+        #lleo_dialog #lleo_picBig {
+            position: absolute !important;
+            top: 0 !important;
+            right: 0 !important;
+            border: solid 2px #fff !important;
+            -webkit-border-radius: 2px !important;
+            -moz-border-radius: 2px !important;
+            border-radius: 2px !important;
+            z-index: 1 !important;
+        }
+        #lleo_dialog #lleo_pic {
+            position: relative !important;
+            border: none !important;
+            width: 30px !important;
+        }
+        #lleo_dialog #lleo_picBig {
+            box-shadow: -1px 2px 4px rgba(0,0,0,0.3);
+            z-index: 2 !important;
+            opacity: 0 !important;
+            visibility: hidden !important;
+        }
+        #lleo_dialog #lleo_picOuter:hover #lleo_picBig {
+            visibility: visible !important;
+            opacity: 1 !important;
+            -webkit-transition: opacity 0.3s !important;
+            -webkit-transition-delay: 0.3s !important;
+        }
+        #lleo_dialog #lleo_transcription {
+            margin: 0 80px 4px 31px !important;
+            color: #aaaaaa !important;
+        }
+        #lleo_dialog .lleo_no_trans {
+            color: #aaa !important;
+        }
+
+        #lleo_dialog .ll-translation-counter {
+            float: right !important;
+            font-size: 11px !important;
+            color: #aaa !important;
+            padding: 2px 2px 1px 10px !important;
+        }
+
+        #lleo_dialog .ll-translation-text {
+            float: left !important;
+            /*width: 80% !important;*/
+        }
+
+        #lleo_dialog #lleo_trans a {
+            color: #3F669F !important;
+            text-decoration: none !important;
+            text-overflow: ellipsis !important;
+            padding: 1px 4px !important;
+            overflow: hidden !important;
+            float: left !important;
+            width: 320px !important;
+        }
+
+        #lleo_dialog .ll-translation-item {
+            color: #3F669F !important;
+            border: solid 1px #fff !important;
+            padding: 3px !important;
+            width: 100% !important;
+            float: left !important;
+            -moz-border-radius: 2px !important;
+            -webkit-border-radius: 2px !important;
+            border-radius: 2px !important;
+        }
+
+        #lleo_dialog .ll-translation-item:hover {
+            border: solid 1px #9FC2C9 !important;
+            background: #EDF4F6 !important;
+            cursor: pointer !important;
+        }
+        #lleo_dialog .ll-translation-item:hover .ll-translation-counter {
+            color: #83a0a6 !important;
+        }
+
+        #lleo_dialog .ll-translation-marker {
+            background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAAWSURBVBhXY7RPm/+fAQkwIXNAbMICAJQ8AkvqWg/SAAAAAElFTkSuQmCC) !important;
+            display: inline-block !important;
+            width: 4px !important;
+            height: 4px !important;
+            margin: 7px 5px 2px 2px !important;
+            float: left !important;
+        }
+
+        #lleo_dialog #lleo_icons {
+            color: #aaa !important;
+            font-size: 11px !important;
+            background: #f8f8f8 !important;
+            padding: 10px 10px 10px 16px !important;
+        }
+        #lleo_icons a {
+            display: inline-block !important;
+            width: 16px !important;
+            height: 16px !important;
+            margin: 0 10px -4px 3px !important;
+            text-decoration: none !important;
+            opacity: 0.5 !important;
+            background: url(data:image/png;base64,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) !important;
+        }
+        #lleo_icons a:hover {
+            opacity: 1 !important;
+        }
+        #lleo_icons a.lleo_google     {background-position:-34px 0 !important;}
+        #lleo_icons a.lleo_multitran  {background-position:-64px 0 !important;}
+        #lleo_icons a.lleo_lingvo     {background-position:-51px 0 !important; width: 12px !important;}
+        #lleo_icons a.lleo_dict       {background-position:-17px 0 !important;}
+        #lleo_icons a.lleo_linguee    {background-position:-81px 0 !important;}
+        #lleo_icons a.lleo_michaelis  {background-position:-98px 0 !important;}
+
+        #lleo_dialog #lleo_contextContainer {
+            margin: 0 !important;
+            padding: 3px 15px 8px 10px !important;
+            background: #eee !important;
+            background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#eee)) !important;
+            background: -moz-linear-gradient(-90deg, #fff, #eee) !important;
+            border-bottom: solid 1px #ddd !important;
+            border-top-left-radius: 3px !important;
+            border-top-right-radius: 3px !important;
+            display: none !important;
+            overflow: hidden !important;
+        }
+        #lleo_dialog .lleo_has_context #lleo_contextContainer {
+            display: block !important;
+        }
+        #lleo_dialog #lleo_context {
+            color: #444 !important;
+            text-shadow: 1px 1px 0 #f4f4f4 !important;
+            line-height: 12px !important;
+            font-size: 11px !important;
+            margin-left: 2px !important;
+        }
+        #lleo_dialog #lleo_context b {
+            line-height: 12px !important;
+            color: #000 !important;
+            font-weight: bold !important;
+            font-size: 11px !important;
+        }
+        /*#lleo_dialog #lleo_gBrand {
+            color: #aaa !important;
+            font-size: 10px !important;
+            *//*padding-right: 52px !important;*//*
+            padding-bottom: 14px !important;
+            margin: -3px 4px 0 4px !important;
+            background: left bottom url(data:image/png;base64,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) no-repeat !important;
+            display: inline-block !important;
+            float: right !important;
+        }
+        #lleo_dialog #lleo_gBrand.hidden {
+            display: none !important;
+        }*/
+        #lleo_dialog #lleo_translateContextLink {
+            color: #444 !important;
+            text-shadow: 1px 1px 0 #f4f4f4 !important;
+            background: -webkit-gradient(linear, left top, left bottom, from(#f4f4f4), to(#ddd)) !important;
+            background: -moz-linear-gradient(-90deg, #f4f4f4, #ddd) !important;
+            border: solid 1px !important;
+            box-shadow: 1px 1px 0 #f6f6f6 !important;
+            border-color: #999 #aaa #aaa #999 !important;
+            -moz-border-radius: 2px !important;
+            -webkit-border-radius: 2px !important;
+            border-radius: 2px !important;
+            padding: 0 3px !important;
+            font-size: 11px !important;
+            text-decoration: none !important;
+            margin: 1px 5px 0 !important;
+            display: inline-block !important;
+            white-space: nowrap !important;
+        }
+        #lleo_dialog #lleo_translateContextLink:hover {
+            background: #f8f8f8 !important;
+        }
+        #lleo_dialog #lleo_translateContextLink.hidden {
+            visibility: hidden !important;
+        }
+
+        #lleo_dialog #lleo_setTransForm {
+            display: block !important;
+            margin-top: 3px !important;
+            padding-top: 5px !important;
+            /* Set position and background because the form might be overlapped by an image when no translations */
+            position: relative !important;
+            background: #fff !important;
+            z-index: 10 !important;
+            padding-bottom: 10px !important;
+            padding-left: 16px !important;
+        }
+        #lleo_dialog .lleo-custom-translation {
+            padding: 4px 5px !important;
+            border: solid 1px #ddd !important;
+            border-radius: 2px !important;
+            width: 90% !important;
+            min-width: 270px !important;
+            background: -webkit-gradient(linear, 0 0, 0 20, from(#f1f1f1), to(#fff)) !important;
+            background: -moz-linear-gradient(-90deg, #f1f1f1, #fff) !important;
+            font: normal 13px Arial, Helvetica !important;
+            line-height: 15px !important;
+        }
+        #lleo_dialog .lleo-custom-translation:hover {
+            border: solid 1px #aaa !important;
+        }
+        #lleo_dialog .lleo-custom-translation:focus {
+            background: #FFFEC9 !important;
+        }
+
+        #lleo_dialog *.hidden {
+            display: none !important;
+        }
+
+        #lleo_dialog .infinitive{
+            color: #D56E00 !important;
+            text-decoration: none;
+            border-bottom: 1px dotted #D56E00 !important;
+        }
+        #lleo_dialog .infinitive:hover{
+            border: none !important;
+        }
+
+        #lleo_dialog .lleo_separator {
+            height: 1px !important;
+            background: #eee;
+            margin-top: 10px !important;
+            background: -webkit-linear-gradient(left, rgba(255,255,255,1) 0%,#eee 8%,rgba(255,255,255,1) 80%) !important;
+            background: -moz-linear-gradient(left, rgba(255,255,255,1) 0%, #eee 8%, rgba(255,255,255,1) 80%) !important;
+            background: -ms-linear-gradient(left, rgba(255,255,255,1) 0%,#eee 8%,rgba(255,255,255,1) 80%) !important;
+            background: linear-gradient(to right, rgba(255,255,255,1) 0%,#eee 8%,rgba(255,255,255,1) 80%) !important;
+        }
+        #lleo_dialog #lleo_trans {
+            /*border-top: 1px solid #eeeeee !important;*/
+            padding: 5px 30px 0 14px !important;
+            zoom: 1;
+        }
+
+        #lleo_dialog .lleo_clearfix {
+            display: block !important;
+            clear: both !important;
+            visibility: hidden !important;
+            height: 0 !important;
+            font-size: 0 !important;
+        }
+
+
+        #lleo_dialog #lleo_picOuter table {
+            width: 44px !important;
+            position: absolute !important;
+            right: 0 !important;
+            top: 0 !important;
+            vertical-align: middle !important;
+        }
+
+        #lleo_dialog #lleo_picOuter td {
+            width: 38px !important;
+            height: 38px !important;
+            /*border: 1px solid #eeeeee !important;*/
+            vertical-align: middle !important;
+            text-align: center !important;
+        }
+
+        #lleo_dialog #lleo_picOuter td div {
+            height: 38px !important;
+            overflow: hidden !important;
+        }
+
+        #lleo_dialog .lleo_empty {
+            margin: 0 5px 7px !important;
+        }
+
+        #lleo_youtubeExportBtn {
+            margin-left: 10px;
+            height: 24px;
+        }
+        #lleo_youtubeExportBtn i {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            background: 0 0 url(https://d144fqpiyasmrr.cloudfront.net/plugins/all/images/i16.png) !important;
+        }
+        #lleo_youtubeExportBtn .yt-uix-button-content {
+            font-size: 12px;
+            line-height: 2px;
+        }
+
+
+        /*** Parsed Lyrics Content *****************************/
+
+        .lleo_lyrics tran {
+            background: transparent !important;
+            border-radius: 2px !important;
+            text-shadow: none !important;
+            cursor: pointer !important;
+        }
+        .lleo_lyrics tran:hover {
+            color: #fff !important;
+            background: #C77213 !important;
+            -webkit-transition: all 0.1s !important;
+            -moz-transition: all 0.1s !important;
+            -ms-transition: all 0.1s !important;
+            -o-transition: all 0.1s !important;
+            transition: all 0.1s !important;
+        }
+
+        .lleo_songName {
+            border: solid 1px #ffd47c;
+            background: #fff1c2;
+            border-radius: 2px;
+        }
+
+        .lleo_hidden_iframe {
+            visibility: hidden;
+        }</style></head>
+<body ng-app="app" id="dvideo-body" ng-controller="ComplexController" class="sh-body ng-scope" ng-style="getBodyStyles()" style="color: rgb(255, 255, 255);">
+
+<div class="loading-welcome active welcome-screen" ng-style="{'background-color': view.code.welcome_extra.background || view.welcome_extra.background}" style="background-color: rgb(255, 255, 255); display: none;">
+    <div class="progress">
+        <div class="loading-bar indeterminate" ng-style="{'background-color': view.code.color1 || view.color1}" style="background-color: rgb(30, 148, 250);"></div>
+    </div>
+    <div class="helper"></div>
+    <img id="welcomeImg" imageonload="" ng-src="https://s3.eu-central-1.amazonaws.com/qrcgappcdn/app-solution/welcome.png" ng-style="{
+            'max-width': view.code.welcome_extra.zoom *2 || view.welcome_extra.zoom *2 + 'px',
+            'max-height': view.code.welcome_extra.zoom *2 || view.welcome_extra.zoom *2 + 'px',
+            'animation-iteration-count' :  view.showPreview == 'infinite' ? 'infinite' : '',
+            'animation-direction' :  view.showPreview == 'infinite' ? 'alternate' : ''
+            }" src="https://s3.eu-central-1.amazonaws.com/qrcgappcdn/app-solution/welcome.png" style="max-width: 100px; max-height: 100px; display: inline;">
+</div>
+<div class="sh-bar" ng-hide="view.code.directLinking == 1">
+    <div class="sh-container" style="position: relative;">
+        <i class="sh-bar__share icon icon-event-share" id="share-fab-button"></i>
+        <div class="sh-bar__name ng-binding">Народна Рада</div>
+        <div class="sh-bar__company ng-binding" ng-show="view.code.company">Civil Council</div>
+    </div>
+</div>
+
+<div class="sh-background" ng-style="getBackgroundStyles()" ng-hide="view.code.directLinking == 1" style="background-image: linear-gradient(rgb(30, 148, 250), rgb(45, 222, 255)); color: rgb(255, 255, 255); height: 601px;"></div>
+
+<div class="sh-container" id="rootElement"><!-- rootElement is important for sync data -->
+    <div ng-hide="hasAnyContentToDisplay() || view.code.directLinking == 1" class="ng-hide">
+        <div class="vcard-row text-center mt-20">
+            <h4>Waiting for you to enter data</h4>
+        </div>
+        <div class="sk-three-bounce">
+            <div class="sk-child sk-bounce1"></div>
+            <div class="sk-child sk-bounce2"></div>
+            <div class="sk-child sk-bounce3"></div>
+        </div>
+    </div>
+    <div ng-show="hasAnyContentToDisplay() &amp;&amp; view.code.directLinking != 1">
+        <div class="sh-page" style="height: auto;">
+
+            <img class="sh-avatar" ng-src="{{asset('images/mobile_logo.png')}}" alt="" ng-show="view.code.avatar" src="http://l.ead.me//qrcgcustomers.s3-eu-west-1.amazonaws.com/account3825712/1495932_2.jpg?0.010521242859136914">
+
+            <div class="sh-page__title ng-binding">Скачав, подумав, проголосував</div>
+
+            <div class="sh-page__description" ng-show="view.code.description.length <= 70"><!--
+        --><span class="sh-page__description-text ng-binding">Тепер Ви впливаєте на бюджет міста</span>
+            </div>
+
+            <div class="sh-page__description ng-hide" ng-show="view.code.description.length > 70 &amp;&amp; showDescription"><!--
+        --><span class="sh-page__description-text ng-binding">Тепер Ви впливаєте на бюджет міста</span>&nbsp;<!--
+        --><span class="sh-page__less" ng-click="showDescription = false">Less</span>
+            </div>
+
+            <div class="sh-page__description ng-hide" ng-show="view.code.description.length > 70 &amp;&amp; !showDescription"><!--
+        --><span class="sh-page__description-text ng-binding">Тепер Ви впливаєте на бюджет міста…</span>&nbsp;<!--
+        --><span class="sh-page__more" ng-click="showDescription = true">More</span>
+            </div>
+
+            <div ng-show="view.code.button.label" class="ng-hide">
+                <a class="sh-button ng-binding" ng-style="{borderColor: getBorderColor1()}" href="" target="_blank" ng-click="callAction($event, 'button')" style="border-color: rgba(255, 255, 255, 0.7);">
+
+                </a>
+            </div>
+
+            <div ng-show="view.code.app_store">
+                <a class="sh-store-link" href="https://itunes.apple.com/ua/app/народна-рада/id1063027091?mt=8" target="_blank" ng-click="callAction($event, 'appStore')">
+                    <img class="sh-store-link__image" src="http://l.ead.me/img/generator/app/apple-en.png" alt="">
+                </a>
+            </div>
+
+            <div ng-show="view.code.play_store">
+                <a class="sh-store-link" href="https://play.google.com/store/apps/details?id=org.tgs.civils.budget" target="_blank" ng-click="callAction($event, 'appStore')">
+                    <img class="sh-store-link__image" src="http://l.ead.me/img/generator/app/google-en.png" alt="">
+                </a>
+            </div>
+
+            <div ng-show="view.code.amazon_store" class="ng-hide">
+                <a class="sh-store-link" href="" target="_blank" ng-click="callAction($event, 'appStore')">
+                    <img class="sh-store-link__image" src="http://l.ead.me/img/generator/app/amazon-en.png" alt="">
+                </a>
+            </div>
+
+            <div ng-show="view.code.website" class="sh-page__website-container">
+                <a class="sh-page__website ng-binding" href="http://vote.imisto.com.ua/votings" target="_blank" ng-style="{color: getTextColor2()}" style="color: rgb(51, 51, 51);">
+                    vote.imisto.com.ua
+                </a>
+            </div>
+
+        </div>
+        <div id="redirectTo">
+            <div class="fixed-blur-bgd">
+                <div class="dialog-container">
+                    <div class="fab-body">
+                        <div class="event-title">
+                            Open browser?                </div>
+                        <div class="dialog-body">
+                            Continue? You will be directed to another website.                </div>
+                        <a class="event-slim-button ripplelink mt-10 pull-right" ng-style="{color: isColorLight(view.code.color2) ? 'black' : view.code.color2}" ng-click="dialogRedirectCallback(false)" style="color: black;">
+                            No                </a>
+                        <a class="event-slim-button ripplelink mt-10 pull-right" ng-style="{color: isColorLight(view.code.color2) ? 'black' : view.code.color2}" ng-click="dialogRedirectCallback(true)" style="color: black;">
+                            Yes                </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="gotIt">
+            <div class="fixed-blur-bgd">
+                <div class="dialog-container">
+                    <div class="fab-body">
+                        <div class="event-gotIt-button">
+                        </div>
+                        <div class="dialog-body pull-left ng-binding">
+
+                        </div>
+                        <a class="text-regular-blue mt-20" ng-click="closeDialog()">
+                            Got it                </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="redirectToMaps">
+            <div class="fixed-blur-bgd">
+                <div class="dialog-container">
+                    <div class="fab-body">
+                        <div class="event-title">
+                            Use Google Maps                </div>
+                        <div class="dialog-body">
+                            Directions will open in Google Maps.                    Do you want to continue?                </div>
+                        <a class="event-slim-button ripplelink mt-10 pull-right" ng-style="{color: isColorLight(view.code.color2) ? 'black' : view.code.color2}" ng-click="dialogRedirectCallback(false)" style="color: black;">
+                            No                </a>
+                        <a class="event-slim-button ripplelink mt-10 pull-right" ng-style="{color: isColorLight(view.code.color2) ? 'black' : view.code.color2}" ng-click="dialogRedirectCallback(true, 'https://maps.google.com/maps?saddr='+getMapAddress()+'&amp;daddr=')" style="color: black;">
+                            Yes                </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="fabs" id="shareFab2">
+            <div class="fixed-blur-bgd">
+                <div class="chat">
+                    <div class="fab-body">
+                        <div class="icon-fab-close icon-event-close"></div>
+                        <div class="fab-header" ng-style="{color: view.code.color2}" style="color: rgb(45, 222, 255);">Share page</div>
+                        <ul>
+                            <li>
+                                <i class="icon-fab-share-facebook icon-event-facebook"></i>
+                                <a href="https://www.facebook.com/sharer/sharer.php?u=vote.imisto.com.ua%2Fmobile" target="_blank">Facebook</a>
+                            </li>
+                            <li>
+                                <i class="icon-fab-share-twitter icon-event-twitter"></i>
+                                <a href="https://twitter.com/share?url=http://l.ead.me/bayDdJ?trackSharing=1" target="_blank">Twitter</a>
+                            </li>
+                            <li>
+                                <i class="icon-fab-share-googleplus icon-event-googleplus"></i>
+                                <a href="https://plus.google.com/share?url=http://l.ead.me/bayDdJ?trackSharing=1" target="_blank">Google+</a>
+                            </li>
+                            <li>
+                                <i class="icon-fab-share-email icon-event-email"></i>
+                                <a href="mailto:?body=http://l.ead.me/bayDdJ?trackSharing=1" target="_blank">Email</a>
+                            </li>
+                            <li>
+                                <i class="icon-fab-share-message icon-event-message"></i>
+                                <span id="shortUrl" style="display: none;">http://l.ead.me/bayDdJ?trackSharing=1</span>
+                                <a href="#" id="copyButton1">
+                                    Copy Link
+                                    <span ng-show="ifCopySucceed" class="ng-hide">
+                                (Copied)
+                            </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="sh-cody ng-hide" ng-show="view.code.directLinking == 1">
+        <div class="sh-cody__message">
+            Some QR Codes types will show a live preview here but not this one. View and test your QR Code in the next step!            </div>
+        <img class="sh-cody__image" src="http://l.ead.me/img/generator/cody/CodyE_PointingLeft.svg">
+    </div>
+
+</div>
+
+<script type="text/javascript" src="http://l.ead.me/public/lib/jquery/dist/jquery.min.js?v=1.020"></script>
+<script type="text/javascript" src="http://l.ead.me/js/build/angular.rendering.min.js?v=1.020"></script>
+<script type="text/javascript">
+    /*<![CDATA[*/
+
+    /**
+     * Angular connection
+     */
+    app.loadBasePreviewController();
+
+    /**
+     * Return value with '-' instead of spaces
+     *
+     * @param input - string
+     * */
+    app.filter('dashEncode', function () {
+        return function (input) {
+            if (input) {
+                return input.replace(/ /g, "-");
+            } else
+                return ' ';
+        };
+    });
+
+    /**
+     * The QR service for the app.
+     * */
+    app.service('qr', function () {
+        /**
+         * Scroll page from buttom to top
+         * */
+        this.scrollFromBottomtoTop = function (loadDemo) {
+            setTimeout(function () {
+                if (loadDemo == true && $('.icon-business-socialmedia').length > 0) {
+                    $("html, body").animate({
+                        scrollTop: $('.icon-business-socialmedia').offset().top
+                    }, 0)
+                    ;$("html, body").animate({
+                        scrollTop: 0
+                    }, 1000);
+                }
+            }, 0)
+        }
+    });
+
+    /**
+     * Directive
+     *
+     * When image is loaded fadeout welcome screen
+     * */
+    app.directive('imageonload', ['qr', function (qr) {
+        return {
+            restrict: 'A',
+            link: function (scope, element, attrs) {
+                element.bind('load', function () {
+                    $("#welcomeImg").fadeIn(1000);
+                    window.setTimeout(function () {
+                        $(".loading-welcome.welcome-screen").fadeOut();
+                        scope.welcomeScreenScrollWindow++;
+                        if (scope.welcomeScreenScrollWindow == 1) {
+                            qr.scrollFromBottomtoTop(scope.loadDemo)
+                        }
+                    }, 2000);
+                });
+                element.bind('error', function () {
+                });
+            }
+        };
+    }]);
+
+    app.filter('normalizeUrl', function () {
+        return function (url) {
+            if (!url) {
+                return url;
+            }
+            if (/^https?:\/\//i.test(url)) {
+                return url;
+            }
+            return 'http://' + url;
+        };
+    });
+
+    app.filter('displayUrl', function () {
+        return function (url) {
+            if (!url) {
+                return url;
+            }
+            if (/^http:\/\//i.test(url)) {
+                return url.substr(7);
+            }
+            if (/^https:\/\//i.test(url)) {
+                return url.substr(8);
+            }
+            return url;
+        };
+    });
+
+    /**
+     * Return domain of input
+     * */
+    app.filter('domain', function () {
+        return function (input) {
+            if (input) {
+                if (input.indexOf('://') >= 0) {
+                    return input.split('/')[2]
+                }
+                return input.split('/')[0]
+            }
+            return input;
+        };
+    });
+
+    app.directive('pictureInput', ['$log', function ($log) {
+        return {
+            restrict: 'A',
+            link: function (scope, element) {
+                element.on('change', function () {
+                    var el = element[0];
+                    if ("files" in el && el.files.length > 0) {
+                        var file = el.files[0];
+                        $log.debug("Got picture type: " + file.type);
+                        if (/^image\//.test(file.type)) {
+                            $log.debug("Reading picture... [type: " + file.type + ", size: " + file.size + "]");
+                            var reader = new FileReader();
+                            reader.onload = function () {
+                                $log.debug("Reading is done [" + ('' + reader.result).substr(0, 30) + "...]");
+                                scope.setPicture(reader.result);
+                                scope.$apply();
+                            };
+                            reader.readAsDataURL(file);
+                        }
+                    } else {
+                        scope.setPicture('');
+                        scope.isTakingPictureAvailable = false;
+                        scope.$apply();
+                    }
+                });
+            }
+        };
+    }]);
+
+    //Override the base preview controller
+    app.controller('ComplexController', function ($scope, $controller, $sce, $rootScope, $filter, previewService, $window, $log, http, $timeout) {
+            /**
+             * Current page state
+             */
+            $scope.page = {
+                form: {
+                    email: ''
+                }
+            };
+
+            $scope.welcomeScreenScrollWindow = 0;
+            $scope.isDialogVisible = false;
+            $scope.showDescription = false;
+
+            /**
+             * @returns {boolean}
+             */
+            $scope.hasAnyContentToDisplay = function () {
+                return true;
+            };
+
+            $scope.getBodyStyles = function () {
+                if (!$scope.view.code) {
+                    return {};
+                }
+                if ($scope.view.code && $scope.view.code.directLinking === 1) {
+                    return {
+                        background: '#fff',
+                        color: '#797d80'
+                    };
+                }
+                return {
+                    color: $scope.getTextColor1()
+                };
+            };
+
+            /**
+             * Get background gradient color.
+             */
+            $scope.getBackgroundStyles = function () {
+                if (!$scope.view.code) {
+                    return {};
+                }
+                if (!$scope.view.code.color2) {
+                    return {
+                        backgroundImage: "linear-gradient(to bottom," + $scope.view.code.color1 + ", " + $filter('colorLuminance')($scope.view.code.color1, -0.2) + " 100%)",
+                        color: $scope.getTextColor1()
+                    };
+                }
+                return {
+                    backgroundImage: "linear-gradient(to bottom, " + $scope.view.code.color1 + ", " + $scope.view.code.color2 + ")",
+                    color: $scope.getTextColor1()
+                };
+            };
+
+            /**
+             * Get the text color #1.
+             * Depends on color1 brightness.
+             * @returns {string}
+             */
+            $scope.getTextColor1 = function () {
+                if (!$scope.view.code) {
+                    return '#fff';
+                }
+                return $scope.isColorLight($scope.view.code.color1) ? '#333' : '#fff';
+            };
+
+            /**
+             * Get the border color #1.
+             * Depends on color1 brightness.
+             * @returns {string}
+             */
+            $scope.getBorderColor1 = function () {
+                if (!$scope.view.code) {
+                    return 'rgba(255, 255, 255, 0.7)';
+                }
+                return $scope.isColorLight($scope.view.code.color1) ? 'rgba(0, 0, 0, 0.54)' : 'rgba(255, 255, 255, 0.7)';
+            };
+
+            /**
+             * Get the text color #2.
+             * Depends on color2 brightness.
+             * @returns {string}
+             */
+            $scope.getTextColor2 = function () {
+                if (!$scope.view.code) {
+                    return '#fff';
+                }
+                return $scope.isColorLight($scope.view.code.color2) ? '#333' : '#fff';
+            };
+
+            /**
+             * Copy short ulr to clipboard
+             *
+             * @param elem - input element with the link
+             * */
+            $scope.ifCopySucceed = false;
+            $scope.copyLinkToClipboard = function (elem) {
+                var targetId = "_hiddenCopyText_";
+                var isInput = elem.tagName === "INPUT" || elem.tagName === "TEXTAREA";
+                var origSelectionStart, origSelectionEnd;
+                if (isInput) {
+                    // can just use the original source element for the selection and copy
+                    target = elem;
+                    origSelectionStart = elem.selectionStart;
+                    origSelectionEnd = elem.selectionEnd;
+                } else {
+                    // must use a temporary form element for the selection and copy
+                    target = document.getElementById(targetId);
+                    if (!target) {
+                        var target = document.createElement("textarea");
+                        target.style.position = "absolute";
+                        target.style.left = "-9999px";
+                        target.style.top = "0";
+                        target.id = targetId;
+                        document.body.appendChild(target);
+                    }
+                    target.textContent = elem.textContent;
+                }
+                // select the content
+                var currentFocus = document.activeElement;
+                target.focus();
+                target.setSelectionRange(0, target.value.length);
+
+                // copy the selection
+                var succeed;
+                try {
+                    succeed = document.execCommand("copy");
+                } catch (e) {
+                    succeed = false;
+                }
+                // restore original focus
+                if (currentFocus && typeof currentFocus.focus === "function") {
+                    currentFocus.focus();
+                }
+
+                if (isInput) {
+                    // restore prior selection
+                    elem.setSelectionRange(origSelectionStart, origSelectionEnd);
+                } else {
+                    // clear temporary content
+                    target.textContent = "";
+                }
+                $scope.$apply(function () {
+                    $scope.ifCopySucceed = succeed;
+                });
+                setTimeout(function () {
+                    $scope.$apply(function () {
+                        $scope.ifCopySucceed = false;
+                    });
+                }, 1500)
+            };
+
+            /**
+             * Open the dialog popup
+             * Event is for getting the current target element
+             * Target:
+             *      - shareAction: Button with got it information
+             *      - channelAction: Button with got it information
+             *
+             * @param event - string
+             * @param target - string
+             * */
+            $scope.callAction = function (event, target) {
+                switch (target) {
+                    case 'callAction':
+                        event.preventDefault();
+                        if ($scope.loadDemo) {
+                            $scope.gotItText = 'Name this optional button as you want and link to any website of your choice.';
+                            $scope.toggleDialog('gotIt', $(event.currentTarget));
+                        } else {
+                            $scope.toggleDialog('redirectTo');
+                        }
+                        break;
+                    case 'shareAction':
+                        if ($scope.loadDemo) {
+                            $scope.gotItText = 'Users can tap this button to share your page.';
+                            $scope.toggleDialog('gotIt', $(event.currentTarget));
+                        }
+                        break;
+                    case 'shareAction2':
+                        if ($scope.loadDemo) {
+                            toggleFab('#shareFab');
+                            event.preventDefault();
+                            $scope.gotItText = 'Your contacts can click this button to share your page.';
+                            $scope.toggleDialog('gotIt', $(document.getElementById('prime')));
+                        }
+                        break;
+                    case 'button':
+                        if ($scope.loadDemo) {
+                            event.preventDefault();
+                            $scope.gotItText = 'By tapping this (optional) button, users are forwarded to a website of your choice.';
+                            $scope.toggleDialog('gotIt', $(event.currentTarget));
+                        }
+                        break;
+                    case 'appStore':
+                        if ($scope.loadDemo) {
+                            event.preventDefault();
+                            $scope.gotItText = 'By tapping here, users get to the specific App Store to download your App.';
+                            $scope.toggleDialog('gotIt', $(event.currentTarget));
+                        }
+                        break;
+                }
+            };
+
+            $scope.toggleFab = toggleFab;
+
+            /**
+             * Toggle dialog
+             *
+             * @param id - string
+             * @param element - current target
+             * */
+            $scope.toggleDialog = function (id, element) {
+                if (element) {
+                    var elem = element.context.outerHTML;
+                    $('#' + id + ' .dialog-container .event-gotIt-button').html(elem);
+                }
+                $($('#' + id).parent()).toggleClass('fabOnTop');
+                $('#' + id + ' .dialog-container').toggleClass('is-visible');
+                $('#prime.fab').toggleClass('disabledClick');
+                $('#' + id + ' .fixed-blur-bgd').toggle();
+            };
+
+            /**
+             * Callback of the dialog yes/no buttons
+             * Can close the dialog or it can redirect to a url and close the dialog
+             * If the url is not defined it will use the targetUrl from the callAction button
+             *
+             * @param proceed - string
+             * @param url - current target
+             * */
+            $scope.dialogRedirectCallback = function (proceed, url) {
+                if (proceed) {
+                    if (url) {
+                        $window.open(url, '_blank');
+                    } else {
+                        if ($scope.view.code.button.url.indexOf('http') < 0)
+                            $window.open('//' + $scope.view.code.button.url, '_blank');
+                        else
+                            $window.open($scope.view.code.button.url, '_blank');
+                    }
+                    $scope.closeDialog();
+                } else {
+                    $scope.closeDialog();
+                }
+            };
+
+            /**
+             * Close dialog
+             *
+             * */
+            $scope.closeDialog = function () {
+                $('.dialog-container').removeClass('is-visible');
+                $('#prime.fab').toggleClass('disabledClick');
+                $('.event-gotIt-button').html('');
+                $('.fixed-blur-bgd').hide();
+            };
+
+            //Inherit from basePreviewController
+            // @todo hmm this is not a normal angular inheritance...
+            angular.extend(this, $controller('BasePreviewController', {$scope: $scope}));
+
+            $scope.loadDemo = parent && typeof parent.ImHere === "function";
+
+            //Get the json data form the file
+            previewService.pushData({"form":[{"section_design":{"fold":false}},{"section_basic_info":{"fold":false}},{"section_links":{"fold":false}},{"section_welcome_screen":{"fold":false}},{"section_advance_options":{"fold":true}}],"code":{"directLinking":0,"openWindow":false,"avatar":"\/\/qrcgcustomers.s3-eu-west-1.amazonaws.com\/account3825712\/1495932_2.jpg?0.010521242859136914","color1":"#1e94fa","color2":"#2ddeff","app_store":"https:\/\/itunes.apple.com\/ua\/app\/\u043d\u0430\u0440\u043e\u0434\u043d\u0430-\u0440\u0430\u0434\u0430\/id1063027091?mt=8","play_store":"https:\/\/play.google.com\/store\/apps\/details?id=org.tgs.civils.budget","amazon_store":"","fallbackUrl":"","stores":{"apple":true,"google":true,"amazon":false},"avatar_extra":{"zoom":100,"background":"#ffffff"},"welcome_extra":{"zoom":50,"background":"#ffffff"},"button":{"label":"","url":""},"name":"\u041d\u0430\u0440\u043e\u0434\u043d\u0430 \u0420\u0430\u0434\u0430","company":"Civil Council","title":"\u0421\u043a\u0430\u0447\u0430\u0432, \u043f\u043e\u0434\u0443\u043c\u0430\u0432, \u043f\u0440\u043e\u0433\u043e\u043b\u043e\u0441\u0443\u0432\u0430\u0432","description":"\u0422\u0435\u043f\u0435\u0440 \u0412\u0438 \u0432\u043f\u043b\u0438\u0432\u0430\u0454\u0442\u0435 \u043d\u0430 \u0431\u044e\u0434\u0436\u0435\u0442 \u043c\u0456\u0441\u0442\u0430","website":"http:\/\/vote.imisto.com.ua\/votings"},"showPreview":0,"welcome_screen":"https:\/\/s3.eu-central-1.amazonaws.com\/qrcgappcdn\/app-solution\/welcome.png"});
+
+            /**
+             * Watch showPreview value
+             *
+             * @param p1 - new value
+             * @param p2 - old value
+             * */
+            $scope.$watch("view.showPreview", function (p1, p2) {
+                if (p1 != undefined && p1 == 'infinite') {
+                    setTimeout(function () {
+                        $(".loading-welcome.welcome-screen").show();
+                        $("#welcomeImg").fadeIn(1000);
+                    }, 500)
+                } else if (p1 == undefined && p2 != undefined && p2 == 'infinite') {
+                    $("#welcomeImg").hide();
+                    $(".loading-welcome").fadeOut();
+                } else if ((p1 != undefined && p2 != undefined && p1 != p2 ) || (p1 != undefined && p1 != 0 && p2 == undefined && p1 != p2)) {
+                    setTimeout(function () {
+                        $(".loading-welcome.welcome-screen").show();
+                        $("#welcomeImg").hide();
+                        $("#welcomeImg").fadeIn(1000);
+                        setTimeout(function () {
+                            $(".loading-welcome").fadeOut();
+                        }, 2000)
+                    }, 500)
+                }
+            });
+
+            // To sync the height of the page and the content in design mode.
+            $scope.$watch('view.code', function () {
+                setTimeout(function () {
+                    $(window).resize();
+                }, 100);
+            });
+
+            $(document).ready(function () {
+                /**
+                 * To work, function 'copyLinkToClipboard' needs to be called from an event listener on the copy button
+                 * */
+                document.getElementById("copyButton1").addEventListener("click", function (event) {
+                    if (event) {
+                        event.preventDefault();
+                    }
+                    $scope.copyLinkToClipboard(document.getElementById("shortUrl"));
+                });
+            });
+
+            /**
+             * Convert hex color to rgbA
+             *
+             * @param hex - color
+             * @param opacity - value between 0-1
+             * */
+            $scope.hexToRgbA = function (hex, opacity) {
+                var c;
+                if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
+                    c = hex.substring(1).split('');
+                    if (c.length == 3) {
+                        c = [c[0], c[0], c[1], c[1], c[2], c[2]];
+                    }
+                    c = '0x' + c.join('');
+                    return 'rgba(' + [(c >> 16) & 255, (c >> 8) & 255, c & 255].join(',') + ',' + opacity + ')';
+                }
+            };
+
+            /**
+             * Set text color based on the background
+             *
+             * @param color - background color
+             * */
+            $scope.isColorLight = function (color) {
+                var c;
+                if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(color)) {
+                    c = color.substring(1).split('');
+                    if (c.length == 3) {
+                        c = [c[0], c[0], c[1], c[1], c[2], c[2]];
+                    }
+                    c = '0x' + c.join('');
+
+                    var r = (c >> 16) & 255,
+                        g = (c >> 8) & 255,
+                        b = c & 255;
+                    // Counting the perceptive luminance
+                    // human eye favors green color...
+                    var a = 1 - (0.240 * r + 0.470 * g + 0.150 * b) / 255;
+                    return (a < 0.4);
+                }
+            };
+
+        }
+    );
+
+    if (parent && typeof parent.ImHere === "function") {
+        parent.ImHere();
+    } else {
+        //Only load this on standalone pages not inframe working
+        SocialShareKit.init();
+    }
+
+    /**
+     * Toggle fab
+     *
+     * @param id - id of the fab
+     */
+    function toggleFab(id) {
+        $(id + ' .prime').toggleClass('is-active');
+        $(id + ' #prime').toggleClass('is-float');
+        $($(id).parent()).toggleClass('fabOnTop');
+        $('#prime.fab').toggleClass('disabledClick');
+        setTimeout(function () {
+            $(id + ' .chat').toggleClass('is-visible');
+        }, 100);
+        $(id + ' .fixed-blur-bgd').toggle();
+    }
+
+    $(document).ready(function () {
+        $('#prime, .icon-event-close').click(function () {
+            var id = $($(this).closest('.fabs')).attr('id');
+            toggleFab('#' + id);
+        });
+
+        $('#share-fab-button').click(function () {
+            toggleFab('#shareFab2');
+        });
+
+        $('.fixed-blur-bgd').click(function (event) {
+            if (event.target == $(this)[0]) {
+                $($("#prime.is-float").parent().parent()).removeClass('fabOnTop');
+                $('.prime').removeClass('is-active');
+                $('#prime').removeClass('is-float');
+                $('#prime.fab').removeClass('disabledClick');
+                $('.chat, .dialog-container').removeClass('is-visible');
+                $(this).hide();
+            }
+        });
+
+        // To fix height of the background (CSS does not work for some reason)
+        $(window).resize(function () {
+            $(".sh-page").height("auto");
+            var height = Math.max($(".sh-bar").outerHeight() + $("#rootElement").outerHeight(), $(window).height());
+            $(".sh-background").height(height);
+            if ($(window).width() < 480) {
+                $(".sh-page").height(height - $(".sh-bar").outerHeight() - 20);
+            }
+        });
+        $(window).scroll(function () {
+            $(".sh-background").height(Math.max($(".sh-bar").outerHeight() + $("#rootElement").outerHeight(), $(window).height()));
+        });
+        setTimeout(function () {
+            $(window).resize();
+        }, 1000);
+        // -------------------------------
+
+        /**
+         * Ripple effect on element
+         */
+        var ink, d, x, y;
+        $(".ripplelink").click(function (e) {
+            if ($(this).find(".ink").length === 0) {
+                $(this).prepend("<span class='ink'></span>");
+            }
+
+            ink = $(this).find(".ink");
+            ink.removeClass("animate");
+
+            if (!ink.height() && !ink.width()) {
+                d = Math.max($(this).outerWidth(), $(this).outerHeight());
+                ink.css({height: d, width: d});
+            }
+
+            x = e.pageX - $(this).offset().left - ink.width() / 2;
+            y = e.pageY - $(this).offset().top - ink.height() / 2;
+
+            ink.css({top: y + 'px', left: x + 'px'}).addClass("animate");
+        });
+
+    });
+
+
+    /*]]>*/
+</script>
+
+
+</body><loom-container id="lo-engage-ext-container"><loom-shadow classname="resolved"></loom-shadow></loom-container></html>

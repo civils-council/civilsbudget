@@ -37,6 +37,9 @@
     <body class="">
         {% block body %}{% endblock %}
         {% block javascripts %}
+            <script src="{{ asset('bundles/fosjsrouting/js/router.min.js') }}"></script>
+            <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
+
             <script src="{{ asset('js/app.js') }}"></script>
 
             <!-- Start of LiveChat (www.livechatinc.com) code -->
@@ -71,7 +74,7 @@
 </html>
 
 {% block flash %}
-    <div class="alerts">
+    <div class="alerts"{{ block('flash_attr') }}>
         {% for flashType in app.session.flashbag.keys %}
             {% for flash in app.session.flashbag.get(flashType) %}
                 <div class="alert alert-dismissible alert-{{ flashType }}">

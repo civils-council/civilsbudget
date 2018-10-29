@@ -5,7 +5,6 @@ namespace AdminBundle\Form;
 use AppBundle\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -28,15 +27,15 @@ class UserType extends AbstractType
                 $form->add(
                     'inn',
                     TextType::class,
-                    ['label' => 'Идентифiкацiйний код', 'position' => 'first']
+                    ['label' => 'Ідентифiкацiйний код', 'position' => 'first']
                 );
             }
         });
 
         $builder
             ->add('lastName', TextType::class, ['label' => 'Прізвище'])
-            ->add('firstName', TextType::class, ['label' => 'Им\'я'])
-            ->add('middleName', TextType::class, ['label' => 'По батьковi'])
+            ->add('firstName', TextType::class, ['label' => 'Ім\'я'])
+            ->add('middleName', TextType::class, ['label' => 'По-батьковi'])
             ->add('birthday', TextType::class, [
                 'label' => 'Дата Народження',
                 'attr' => ['placeholder' => 'Формат: 1950-05-25, якщо є ІНН, Дата Народження буде вирахувано автоматично']

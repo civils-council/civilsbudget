@@ -15,7 +15,6 @@
 /web/bundles/
 /web/uploads/
 /web-src/less/*.css
-*~
 .idea
 /app/rsa_key.pem
 *.log
@@ -25,3 +24,5 @@
 /var/*
 !var/SymfonyRequirements.php
 web-src/images/.DS_Store
+/package-lock.json
+/web-src/*/*.map

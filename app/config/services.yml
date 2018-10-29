@@ -11,3 +11,24 @@ services:
             class: Twig_Extensions_Extension_Text
             tags:
                 - { name: twig.extension }
+
+
+    app.turbosms_client:
+        class: SoapClient
+        arguments:
+            - 'http://turbosms.in.ua/api/wsdl.html'
+        shared: false
+        lazy: true
+
+    app.turbosms_sender:
+        class: AppBundle\Service\TurboSmsSender
+        arguments:
+            - '%turbosms_user%'
+            - '%turbosms_pass%'
+            - '%turbosms_from%'
+        calls:
+            - ['setLogger', ['@logger']]
+            - ['setClient', ['@app.turbosms_client']]
+            - ['setKernel', ['@kernel']]
+        tags:
+            - { name: sms_provider }

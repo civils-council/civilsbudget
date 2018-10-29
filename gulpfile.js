@@ -1,70 +1,74 @@
-var gulp = require('gulp'),
-    concatJs = require('gulp-concat'),
-    minifyJs = require('gulp-uglify'),
-    less = require('gulp-less'),
-    clean = require('gulp-clean');
+var gulp = require('gulp');
+var less = require('gulp-less');
+// var babel = require('gulp-babel');
+var concat = require('gulp-concat');
+var uglify = require('gulp-uglify');
+var rename = require('gulp-rename');
+var cleanCSS = require('gulp-clean-css');
+var del = require('del');
 
-gulp.task('less', function() {
+function styles() {
     return gulp.src(['web-src/less/*.less'])
-        .pipe(less({compress: true}))
+        .pipe(less())
+        .pipe(cleanCSS())
         .pipe(gulp.dest('web/css/'));
-});
-
-gulp.task('lib-js', function() {
+}
+function libJs() {
     return gulp.src([
-        'bower_components/jquery/dist/jquery.js',
-        'bower_components/bootstrap/dist/js/bootstrap.js',
-        'bower_components/select2/dist/js/select2.full.js'
-    ])
-        .pipe(concatJs('app.js'))
-        .pipe(minifyJs())
+        'node_modules/jquery/dist/jquery.js',
+        'node_modules/bootstrap/dist/js/bootstrap.js',
+        'node_modules/select2/dist/js/select2.full.js'
+    ], { sourcemaps: true })
+        // .pipe(babel())
+        .pipe(uglify())
+        .pipe(concat('app.js'))
         .pipe(gulp.dest('web/js/'));
-});
+}
 
-gulp.task('pages-js', function() {
+function pagesJs() {
     return gulp.src([
         'web-src/js/*.js'
-    ])
-        .pipe(minifyJs())
+    ], { sourcemaps: true })
+        // .pipe(babel())
+        .pipe(uglify())
         .pipe(gulp.dest('web/js/'));
-});
+}
 
-gulp.task('images', function () {
+function images () {
     return gulp.src([
         'web-src/images/*'
     ])
         .pipe(gulp.dest('web/images/'))
-});
+}
 
-gulp.task('developers', function () {
+function developers () {
     return gulp.src([
         'web-src/images/developers/*'
     ])
         .pipe(gulp.dest('web/images/developers/'))
-});
+}
 
-gulp.task('fonts', function () {
+function fonts () {
     return gulp.src([
-        'bower_components/bootstrap/fonts/*',
-		'web-src/fonts/*'
+        'node_modules/bootstrap/fonts/*',
+        'node_modules/bootwatch/fonts/*',
+        'node_modules/font-awesome/fonts/*',
+        'web-src/fonts/*'
     ])
         .pipe(gulp.dest('web/fonts/'))
-});
+}
 
-gulp.task('clean', function () {
-    return gulp.src(['web/css/*', 'web/js/*', 'web/images/*', 'web/fonts/*'])
-        .pipe(clean());
-});
+function clean() {
+    return del(['web/css/*', 'web/js/*', 'web/images/*', 'web/images/developers/', 'web/fonts/*']);
+}
 
-gulp.task('default', ['clean'], function () {
-    var tasks = ['images', 'fonts', 'less', 'lib-js', 'pages-js', 'developers'];
+function watch() {
+    gulp.watch('web-src/less/*.less', styles);
+    gulp.watch('web-src/js/*.js', pagesJs);
+}
 
-    tasks.forEach(function (val) {
-        gulp.start(val);
-    });
-});
+var build = gulp.series(clean, gulp.parallel(images, developers, fonts, libJs), gulp.parallel(styles, pagesJs));
 
-gulp.task('watch', function () {
-    var less = gulp.watch('web-src/less/*.less', ['less']),
-        js = gulp.watch('web-src/js/*.js', ['pages-js']);
-});
+gulp.task('build', build);
+gulp.task('default', build);
+gulp.task('watch', watch);
