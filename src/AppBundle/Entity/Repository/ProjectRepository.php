@@ -66,7 +66,7 @@ class ProjectRepository extends EntityRepository implements ProjectRepositoryInt
         }
         $qb
             ->groupBy('project.id')
-            ->orderBy('vs.title', Criteria::ASC);
+            ->orderBy('project.viewOrder', Criteria::ASC);
 
         $query = $qb->getQuery();
         $results = $query->getResult();
@@ -75,7 +75,11 @@ class ProjectRepository extends EntityRepository implements ProjectRepositoryInt
     }
 
     /**
-     * {@inheritdoc}
+     * @param int $id
+     *
+     * @return array|mixed
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function getOneProjectShow($id)
     {

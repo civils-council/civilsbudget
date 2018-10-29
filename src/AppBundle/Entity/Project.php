@@ -157,6 +157,13 @@ class Project implements \JsonSerializable
     private $gallery;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $viewOrder;
+
+    /**
      * Constructor.
      */
     public function __construct()
@@ -582,5 +589,25 @@ class Project implements \JsonSerializable
         return $this->getUserProjects()->filter(function (UserProject $userProjects) use ($user) {
             return $user === $userProjects->getUser();
         });
+    }
+
+    /**
+     * @return int
+     */
+    public function getViewOrder(): int
+    {
+        return $this->viewOrder;
+    }
+
+    /**
+     * @param int $viewOrder
+     *
+     * @return self
+     */
+    public function setViewOrder(int $viewOrder): self
+    {
+        $this->viewOrder = $viewOrder;
+
+        return $this;
     }
 }
