@@ -241,7 +241,9 @@ class UserManager
             $this->em->persist($otpToken);
             $this->em->flush();
 
-            $this->smsSender->sendTurboSms($user->getPhone(), $otpToken->getToken());
+            $message = "Vitaemo v NarodnaRada! Vash kod:".$otpToken->getToken();
+
+            $this->smsSender->sendTurboSms($user->getPhone(), $message);
         } catch (\Exception $e) {
         }
 
