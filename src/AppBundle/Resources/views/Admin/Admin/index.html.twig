@@ -50,6 +50,16 @@
                 </div>
             </div>
         </div>
+        <div class="col-sm-4 col-xs-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Публічне голосування:
+                </div>
+                <div class="panel-body">
+                    <a href="{{ path('offline_dashboard') }}" class="btn btn-info btn-block">Голосувати</a><br><br>
+                </div>
+            </div>
+        </div>
         {% if is_granted('ROLE_REGIONAL_ADMIN') %}
         <div class="col-sm-4 col-xs-6">
             <div class="panel panel-default">
@@ -103,16 +113,6 @@
                 </div>
                 <div class="panel-body">
                     <a href="{{ path('admin_users') }}" class="btn btn-default btn-block">До списку виборців</a><br><br>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-4 col-xs-6">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    Публічне голосування:
-                </div>
-                <div class="panel-body">
-                    <a href="{{ path('offline_dashboard') }}" class="btn btn-info btn-block">Голосувати</a><br><br>
                 </div>
             </div>
         </div>

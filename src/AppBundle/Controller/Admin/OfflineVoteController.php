@@ -56,8 +56,9 @@ class OfflineVoteController extends Controller
         ]);
         $form->handleRequest($request);
 
-        if ($user->getInn() && (!$user->getFirstName() || !$user->getLastName() || !$user->getInn() || !$user->getPhone())) {
-            $this->addFlash('warning', 'Ви можете продовжувати голосовання, але Ваші голоси будуть враховані після пред\'влення посвідчення особи оператору');
+        $settings = $this->getCurrentVoteSettings();
+        if ($user->getInn() && ($settings instanceof VoteSettings && $user->getCurrentLocation()->getCity() !== $settings->getLocation()->getCity())) {
+            $this->addFlash('warning-origin', 'Ви можете продовжувати голосовання, але Ваші голоси будуть враховані після пред\'влення посвідчення особи оператору');
         }
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -131,7 +132,7 @@ class OfflineVoteController extends Controller
     {
         return [
             'user' => $user,
-            'vote' => $this->getDoctrine()->getRepository(VoteSettings::class)->find(8),
+            'vote' => $this->getCurrentVoteSettings(),
         ];
     }
 
@@ -183,5 +184,13 @@ class OfflineVoteController extends Controller
         $this->addFlash('success', 'Дякуємо. Ваш голос по голосуванню '.$settings->getTitle().' прийнятий.');
 
         return new Response('ok');
+    }
+
+    /**
+     * @return VoteSettings|null|object
+     */
+    protected function getCurrentVoteSettings()
+    {
+        return $this->getDoctrine()->getRepository(VoteSettings::class)->find(8);
     }
 }
