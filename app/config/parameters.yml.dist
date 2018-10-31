@@ -35,3 +35,5 @@ parameters:
     turbosms_user: ~
     turbosms_pass: ~
     turbosms_from: ~
+    alpha_api_key: ~
+    alpha_from: ~

@@ -7,7 +7,7 @@ use AppBundle\Entity\Country;
 use AppBundle\Entity\Location;
 use AppBundle\Entity\OtpToken;
 use AppBundle\Entity\User;
-use AppBundle\Service\TurboSmsSender;
+use AppBundle\Service\SmsSenderInterface;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Routing\Router;
 
@@ -31,7 +31,7 @@ class UserManager
     private $resource;
 
     /**
-     * @var TurboSmsSender
+     * @var SmsSenderInterface
      */
     private $smsSender;
 
@@ -62,9 +62,9 @@ class UserManager
     }
 
     /**
-     * @param TurboSmsSender $smsSender
+     * @param SmsSenderInterface $smsSender
      */
-    public function setSmsSender(TurboSmsSender $smsSender): void
+    public function setSmsSender(SmsSenderInterface $smsSender): void
     {
         $this->smsSender = $smsSender;
     }
@@ -241,9 +241,9 @@ class UserManager
             $this->em->persist($otpToken);
             $this->em->flush();
 
-            $message = "Vitaemo v NarodnaRada! Vash kod:".$otpToken->getToken();
+            $message = 'Vitaemo v NarodnaRada! Vash kod:'.$otpToken->getToken();
 
-            $this->smsSender->sendTurboSms($user->getPhone(), $message);
+            $this->smsSender->send($user->getPhone(), $message);
         } catch (\Exception $e) {
         }
 

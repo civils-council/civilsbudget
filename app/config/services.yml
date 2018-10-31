@@ -32,3 +32,14 @@ services:
             - ['setKernel', ['@kernel']]
         tags:
             - { name: sms_provider }
+
+    app.alpha_sms_sender:
+        class: AppBundle\Service\AlphaSmsSender
+        arguments:
+            - '%alpha_api_key%'
+            - '%alpha_from%'
+        calls:
+            - ['setLogger', ['@logger']]
+            - ['setKernel', ['@kernel']]
+        tags:
+            - { name: sms_provider }

@@ -95,7 +95,7 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     private $lastLoginAt;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      *
@@ -226,9 +226,9 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     public function __construct()
     {
         $this->otpTokens = new ArrayCollection();
-        $this->likedProjects = new ArrayCollection;
-        $this->userProjects = new ArrayCollection;
-        $this->locations = new ArrayCollection;
+        $this->likedProjects = new ArrayCollection();
+        $this->userProjects = new ArrayCollection();
+        $this->locations = new ArrayCollection();
     }
 
     /**
@@ -362,7 +362,7 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getPhone()
     {
@@ -651,14 +651,17 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
         if (!$this->getLikedProjects()->contains($project)) {
             return $this->addUserProject(new UserProject($this, $project));
         }
+
         return $this;
     }
+
     /**
      * @deprecated
      *
      * Remove project
      *
      * @param Project $project
+     *
      * @return User
      */
     public function removeLikedProject(Project $project)
@@ -666,8 +669,10 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
         if ($this->getLikedProjects()->contains($project)) {
             $this->getLikedProjects()->removeElement($project);
         }
+
         return $this;
     }
+
     /**
      * @deprecated
      *
@@ -739,7 +744,7 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     }
 
     /**
-     * Add likedProject
+     * Add likedProject.
      *
      * @param Project $likedProject
      *
@@ -750,6 +755,7 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
         if (!$this->getLikedProjects()->contains($likedProject)) {
             $this->getLikedProjects()->add($likedProject);
         }
+
         return $this;
     }
 
