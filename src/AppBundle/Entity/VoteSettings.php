@@ -63,6 +63,7 @@ class VoteSettings
      * @var Project[]ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Project", mappedBy="voteSetting", cascade={"persist"})
+     * @ORM\OrderBy({"viewOrder" = "ASC"})
      */
     private $project;
 
