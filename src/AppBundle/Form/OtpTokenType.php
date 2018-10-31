@@ -24,7 +24,7 @@ class OtpTokenType extends AbstractType
         $builder
             ->add('token', TextType::class, [
                 'required' => true,
-                'label' => 'Код підтвердження',
+                'label' => 'Вам на мобільний телефон  висланний код для підтвердження. Введіть його в це поле',
                 'constraints' => [new NotBlank(['message' => 'Обов\'язкове поле'])]
             ])
             ->add('permission', CheckboxType::class, [

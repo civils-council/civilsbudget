@@ -10,7 +10,9 @@
             </div>
 
             <div class="header-controls">
+                {% if 'offline' not in app.request.get('_route') %}
                 <a href="{{ path("admin_dashboard") }}">{{ block('title')}}</a>
+                {% endif %}
                 {% block user %}
                     {% if app.user %}
                         <a href="{{ path('logout') }}" class="lb-signout" title="Вихід">Вихід</a>
