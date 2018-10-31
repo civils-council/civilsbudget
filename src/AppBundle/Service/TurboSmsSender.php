@@ -11,7 +11,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 /**
  * Class TurboSmsSender.
  */
-class TurboSmsSender
+class TurboSmsSender implements SmsSenderInterface
 {
     private const KERNEL_NOT_IGNORE_MODE = 'prod';
     private const STATUS_OK = 'ok';
@@ -63,14 +63,12 @@ class TurboSmsSender
     }
 
     /**
-     * @param $phone
-     * @param $text
+     * @param string $phone
+     * @param string $text
      *
      * @return array|bool
-     *
-     * @throws TurboSmsException
      */
-    public function sendTurboSms($phone, $text)
+    public function send(string $phone, string $text)
     {
         $body = [
             'sender' => $this->turbosmsFrom,

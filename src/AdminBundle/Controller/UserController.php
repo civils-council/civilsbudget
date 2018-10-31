@@ -4,8 +4,6 @@ namespace AdminBundle\Controller;
 
 use AdminBundle\Form\CreateUser;
 use AdminBundle\Model\CreateUserModel;
-use AppBundle\Entity\Admin;
-use AppBundle\Entity\City;
 use AppBundle\Entity\Location;
 use AppBundle\Entity\Project;
 use AppBundle\Entity\VoteSettings;
@@ -28,10 +26,11 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
  */
 class UserController extends Controller
 {
-
     /**
      * Lists all User entities.
+     *
      * @param Request $request
+     *
      * @return array
      *
      * @Route("/", name="admin_users")
@@ -40,12 +39,12 @@ class UserController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $em    = $this->get('doctrine.orm.entity_manager');
-        $dql   = "SELECT a FROM AppBundle:User a INNER JOIN a.addedByAdmin aba WHERE aba.id = :abaId";
+        $em = $this->get('doctrine.orm.entity_manager');
+        $dql = 'SELECT a FROM AppBundle:User a INNER JOIN a.addedByAdmin aba WHERE aba.id = :abaId';
         $query = $em->createQuery($dql);
         $query->setParameter('abaId', $this->getUser()->getId());
 
-        $paginator  = $this->get('knp_paginator');
+        $paginator = $this->get('knp_paginator');
         $entitiesPagination = $paginator->paginate(
             $query,
             $request->query->get('page', 1),
@@ -58,8 +57,9 @@ class UserController extends Controller
     }
 
     /**
-     * Search User entity by INN
-     * @param string $inn
+     * Search User entity by INN.
+     *
+     * @param string  $inn
      * @param Request $request
      *
      * @Route("/{inn}/search", name="admin_users_search_by_inn")
@@ -107,13 +107,13 @@ class UserController extends Controller
         if ($form->isValid()
             && $form->get('user')->isValid()
             && $form->get('location')->isValid()
-            && count($errors) === 0
+            && 0 === count($errors)
         ) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity->getLocation());
             $entity->getUser()->addLocation($entity->getLocation());
             $entity->getUser()->setAddedByAdmin($this->getUser());
-            if ($entity->getUser()->getBirthday() === null && $this->getBirthDayFromInn($entity->getUser()->getInn())) {
+            if (null === $entity->getUser()->getBirthday() && $this->getBirthDayFromInn($entity->getUser()->getInn())) {
                 $entity->getUser()->setBirthday(
                     $this->getBirthDayFromInn($entity->getUser()->getInn())->format('Y-m-d')
                 );
@@ -141,11 +141,11 @@ class UserController extends Controller
     {
         $form = $this->createFormBuilder()
             ->add('inn', null)
-            ->add("Пошук", SubmitType::class)
+            ->add('Пошук', SubmitType::class)
             ->getForm();
 
         $form->handleRequest($request);
-        if($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
             $em = $this->getDoctrine()->getManager();
             $user = $em->getRepository(User::class)->findOneBy(['inn' => $data['inn']]);
@@ -153,11 +153,12 @@ class UserController extends Controller
             if ($user) {
                 return $this->redirectToRoute('admin_users_show', ['id' => $user->getId()]);
             } else {
-               return $this->redirectToRoute('admin_users_new');
+                return $this->redirectToRoute('admin_users_new');
             }
         }
+
         return [
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ];
     }
 
@@ -171,12 +172,12 @@ class UserController extends Controller
     public function newAction()
     {
         $entity = new CreateUserModel();
-        $form   = $this->createCreateForm($entity);
+        $form = $this->createCreateForm($entity);
 
         return array(
             'entity' => $entity,
-            'form'   => $form->createView(),
-            'errors' => null
+            'form' => $form->createView(),
+            'errors' => null,
         );
     }
 
@@ -189,11 +190,13 @@ class UserController extends Controller
     {
         if (!$user->getCurrentLocation()) {
             $this->addFlash('danger', 'User must have location.');
+
             return $this->redirectToRoute('admin_users');
         }
 
         if ($user->getCurrentLocation() && !$user->getCurrentLocation()->getCity()) {
             $this->addFlash('danger', 'User must have city in location.');
+
             return $this->redirectToRoute('admin_users');
         }
 
@@ -206,8 +209,8 @@ class UserController extends Controller
         foreach ($voteSettings as $voteSetting) {
             $limitVoteSetting = $voteSetting->getVoteLimits();
 
-            $balanceVotes[]= [$voteSetting,
-                'balance' => $limitVoteSetting - $this->getDoctrine()->getRepository(User::class)->getUserVotesBySettingVote($voteSetting, $user)];
+            $balanceVotes[] = [$voteSetting,
+                'balance' => $limitVoteSetting - $this->getDoctrine()->getRepository(User::class)->getUserVotesBySettingVote($voteSetting, $user), ];
         }
 
         $query = $this->getDoctrine()->getRepository(Project::class)
@@ -235,10 +238,10 @@ class UserController extends Controller
         );
 
         return [
-            'entity'      => $user,
+            'entity' => $user,
             'delete_form' => $deleteForm->createView(),
             'pagination' => $entitiesPagination,
-            'balanceVotes' => $balanceVotes
+            'balanceVotes' => $balanceVotes,
         ];
     }
 
@@ -249,7 +252,7 @@ class UserController extends Controller
      * @Method("GET")
      * @Template()
      *
-     * @param User $user
+     * @param User    $user
      * @param Request $request
      *
      * @return array|RedirectResponse
@@ -270,14 +273,14 @@ class UserController extends Controller
         if ($editForm->isValid()) {
             $em->flush();
 
-            return $this->redirect($this->generateUrl('admin_users_edit', array('id' => $user->getId())));
+            return $this->redirect($this->generateUrl('admin_users_show', array('id' => $user->getId())));
         }
 
         return array(
-            'entity'      => $user,
-            'edit_form'   => $editForm->createView(),
+            'entity' => $user,
+            'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
-            'errors' => []
+            'errors' => [],
         );
     }
 
@@ -288,7 +291,7 @@ class UserController extends Controller
      * @Method("PUT")
      * @Template("AdminBundle:User:edit.html.twig")
      *
-     * @param User $user
+     * @param User    $user
      * @param Request $request
      *
      * @return array|RedirectResponse
@@ -305,7 +308,7 @@ class UserController extends Controller
 
         $entityUserModel = new CreateUserModel();
         $entityUserModel->setUser($user);
-        $entityUserModel->setLocation(new Location);
+        $entityUserModel->setLocation(new Location());
 
         $deleteForm = $this->createDeleteForm($user->getId());
         $editForm = $this->createEditForm($entityUserModel);
@@ -314,7 +317,7 @@ class UserController extends Controller
 
         $errors = $this->get('validator')->validate($entityUserModel->getUser(), null, ['admin_user_put']);
 
-        if ($editForm->isValid() && count($errors) === 0) {
+        if ($editForm->isValid() && 0 === count($errors)) {
             $newLocation = $entityUserModel->getLocation();
             if ($this->isNewLocation($newLocation, $user->getCurrentLocation())) {
                 $em->persist($entityUserModel->getLocation());
@@ -322,14 +325,14 @@ class UserController extends Controller
             }
             $em->flush();
 
-            return $this->redirect($this->generateUrl('admin_users_edit', array('id' => $user->getId())));
+            return $this->redirect($this->generateUrl('admin_users_show', array('id' => $user->getId())));
         }
 
         return array(
-            'entity'      => $user,
-            'edit_form'   => $editForm->createView(),
+            'entity' => $user,
+            'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
-            'errors' => $errors
+            'errors' => $errors,
         );
     }
 
@@ -350,7 +353,6 @@ class UserController extends Controller
                 $user,
                 $project
             ));
-
         } catch (ValidatorException $e) {
             $this->addFlash('danger', $e->getMessage());
         } catch (\Exception $e) {
@@ -361,14 +363,15 @@ class UserController extends Controller
 
         return $this->redirectToRoute('admin_users_show', ['id' => $user->getId()]);
     }
-    
+
     /**
      * Deletes a User entity.
      *
      * @Route("/{id}", name="admin_users_delete")
      * @Method("DELETE")
 
-     * @param User $user
+     *
+     * @param User    $user
      * @param Request $request
      *
      * @return RedirectResponse
@@ -419,7 +422,7 @@ class UserController extends Controller
             'validation_groups' => ['admin_user_put'],
             'action' => $this->generateUrl('admin_users_update', array('id' => $entity->getUser()->getId())),
             'method' => 'PUT',
-            'cities' => $this->getAvailableCities()
+            'cities' => $this->getAvailableCities(),
         ));
 
         $form->add('submit', SubmitType::class, array('label' => 'Update'));
@@ -439,7 +442,7 @@ class UserController extends Controller
         $form = $this->createForm(CreateUser::class, $entity, array(
             'action' => $this->generateUrl('admin_users_create'),
             'method' => 'POST',
-            'cities' => $this->getAvailableCities()
+            'cities' => $this->getAvailableCities(),
         ));
 
         $form->add('submit', SubmitType::class, array('label' => 'Create'));

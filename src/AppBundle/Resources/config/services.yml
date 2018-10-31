@@ -43,7 +43,7 @@ services:
             - "@doctrine.orm.entity_manager"
             - "%kernel.root_dir%"
         calls:
-            - ['setSmsSender', ['@app.turbosms_sender']]
+            - ['setSmsSender', ['@app.alpha_sms_sender']]
             - ['setRouter', ['@router']]
 
     app.session:

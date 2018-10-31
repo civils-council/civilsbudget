@@ -37,16 +37,14 @@
     <br><a href="{{ path('admin_dashboard') }}" class="btn btn-success">Повернутися до адмін панелі</a><br><br>
 
     <ul class="record_actions">
-    {% if is_granted('ROLE_REGIONAL_ADMIN') %}
         <li>
             <a href="{{ path('admin_users_edit', { 'id': entity.id }) }}">
                 Редагувати
             </a>
         </li>
+    {% if is_granted('ROLE_REGIONAL_ADMIN') %}
         {{ form_errors(delete_form) }}
         {{ form_start(delete_form, {'action': path('admin_users_delete', {'id': entity.id}), 'method': 'POST'}) }}
-
-
         <div class="margin-top-20 btn_save">
             {{ form_widget(delete_form.submit, {'attr': {'class': 'btn green-haze'}}) }}
         </div>
