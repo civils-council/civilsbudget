@@ -29,11 +29,28 @@ services:
             - "%bi_oauth_url%"
             - "@router"
 
+    app.security.bank_id_nbu:
+        class: AppBundle\Security\BankIdNbuService
+        arguments:
+        - "%nbu_client_id%"
+        - "%nbu_client_secret%"
+        - "%nbu_oauth_url%"
+        - "@router"
+        - "%nbu_cert_file_path%"
+        - "@app.security.bank_id_nbu_encryptor"
+
+    app.security.bank_id_nbu_encryptor:
+        class: AppBundle\Security\Encryptor\BankIdNbu\BandIdNbuEncryptor
+        arguments:
+        - "%nbu_key_file_path%"
+        - "%nbu_key_password%"
+
     app.twig_extension:
         class: AppBundle\Twig\AppExtension
         public: false
         arguments:
             - "@app.security.bank_id"
+            - "@app.security.bank_id_nbu"
         tags:
             - { name: twig.extension }
 

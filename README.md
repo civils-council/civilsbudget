@@ -33,6 +33,12 @@ Observer approve or disapprove this project for publishing.
 
 ### Initial commands to initiate docker-containers
 
+Note Example for docker: 
+1) put php-ext: eusphpei to docker/php/eusphpei 
+2) After first run in eusphpei folder will be created file osplm.ini 
+    replace path there, example: Path=/var/www/civils-app/app/certificates
+3) put nbuBankId certificates to app/certificates
+
 ```bash
 docker-compose build --build-arg host_uid=$(id -u) --build-arg civils-app
 docker-compose build nginx
