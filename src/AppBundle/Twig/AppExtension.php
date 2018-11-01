@@ -3,6 +3,7 @@
 namespace AppBundle\Twig;
 
 use AppBundle\Entity\Project;
+use AppBundle\Security\BankIdNbuService;
 use AppBundle\Security\BankIdService;
 
 class AppExtension extends \Twig_Extension
@@ -12,10 +13,17 @@ class AppExtension extends \Twig_Extension
      */
     private $bankId;
 
-    public function __construct(BankIdService $bankId)
+    /**
+     * @var BankIdNbuService
+     */
+    private $bankIdNbu;
+
+    public function __construct(BankIdService $bankId, BankIdNbuService $bankIdNbu)
     {
         $this->bankId = $bankId;
+        $this->bankIdNbu = $bankIdNbu;
     }
+
     public function getFunctions()
     {
         return [
@@ -34,6 +42,7 @@ class AppExtension extends \Twig_Extension
     {
         return [
             'login_url' => $this->bankId->getLink(),
+            'nbu_login_url' => $this->bankIdNbu->getLink(),
         ];
     }
 

@@ -25,3 +25,7 @@
 /var/*
 !var/SymfonyRequirements.php
 web-src/images/.DS_Store
+/docker/mysql/db
+/docker/php/eusphpei
+app/certificates/
+app/keys/

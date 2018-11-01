@@ -2,11 +2,11 @@
 # Set parameters here that may be different on each deployment target of the app, e.g. development, staging, production.
 # http://symfony.com/doc/current/best_practices/configuration.html#infrastructure-related-configuration
 parameters:
-    database_host:     127.0.0.1
-    database_port:     ~
-    database_name:     civils-budget
+    database_host:     mysql
+    database_port:     3306
+    database_name:     civil_council
     database_user:     root
-    database_password: ~
+    database_password: root
     # You should uncomment this if you want use pdo_sqlite
     # database_path: "%kernel.root_dir%/data.db3"
 
@@ -24,11 +24,19 @@ parameters:
 
     email_sender: ~
 
+    #NBU BANK ID
     client_id: ~
     client_secret: ~
 
     bi_oauth_url: "https://bankid.org.ua"
     bi_get_data_url: "https://biprocessing.org.ua"
+
+    #NBU BANK ID
+    nbu_client_id: ~
+    nbu_client_secret: ~
+    nbu_oauth_url: https://testid.bank.gov.ua
+    nbu_key_path: /var/www/civils-app/app/keys/nbu-bank-id.dat
+    nbu_cert_path: /var/www/civils-app/app/certificates/EU-5B63D88375D92018040000007F0F00004A280000.cer
 
     limit_votes: 4
 

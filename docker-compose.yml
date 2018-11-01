@@ -1,0 +1,35 @@
+version: "3.7"
+services:
+    civils-app:
+        build: docker/php
+        volumes:
+            - .:/var/www/civils-app
+        depends_on:
+            - mysql
+        links:
+            - mysql
+    nginx:
+        build: docker/nginx
+        volumes:
+            - .:/var/www/civils-app
+        depends_on:
+            - civils-app
+        ports:
+          - 8080:80
+        logging:
+            driver: syslog
+    mysql:
+        image: mysql:5.7
+        ports:
+            - 13306:3306
+        volumes:
+            - ./docker/mysql/db:/var/lib/mysql
+            - ./docker/mysql:/docker-entrypoint-initdb.d/
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+    node:
+        image: node:10-alpine
+        working_dir: /home/node/app
+        user: node
+        volumes:
+        - .:/home/node/app

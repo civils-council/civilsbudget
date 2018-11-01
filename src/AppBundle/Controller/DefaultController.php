@@ -87,6 +87,64 @@ class DefaultController extends Controller
     }
 
     /**
+     * @Route("/login-nbu", name="login_nbu")
+     * @Template()
+     */
+    public function loginNbuAction(Request $request)
+    {
+        $accessToken = null;
+        try {
+            if (null === $code = $request->query->get('code')) {
+                throw new \Exception('No code found');
+            }
+
+            //TODO: getAccessToken, getBankIdUserData... etc is not necessary here
+            //TODO: move code bellow to service
+
+            $accessTokenRaw = $this->get('app.security.bank_id_nbu')->getAccessToken($code);
+
+            if (null === $accessToken = $accessTokenRaw['access_token'] ?? null) {
+                throw new \Exception('Token not found');
+            }
+
+            $userData = $this->get('app.security.bank_id_nbu')->getBankIdUserData($accessToken);
+
+            if (($userData['state'] ?? null) !== 'ok') {
+                throw new \Exception('Invalid response from bankID nbu');
+            }
+
+            if (!($userData['customerCrypto'] ?? null)) {
+                throw new \Exception('No Crypto Data found');
+            }
+
+            $decodedData = $this->get('app.security.bank_id_nbu')->decodeResponse($userData);
+
+
+//                $usersData = $this->get('app.user.manager')->isUniqueUser($data);
+//                /** @var User $userResponse */
+//                $userResponse = $usersData['user'];
+//
+//                return $this->redirectToRoute(
+//                    'additional_registration',
+//                    [
+//                        'id' => $userResponse->getId(),
+//                        'status' => $usersData['status'],
+//                        'city' => $request->get('city')
+//                    ]
+//                );
+
+            return $this->json([
+                'code'=>$code,
+                'accessToken' => $accessToken,
+                'decodedData' => $decodedData,
+                'userData' => $userData,
+            ]);
+        } catch (\Exception $e) {
+            return $this->json(['message' => $e->getMessage()]);
+        }
+    }
+
+    /**
      * @Route("/confirm_data/{id}", name="additional_registration")
      * @Template()
      * @Method({"GET","POST"})
