@@ -39,7 +39,7 @@ class UserType extends AbstractType
                 'attr' => ['placeholder' => 'Формат: +380999999999', 'mask' => UserManager::PHONE_PATTERN],
             ])
             ->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
-                /** @var User $user */
+                /** @var User|null $user */
                 $user = $event->getData();
                 $form = $event->getForm();
 
@@ -51,16 +51,16 @@ class UserType extends AbstractType
                     );
                 }
 
-                if (null === $form->get('phone')->getData()) {
+                if (null === $form->get('phone')->getData() && null !== $user) {
                     $user->setPhone(self::EMPTY_PHONE);
                 }
             })
             ->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) {
-                /** @var User $user */
+                /** @var User|null $user */
                 $user = $event->getData();
                 $form = $event->getForm();
 
-                if ($form->isValid() && self::EMPTY_PHONE === $user->getPhone()) {
+                if ($form->isValid() && $user && self::EMPTY_PHONE === $user->getPhone()) {
                     $user->setPhone(null);
                 }
             });

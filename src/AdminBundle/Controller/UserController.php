@@ -172,6 +172,7 @@ class UserController extends Controller
     public function newAction()
     {
         $entity = new CreateUserModel();
+        $entity->setUser(new User());
         $form = $this->createCreateForm($entity);
 
         return array(
