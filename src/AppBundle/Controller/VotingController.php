@@ -45,7 +45,8 @@ class VotingController extends Controller
         $ttl = $this->getParameter('statistic_ttl');
 
         try {
-            $statistic = $cache->getItem('statistic');
+            $statistic = $cache->getItem('statistic-'.$voteSetting->getId());
+
             if ($statistic->isHit()) {
                 $votingStatistic = $statistic->get();
             } else {
