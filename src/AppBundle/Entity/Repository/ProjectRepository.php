@@ -11,7 +11,7 @@ use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
 /**
- * ProjectRepository
+ * ProjectRepository.
  */
 class ProjectRepository extends EntityRepository implements ProjectRepositoryInterface
 {
@@ -28,7 +28,7 @@ class ProjectRepository extends EntityRepository implements ProjectRepositoryInt
             ->leftJoin('user_projects.user', 'user')
             ->addSelect('COUNT(user.id) as countLikes')
             ->groupBy('project.id')
-            ->orderBy("countLikes", 'DESC');
+            ->orderBy('countLikes', 'DESC');
 
         $query = $qb->getQuery();
         $results = $query->getResult();
@@ -41,8 +41,7 @@ class ProjectRepository extends EntityRepository implements ProjectRepositoryInt
      */
     public function getProjectShow(
         ParameterBag $parameterBag
-    )
-    {
+    ) {
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb
             ->select('project')
@@ -78,6 +77,7 @@ class ProjectRepository extends EntityRepository implements ProjectRepositoryInt
      * @param int $id
      *
      * @return array|mixed
+     *
      * @throws \Doctrine\ORM\NoResultException
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
@@ -99,6 +99,9 @@ class ProjectRepository extends EntityRepository implements ProjectRepositoryInt
      * @param Project $project
      *
      * @return int
+     *
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function countVotesPerProject(Project $project): int
     {
@@ -116,6 +119,9 @@ class ProjectRepository extends EntityRepository implements ProjectRepositoryInt
      * @param Project $project
      *
      * @return int
+     *
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function countAdminVotesPerProject(Project $project): int
     {
@@ -133,7 +139,7 @@ class ProjectRepository extends EntityRepository implements ProjectRepositoryInt
     /**
      * @param VoteSettings $voteSettings
      *
-     * @return \Doctrine\ORM\Query
+     * @return \Doctrine\ORM\QueryBuilder
      */
     public function projectVoteStatisticByVoteSettings(VoteSettings $voteSettings)
     {
@@ -153,8 +159,7 @@ class ProjectRepository extends EntityRepository implements ProjectRepositoryInt
             ->where('p.voteSetting = :voteSetting')
             ->groupBy('p')
             ->setParameter('voteSetting', $voteSettings)
-            ->addOrderBy('totalVotes', 'DESC')
-            ->getQuery();
+            ->addOrderBy('totalVotes', 'DESC');
     }
 
     /**

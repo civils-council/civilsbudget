@@ -31,6 +31,8 @@ framework:
         save_path: '%kernel.project_dir%/var/sessions/%kernel.environment%'
     fragments:       ~
     http_method_override: true
+    cache:
+        app: cache.adapter.apcu
 
 # Twig Configuration
 twig:

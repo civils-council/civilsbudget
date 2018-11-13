@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Project;
 use AppBundle\Entity\VoteSettings;
+use Psr\Cache\InvalidArgumentException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -40,9 +41,27 @@ class VotingController extends Controller
      */
     public function statisticAction(VoteSettings $voteSetting, Request $request)
     {
-        $votingStatistic = $this->getDoctrine()
-            ->getRepository(Project::class)
-            ->projectVoteStatisticByVoteSettings($voteSetting);
+        $cache = $this->get('cache.app');
+        $ttl = $this->getParameter('statistic_ttl');
+
+        try {
+            $statistic = $cache->getItem('statistic');
+            if ($statistic->isHit()) {
+                $votingStatistic = $statistic->get();
+            } else {
+                $votingStatistic = $this->getDoctrine()
+                    ->getRepository(Project::class)
+                    ->projectVoteStatisticByVoteSettings($voteSetting)
+                ->getQuery()->getResult();
+                $statistic->set($votingStatistic);
+                $statistic->expiresAfter($ttl);
+                $cache->save($statistic);
+            }
+        } catch (InvalidArgumentException $e) {
+            $votingStatistic = $this->getDoctrine()
+                ->getRepository(Project::class)
+                ->projectVoteStatisticByVoteSettings($voteSetting);
+        }
 
         $pagination = $this->get('knp_paginator')->paginate(
             $votingStatistic,

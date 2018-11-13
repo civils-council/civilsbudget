@@ -37,3 +37,4 @@ parameters:
     turbosms_from: ~
     alpha_api_key: ~
     alpha_from: ~
+    statistic_ttl: 600
