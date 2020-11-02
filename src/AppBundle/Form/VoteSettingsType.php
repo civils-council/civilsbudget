@@ -19,6 +19,7 @@ class VoteSettingsType extends AbstractType
             ->add('voteLimits')
             ->add('dateFrom')
             ->add('dateTo')
+            ->add('datePaperVoteTo')
             ->add('description')
             ->add('location');
     }

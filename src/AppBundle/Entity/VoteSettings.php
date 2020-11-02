@@ -54,7 +54,7 @@ class VoteSettings
     /**
      * @var integer
      *
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="Vote limits should not be empty")
      * @ORM\Column(name="vote_limits", type="integer", nullable=false)
      */
     private $voteLimits;
@@ -70,7 +70,7 @@ class VoteSettings
     /**
      * @var \DateTime
      *
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="Date vote from should not be empty")
      * @ORM\Column(name="date_from", type="datetime", nullable=false)
      */
     private $dateFrom;
@@ -78,7 +78,7 @@ class VoteSettings
     /**
      * @var \DateTime
      *
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="Date vote to should not be empty")
      * @ORM\Column(name="date_to", type="datetime", nullable=false)
      */
     private $dateTo;
@@ -86,7 +86,6 @@ class VoteSettings
     /**
      * @var \DateTime
      *
-     * @Assert\NotBlank()
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $datePaperVoteTo;
@@ -101,7 +100,7 @@ class VoteSettings
     /**
      * @var City
      *
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="Location should not be empty")
      * @ORM\ManyToOne(targetEntity="City", inversedBy="voteSetting")
      * @ORM\JoinColumn(name="location_id", nullable = true, referencedColumnName="id")
      */
@@ -444,7 +443,7 @@ class VoteSettings
      *
      * @return VoteSettings
      */
-    public function setDatePaperVoteTo(\DateTime $datePaperVoteTo): VoteSettings
+    public function setDatePaperVoteTo(?\DateTime $datePaperVoteTo): VoteSettings
     {
         $this->datePaperVoteTo = $datePaperVoteTo;
 

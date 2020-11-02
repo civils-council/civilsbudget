@@ -8,12 +8,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class VotingDTO
 {
     /**
-     * @var string
+     * @var string|null
      */
     private $logo;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $backgroundImage;
 
@@ -62,9 +62,9 @@ class VotingDTO
     /**
      * @Groups({"voting_list"})
      *
-     * @return string
+     * @return string|null
      */
-    public function getShortDescription(): string
+    public function getShortDescription(): ?string
     {
         return $this->voteSettings->getShortDescription();
     }
@@ -172,11 +172,11 @@ class VotingDTO
     }
 
     /**
-     * @param string $logo
+     * @param string|null $logo
      *
      * @return VotingDTO
      */
-    public function setLogo(string $logo): VotingDTO
+    public function setLogo(?string $logo): VotingDTO
     {
         $this->logo = $logo;
 
@@ -184,11 +184,11 @@ class VotingDTO
     }
 
     /**
-     * @param string $backgroundImage
+     * @param string|null $backgroundImage
      *
      * @return VotingDTO
      */
-    public function setBackgroundImage(string $backgroundImage): VotingDTO
+    public function setBackgroundImage(?string $backgroundImage): VotingDTO
     {
         $this->backgroundImage = $backgroundImage;
 
