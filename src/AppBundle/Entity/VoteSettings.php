@@ -86,7 +86,6 @@ class VoteSettings
     /**
      * @var \DateTime
      *
-     * @Assert\NotBlank(message="Date paper vote to should not be empty")
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $datePaperVoteTo;
