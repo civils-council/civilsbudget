@@ -121,6 +121,13 @@ class VoteSettings
     private $backgroundImg;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", nullable=false)
+     */
+    private $isOfflineVotingEnabled;
+
+    /**
      * @return string
      */
     public function __toString()
@@ -456,5 +463,19 @@ class VoteSettings
     public function getDatePaperVoteTo(): ?\DateTime
     {
         return $this->datePaperVoteTo;
+    }
+
+    public function setIsOfflineVotingEnabled(bool $isOfflineVotingEnabled): VoteSettings
+    {
+        $this->isOfflineVotingEnabled = $isOfflineVotingEnabled;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isOfflineVotingEnabled(): bool
+    {
+        return $this->isOfflineVotingEnabled;
     }
 }
