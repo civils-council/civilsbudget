@@ -21,6 +21,7 @@ class VoteSettingsType extends AbstractType
             ->add('dateTo')
             ->add('datePaperVoteTo')
             ->add('description')
+            ->add('isOfflineVotingEnabled')
             ->add('location');
     }
 

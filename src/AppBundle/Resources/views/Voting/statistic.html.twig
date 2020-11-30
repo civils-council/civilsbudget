@@ -1,5 +1,7 @@
 {% extends "@App/layout.html.twig" %}
 
+{% set totalVotesTitle = voteSetting.isOfflineVotingEnabled ? 'Всього голосів' : 'Голосів' %}
+
 {% block title %}
     Голосування
 {% endblock title %}
@@ -7,17 +9,19 @@
 {% block content %}
     <h3>{{ voteSetting.location ~ ': ' ~ voteSetting.title }}</h3>
     <h5>{{ 'Виборців віддало голоси: '~ countVoted ~
-        '. Проектів підтримало: ' ~ countTotalVotes  ~ ' (онлайн: ' ~
-        (countTotalVotes-countAdminVotes) ~ ', офлайн: ' ~  countAdminVotes ~ ')'}}</h5>
+        '. Проектів підтримало: ' ~ countTotalVotes  ~ (voteSetting.isOfflineVotingEnabled ? ' (онлайн: ' ~
+        (countTotalVotes-countAdminVotes) ~ ', офлайн: ' ~  countAdminVotes ~ ')' : '')}}</h5>
 <table class="table table-striped">
     <tr>
         <th>#</th>
         <th>{{ knp_pagination_sortable(pagination, 'Назва', ['p.id']) }}</th>
         <th>{{ 'Автор' }}</th>
         <th>{{ 'Бюджет' }}</th>
+        {% if voteSetting.isOfflineVotingEnabled %}
         <th>{{ knp_pagination_sortable(pagination, 'Онлайн голосів', ['selfVotes']) }}</th>
         <th>{{ knp_pagination_sortable(pagination, 'Офлайн голосів', ['paperVotes']) }}</th>
-        <th>{{ knp_pagination_sortable(pagination, 'Всього голосів', ['totalVotes']) }}</th>
+        {% endif %}
+        <th>{{ knp_pagination_sortable(pagination, totalVotesTitle, ['totalVotes']) }}</th>
     </tr>
     {% for projectStat in pagination %}
         <p></p>
@@ -26,8 +30,10 @@
             <td><a href="{{ path('projects_show', {'id': projectStat['id']}) }}">{{ projectStat['title'] }}</a></td>
             <td>{{ projectStat['lastName'] ~ ' ' ~ projectStat['firstName'] }}</td>
             <td>{{ projectStat['charge']|number_format(0, '.')}}</td>
+            {% if voteSetting.isOfflineVotingEnabled %}
             <td>{{ projectStat['selfVotes'] }}</td>
             <td>{{ projectStat['paperVotes'] }}</td>
+            {% endif %}
             <td>{{ projectStat['totalVotes'] }}</td>
         </tr>
     {% endfor %}

@@ -56,9 +56,11 @@
                     <div id="hp-voted">
                         <span class="voted-title">Вже підтримано проектів {% if voteSetting %} {{ voteSetting.location.city }} {% endif %}</span><br>
                         {% set digits = (countTotalVotes-countAdminVotes)|split('') %}
-                        {% set digitsAdmin = countAdminVotes|split('') %}
-                        {% set digitsAll = countTotalVotes|split('') %}
                         {% set digitsVoted = countVoted|split('') %}
+                        {% set digitsAll = countTotalVotes|split('') %}
+
+                        {% if voteSetting.isOfflineVotingEnabled %}
+                        {% set digitsAdmin = countAdminVotes|split('') %}
                         <span class="voted-title">онлайн:</span>
                         <div class="counter">
                             {% for digit in digits %}
@@ -78,6 +80,7 @@
                         </div>
                         <br>
                         <span class="voted-title">всього:</span>
+                        {% endif %}
                         <div class="counter">
                             {% for digit in digitsAll %}
                                 <span class="digit">
