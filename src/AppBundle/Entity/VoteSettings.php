@@ -476,6 +476,6 @@ class VoteSettings
      */
     public function isOfflineVotingEnabled(): bool
     {
-        return $this->isOfflineVotingEnabled;
+        return (bool) $this->isOfflineVotingEnabled;
     }
 }

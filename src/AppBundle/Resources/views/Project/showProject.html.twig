@@ -40,9 +40,15 @@
     </div>
     <div class="row hd-statis">
         <div class="col-md-6 support">
-            Підтримало онлайн: <span>{{ (countVoted-countAdminVoted)|number_format(0, '.', ' ') }},</span>
-            офлайн: <span>{{ countAdminVoted|number_format(0, '.', ' ') }},</span>
-            всього: <span>{{ project.userProjects.count|number_format(0, '.', ' ') }}</span>
+            Підтримало
+            {% if project.voteSetting.isOfflineVotingEnabled %}
+                онлайн: <span>{{ (countVoted-countAdminVoted)|number_format(0, '.', ' ') }},</span>
+                офлайн: <span>{{ countAdminVoted|number_format(0, '.', ' ') }},</span>
+                всього:
+            {% else %}
+                проект:
+            {% endif  %}
+            <span>{{ project.userProjects.count|number_format(0, '.', ' ') }}</span>
         </div>
         <div class="col-md-6 date-voting">Кінцева дата голосування: <span>{{ project.voteSetting.dateTo|date('d.m.Y') }}</span></div>
     </div>
