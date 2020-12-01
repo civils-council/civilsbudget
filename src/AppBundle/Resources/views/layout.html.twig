@@ -32,7 +32,7 @@
                 </div>
                 <div class="modal-body">
                     <div>
-                        {% if voteSetting is defined and voteSetting%}
+                        {% if voteSetting is defined and voteSetting.isOfflineVotingEnabled%}
                             Якщо у Вас немає можливості підтримати проект онлайн,
                             Ви його можете підримати прийшовши за адресою:</br></br>
                             {{ voteSetting.address|nl2br }}
