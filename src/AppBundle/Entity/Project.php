@@ -103,7 +103,7 @@ class Project implements \JsonSerializable
      *
      * @var User[] ArrayCollection
      *
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\User", mappedBy="likedProjects", fetch="EXTRA_LAZY")
+     * ORM\ManyToMany(targetEntity="AppBundle\Entity\User", mappedBy="likedProjects", fetch="EXTRA_LAZY")
      */
     private $likedUsers;
 

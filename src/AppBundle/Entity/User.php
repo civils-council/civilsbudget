@@ -169,7 +169,7 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
      *
      * @var Project[]ArrayCollection
      *
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Project", inversedBy="likedUsers")
+     * ORM\ManyToMany(targetEntity="AppBundle\Entity\Project", inversedBy="likedUsers")
      */
     private $likedProjects;
 
