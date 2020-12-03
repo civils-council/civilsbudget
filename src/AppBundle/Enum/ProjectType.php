@@ -6,16 +6,16 @@ use MyCLabs\Enum\Enum;
 
 class ProjectType extends Enum
 {
-    const NATIONAL_SMALL = 'NS';
-    const NATIONAL_BIG = 'NB';
-    const PERSONAL_SMALL = 'PS';
-    const PERSONAL_BIG = 'PB';
+    const SMALL_BUDGETARY = 'NS';
+    const LARGE_BUDGETARY = 'NB';
+    const SMALL_MUNICIPAL = 'PS';
+    const LARGE_MUNICIPAL = 'PB';
 
     const ENUM_NAME = [
-        self::NATIONAL_SMALL => 'Державні / Малі',
-        self::NATIONAL_BIG => 'Державні / Великі',
-        self::PERSONAL_SMALL => 'Особисті / Малі',
-        self::PERSONAL_BIG => 'Особисті / Великі',
+        self::SMALL_BUDGETARY => 'Малий Бюджетний',
+        self::LARGE_BUDGETARY => 'Великий Бюджетний',
+        self::SMALL_MUNICIPAL => 'Малий Громадський',
+        self::LARGE_MUNICIPAL => 'Великий Громадський',
     ];
 
     public function description() {

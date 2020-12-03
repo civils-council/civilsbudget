@@ -169,7 +169,7 @@ class Project implements \JsonSerializable
      *
      * @ORM\Column(type="php_enum_project_type", nullable=true)
      */
-    private $type;
+    private $projectType;
 
     /**
      * Constructor.
@@ -619,12 +619,12 @@ class Project implements \JsonSerializable
         return $this;
     }
 
-    public function getType(): ?ProjectType {
-        return $this->type;
+    public function getProjectType(): ?ProjectType {
+        return $this->projectType;
     }
 
-    public function setType(?ProjectType $type = null): Project {
-        $this->type = $type;
+    public function setProjectType(?ProjectType $type = null): Project {
+        $this->projectType = $type;
         return $this;
     }
 }

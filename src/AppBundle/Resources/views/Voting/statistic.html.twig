@@ -29,7 +29,7 @@
         <tr {% if loop.index is odd %}class="color"{% endif %}>
             <td>{{ loop.index }}.</td>
             <td><a href="{{ path('projects_show', {'id': projectStat['id']}) }}">{{ projectStat['title'] }}</a></td>
-            <td>{{ projectStat['type']|projectTypeDescription }}</td>
+            <td>{{ projectStat['projectType']|projectTypeDescription }}</td>
             <td>{{ projectStat['lastName'] ~ ' ' ~ projectStat['firstName'] }}</td>
             <td>{{ projectStat['charge']|number_format(0, '.')}}</td>
             {% if voteSetting.isOfflineVotingEnabled %}

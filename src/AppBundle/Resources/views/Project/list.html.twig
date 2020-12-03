@@ -136,9 +136,9 @@
                     </div><!-- card actions -->
                     <div class="item-meta">
                         {% if project[0].voteSetting %}
-                        <div>Тип: <span>{{ project[0].type ? project[0].type.description ~ " - " : "" }}{{ project[0].voteSetting.title }}</span></div>
+                        <div>Тип: <span>{{ project[0].projectType ? project[0].projectType|projectTypeDescription ~ " - " : "" }}{{ project[0].voteSetting.title }}</span></div>
                         {% endif %}
-                        <div>Підтримало: <span>{{ project['countLikes']|number_format(0, '.', ' ') }}</span></div>
+                        <div>Підтримало: <span>{{ project['countVoted']|number_format(0, '.', ' ') }}</span></div>
                         <div>Бюджет: <span>{{ project[0].charge|number_format(0, '.', ' ') }}</span> грн.</div>
                     </div>
                     <div class="card-reveal">

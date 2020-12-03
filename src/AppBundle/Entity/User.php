@@ -744,6 +744,8 @@ class User extends AbstractUser implements UserInterface, \JsonSerializable
     }
 
     /**
+     * @deprecated
+     *
      * Add likedProject.
      *
      * @param Project $likedProject
