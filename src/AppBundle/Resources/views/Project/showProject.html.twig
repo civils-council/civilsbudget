@@ -9,7 +9,7 @@
                 </h3>
                 <h4>
                     {% if project.voteSetting %}
-                        <div class="col-md-12">Тип: {{ project.voteSetting.title }}</div>
+                        <div class="col-md-12">Тип: {{ project.type ? project.type.description ~ " - " : "" }} {{ project.voteSetting.title }}</div>
                     {% endif %}
                 </h4>
             </div>

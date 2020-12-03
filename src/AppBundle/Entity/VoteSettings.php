@@ -123,7 +123,7 @@ class VoteSettings
     /**
      * @var bool
      *
-     * @ORM\Column(type="boolean", nullable=false)
+     * @ORM\Column(type="boolean", nullable=true, options = {"default": true})
      */
     private $isOfflineVotingEnabled;
 

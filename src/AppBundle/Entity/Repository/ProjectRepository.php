@@ -147,6 +147,7 @@ class ProjectRepository extends EntityRepository implements ProjectRepositoryInt
             ->select(
                 'p.id',
                 'p.title',
+                'p.type',
                 'p.charge',
                 'o.firstName',
                 'o.lastName',
