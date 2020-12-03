@@ -24,11 +24,10 @@ class ProjectRepository extends EntityRepository implements ProjectRepositoryInt
         $qb
             ->select('project')
             ->from('AppBundle:Project', 'project')
-            ->leftJoin('project.userProjects', 'user_projects')
-            ->leftJoin('user_projects.user', 'user')
-            ->addSelect('COUNT(user.id) as countLikes')
+            ->leftJoin('project.userProjects', 'up')
+            ->addSelect('COUNT(up.user) as countVoted')
             ->groupBy('project.id')
-            ->orderBy('countLikes', 'DESC');
+            ->orderBy('countVoted', 'DESC');
 
         $query = $qb->getQuery();
         $results = $query->getResult();
@@ -46,10 +45,10 @@ class ProjectRepository extends EntityRepository implements ProjectRepositoryInt
         $qb
             ->select('project')
             ->from('AppBundle:Project', 'project')
-            ->leftJoin('project.likedUsers', 'user')
+            ->leftJoin('project.userProjects', 'up')
             ->leftJoin('project.voteSetting', 'vs')
             ->leftJoin('vs.location', 'l')
-            ->addSelect('COUNT(user.id) as countLikes')
+            ->addSelect('COUNT(up.user) as countVoted')
             ->where('project.approved = :approved')
             ->setParameter('approved', true);
 
@@ -84,8 +83,8 @@ class ProjectRepository extends EntityRepository implements ProjectRepositoryInt
     public function getOneProjectShow($id)
     {
         return $this->createQueryBuilder('project')
-            ->select('project', 'COUNT(user.id) as countLikes')
-            ->leftJoin('project.likedUsers', 'user')
+            ->select('project', 'COUNT(up.user) as countVoted')
+            ->leftJoin('project.userProjects', 'up')
             ->andWhere('project.approved= :approved')
             ->andWhere('project.id = :id')
             ->setParameter('approved', true)
@@ -106,9 +105,8 @@ class ProjectRepository extends EntityRepository implements ProjectRepositoryInt
     public function countVotesPerProject(Project $project): int
     {
         return (int) $this->createQueryBuilder('p')
-            ->select('COUNT(u.id) as voted')
+            ->select('COUNT(up.user) as voted')
             ->leftJoin('p.userProjects', 'up')
-            ->leftJoin('up.user', 'u')
             ->where('p = :project')
             ->setParameter('project', $project)
             ->getQuery()
@@ -126,9 +124,8 @@ class ProjectRepository extends EntityRepository implements ProjectRepositoryInt
     public function countAdminVotesPerProject(Project $project): int
     {
         return (int) $this->createQueryBuilder('p')
-            ->select('COUNT(u.id) as voted')
+            ->select('COUNT(up.user) as voted')
             ->leftJoin('p.userProjects', 'up')
-            ->leftJoin('up.user', 'u')
             ->where('p = :project')
             ->setParameter('project', $project)
             ->andWhere('up.addedBy IS NOT NULL')
@@ -147,7 +144,7 @@ class ProjectRepository extends EntityRepository implements ProjectRepositoryInt
             ->select(
                 'p.id',
                 'p.title',
-                'p.type',
+                'p.projectType',
                 'p.charge',
                 'o.firstName',
                 'o.lastName',
