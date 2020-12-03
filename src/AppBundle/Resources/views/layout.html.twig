@@ -137,11 +137,13 @@
 
             <div class="header-controls">
                 {#<a href="#" class="lb-diagramm" title="Статистика"></a>#}
-                {% if app.user %}
+                {% if app.user  %}
+                    <span class="header-controls-user-name">
+                    {{ app.user.firstName ~ ' ' ~ app.user.lastName }}
                     {#<a href="{{ path('logout') }}" class="lb-signout" style="background-image: url( {% if app.user.avatar %} {{ asset(app.user.avatar) }} {% else %} {{ asset('bundles/app/img/icon_developer.png') }} {% endif %} );" title="Вихід"></a>#}
                     <a href="{{ path('logout') }}"><img  class="lb-signout" src="{% if app.user.avatar %} {{ asset(app.user.avatar) }} {% else %} {{ asset('bundles/app/img/icon_developer.png') }} {% endif %} ">  Вихід</a>
                     {#<i class="lb-signout" title="Вихід"></i>#}
-
+                    </span>
                 {% elseif app.request.get('_route') != 'login' %}
                     <a href="" class="lb-signin" data-toggle="modal" data-target="#login-modal" title="Увійти">Увійти та проголосувати</a>
                 {% endif %}
