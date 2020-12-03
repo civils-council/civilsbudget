@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Enum\ProjectType;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -103,7 +104,7 @@ class Project implements \JsonSerializable
      *
      * @var User[] ArrayCollection
      *
-     * ORM\ManyToMany(targetEntity="AppBundle\Entity\User", mappedBy="likedProjects", fetch="EXTRA_LAZY")
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\User", mappedBy="likedProjects", fetch="EXTRA_LAZY")
      */
     private $likedUsers;
 
@@ -162,6 +163,13 @@ class Project implements \JsonSerializable
      * @ORM\Column(type="integer", nullable=true)
      */
     private $viewOrder;
+
+    /**
+     * @var ProjectType|null
+     *
+     * @ORM\Column(type="php_enum_project_type", nullable=true)
+     */
+    private $type;
 
     /**
      * Constructor.
@@ -608,6 +616,15 @@ class Project implements \JsonSerializable
     {
         $this->viewOrder = $viewOrder;
 
+        return $this;
+    }
+
+    public function getType(): ?ProjectType {
+        return $this->type;
+    }
+
+    public function setType(?ProjectType $type = null): Project {
+        $this->type = $type;
         return $this;
     }
 }

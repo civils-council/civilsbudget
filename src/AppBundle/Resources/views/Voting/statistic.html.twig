@@ -15,6 +15,7 @@
     <tr>
         <th>#</th>
         <th>{{ knp_pagination_sortable(pagination, 'Назва', ['p.id']) }}</th>
+        <th>{{ 'Тип' }}</th>
         <th>{{ 'Автор' }}</th>
         <th>{{ 'Бюджет' }}</th>
         {% if voteSetting.isOfflineVotingEnabled %}
@@ -28,6 +29,7 @@
         <tr {% if loop.index is odd %}class="color"{% endif %}>
             <td>{{ loop.index }}.</td>
             <td><a href="{{ path('projects_show', {'id': projectStat['id']}) }}">{{ projectStat['title'] }}</a></td>
+            <td>{{ projectStat['type']|projectTypeDescription }}</td>
             <td>{{ projectStat['lastName'] ~ ' ' ~ projectStat['firstName'] }}</td>
             <td>{{ projectStat['charge']|number_format(0, '.')}}</td>
             {% if voteSetting.isOfflineVotingEnabled %}

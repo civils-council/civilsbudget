@@ -12,6 +12,10 @@ services:
             tags:
                 - { name: twig.extension }
 
+    twig.project.type:
+        class: AppBundle\Twig\ProjectTypeExtension
+        tags:
+            - { name: twig.extension }
 
     app.turbosms_client:
         class: SoapClient
