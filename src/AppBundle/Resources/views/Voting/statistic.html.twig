@@ -7,10 +7,33 @@
 {% endblock title %}
 
 {% block content %}
-    <h3>{{ voteSetting.location ~ ': ' ~ voteSetting.title }}</h3>
-    <h5>{{ 'Виборців віддало голоси: '~ countVoted ~
-        '. Проектів підтримало: ' ~ countTotalVotes  ~ (voteSetting.isOfflineVotingEnabled ? ' (онлайн: ' ~
-        (countTotalVotes-countAdminVotes) ~ ', офлайн: ' ~  countAdminVotes ~ ')' : '')}}</h5>
+{% set filterValue = pagination.params.filterValue is defined ? pagination.params.filterValue : '' %}
+<h3>{{ voteSetting.location ~ ': ' ~ voteSetting.title }}</h3>
+<section class="statistic-header-sub">
+<h5 class="float: left"> {{ 'Проектів: '~ pagination.getTotalItemCount ~ '.  Виборців віддало голоси: '~ countVoted ~
+    '. Проектів підтримало: ' ~ countTotalVotes  ~ (voteSetting.isOfflineVotingEnabled ? ' (онлайн: ' ~
+    (countTotalVotes-countAdminVotes) ~ ', офлайн: ' ~  countAdminVotes ~ ')' : '')}}</h5>
+<div>
+    <form method="get"
+          action="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params'))  }}"
+          enctype="application/x-www-form-urlencoded"
+          style="float: right;"
+    >
+        <select name="filterField">
+                <option value="p.projectType" selected="selected">Тип</option>
+        </select>
+        <select name="filterValue">
+            <option value="" {% if filterValue == '' %} selected="selected"{% endif %}>Всі</option>
+            <option value="SB" {% if filterValue == 'SB' %} selected="selected"{% endif %}>Малий Бюджетний</option>
+            <option value="LB" {% if filterValue == 'LB' %} selected="selected"{% endif %}>Великий Бюджетний</option>
+            <option value="SM" {% if filterValue == 'SM' %} selected="selected"{% endif %}>Малий Громадський</option>
+            <option value="LM" {% if filterValue == 'LM' %} selected="selected"{% endif %}>Великий Громадський</option>
+        </select>
+        <button>Вибрати</button>
+    </form>
+</div>
+</section>
+
 <table class="table table-striped">
     <tr>
         <th>#</th>
@@ -40,6 +63,9 @@
         </tr>
     {% endfor %}
 </table>
+<div class="navigation">
+    {{ knp_pagination_render(pagination) }}
+</div>
 {% endblock content %}
 
 {% block javascripts %}

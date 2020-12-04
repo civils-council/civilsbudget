@@ -6,10 +6,10 @@ use MyCLabs\Enum\Enum;
 
 class ProjectType extends Enum
 {
-    const SMALL_BUDGETARY = 'NS';
-    const LARGE_BUDGETARY = 'NB';
-    const SMALL_MUNICIPAL = 'PS';
-    const LARGE_MUNICIPAL = 'PB';
+    const SMALL_BUDGETARY = 'SB';
+    const LARGE_BUDGETARY = 'LB';
+    const SMALL_MUNICIPAL = 'SM';
+    const LARGE_MUNICIPAL = 'LM';
 
     const ENUM_NAME = [
         self::SMALL_BUDGETARY => 'Малий Бюджетний',
