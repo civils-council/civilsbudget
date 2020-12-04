@@ -8,6 +8,7 @@ use AppBundle\Entity\Project;
 use AppBundle\Entity\VoteSettings;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
 /**
@@ -133,14 +134,8 @@ class ProjectRepository extends EntityRepository implements ProjectRepositoryInt
             ->getSingleScalarResult();
     }
 
-    /**
-     * @param VoteSettings $voteSettings
-     *
-     * @return \Doctrine\ORM\QueryBuilder
-     */
-    public function projectVoteStatisticByVoteSettings(VoteSettings $voteSettings)
-    {
-        return $this->createQueryBuilder('p')
+    public function projectVoteStatisticByVoteSettings(VoteSettings $voteSettings): QueryBuilder {
+        $qb = $this->createQueryBuilder('p')
             ->select(
                 'p.id',
                 'p.title',
@@ -148,9 +143,7 @@ class ProjectRepository extends EntityRepository implements ProjectRepositoryInt
                 'p.charge',
                 'o.firstName',
                 'o.lastName',
-                'COUNT(up.user) AS totalVotes',
-                'SUM(CASE WHEN up.addedBy IS NOT NULL THEN 1 ELSE 0 END) AS paperVotes',
-                'COUNT(up.user) - SUM(CASE WHEN up.addedBy IS NOT NULL THEN 1 ELSE 0 END) AS selfVotes'
+                'COUNT(DISTINCT up.user) AS totalVotes'
             )
             ->leftJoin('p.userProjects', 'up')
             ->innerJoin('p.owner', 'o')
@@ -158,6 +151,13 @@ class ProjectRepository extends EntityRepository implements ProjectRepositoryInt
             ->groupBy('p')
             ->setParameter('voteSetting', $voteSettings)
             ->addOrderBy('totalVotes', 'DESC');
+        if ($voteSettings->isOfflineVotingEnabled()) {
+            $qb
+                ->addSelect('SUM(CASE WHEN up.addedBy IS NOT NULL THEN 1 ELSE 0 END) AS paperVotes')
+                ->addSelect('COUNT(up.user) - SUM(CASE WHEN up.addedBy IS NOT NULL THEN 1 ELSE 0 END) AS selfVotes');
+        }
+
+        return $qb;
     }
 
     /**
