@@ -94,10 +94,7 @@ class UserManager
             $middleName = $this->getDecodedValueFromCustomerData('middleName', $data['customer']);
             $sex = $this->getDecodedValueFromCustomerData('sex', $data['customer']);
 
-            $this->em->persist($location);
-
             $user = (new User())
-                ->addLocation($location)
                 ->setClid($clId)
                 ->setSex($sex)
                 ->setMiddleName($middleName)
@@ -106,7 +103,13 @@ class UserManager
                 ->setInn($inn)
             ;
             $this->em->persist($user);
-            $location->setUser($user);
+
+            if ($location) {
+                $location->setUser($user);
+                $this->em->persist($location);
+                $user->addLocation($location);
+            }
+
             $this->em->flush();
 
             return ['user' => $user, 'status' => 'new'];

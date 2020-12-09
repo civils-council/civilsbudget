@@ -46,6 +46,9 @@ class VoteSettingsRepository extends EntityRepository implements VoteSettingInte
      */
     public function getVoteSettingByUserCity(User $user, ?bool $paperVote = false): array
     {
+        if (!$user->getCurrentLocation() || !$user->getCurrentLocation()->getCity()) {
+            return [];
+        }
         $to = $paperVote ? 'datePaperVoteTo' : 'dateTo';
         return $this->createQueryBuilder('vs')
             ->leftJoin('vs.location', 'l')
