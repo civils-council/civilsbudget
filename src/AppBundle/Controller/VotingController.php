@@ -68,7 +68,7 @@ class VotingController extends Controller
         $pagination = $this->get('knp_paginator')->paginate(
             $votingStatistic,
             $request->query->getInt('page', 1),
-            $request->query->getInt('limit', 100)
+            $request->query->getInt('limit', 150)
         );
 
         $voteSettingRepository = $this->getDoctrine()->getRepository(VoteSettings::class);

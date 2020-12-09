@@ -92,6 +92,14 @@ class Project implements ProjectInterface
             throw new ValidatorException('Ви вже підтримали цей проект.', 403);
         }
 
+        if (!$user->getCurrentLocation()) {
+            throw new ValidatorException(
+                'Вибачте, ви не можете підтримати проект. Відсутні дані про вашу адресу. ' .
+                'Зверніться до свого банку для заповнння даних про адресу.',
+                403
+            );
+        }
+
         if (mb_strtolower($user->getCurrentLocation()->getCity())
             != mb_strtolower($project->getVoteSetting()->getLocation()->getCity())
         ) {
