@@ -17,6 +17,18 @@ services:
         tags:
             - { name: twig.extension }
 
+    app.session.service:
+        class: AppBundle\Helper\SessionSet
+        arguments:
+            - '@session'
+
+    app.reqiuest_subscriber:
+        class: AppBundle\EventSubscriber\ProjectRequestSubscriber
+        arguments:
+            - '@app.session.service'
+        tags:
+            - { name: kernel.event_subscriber }
+
     app.turbosms_client:
         class: SoapClient
         arguments:
