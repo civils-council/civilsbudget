@@ -65,7 +65,8 @@ class DefaultController extends Controller
                     [
                         'id' => $userResponse->getId(),
                         'status' => $usersData['status'],
-                        'city' => $request->get('city')
+                        'city' => $request->get('city'),
+                        'redirect_to_route' => $request->get('redirect_to_route'),
                     ]
                 );
             }
@@ -180,7 +181,7 @@ class DefaultController extends Controller
                 //TODO check return value
                 $this->addFlash($flashMessage['status'], $flashMessage['text']);
 
-                return $this->redirect($this->generateUrl('projects_show', ['id' => $this->get('app.session')->getProjectId()]));
+                return $this->redirectToRoute('projects_show', ['id' => $this->get('app.session')->getProjectId()]);
             } else {
                 $this->setAuthenticateToken($user);
                 return $this->redirectToRoute('homepage');
