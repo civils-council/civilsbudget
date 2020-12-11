@@ -8,6 +8,7 @@ use AppBundle\Entity\Project;
 use AppBundle\Entity\VoteSettings;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
@@ -47,10 +48,13 @@ class ProjectRepository extends EntityRepository implements ProjectRepositoryInt
             ->select('project')
             ->from('AppBundle:Project', 'project')
             ->leftJoin('project.userProjects', 'up')
+            ->leftJoin('project.userProjects', 'upr', Join::WITH, 'upr.user = :user')
             ->leftJoin('project.voteSetting', 'vs')
             ->leftJoin('vs.location', 'l')
             ->addSelect('COUNT(up.user) as countVoted')
+            ->addSelect('COUNT(DISTINCT upr.user) as voted')
             ->where('project.approved = :approved')
+            ->setParameter('user', $parameterBag->get('user'))
             ->setParameter('approved', true);
 
         if ($city = $parameterBag->get(ProjectController::QUERY_CITY)) {

@@ -115,6 +115,7 @@
         <div class="col-md-3  item-content">
             <div class="wrap-item">
                 <div class="card" id="project{{ project[0].id }}">
+                    {% include  '@App/Project/votedProjectCheck.html.twig' with {'isUserVoted': project.voted } %}
                     <div class="card-image">
                         <a href="{{ path('projects_show', { id: project[0].id }) }}" class="img-lnk">
                             <img src="{% if project[0].picture %}
@@ -138,6 +139,7 @@
                         {% if project[0].voteSetting %}
                         <div>Тип: <span>{{ project[0].projectType ? project[0].projectType|projectTypeDescription ~ " - " : "" }}{{ project[0].voteSetting.title }}</span></div>
                         {% endif %}
+                        <div>Ви проголосували: <span>{{ project['voted'] }}</span></div>
                         <div>Підтримало: <span>{{ project['countVoted']|number_format(0, '.', ' ') }}</span></div>
                         <div>Бюджет: <span>{{ project[0].charge|number_format(0, '.', ' ') }}</span> грн.</div>
                     </div>

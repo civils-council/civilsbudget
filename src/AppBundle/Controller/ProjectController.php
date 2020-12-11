@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Project;
 use AppBundle\Entity\User;
+use AppBundle\Entity\UserProject;
 use AppBundle\Entity\VoteSettings;
 use AppBundle\Exception\ValidatorException;
 use AppBundle\Form\ProjectType;
@@ -38,6 +39,7 @@ class ProjectController extends Controller
     {
         $parameterBag = $request->query;
         $parameterBag->add(['voteSetting' => $voteSetting]);
+        $parameterBag->add(['user' => $this->getUser()]);
         $em = $this->getDoctrine()->getManager();
         $projects = $em->getRepository(Project::class)->getProjectShow($parameterBag);
         $countAdminVotes = $em->getRepository(VoteSettings::class)->countAdminVotesPerVoting($voteSetting);
@@ -93,11 +95,13 @@ class ProjectController extends Controller
         $em = $this->getDoctrine()->getManager();
         $countAdminVoted = $em->getRepository(Project::class)->countAdminVotesPerProject($project);
         $countVoted = $em->getRepository(Project::class)->countVotesPerProject($project);
+        $isUserVoted = $em->getRepository(UserProject::class)->findBy(['project' => $project, 'user' => $this->getUser()]);
         $request->attributes->set(ProjectController::QUERY_CITY, $project->getCity());
         return [
             'project' => $project,
             'voteSetting' => $project->getVoteSetting(),
             'countVoted' => $countVoted,
+            'isUserVoted' => (bool)$isUserVoted,
             'countAdminVoted' => $countAdminVoted,
         ];
     }

@@ -4,6 +4,7 @@
     <div class="row hd-caption" style="background-image: url({% if project.picture %} {{ asset(project.picture) }} {% else %} {{ asset('bundles/app/img/default_bg.png') }} {% endif %})">
         <div class="row">
             <div class="col-md-12">
+                {% include  '@App/Project/votedProjectCheck.html.twig' with {'isUserVoted': isUserVoted} %}
                 <h3>
                     {{ project.title|humanize }}
                 </h3>
