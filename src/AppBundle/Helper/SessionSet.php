@@ -1,40 +1,76 @@
 <?php
 namespace AppBundle\Helper;
 
-use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 class SessionSet
 {
-    const SESSION_NAME = 'project_id';
+    const SESSION_PROJECT_ID = 'project_id';
+    const SESSION_USER_CLID = 'user_clid';
 
     /**
      * @var Session
      */
     private $session;
 
+    /**
+     * @param Session $session
+     */
     public function __construct(Session $session)
     {
         $this->session = $session;
     }
 
-    public function setSession($id)
+    /**
+     * @param string|null $id
+     */
+    public function setProjectId(?string $id)
     {
-        $this->session->set(self::SESSION_NAME, $id);
-        return true;
+        $this->session->set(self::SESSION_PROJECT_ID, $id);
     }
 
-    public function check()
+    /**
+     * @return bool
+     */
+    public function existsProjectId(): bool
     {
-        $result = false;
-        if (!empty($this->session->get(self::SESSION_NAME))) {
-            $result = true;
-        }
-        return $result;
+        return $this->session->has(self::SESSION_PROJECT_ID) && !empty($this->getProjectId());
     }
 
-    public function getProjectId()
+    /**
+     * @return string
+     */
+    public function getProjectId(): ?string
     {
-        return $this->session->get(self::SESSION_NAME);
+        return $this->session->get(self::SESSION_PROJECT_ID);
+    }
+
+    /**
+     * @param string|null $id
+     */
+    public function setUserClid(?string $id)
+    {
+        $this->session->set(self::SESSION_USER_CLID, $id);
+    }
+
+    /**
+     * @return bool
+     */
+    public function existsUserClid(): bool
+    {
+        return $this->session->has(self::SESSION_USER_CLID) && !empty($this->getUserClid());
+    }
+
+    /**
+     * @return string
+     */
+    public function getUserClid(): ?string
+    {
+        return $this->session->get(self::SESSION_USER_CLID);
+    }
+
+    public function removeUserClid()
+    {
+        $this->session->remove(self::SESSION_USER_CLID);
     }
 }

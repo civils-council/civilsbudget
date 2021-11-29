@@ -42,6 +42,6 @@ class ProjectRequestSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $this->session->setSession($event->getRequest()->get('id'));
+        $this->session->setProjectId($event->getRequest()->get('id'));
     }
 }

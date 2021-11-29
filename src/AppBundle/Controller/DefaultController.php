@@ -4,9 +4,12 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\User;
 use AppBundle\Entity\VoteSettings;
+use AppBundle\Exception\AuthException;
+use AppBundle\Exception\NotFoundException;
 use AppBundle\Form\ConfirmDataType;
 use AppBundle\Form\LoginType;
 use AppBundle\Form\LoginUserType;
+use Doctrine\ORM\OptimisticLockException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -44,22 +47,25 @@ class DefaultController extends Controller
     /**
      * @Route("/login", name="login")
      * @Template()
+     * @throws OptimisticLockException
      */
     public function loginAction(Request $request)
     {
         $authenticationUtils = $this->get('security.authentication_utils');
 
         $data = ['clid' => $authenticationUtils->getLastUsername()];
-        $form = $this->createForm( LoginType::class, $data, ['action' => $this->generateUrl('login_check')]);
+        $form = $this->createForm(LoginType::class, $data, ['action' => $this->generateUrl('login_check')]);
 
         if ($code = $request->query->get('code')) {
             $accessToken = $this->get('app.security.bank_id')->getAccessToken($code);
             $data = $this->get('app.security.bank_id')->getBankIdUser($accessToken['access_token']);
             if ($data['state'] == 'ok') {
-                $usersData = $this->get('app.user.manager')->isUniqueUser($data);
+                $usersData = $this->get('app.user.manager')->findOrCreateUser($data);
                 /** @var User $userResponse */
                 $userResponse = $usersData['user'];
-                
+
+                $this->get('app.session')->setUserClid($userResponse->getClid());
+
                 return $this->redirectToRoute(
                     'additional_registration',
                     [
@@ -93,14 +99,24 @@ class DefaultController extends Controller
      */
     public function additionalRegistrationAction(User $user, Request $request)
     {
+        $session = $this->get('app.session');
+
+        if (!($session->existsUserClid() && $session->getUserClid() === $user->getClid())) {
+            $this->addFlash('danger', 'Access denied');
+            throw new AuthException('Access denied', 403);
+        }
+
         if ($request->get('status') && $request->get('status') == 'new') {
             $em = $this->getDoctrine()->getManager();
             $form = $this->createForm(ConfirmDataType::class, $user);
             $form->handleRequest($request);
+
             if ($form->isSubmitted() && $form->isValid()) {
                 $em->flush();
 
                 $this->setAuthenticateToken($user);
+                $session->removeUserClid();
+
                 if ($user->isIsDataPublic()) {
                     
                     /** @var VoteSettings[] $voteSettings */
@@ -149,8 +165,7 @@ class DefaultController extends Controller
                 }
 
                 // if you put a check before send email, during registration of the project will not be sending mail
-                if ($this->get('app.session')->check()) {
-
+                if ($this->get('app.session')->existsProjectId()) {
                     $project = $this->getDoctrine()->getRepository('AppBundle:Project')->find($this->get('app.session')->getProjectId());
                     $flashMessage = $this->get('app.like.service')->execute($user, $project);
                     //TODO check return value
@@ -174,7 +189,8 @@ class DefaultController extends Controller
                     ->getProjectVoteSettingShow($request)
             ];
         } else {
-            if($this->get('app.session')->check()) {
+            $session->removeUserClid();
+            if($this->get('app.session')->existsProjectId()) {
                 $this->setAuthenticateToken($user);
                 $project = $this->getDoctrine()->getRepository('AppBundle:Project')->find($this->get('app.session')->getProjectId());
                 $flashMessage = $this->get('app.like.service')->execute($user, $project);

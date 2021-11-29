@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Api;
 
 use AppBundle\Entity\User;
 use AppBundle\Entity\VoteSettings;
+use Doctrine\ORM\OptimisticLockException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -16,6 +17,7 @@ class UserController extends Controller
     /**
      * @Route("/api/authorization", name="api_authorization")
      * @Method({"GET", "POST"})
+     * @throws OptimisticLockException
      */
     public function authorizationAction(Request $request)
     {
@@ -23,7 +25,7 @@ class UserController extends Controller
         if(!empty($code)) {
             $data = $this->get('app.security.bank_id')->getBankIdUser($code);
             if ($data['state'] == 'ok') {
-                $response = $this->get('app.user.manager')->isUniqueUser($data);
+                $response = $this->get('app.user.manager')->findOrCreateUser($data);
                 /** @var User $user */
                 $user = $response['user'];
                 $this->getAuthenticator()->addAuth($user);
