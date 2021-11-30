@@ -136,16 +136,16 @@
             "time": "2017-09-29T19:46:41+00:00"
         },
         {
-            "name": "beberlei/DoctrineExtensions",
+            "name": "beberlei/doctrineextensions",
             "version": "v1.0.19",
             "source": {
                 "type": "git",
-                "url": "https://github.com/beberlei/DoctrineExtensions.git",
+                "url": "https://github.com/beberlei/doctrineextensions.git",
                 "reference": "edc0ef1bf7b9f84f91fbd1f27560395ce70a3092"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/beberlei/DoctrineExtensions/zipball/edc0ef1bf7b9f84f91fbd1f27560395ce70a3092",
+                "url": "https://api.github.com/repos/beberlei/doctrineextensions/zipball/edc0ef1bf7b9f84f91fbd1f27560395ce70a3092",
                 "reference": "edc0ef1bf7b9f84f91fbd1f27560395ce70a3092",
                 "shasum": ""
             },
