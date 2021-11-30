@@ -9,6 +9,7 @@ use AppBundle\Entity\OtpToken;
 use AppBundle\Entity\User;
 use AppBundle\Service\SmsSenderInterface;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\OptimisticLockException;
 use Symfony\Component\Routing\Router;
 
 class UserManager
@@ -81,8 +82,9 @@ class UserManager
      * @param array $data
      *
      * @return array
+     * @throws OptimisticLockException
      */
-    public function isUniqueUser($data)
+    public function findOrCreateUser(array $data): array
     {
         $location = $this->getLocationFromCustomerData($data['customer']);
         $clId = $this->getDecodedValueFromCustomerData('clId', $data['customer']);

@@ -1860,12 +1860,12 @@
             "version": "v1.4.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/hautelook/AliceBundle.git",
+                "url": "https://github.com/theofidry/AliceBundle.git",
                 "reference": "058925945bccbc8776725fec9e8557aca9666d9c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hautelook/AliceBundle/zipball/058925945bccbc8776725fec9e8557aca9666d9c",
+                "url": "https://api.github.com/repos/theofidry/AliceBundle/zipball/058925945bccbc8776725fec9e8557aca9666d9c",
                 "reference": "058925945bccbc8776725fec9e8557aca9666d9c",
                 "shasum": ""
             },
@@ -1931,6 +1931,12 @@
                 "faker",
                 "orm",
                 "symfony"
+            ],
+            "funding": [
+                {
+                    "url": "https://github.com/theofidry",
+                    "type": "github"
+                }
             ],
             "time": "2016-11-04T08:48:00+00:00"
         },
@@ -3089,6 +3095,7 @@
                 }
             ],
             "description": "A security checker for your composer.lock",
+            "abandoned": "https://github.com/fabpot/local-php-security-checker",
             "time": "2017-08-22T22:18:16+00:00"
         },
         {
