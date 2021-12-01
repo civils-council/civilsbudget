@@ -6,7 +6,7 @@
 
 <p>Дякуємо за вашу участь в онлайн голосуванні представлених проектів. Ваші голоси дуже важливі для нас та жителів всього міста.</p>
 <p>Ви віддали ваші голоси за наступні проекти:</p>
-    {% for project in user.likedProjects %}
+    {% for project in user.userProjects %}
         <p>{{ loop.index }}). {{ project.voteSetting.location.city }} - {{ project.title }} </p>
     {% endfor %}
 
